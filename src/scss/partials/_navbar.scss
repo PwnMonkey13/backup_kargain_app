@@ -1,0 +1,108 @@
+header{
+  background-color: #fff;
+}
+
+header .form-control[type=search]{
+  height: 33px;
+  border: none;
+  border-radius: 25px;
+  width: 306px;
+  background: #eae9e9 url($imagesDir + "search.png") no-repeat right 15px center;
+  margin-left: 92px;
+  box-shadow : none;
+}
+
+nav {
+  max-width: 1040px;
+  margin: auto;
+  padding: 1rem 2rem;
+
+  h1 {
+    font-size: 1rem;
+    color: #444 ;
+    margin: 0;
+    font-weight: 700;
+    float: left;
+  }
+
+  & > div {
+    float: right;
+    a {
+      font-size: 0.9rem;
+      margin-left: 1rem;
+    }
+  }
+
+  li.nav-item {
+    display: inline-block;
+    width: auto;
+    margin: auto !important;
+    vertical-align: middle;
+  }
+
+  &:after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+}
+
+/**
+ * This is a fix for Reactstrap 5.0.0-alpha.4 not displaying menus in the
+ * navbar correcrtly on mobile devices.
+ **/
+.navbar .dropdown {
+  display: block;
+}
+
+.navbar_icon img{
+  width: 22px;
+  height: auto;
+}
+
+.navbar-icon-notifications {
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #569ffc;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -14px;
+  }
+}
+
+.dropdown-menu{
+  border-radius: 17px;
+  -webkit-box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.11);
+  -moz-box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.11);
+  box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.11);
+  border: none;
+  width: 500px;
+  padding: 15px 20px;
+  top: 160%;
+}
+
+.navbar-icons-wrapper .a-reg{
+  color: #3d4248;
+  font: 700 13px Quicksand;
+}
+.navbar-icons-wrapper .a-reg-separator{
+  color: #3d4248;
+  font: 400 13px Quicksand;
+  margin: 0 10px;
+}
+
+@media (max-width: 768px) {
+    .navbar .dropdown-menu {
+      position: relative !important;
+      display: block !important;
+      transform: none !important;
+      padding: 0 0 10px 0;
+      border: none;
+    }
+}

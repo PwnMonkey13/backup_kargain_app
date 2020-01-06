@@ -1,0 +1,54 @@
+footer {
+  font-size: 0.8rem;
+  color: #888;
+  width: 100%;
+  margin: 1rem auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+.menu-footer {
+  ul {
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline;
+      list-style: none;
+      margin: 1rem;
+
+      a {
+        color: #343333;
+        font-weight: 700;
+
+        span {
+          color: #343333;
+          margin: 0 20px;
+        }
+      }
+    }
+  }
+}
+
+.chat-btn{
+  position: fixed;
+  bottom: 100px;
+  display: flex;
+  background-color: #569ffc;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 25px;
+
+  span{
+    font: 700 11px Quicksand;
+  }
+
+  &:hover{
+    text-decoration: none;
+  }
+}
+
+.copyright{
+  color: #343333;
+  font: 400 11px Quicksand;
+}
