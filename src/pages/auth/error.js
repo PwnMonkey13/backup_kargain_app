@@ -1,15 +1,17 @@
 import React from 'react'
 import Link from 'next/link'
+import { withRouter } from 'next/router'
 import Layout from '../../layouts/Layout'
 
-const error = (props) => {
-    if (props.action === 'register' && props.type === 'oauth') {
+const Error = (props) => {
+    console.log(props);
+    if (props.query.action === 'register') {
         return(
             <Layout {...props} navmenu={false}>
                 <div className="text-center mb-5">
                     <h1 className="display-4 mt-5 mb-3">Unable to sign in</h1>
                     <p className="lead">An account associated with your email address already exists.</p>
-                    <p className="lead"><Link href="/auth"><a>Sign in with email or another service</a></Link></p>
+                    <p className="lead"><Link href="/auth/register"><a>Sign in with email or another service</a></Link></p>
                 </div>
                 <div className="row">
                     <div className="col-sm-8 mr-auto ml-auto mb-5">
@@ -38,7 +40,7 @@ const error = (props) => {
                 <div className="text-center mb-5">
                     <h1 className="display-4 mt-5 mb-2">Link not valid</h1>
                     <p className="lead">This sign in link is no longer valid.</p>
-                    <p className="lead"><Link href="/auth"><a>Get a new sign in link</a></Link></p>
+                    <p className="lead"><Link href="/auth/login"><a>Get a new sign in link</a></Link></p>
                 </div>
             </Layout>
         )
@@ -55,4 +57,8 @@ const error = (props) => {
     }
 };
 
-export default error;
+Error.getInitialProps = async ({ query }) => {
+    return { query };
+};
+
+export default Error;

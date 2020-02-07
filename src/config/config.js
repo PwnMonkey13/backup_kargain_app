@@ -1,11 +1,12 @@
 let env;
 let config;
 const global = {
-    port : process.env.PORT || 3000
+    port : process.env.PORT || 3000,
 };
 
 const dev = {
-    api: "http://localhost:8080/api/",
+    api : "http://localhost:8080/api",
+    wp_rest_api : "http://localhost:5555/wp-json/wp/v2",
 };
 
 const prod = {

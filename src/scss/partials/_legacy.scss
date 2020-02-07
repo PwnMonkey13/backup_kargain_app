@@ -188,7 +188,7 @@
 .top-profile-wrapper{
   max-width: 856px;
   width: 100%;
-  margin: 140px auto 90px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -216,12 +216,11 @@
   align-items: center;
   margin-bottom: 5px;
 }
-.top-profile-content-wrapper{
-  width: 625px;
-}
+
 .top-profile-login{
   color: #a1a1a1;
   font: 400 16px Quicksand;
+  text-align: left;
 }
 .top-profile-location{
   color: #569ffc;
@@ -388,31 +387,19 @@ h2{
   color: #a7a4a4;
 }
 
-.vente-wrapper{
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-}
-.vente-wrapper .radio-wrapper{
-  margin-right: 70px;
-  margin-left: 70px;
-}
-
 .tab-inputs-wrapper{
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   max-width: 760px;
   width: 100%;
-  margin: 0 auto;
+  margin: 20px 0 auto;
   flex-wrap: wrap;
-  margin-top: 20px;
 }
 .tab-inputs-wrapper .dropdown-wrapper{
-  margin: 0;
   width: 345px;
   justify-content: flex-end;
-  margin-bottom: 35px;
+  margin: 0 0 35px;
 }
 .btn-affic{
   margin-top: 30px;
@@ -800,9 +787,7 @@ p.des-a:hover{
   align-items: center;
   white-space: nowrap;
 }
-.objava-wrapper .top-profile-wrapper .top-profile-content-wrapper {
-  width: 521px;
-}
+
 .annonce-slider3{
   margin-top: 20px;
 }

@@ -1,15 +1,18 @@
 import React from "react";
+import classnames from 'classnames';
 
-const Or = () => {
-    return(
-        <div className="login-or">
-            <hr className="hr-or"/>
-            <span className="span-or">ou</span>
+const Divider = ({text, vertical}) => {
+    const Classnames = classnames(
+        'divider_stick',
+        vertical ? 'vertical' : '',
+    );
+
+    return (
+        <div className={Classnames}>
+            <hr/>
+            { text && <span>{text}</span> }
         </div>
     )
 };
-
-const Divider = () => {};
-Divider.Or = Or;
 
 export default Divider;

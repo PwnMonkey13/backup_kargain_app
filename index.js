@@ -1,4 +1,4 @@
-const next = require('next');
+    const next = require('next');
 const server = require('./server');
 const csrf = require('csurf');
 const csrfProtection = csrf({ session: true });

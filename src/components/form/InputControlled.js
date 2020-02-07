@@ -1,7 +1,7 @@
-import React, {Fragment} from 'react';
-import InputPhone from 'react-phone-number-input/input'
-import { Input, NumberInput,TextArea } from 'linked-controls'
-import { Label, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
+export React, {Fragment} from 'react';
+export InputPhone from 'react-phone-number-input/input'
+export { Input, NumberInput,TextArea } from 'linked-controls'
+export { Label, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
 import classNames from 'classnames'
 import FormGroupCustom from '../../components/form/FormGroupCustom'
 
@@ -96,7 +96,7 @@ const InputControlled = (props) => {
                     { prepend && <InputGroupAddon addonType="prepend">
                         <InputGroupText>{prepend}</InputGroupText>
                     </InputGroupAddon> }
-                    <Switch $flag={$flag} type={type} {...rest} />
+                    <Switch $flag={$flag} type={type || 'text' } {...rest} />
                     { append && <InputGroupAddon addonType="append">
                         <InputGroupText>{append}</InputGroupText>
                     </InputGroupAddon> }
@@ -104,7 +104,7 @@ const InputControlled = (props) => {
                 ) :
                 <Switch $flag={$flag} type={type} {...rest} />
             }
-            { $flag.error && <div className="validation-error">{ $flag.error || '' }</div> }
+            { $flag.error && <div className="validation-error">{ $flag.error }</div> }
         </FormGroupCustom>
     )
 };

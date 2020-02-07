@@ -74,6 +74,33 @@ const Index2 = () => {
                     </ListGroup>
                 </Col>
             </Row>
+            <Row>
+                <Jumbotron className="text-light rounded-0" style={{
+                    backgroundColor: 'rgba(73,155,234,1)',
+                    background: 'radial-gradient(ellipse at center, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%)',
+                    boxShadow: 'inset 0 0 100px rgba(0,0,0,0.1)'
+                }}>
+                    <Container className="mt-2 mb-2">
+                        <h1 className="display-2 mb-3" style={{fontWeight: 300}}>
+                        <span style={{fontWeight: 600}}>
+                            <span className="mr-3">▲</span>
+                            <br className="v-block d-sm-none"/>
+                            Next.js
+                        </span>
+                            <br className="v-block d-lg-none"/> Starter Project
+                        </h1>
+                        <p className="lead mb-5">
+                            A reference and template for React projects
+                        </p>
+                        <p className="text-right">
+                            <a className="btn btn-outline-light btn-lg">
+                                <i className="icon ion-md-heart"/>
+                                <span className="icon ion-logo-github mr-2"/> Download from GitHub
+                            </a>
+                        </p>
+                    </Container>
+                </Jumbotron>
+            </Row>
         </Layout>
     );
 };

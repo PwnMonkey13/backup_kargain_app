@@ -1,4 +1,6 @@
-module.exports = {
+const withCSS = require('@zeit/next-css')
+
+module.exports = withCSS({
     webpack(config, options) {
         if (!options.defaultLoaders) {
             throw new Error(
@@ -16,11 +18,6 @@ module.exports = {
             }
         });
 
-        config.module.rules.push({
-            test: /\.css$/,
-            use: ["style-loader", "css-loader"]
-        });
-
         return config
     }
-};
+});

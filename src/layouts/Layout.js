@@ -10,7 +10,7 @@ import Footer from '../components/Footer'
 // const cookies = new Cookies();
 // cookies.set('redirect_url', window.location.pathname, { path: '/' })
 
-const Layout = ({t, navmenu, ...props}) => {
+const Layout = ({navmenu, fluid, ...props}) => {
 
     useEffect(() =>{
         if (!window.GA_INITIALIZED) {
@@ -23,7 +23,7 @@ const Layout = ({t, navmenu, ...props}) => {
     return (
         <div className="main_layout">
             { navmenu !== false && <NavbarClient/> }
-            <MainBody>
+            <MainBody fluid={fluid}>
                 {props.children}
             </MainBody>
             <Footer/>
@@ -31,9 +31,9 @@ const Layout = ({t, navmenu, ...props}) => {
     )
 };
 
-const MainBody = (props) => {
+const MainBody = ({fluid, ...props}) => {
     return (
-        <Container style={{marginTop: '5em', minHeight: '80vh'}}>
+        <Container fluid={fluid} style={{marginTop: '5rem'}}>
             {props.children}
         </Container>
     )

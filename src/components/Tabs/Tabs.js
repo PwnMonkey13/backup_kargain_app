@@ -1,54 +1,67 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 
-const Tabs = ({ children, ...props }) => {
-    const [ activeTab, setActiveTab ] = useState(0);
+const TabsItem = ({activeTab, index, ...props}) => {
+    const classes = classNames(
+        'tab-pane',
+        'fade',
+        { 'show': index === activeTab },
+        { 'active': index === activeTab },
+        props.className
+    );
 
-    useEffect(() => {
-        setActiveTab(props.active);
-    }, [props.active]);
+    return(
+        <div className={classes} id={props.id}>
+            {props.children}
+        </div>
+    );
+};
+
+const Tabs = ({ defaultActive, children, classname, id, ...props }) => {
+    const [ activeTab, setActiveTab ] = useState(defaultActive || 0);
 
     const onClickTabItem = (index) => {
         setActiveTab(index);
     };
 
+    const Classnames = classNames(
+        'nav nav-tabs',
+        classname
+    );
+
     return(
-        <div>
-            <ul className="nav nav-tabs">
+        <section className="tabs">
+            <ul className={Classnames} id={id}>
                 {children.map((item, index) => {
-                    const { title } = item.props;
+                    const { title, img } = item.props;
                     const classes = classNames(
                         'nav-item',
                         { 'active' : index === activeTab }
                     );
 
                     return(
-                        <li key={index} className={classes}
+                        <li key={index}
+                            className={classes}
+                            data-toggle="tab"
+                            role="tab"
+                            aria-selected={activeTab === index}
                             onClick={() => onClickTabItem(index)}>
                             <label>{title}</label>
-                            <img src="images/tab-car.png" alt=""/>
+                            { img && <img src={img} alt={title}/> }
                         </li>
                     );
                 })}
             </ul>
 
-            <div className="tab-content" id="myTabContent">
+            <div className="tab-content tab-content-profile" id="myTabContent">
                 { children.map((item, index) => {
-                    const classes = classNames(
-                        'tab-pane',
-                        'fade',
-                        { 'show': index === activeTab },
-                        { 'active': index === activeTab },
-                    );
-                    return (
-                        <div key={index} className={classes}>
-                            {item.props.children}
-                        </div>
-                    );
+                    return <TabsItem key={index} index={index} activeTab={activeTab} {...item.props}/>;
                 })}
             </div>
-        </div>
+        </section>
     );
 };
+
+Tabs.Item = TabsItem;
 
 export default Tabs;

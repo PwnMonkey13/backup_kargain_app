@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { Row, Col } from 'reactstrap'
 import Cookies from 'universal-cookie'
 import Layout from '../../layouts/Layout'
-import SignIn from '../../components/signin'
 import userAgent from "../../components/HelloUA";
 
 const AuthIndex = (props) => {

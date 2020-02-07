@@ -1,37 +1,29 @@
-function CheckboxesUtils (data, alreadyChecked =  []){
+function CheckboxesUtils(data, alreadyChecked = []) {
     return data.map(item => {
-        if(typeof item === "object"){
-            const { name } = item;
+        if (typeof item === "object") {
+            const {name} = item;
             const checked = alreadyChecked.includes(name);
-            return {
-                checked,
-                ...item
-            };
-        } else{
+            return { checked, ...item };
+        } else {
             const name = item.split(' ').join('-').toLowerCase();
             const checked = alreadyChecked.includes(item);
             return {
                 checked,
                 name,
-                label : item
+                label: item
             };
         }
     });
 }
 
-function SelectOptionsUtils (data){
+function SelectOptionsUtils(data) {
     return data.map(item => {
-        if(typeof item === "object"){
-            return {
-                ...item
+        if (typeof item === "object") return {...item};
+        else return {
+                value: typeof item === "string" ? item.split(' ').join('-').toLowerCase() : Number(item),
+                label: item
             };
-        } else{
-            return {
-                value : typeof item === "string" ? item.split(' ').join('-').toLowerCase() : Number(item),
-                label : item
-            };
-        }
     });
 }
 
-export { CheckboxesUtils, SelectOptionsUtils }
+export {CheckboxesUtils, SelectOptionsUtils}

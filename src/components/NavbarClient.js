@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import Cookies from "universal-cookie/cjs";
+import Cookies from "js-cookie";
 import {
     Collapse,
     Navbar,
@@ -23,14 +23,6 @@ const NavbarClient = ({t, ...props}) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
     const router = useRouter();
-
-    const handleSignoutSubmit = async (event) => {
-        event.preventDefault();
-        // Save current URL so user is redirected back here after signing out
-        const cookies = new Cookies();
-        cookies.set('redirect_url', window.location.pathname, { path: '/' });
-        await router.push('/');
-    };
 
     const navBar2 = () =>{
         if (props.session && props.session.user) {
@@ -76,7 +68,7 @@ const NavbarClient = ({t, ...props}) => {
     return (
         <header className="fixed-top">
             {/*<navBar2/>*/}
-            <Navbar className="navbar navbar-expand-md pt-3 pb-3">
+            <Navbar className="navbar navbar-expand-md">
                 <NavbarBrand className="nav" href="/">
                     <img src={getLogo()} style={{width:100, marginTop: -7}}  alt=""/>
                 </NavbarBrand>
@@ -84,7 +76,8 @@ const NavbarClient = ({t, ...props}) => {
                 <Collapse isOpen={isOpen} navbar>
                     <Nav className="mr-auto" navbar>
                         <NavItem>
-                            <NavLink className="btn btn-outline-primary" href="/announce-rental">Ajouter une annonce
+                            <NavLink className="btn btn-outline-primary" href="/announce-rental">
+                                Ajouter une annonce
                             </NavLink>
                         </NavItem>
 
@@ -108,7 +101,7 @@ const NavbarClient = ({t, ...props}) => {
                             </NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink href="" className="navbar_icon">
+                            <NavLink href="/auth/logout" className="navbar_icon">
                                 <img src="/images/user.svg" alt=""/>
                             </NavLink>
                         </NavItem>

@@ -1,389 +1,384 @@
 {
-  "equipements": [
-    {
-      "name": "abs",
-      "label": "ABS"
-    },
-    {
-      "name": "esp",
-      "label": "ESP"
-    },
-    {
-      "name": "régulateur-de-vitesse-adaptatif",
-      "label": "Régulateur de vitesse adaptatif"
-    },
-    {
-      "name": "soundsystem",
-      "label": "Soundsystem"
-    },
-    {
-      "name": "bluetooth",
-      "label": "Bluetooth"
-    },
-    {
-      "name": "hayon-arrière-électrique",
-      "label": "Hayon arrière électrique"
-    },
-    {
-      "name": "cd",
-      "label": "CD"
-    },
-    {
-      "name": "mp3",
-      "label": "MP3"
-    },
-    {
-      "name": "start/stop-automatique",
-      "label": "Start/Stop automatique"
-    },
-    {
-      "name": "usb",
-      "label": "USB"
-    },
-    {
-      "name": "anti-patinage",
-      "label": "Anti-patinage"
-    },
-    {
-      "name": "porte-bagages",
-      "label": "Porte-bagages"
-    },
-    {
-      "name": "verrouillage-centralisé-sans-clé",
-      "label": "Verrouillage centralisé sans clé"
-    },
-    {
-      "name": "rétroviseurs-latéraux-électriques",
-      "label": "Rétroviseurs latéraux électriques"
-    },
-    {
-      "name": "airbags-latéraux",
-      "label": "Airbags latéraux"
-    },
-    {
-      "name": "ordinateur-de-bord",
-      "label": "Ordinateur de bord"
-    },
-    {
-      "name": "sieges-ventilés",
-      "label": "Sieges ventilés"
-    },
-    {
-      "name": "direction-assistée",
-      "label": "Direction assistée"
-    },
-    {
-      "name": "détecteur-de-pluie",
-      "label": "Détecteur de pluie"
-    },
-    {
-      "name": "phares-de-jour",
-      "label": "Phares de jour"
-    },
-    {
-      "name": "vitres-électriques",
-      "label": "Vitres électriques"
-    },
-    {
-      "name": "anti-démarrage",
-      "label": "Anti-démarrage"
-    },
-    {
-      "name": "affichage-tête-haute",
-      "label": "Affichage tête haute"
-    },
-    {
-      "name": "jantes-alliages",
-      "label": "Jantes alliages"
-    },
-    {
-      "name": "toit-ouvrant",
-      "label": "Toit ouvrant"
-    },
-    {
-      "name": "climatisation-automatique",
-      "label": "Climatisation automatique"
-    },
-    {
-      "name": "phares-au-xénon",
-      "label": "Phares au xénon"
-    },
-    {
-      "name": "volant-en-cuir",
-      "label": "Volant en cuir"
-    },
-    {
-      "name": "kit-mains-libres",
-      "label": "Kit mains libres"
-    },
-    {
-      "name": "régulateur-de-vitesses",
-      "label": "Régulateur de vitesses"
-    },
-    {
-      "name": "climatisation",
-      "label": "Climatisation"
-    },
-    {
-      "name": "tappe-de-ski",
-      "label": "Tappe de ski"
-    },
-    {
-      "name": "sièges-massants",
-      "label": "Sièges massants"
-    },
-    {
-      "name": "volant-multifonctions",
-      "label": "Volant multifonctions"
-    },
-    {
-      "name": "système-de-navigation",
-      "label": "Système de navigation"
-    },
-    {
-      "name": "sieges-chauffants",
-      "label": "Sieges chauffants"
-    },
-    {
-      "name": "equipement-handicapé",
-      "label": "Equipement handicapé"
-    },
-    {
-      "name": "sièges-à-réglage-lombaire",
-      "label": "Sièges à réglage lombaire"
-    },
-    {
-      "name": "toit-panoramique",
-      "label": "Toit panoramique"
-    },
-    {
-      "name": "camera-d’aide-au-stationnement",
-      "label": "Camera d’aide au stationnement"
-    },
-    {
-      "name": "radar-de-stationnement-arrière",
-      "label": "Radar de stationnement arrière"
-    },
-    {
-      "name": "pare-brise-chauffant",
-      "label": "Pare-brise chauffant"
-    },
-    {
-      "name": "radar-de-stationnement-avant",
-      "label": "Radar de stationnement avant"
-    },
-    {
-      "name": "suspension-pneumatique",
-      "label": "Suspension pneumatique"
-    },
-    {
-      "name": "airbag-conducteur",
-      "label": "Airbag conducteur"
-    },
-    {
-      "name": "attache-remorque",
-      "label": "Attache remorque"
-    },
-    {
-      "name": "phares-directionnels",
-      "label": "Phares directionnels"
-    },
-    {
-      "name": "airbag-passager",
-      "label": "Airbag passager"
-    },
-    {
-      "name": "accoudoir",
-      "label": "Accoudoir"
-    },
-    {
-      "name": "chauffage-auxiliaire",
-      "label": "Chauffage auxiliaire"
-    },
-    {
-      "name": "pétales-de-changement-de-vitesse",
-      "label": "Pétales de changement de vitesse"
-    },
-    {
-      "name": "volant-chauffant",
-      "label": "Volant chauffant"
-    },
-    {
-      "name": "4x4",
-      "label": "4x4"
-    },
-    {
-      "name": "feux-antibrouillard",
-      "label": "Feux antibrouillard"
-    },
-    {
-      "name": "radio",
-      "label": "Radio"
-    },
-    {
-      "name": "détecteur-de-lumière",
-      "label": "Détecteur de lumière"
-    },
-    {
-      "name": "led-phare-de-jour",
-      "label": "LED phare de jour"
-    },
-    {
-      "name": "phares-au-led",
-      "label": "Phares au LED"
-    },
-    {
-      "name": "porte-coulissante",
-      "label": "Porte coulissante"
-    },
-    {
-      "name": "écran-tactile",
-      "label": "Écran tactile"
-    },
-    {
-      "name": "alarme",
-      "label": "Alarme"
-    },
-    {
-      "name": "le-système-d’appel-d’urgence",
-      "label": "Le système d’appel d’urgence"
-    }
-  ],
-  "externalColors" : [
-      {
-        "name": "noir",
-        "label": "Noir"
-      },
-      {
-        "name": "blanc",
-        "label": "Blanc"
-      },
-      {
-        "name": "vert",
-        "label": "Vert"
-      },
-      {
-        "name": "belge",
-        "label": "Belge"
-      },
-      {
-        "name": "doré",
-        "label": "Doré"
-      },
-      {
-        "name": "marron",
-        "label": "Marron"
-      },
-      {
-        "name": "orange",
-        "label": "Orange"
-      },
-      {
-        "name": "bronze",
-        "label": "Bronze"
-      },
-      {
-        "name": "violet",
-        "label": "Violet"
-      },
-      {
-        "name": "bleu",
-        "label": "Bleu"
-      },
-      {
-        "name": "rouge",
-        "label": "Rouge"
-      },
-      {
-        "name": "argent",
-        "label": "Argent"
-      },
-      {
-        "name": "gris",
-        "label": "Gris"
-      },
-      {
-        "name": "jaune",
-        "label": "Jaune"
-      },
-      {
-        "name": "autre",
-        "label": "Autre"
-      }
+    "equipements": [{
+            "value": "abs",
+            "label": "ABS"
+        },
+        {
+            "value": "esp",
+            "label": "ESP"
+        },
+        {
+            "value": "régulateur-de-vitesse-adaptatif",
+            "label": "Régulateur de vitesse adaptatif"
+        },
+        {
+            "value": "soundsystem",
+            "label": "Soundsystem"
+        },
+        {
+            "value": "bluetooth",
+            "label": "Bluetooth"
+        },
+        {
+            "value": "hayon-arrière-électrique",
+            "label": "Hayon arrière électrique"
+        },
+        {
+            "value": "cd",
+            "label": "CD"
+        },
+        {
+            "value": "mp3",
+            "label": "MP3"
+        },
+        {
+            "value": "start/stop-automatique",
+            "label": "Start/Stop automatique"
+        },
+        {
+            "value": "usb",
+            "label": "USB"
+        },
+        {
+            "value": "anti-patinage",
+            "label": "Anti-patinage"
+        },
+        {
+            "value": "porte-bagages",
+            "label": "Porte-bagages"
+        },
+        {
+            "value": "verrouillage-centralisé-sans-clé",
+            "label": "Verrouillage centralisé sans clé"
+        },
+        {
+            "value": "rétroviseurs-latéraux-électriques",
+            "label": "Rétroviseurs latéraux électriques"
+        },
+        {
+            "value": "airbags-latéraux",
+            "label": "Airbags latéraux"
+        },
+        {
+            "value": "ordinateur-de-bord",
+            "label": "Ordinateur de bord"
+        },
+        {
+            "value": "sieges-ventilés",
+            "label": "Sieges ventilés"
+        },
+        {
+            "value": "direction-assistée",
+            "label": "Direction assistée"
+        },
+        {
+            "value": "détecteur-de-pluie",
+            "label": "Détecteur de pluie"
+        },
+        {
+            "value": "phares-de-jour",
+            "label": "Phares de jour"
+        },
+        {
+            "value": "vitres-électriques",
+            "label": "Vitres électriques"
+        },
+        {
+            "value": "anti-démarrage",
+            "label": "Anti-démarrage"
+        },
+        {
+            "value": "affichage-tête-haute",
+            "label": "Affichage tête haute"
+        },
+        {
+            "value": "jantes-alliages",
+            "label": "Jantes alliages"
+        },
+        {
+            "value": "toit-ouvrant",
+            "label": "Toit ouvrant"
+        },
+        {
+            "value": "climatisation-automatique",
+            "label": "Climatisation automatique"
+        },
+        {
+            "value": "phares-au-xénon",
+            "label": "Phares au xénon"
+        },
+        {
+            "value": "volant-en-cuir",
+            "label": "Volant en cuir"
+        },
+        {
+            "value": "kit-mains-libres",
+            "label": "Kit mains libres"
+        },
+        {
+            "value": "régulateur-de-vitesses",
+            "label": "Régulateur de vitesses"
+        },
+        {
+            "value": "climatisation",
+            "label": "Climatisation"
+        },
+        {
+            "value": "tappe-de-ski",
+            "label": "Tappe de ski"
+        },
+        {
+            "value": "sièges-massants",
+            "label": "Sièges massants"
+        },
+        {
+            "value": "volant-multifonctions",
+            "label": "Volant multifonctions"
+        },
+        {
+            "value": "système-de-navigation",
+            "label": "Système de navigation"
+        },
+        {
+            "value": "sieges-chauffants",
+            "label": "Sieges chauffants"
+        },
+        {
+            "value": "equipement-handicapé",
+            "label": "Equipement handicapé"
+        },
+        {
+            "value": "sièges-à-réglage-lombaire",
+            "label": "Sièges à réglage lombaire"
+        },
+        {
+            "value": "toit-panoramique",
+            "label": "Toit panoramique"
+        },
+        {
+            "value": "camera-d’aide-au-stationnement",
+            "label": "Camera d’aide au stationnement"
+        },
+        {
+            "value": "radar-de-stationnement-arrière",
+            "label": "Radar de stationnement arrière"
+        },
+        {
+            "value": "pare-brise-chauffant",
+            "label": "Pare-brise chauffant"
+        },
+        {
+            "value": "radar-de-stationnement-avant",
+            "label": "Radar de stationnement avant"
+        },
+        {
+            "value": "suspension-pneumatique",
+            "label": "Suspension pneumatique"
+        },
+        {
+            "value": "airbag-conducteur",
+            "label": "Airbag conducteur"
+        },
+        {
+            "value": "attache-remorque",
+            "label": "Attache remorque"
+        },
+        {
+            "value": "phares-directionnels",
+            "label": "Phares directionnels"
+        },
+        {
+            "value": "airbag-passager",
+            "label": "Airbag passager"
+        },
+        {
+            "value": "accoudoir",
+            "label": "Accoudoir"
+        },
+        {
+            "value": "chauffage-auxiliaire",
+            "label": "Chauffage auxiliaire"
+        },
+        {
+            "value": "pétales-de-changement-de-vitesse",
+            "label": "Pétales de changement de vitesse"
+        },
+        {
+            "value": "volant-chauffant",
+            "label": "Volant chauffant"
+        },
+        {
+            "value": "4x4",
+            "label": "4x4"
+        },
+        {
+            "value": "feux-antibrouillard",
+            "label": "Feux antibrouillard"
+        },
+        {
+            "value": "radio",
+            "label": "Radio"
+        },
+        {
+            "value": "détecteur-de-lumière",
+            "label": "Détecteur de lumière"
+        },
+        {
+            "value": "led-phare-de-jour",
+            "label": "LED phare de jour"
+        },
+        {
+            "value": "phares-au-led",
+            "label": "Phares au LED"
+        },
+        {
+            "value": "porte-coulissante",
+            "label": "Porte coulissante"
+        },
+        {
+            "value": "écran-tactile",
+            "label": "Écran tactile"
+        },
+        {
+            "value": "alarme",
+            "label": "Alarme"
+        },
+        {
+            "value": "le-système-d’appel-d’urgence",
+            "label": "Le système d’appel d’urgence"
+        }
     ],
-  "paints" : [
-    {
-      "name": "metalique",
-      "label": "Métalique"
-    },
-    {
-      "name": "autre",
-      "label": "Autre"
-    }
-  ],
-  "materials" : [
-    {
-      "name": "alcantre",
-      "label": "Alcantre"
-    },
-    {
-      "name": "cuir",
-      "label": "Cuir"
-    },
-    {
-      "name": "cuir partiel",
-      "label": "Cuir partiel"
-    },
-    {
-      "name": "tissu",
-      "label": "Tissu"
-    },
-    {
-      "name": "velours",
-      "label": "Velours"
-    },
-    {
-      "name": "autre",
-      "label": "Autre"
-    }
-  ],
-  "vehicleState" : [
-    {
-      "name":  "new-car",
-      "label" : "Neuve"
-    },
-    {
-      "name":  "occasion",
-      "label" : "Occasion"
-    },
-    {
-      "name":  "collection",
-      "label" : "Collection"
-    },
-    {
-      "name":  "driving-school-car",
-      "label" : "Véhicule auto-école"
-    },
-    {
-      "name":  "post-rental",
-      "label" : "Après location"
-    },
-    {
-      "name":  "cab",
-      "label" : "Taxi"
-    },
-    {
-      "name":  "company-vehicle",
-      "label" : "Véhicule de société"
-    },
-    {
-      "name":  "demo-vehicle",
-      "label" : "Véhicule de démonstration"
-    },
-    {
-      "name":  "Pre-save-vehicle",
-      "label" : "Pré-enregistré"
-    }
-  ],
-  "textarea" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsanet viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculusmus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget."
+    "externalColors": [{
+            "value": "noir",
+            "label": "Noir"
+        },
+        {
+            "value": "blanc",
+            "label": "Blanc"
+        },
+        {
+            "value": "vert",
+            "label": "Vert"
+        },
+        {
+            "value": "belge",
+            "label": "Belge"
+        },
+        {
+            "value": "doré",
+            "label": "Doré"
+        },
+        {
+            "value": "marron",
+            "label": "Marron"
+        },
+        {
+            "value": "orange",
+            "label": "Orange"
+        },
+        {
+            "value": "bronze",
+            "label": "Bronze"
+        },
+        {
+            "value": "violet",
+            "label": "Violet"
+        },
+        {
+            "value": "bleu",
+            "label": "Bleu"
+        },
+        {
+            "value": "rouge",
+            "label": "Rouge"
+        },
+        {
+            "value": "argent",
+            "label": "Argent"
+        },
+        {
+            "value": "gris",
+            "label": "Gris"
+        },
+        {
+            "value": "jaune",
+            "label": "Jaune"
+        },
+        {
+            "value": "autre",
+            "label": "Autre"
+        }
+    ],
+    "paints": [{
+            "value": "metalique",
+            "label": "Métalique"
+        },
+        {
+            "value": "autre",
+            "label": "Autre"
+        }
+    ],
+    "materials": [{
+            "value": "alcantre",
+            "label": "Alcantre"
+        },
+        {
+            "value": "cuir",
+            "label": "Cuir"
+        },
+        {
+            "value": "cuir partiel",
+            "label": "Cuir partiel"
+        },
+        {
+            "value": "tissu",
+            "label": "Tissu"
+        },
+        {
+            "value": "velours",
+            "label": "Velours"
+        },
+        {
+            "value": "autre",
+            "label": "Autre"
+        }
+    ],
+    "vehicleState": [{
+            "value": "new-car",
+            "label": "Neuve"
+        },
+        {
+            "value": "occasion",
+            "label": "Occasion"
+        },
+        {
+            "value": "collection",
+            "label": "Collection"
+        },
+        {
+            "value": "driving-school-car",
+            "label": "Véhicule auto-école"
+        },
+        {
+            "value": "post-rental",
+            "label": "Après location"
+        },
+        {
+            "value": "cab",
+            "label": "Taxi"
+        },
+        {
+            "value": "company-vehicle",
+            "label": "Véhicule de société"
+        },
+        {
+            "value": "demo-vehicle",
+            "label": "Véhicule de démonstration"
+        },
+        {
+            "value": "Pre-save-vehicle",
+            "label": "Pré-enregistré"
+        }
+    ],
+    "textarea": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsanet viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculusmus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget."
 }

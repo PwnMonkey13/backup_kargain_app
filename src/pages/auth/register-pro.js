@@ -1,15 +1,18 @@
 import React, { useState, useContext } from 'react';
-import axioswal from 'axioswal';
-import Layout from '../../layouts/Layout';
-import redirectTo from '../../libs/redirectTo';
-import { UserContext } from '../../components/UserContext';
 import { Container, Form } from 'reactstrap'
+import { useRouter } from "next/router";
+import {useLink} from "valuelink";
+
+import Layout from '../../layouts/Layout';
 import InputControlled from '../../components/form/InputControlled';
 import FormGroupCustom from '../../components/form/FormGroupCustom'
-import {useLink} from "valuelink";
+import { UserContext } from '../../components/Context/UserContext';
+import AuthService from '../../services/AuthService'
+import Link from "next/link";
 
 const LoginPage = () => {
     const { dispatch } = useContext(UserContext);
+    const router = useRouter();
     const $state = useLink({
         email : '',
         company_name : '',
@@ -29,112 +32,114 @@ const LoginPage = () => {
         }
     );
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         const state = $state.value;
-        event.preventDefault();
-        axioswal
-            .post('/api/authenticate', {
-                email : state.email,
-                password : state.password,
-            })
-            .then((data) => {
-                if (data.status === 'ok') {
-                    dispatch({ type: 'fetch' });
-                    redirectTo('/');
-                }
-            });
+        if (!state.email) return;
+
+        AuthService.registerPro(state.email, state.password)
+            .then(data => {
+                dispatch({ type : 'registerProSuccess', payload : data });
+                router.push('/account');
+            }).catch(err => {
+            console.log(err);
+        });
     };
 
     return (
         <Layout>
             <Container>
-                <Form className="auth_form m-auto" onSubmit={handleSubmit}>
+
+                <FormGroupCustom.Row>
+                    <Link href="#">
+                        <a className="register-fb">
+                            <img src="/images/fb.png" alt=""/>
+                            Se connecter avec Facebook
+                        </a>
+                    </Link>
+
+                    <Link href="#">
+                        <a className="register-g">
+                            <img src="/images/g+.png" alt=""/>
+                            Se connecter avec Google+
+                        </a>
+                    </Link>
+                </FormGroupCustom.Row>
+
+                <Form className="auth_form" onSubmit={handleSubmit}>
                     <h1>Connexion</h1>
                     <div className="form_container">
-                        <InputControlled
+                        <InputControlled required
                             type="email"
                             label="Email"
-                            required
                             $flag={$state.at('email')}
                         />
-                        <InputControlled
+                        <InputControlled required
                             label="Nom de société"
-                            required
                             $flag={$state.at('company_name')}
                         />
-                        <InputControlled
+                        <InputControlled required
                             label="ID société"
-                            required
                             $flag={$state.at('company_ID')}
                         />
-                        <InputControlled
+                        <InputControlled required
                             label="Gérant de la société"
-                            required
                             $flag={$state.at('company_owner')}
                         />
-                        <InputControlled
+                        <InputControlled required
                             label="Pays"
-                            required
                             $flag={$state.at('country')}
                         />
-                        <InputControlled
+                        <InputControlled required
                             label="Ville"
-                            required
                             $flag={$state.at('city')}
                         />
-                        <InputControlled
+                        <InputControlled required
                             label="Code Postal"
-                            required
                             $flag={$state.at('postalcode')}
                         />
-                        <InputControlled
+                        <InputControlled required
                             label="Adresse"
-                            required
                             $flag={$state.at('adresse')}
                         />
-                        <InputControlled
+                        <InputControlled required
+                            type="tel"
                             label="Téléphone"
-                            required
                             $flag={$state.at('tel')}
                         />
-                        <InputControlled
+                        <InputControlled required
                             label="Nom d'utilisateur"
-                            required
                             $flag={$state.at('username')}
                         />
-                        <InputControlled
+                        <InputControlled required
                             type="password"
                             label="Mot de passe"
-                            required
                             $flag={$state.at('password')}
                         />
-                        <InputControlled
+                        <InputControlled required
                             type="password"
                             label="Confirmer mot de passe"
-                            required
                             $flag={$state.at('confirm_pwd')}
                         />
                         <InputControlled
                             type="file"
                             label="Copie de l’extrait kbis de société"
-                            required
-                            $flag={$state.at('username')}
+                            $flag={$state.at('file_kbis')}
                         />
                         <InputControlled
                             type="file"
                             label="Copie de la pièce identité du gérant"
-                            required
-                            $flag={$state.at('username')}
+                            $flag={$state.at('file_id')}
                         />
                         <InputControlled
                             label="J’ai lu et j’accepte les conditions générales d’utilisation"
                             type="checkbox"
                             required
-                            $flag={$state.at('save_pwd')}
+                            $flag={$state.at('accept_legal')}
                         />
 
                         <FormGroupCustom className="submit">
-                            <button className="btn btn-outline-primary" type="submit">S'enregirster</button>
+                            <button className="btn btn-outline-primary" type="submit">S'enregistrer</button>
                         </FormGroupCustom>
                     </div>
                 </Form>

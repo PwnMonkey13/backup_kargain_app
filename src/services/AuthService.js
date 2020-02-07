@@ -13,7 +13,6 @@ function login(email, password) {
         .then(handleResponse)
         .then(res => res.json())
         .then(json => {
-            console.log(json);
             if (json.success === false) throw json.msg;
             else return json.data;
         })
@@ -23,11 +22,11 @@ function login(email, password) {
     );
 }
 
-function register(email, password) {
+function register(user) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify(user)
     };
 
     return fetch(`${config.api}/auth/register`, requestOptions)
@@ -35,7 +34,7 @@ function register(email, password) {
         .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
-            else return json.data;
+            else return json;
         })
         .catch(err => {
             throw err;
@@ -43,7 +42,27 @@ function register(email, password) {
     );
 }
 
-function authorizeUser() {
+function registerPro(form) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ form })
+    };
+
+    return fetch(`${config.api}/auth/register-pro`, requestOptions)
+        .then(handleResponse)
+        .then(res => res.json())
+        .then(json => {
+            if (json.success === false) throw json.msg;
+            else return json.data;
+        })
+        .catch(err => {
+                throw err;
+            }
+        );
+}
+
+function authorize() {
     const requestOptions = {
         method: 'GET',
         headers: setHeaders(),
@@ -67,6 +86,7 @@ function signout() {}
 export default {
     login,
     register,
-    authorizeUser,
+    registerPro,
+    authorize,
     signout
 };

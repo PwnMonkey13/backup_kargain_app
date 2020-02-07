@@ -31,12 +31,7 @@
   .profile-marque-wrapper{
     flex-wrap: wrap;
   }
-  .top-profile-content-wrapper {
-    width: 475px;
-  }
-  .nav-tabs-profile .nav-link {
-    width: 170px;
-  }
+
   .profile-marque-wrapper .d-flex{
     margin-top: 20px;
   }
@@ -46,16 +41,6 @@
 }
 
 @media (max-width: 767px){
-  h1,h2,h3,h4,h5,h6{
-    font-size: 1.3em !important;
-  }
-  [type="radio"]:checked + label, [type="radio"]:not(:checked) + label,
-  [type="checkbox"]:checked + label, [type="checkbox"]:not(:checked) + label{
-    white-space: unset;
-  }
-  textarea{
-    margin-left: 0;
-  }
   .tab-pane img{
     width: 100%;
   }
@@ -197,9 +182,7 @@
   .top-profile-wrapper,.top-profile-name-btn{
     flex-direction: column;
   }
-  .top-profile-content-wrapper {
-    width: auto;
-  }
+
   .top-profile-name-btn > div,.top-profile-name{
     margin-top: 10px;
   }
@@ -348,10 +331,7 @@
   .register-socials-wrapper{
     flex-direction: column;
   }
-  .register-g{
-    margin-left: 0;
-    margin-top: 20px;
-  }
+
   .register-socials-wrapper{
     margin-top: 20px;
   }

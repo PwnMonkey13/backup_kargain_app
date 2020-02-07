@@ -1,14 +1,20 @@
 import React  from 'react'
-import { UserContextProvider } from '../components/UserContext'
+import { UserContextProvider } from '../components/Context/UserContext'
+import { ModalDialogContextProvider } from '../components/Context/ModalDialogContext'
 import Loading from '../components/Loading'
+import ModalExample from "../components/ModalExample";
 
 function MyApp({ Component, pageProps }) {
 
     return (
-        <UserContextProvider>
-            {/*<Loading {...state} />*/}
-            <Component {...pageProps} />
-        </UserContextProvider>
+        <ModalDialogContextProvider>
+            <UserContextProvider>
+                {/*<Loading {...state} />*/}
+                <ModalExample/>
+                <Component {...pageProps} />
+            </UserContextProvider>
+        </ModalDialogContextProvider>
+
     );
 }
 

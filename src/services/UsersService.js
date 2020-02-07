@@ -1,16 +1,16 @@
+import fetch from 'isomorphic-unfetch'
 import handleResponse from '../libs/handleResponse';
-import setHeaders from '../libs/authHeaders';
 import config from '../config/config';
+import setHeaders from "../libs/authHeaders";
 
-function getUsers(uid = null) {
+function getUsers(username = null, token = null) {
     const requestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        // headers: setHeaders()
+        method : 'GET',
+        headers: setHeaders(token)
     };
 
     let url = `${config.api}/users`;
-    if (uid) url += '/' + uid;
+    if (username) url += '/' + username;
 
     return fetch(url, requestOptions)
         .then(handleResponse)
