@@ -1,4 +1,4 @@
-import completeFields from "../Validations/completeFields";
+import CompleteFields from "../Validations/CompleteFields";
 
 const model = [
     {
@@ -19,4 +19,4 @@ const model = [
     },
 ];
 
-export default completeFields(model);
+export default CompleteFields(model);
