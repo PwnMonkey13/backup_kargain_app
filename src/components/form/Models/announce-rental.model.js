@@ -1,4 +1,4 @@
-import completeFields from "../Validations/completeFields";
+import CompleteFields from "../Validations/CompleteFields";
 import {SelectOptionsUtils} from "../../../libs/formFieldsUtils";
 import FieldsTranslalted from "../../../../public/locales/fr/fields";
 
@@ -543,4 +543,4 @@ const model = [
     },
 ];
 
-export default completeFields(model);
+export default CompleteFields(model);
