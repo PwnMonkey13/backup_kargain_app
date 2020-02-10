@@ -29,8 +29,6 @@ const Edit = (props) => {
     };
 
     const handleSubmit = async (e, inputs) => {
-        console.log(e);
-        console.log(inputs);
         // e.preventDefault();
         // const state = model.reduce((carry, m) => { return { ...carry, [m.name] : m.value }}, {});
         // setState({

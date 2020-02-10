@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+import {set as _set} from "lodash";
 
 const resolve = (path, obj = self, separator = '.') => {
     const properties = Array.isArray(path) ? path : path.split(separator);
@@ -54,11 +55,17 @@ const useForm = (model, values, submitCallback) => {
     };
 
     const prepareSubmit = (e, inputs) => {
-        const data = inputs.reduce((carry, input) => {
+        const form = inputs.reduce((carry, input) => {
             if(input.value) carry[input.name] = input.value;
             return carry;
         }, {});
-        submitCallback(e, data);
+
+        const formated = Object.entries(form).reduce((res, [path, val]) => {
+            _set(res, path, val);
+            return res;
+        }, {});
+
+        submitCallback(e, formated);
     };
 
     const parseInput = input => input.value = input.parseFun ? input.parseFun(input.value) : input.value;

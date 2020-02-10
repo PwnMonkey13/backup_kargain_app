@@ -7,8 +7,7 @@ const handleResponse = response => {
 		}
 		else{
 			return response.json().then(json => {
-				console.log(json);
-				// if(json.success === false) throw Error(json.msg);
+				if(json.success === false) throw Error(json.msg);
 			})
 			.catch(err => {
 				throw err;

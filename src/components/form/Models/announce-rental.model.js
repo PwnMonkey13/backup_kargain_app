@@ -191,6 +191,7 @@ const model = [
     {
         componentType: 'input',
         type : 'text',
+        label : 'Titre',
         name : 'title',
         required : true
     },
@@ -199,7 +200,7 @@ const model = [
         type: 'radio',
         name: 'category',
         label: 'Catégorie',
-        required : true,
+        // required : true,
         display : 'inline',
         // linked : 'category',
         classname : 'btn-group',
@@ -211,7 +212,7 @@ const model = [
         type: 'radio',
         name: 'type',
         label: 'Type',
-        required : true,
+        // required : true,
         choices: RadioTypeChoices
     },
     {
@@ -257,7 +258,7 @@ const model = [
                 name: 'price[activePerHour]',
                 label: 'Prix par jour',
                 placeholder: "TTC",
-                required : true,
+                // required : true,
             },
             {
                 componentType : 'input',
@@ -397,7 +398,7 @@ const model = [
         type: 'select',
         name: 'doors',
         label: "Nombre de portes",
-        required : true,
+        // required : true,
         options: SelectChoicesDoors
     },
 

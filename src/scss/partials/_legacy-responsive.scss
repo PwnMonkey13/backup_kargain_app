@@ -10,24 +10,19 @@
 }
 
 @media (max-width: 992px){
-  .navbar .btn-outline-primary,.navbar .navbar-icons-wrapper{
-    display: none;
-  }
-  .search-header-wrapper {
-    flex-grow: 0;
-  }
+
   .mobile-footer-menu{
     display: flex;
   }
+
   footer .chat-btn{
     display: none;
   }
+
   .chat-btn{
     position: static;
   }
-  header .form-control[type=search]{
-    margin-left: 0;
-  }
+
   .profile-marque-wrapper{
     flex-wrap: wrap;
   }
@@ -64,17 +59,7 @@
     border: 1px solid #3d4248;
     margin-left: 19px;
   }
-  .navbar-brand img {
-    max-width: 120px;
-    width: 100%;
-    height: auto;
-  }
-  .navbar-brand{
-    margin-right: 10px;
-  }
-  header .form-control[type=search]{
-    width: 220px;
-  }
+
   .input-text {
     border: none;
     border-bottom: 1px solid #000;
@@ -129,10 +114,7 @@
     font: 700 12px Quicksand;
     padding: 7px 8px;
   }
-  .navbar-icons-wrapper-notifications {
-    margin: 0 12px;
-    position: relative;
-  }
+
   .chat-btn {
     padding: 8px 13px;
     border-radius: 25px;
@@ -141,12 +123,7 @@
     margin-right: 10px;
     max-width: 19px;
   }
-  .dropdown-menu{
-    width: 411px;
-  }
-  h4{
-    margin-bottom: 5px;
-  }
+
   .width-100-mob,.nice-select{
     width: 100%;
   }
@@ -262,9 +239,6 @@
   .vartical-tab-profile form{
     width: 100%;
     align-items: flex-start;
-  }
-  .margin-top-header {
-    margin-top: 100px;
   }
   .nav-pills{
     flex-direction: row !important;

@@ -13,7 +13,6 @@ const LoginPage = () => {
     const { dispatchModal } = useContext(ModalDialogContext);
     const router = useRouter();
     const { redirect } = router.query;
-    console.log(redirect);
 
     const handleSubmit = () => {
         const state = model.reduce((carry, m) => { return { ...carry, [m.name] : m.value }}, {});

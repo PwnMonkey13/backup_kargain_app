@@ -4,6 +4,7 @@ import AuthService from '../../services/AuthService'
 import useLocalStorage from '../../hooks/useLocalStorage'
 const UserContext = createContext({});
 
+
 const reducer = (state, action) => {
     switch (action.type) {
         case 'set':
@@ -26,9 +27,9 @@ const reducer = (state, action) => {
 };
 
 const UserContextProvider = ({ children }) => {
-    const [ loggedInUser, setLoggedInUser, clearLoggedInUser ] = useLocalStorage('loggedin_user', null);
+    const [ loggedInUser, setLoggedInUser, clearLoggedInUser ] = useLocalStorage('loggedin_user', {});
     const [session, dispatch] = useReducer(reducer, {
-        isLoggedIn: loggedInUser !== null,
+        isLoggedIn: loggedInUser !== null && Cookie.get('token'),
         user : loggedInUser
     });
 
@@ -37,7 +38,6 @@ const UserContextProvider = ({ children }) => {
             clearLoggedInUser();
             Cookie.remove('token');
             dispatch({ type : 'logout'});
-            console.log('zzefzf');
         }
         if (action.type === 'checkToken') {
             AuthService.authorize()
@@ -60,9 +60,9 @@ const UserContextProvider = ({ children }) => {
        }
     };
 
-    // useEffect(() => {
-    //     dispatchProxy({ type : 'logout', err : "Unauthorized" })
-    // }, []);
+    useEffect(() => {
+        if(!session.isLoggedIn) dispatchProxy({ type : 'logout', err : "Unauthorized" })
+    }, []);
 
     return (
         <UserContext.Provider value={{ session, dispatch: dispatchProxy }}>

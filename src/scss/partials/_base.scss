@@ -27,9 +27,6 @@ body {
   text-align: center;
   background-color: $bg_grey;
   font-family: $default-font, 'valeraRound' ,sans-serif;
-  //font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-  //"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-  //"Helvetica Neue", sans-serif;
 }
 
 article,
@@ -59,20 +56,10 @@ header {
 
 main {
   align-items: center;
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flex;
-  display: -o-flex;
   display: flex;
-  height: 100vh;
   justify-content: center;
   padding: 1rem;
-  max-width: 1040px;
   margin: 0 auto;
-}
-
-h1, h2, h3, h4, h5{
-  //text-align: left;
 }
 
 h3{
@@ -89,22 +76,6 @@ h4{
   text-align: left;
 }
 
-a {
-  text-decoration: none!important;
-  color: #00ad9f;
-  //color: #424770;
-  -webkit-transition: color .4s ease-in-out;
-  -o-transition: color .4s ease-in-out;
-  transition: color .4s ease-in-out;
-
-  &:hover {
-    color: #24B47E;
-    -webkit-transition: color .2s ease-in-out;
-    -o-transition: color .2s ease-in-out;
-    transition: color .2s ease-in-out;
-  }
-}
-
 hr {
   box-sizing: content-box;
   height: 0;
@@ -112,6 +83,11 @@ hr {
   border: 0;
   margin: 1rem 0;
   border-top: 1px solid rgba(0,0,0,.1);
+}
+
+a {
+  text-decoration: none!important;
+  color: #00ad9f;
 }
 
 .main_layout {
@@ -150,6 +126,20 @@ hr {
   color: #000;
 }
 
+.btn-outline-primary{
+  color: #569ffc;
+  border-color: #569ffc;
+  padding: 1rem;
+  border-radius: 50px;
+  font: 700 16px Quicksand;
+
+  &:hover {
+    background-color: #569ffc;
+    border-color: #569ffc;
+    color:white;
+  }
+}
+
 .lead {
   font-size: 3em;
   opacity: 0.7;
@@ -175,4 +165,11 @@ hr {
   .lead {
     font-size: 1.5em;
   }
+}
+
+
+.announce{
+  margin: 1rem;
+  padding: 1rem;
+  border: 1px solid black;
 }

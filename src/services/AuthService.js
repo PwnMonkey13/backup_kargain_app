@@ -1,3 +1,4 @@
+import fetch from 'isomorphic-unfetch';
 import handleResponse from '../libs/handleResponse';
 import setHeaders from '../libs/authHeaders';
 import config from '../config/config';
@@ -62,10 +63,10 @@ function registerPro(form) {
         );
 }
 
-function authorize() {
+function authorize(token) {
     const requestOptions = {
         method: 'GET',
-        headers: setHeaders(),
+        headers: setHeaders('GET', token),
     };
 
     return fetch(`${config.api}/auth/authorize`, requestOptions)
@@ -73,7 +74,7 @@ function authorize() {
         .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
-            else return json.data;
+            else return json.data.user;
         })
         .catch(err => {
             throw err;

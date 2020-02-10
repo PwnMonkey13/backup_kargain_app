@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-unfetch';
-import axios from 'axios';
 import handleResponse from '../libs/handleResponse';
 import config from '../config/config';
 import setHeaders from "../libs/authHeaders";
@@ -19,7 +18,6 @@ function getWPAnnounces(id = null) {
             return json;
         })
         .catch(err => {
-            console.log(err);
             throw err;
         });
 }
@@ -40,7 +38,8 @@ function getAnnounces() {
         })
         .catch(err => {
             throw err;
-        });
+        }
+    );
 }
 
 function createAnnounce(data, token) {
@@ -49,16 +48,6 @@ function createAnnounce(data, token) {
         headers: setHeaders('POST', token),
         body: JSON.stringify(data)
     };
-
-    const params = {
-        title : data.title,
-        slug : 'auto-occasion-annonce-12360',
-        status : 'draft',
-        post_content : data.about,
-
-
-    };
-
 
     let url = `${config.api}/ads`;
     return fetch(url, requestOptions)

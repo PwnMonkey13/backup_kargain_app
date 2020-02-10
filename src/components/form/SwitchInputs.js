@@ -1,22 +1,15 @@
 import React from "react";
 import {
-    CheckboxInput,
-    CheckboxMultipleInput,
-    EmailInput,
-    FileInput,
+    TextInput,
     NumberInput,
+    EmailInput,
     PasswordInput,
+    CheckBoxInput,
+    CheckboxMultipleInput,
     RadioInput,
     SelectInput,
-    TelInput,
     TextareaInput,
-    TextInput
 } from "./Inputs";
-
-import {
-    ManufactureYearSelectGroup,
-    TechnicalPaperTabGroup,
-} from "./announceFields";
 
 const SwitchInput = (props) => {
     switch (props.type) {
@@ -32,21 +25,21 @@ const SwitchInput = (props) => {
         case 'textarea' :
             return <TextareaInput {...props} />;
         case 'checkbox':
-            return <CheckboxInput {...props}/>;
+            return <CheckBoxInput{...props}/>;
         case 'checkbox-multiple':
             return <CheckboxMultipleInput {...props}/>;
         case 'radio':
             return <RadioInput {...props}/>;
         case 'select':
             return <SelectInput {...props}/>;
-        case 'tel':
-            return <TelInput {...props} />;
-        case 'file':
-            return <FileInput {...props}/>;
-        case 'YearSelect' :
-            return <ManufactureYearSelectGroup {...props} />;
-        case 'technicalPaperTabs':
-            return <TechnicalPaperTabGroup {...props} />;
+        // case 'tel':
+        //     return <TelInput {...props} />;
+        // case 'file':
+        //     return <FileInput {...props}/>;
+        // case 'YearSelect' :
+        //     return <ManufactureYearSelectGroup {...props} />;
+        // case 'technicalPaperTabs':
+        //     return <TechnicalPaperTabGroup {...props} />;
     }
 };
 

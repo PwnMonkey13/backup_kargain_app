@@ -1,5 +1,7 @@
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700');
+@import 'bootstrap/scss/bootstrap.scss';
+@import 'react-bootstrap-table/dist/react-bootstrap-table-all.min';
 
 @import './partials/variables';
 @import './partials/base';

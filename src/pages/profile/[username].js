@@ -10,6 +10,7 @@ import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 import Tabs from "../../components/Tabs/Tabs";
 
 const Index = ({err, profile, ...props}) => {
+
     const router = useRouter();
     const { session, dispatch } = useContext(UserContext);
     const { dispatchModal } = useContext(ModalDialogContext);
@@ -45,7 +46,7 @@ const Index = ({err, profile, ...props}) => {
     };
 
     return ( profile ?
-        <Layout {...props}>
+        <>
             <Row>
                 <div className="top-profile-wrapper">
                     <img src={getProfileAvatar()} alt="" className="img-profile-wrapper"/>
@@ -169,20 +170,16 @@ const Index = ({err, profile, ...props}) => {
                     <p>Content 4</p>
                 </Tabs.Item>
             </Tabs>
-        </Layout> :
-        <Layout>
-            <p> TODO, unknown user</p>
-        </Layout>
+        </> : <p> TODO, unknown user</p>
     );
 };
 
 Index.getInitialProps = async function(ctx) {
-    const { token } = nextCookie(ctx);
+    const {token} = nextCookie(ctx);
     const { username } = ctx.query;
-    const { originalUrl } = ctx.req;
     try{
         const profile = await UsersService.getUsers(username, token);
-        return { originalUrl, profile };
+        return { profile };
     } catch (err) {
         return err;
     }

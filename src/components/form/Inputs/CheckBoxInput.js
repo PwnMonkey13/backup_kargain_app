@@ -4,7 +4,7 @@ import {Row} from "reactstrap";
 import PropTypes from 'prop-types';
 import ValidationAlert from '../Validations/ValidationAlert';
 
-const CheckboxMultipleInput = ({ setInputs, ...props }) => {
+const CheckBoxInput = ({ setInputs, ...props }) => {
 
     const [checked, setChecked] = useState(props.value);
     const onChange = (e) => {
@@ -13,7 +13,7 @@ const CheckboxMultipleInput = ({ setInputs, ...props }) => {
 
     useEffect(() => {
         if(checked) setInputs(props.name, checked);
-    }, [value]);
+    }, [checked]);
 
     return (
         <div className={classNames(props.classname, 'form-field')}>
@@ -41,9 +41,7 @@ const CheckboxMultipleInput = ({ setInputs, ...props }) => {
     )
 };
 
-export default CheckboxMultipleInput;
-
-CheckboxMultipleInput.defaultProps = {
+CheckBoxInput.defaultProps = {
     required: false,
     disabled : false,
     checked : false,
@@ -52,10 +50,12 @@ CheckboxMultipleInput.defaultProps = {
     options : []
 };
 
-CheckboxMultipleInput.propTypes = {
+CheckBoxInput.propTypes = {
     required: PropTypes.bool,
     disabled: PropTypes.bool,
     checked: PropTypes.bool,
     display: PropTypes.string,
     value: PropTypes.any,
 };
+
+export default CheckBoxInput;
