@@ -15,12 +15,10 @@ export default () => {
     }, []);
 
     return(
-        <Layout>
-            <div className="text-center pt-5 pb-5">
-                <p className="lead">
-                    Login out...
-                </p>
-            </div>
-        </Layout>
+        <div className="text-center pt-5 pb-5">
+            <p className="lead">
+                Login out...
+            </p>
+        </div>
     )
 }

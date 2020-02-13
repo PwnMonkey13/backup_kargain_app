@@ -1,25 +1,25 @@
-import React, { useContext, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import React, {useEffect} from 'react'
+import {useRouter} from 'next/router'
 import Loader from '../../components/Loader'
-import Layout from "../../layouts/Layout";
-import {UserContext} from "../../components/Context/UserContext";
+import Link from "next/link";
 
 const Callback = (props) => {
     const router = useRouter();
-    const { session } = useContext(UserContext);
-    const redirectTo = session.redirectTo || '/';
+    const { redirect } = props.router.query;
 
     useEffect(() => {
-        setTimeout(()=>{
-            router.push(props.redirectTo || '/');
+        setTimeout(() => {
+            router.push(redirect || '/');
         }, 3000);
     }, []);
 
     return (
-        <Layout>
+        <>
             <Loader fullscreen={false}/>
-            <a href={redirectTo}>Redirection...</a>
-        </Layout>
+            <Link href={redirect}>
+                <a>Redirection...</a>
+            </Link>
+        </>
     );
 };
 

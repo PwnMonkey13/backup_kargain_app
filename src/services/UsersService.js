@@ -24,7 +24,7 @@ function getUsers(username = null, token = null) {
         });
 }
 
-function updateUser(user) {
+function updateUser(username, updates, token) {
 
     // const formData = {
     //     // _csrf: await NextAuth.csrfToken(),
@@ -39,15 +39,15 @@ function updateUser(user) {
     // }).join('&');
 
     const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'PUT',
+        headers: setHeaders('PUT', token),
         // headers: setHeaders({
         //     'Content-Type': 'application/x-www-form-urlencoded'
         // }),
-        body: user
+        body: JSON.stringify(updates)
     };
 
-    let url = `${config.api}/users/${user._id}`;
+    let url = `${config.api}/users/${username}`;
 
     return fetch(url, requestOptions)
         .then(handleResponse)

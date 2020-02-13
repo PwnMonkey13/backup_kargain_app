@@ -1,18 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
-import {Container, Row, Col} from 'reactstrap'
-import {UserContext} from '../components/Context/UserContext';
+import React, { useState, useEffect } from 'react';
+import {Row, Col} from 'reactstrap'
 import AnnounceService from '../services/AnnounceService';
-import Layout from '../layouts/Layout';
 import AnnounceCard from '../components/AnnounceCard';
 
-const Index = ({...props}) => {
+const Index = () => {
     const [ announces, setAnnounces ] = useState([]);
-    const {session, dispatch} = useContext(UserContext);
 
     const fetchAnnounces = () => {
-        console.log('fetch');
         AnnounceService.getAnnounces().then(response => {
-            console.log(response);
             setAnnounces(response);
         }).catch(err => {
             throw err;
@@ -20,12 +15,11 @@ const Index = ({...props}) => {
     };
 
     useEffect(() => {
-        console.log('effect');
         fetchAnnounces();
     }, []);
 
     return (
-        <Container>
+        <main>
             <Row>
                 <Col md="10">
                     <div className="righ-filter-wrapper">
@@ -59,7 +53,7 @@ const Index = ({...props}) => {
                     </div>
                 </Col>
             </Row>
-        </Container>
+        </main>
     )
 };
 

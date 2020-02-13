@@ -11,27 +11,24 @@ import AuthService from '../../services/AuthService'
 import model from "../../components/form/Models/register.model"
 
 const LoginPage = () => {
+    const router = useRouter();
     const {dispatch} = useContext(UserContext);
     const {dispatchModal} = useContext(ModalDialogContext);
-    const router = useRouter();
+    const { redirect } = router.query;
 
-    const handleSubmit = () => {
-        const state = model.reduce((carry, m) => {
-            return {...carry, [m.name]: m.value}
-        }, {});
-        AuthService.register(state)
+    const handleSubmit = async (e, data) => {
+        AuthService.register(data)
             .then(data => {
-                    dispatch({type: 'set', payload: {user: {email: data.document.email}}});
-                    router.push('/auth/check-email');
-                }
-            )
-            .catch(err => {
+                dispatch({type: 'set', payload: {user: {email: data.document.email}}});
+                if (redirect) router.push({pathname: redirect});
+                else router.push('/auth/callback?redirect=/auth/check-email');
+            }).catch(err => {
                 dispatchModal({type: 'error', err});
             })
     };
 
     return (
-        <Layout>
+        <main>
             <h1>Créer un compte</h1>
             <Row>
                 <Col className="social_providers" sm="12" md="5">
@@ -48,15 +45,17 @@ const LoginPage = () => {
                             Se connecter avec Google+
                         </a>
                     </Link>
-
-                    <Link href="/auth/register-pro">
-                        <button className="btn btn-outline-primary submit">
-                            S'enregistrer en tant que Pro
-                        </button>
+                    <Divider text="ou"/>
+                    <Link href="/auth/login">
+                        <a className="btn btn-outline-primary submit">
+                            Se connecter
+                        </a>
                     </Link>
-
-                    <Divider text="or"/>
-
+                    <Link href="/auth/register-pro">
+                        <a className="btn btn-outline-primary submit">
+                            Créer un compte Pro
+                        </a>
+                    </Link>
                 </Col>
                 <Col className="auth_form m-auto" sm="12" md="7">
                     <FormPanel
@@ -66,7 +65,7 @@ const LoginPage = () => {
                     />
                 </Col>
             </Row>
-        </Layout>
+        </main>
     );
 };
 

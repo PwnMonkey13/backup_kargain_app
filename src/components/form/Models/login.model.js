@@ -1,6 +1,4 @@
-import CompleteFields from "../Validations/CompleteFields";
-
-const model = [
+const fields = [
     {
         componentType : 'input',
         name: 'email',
@@ -19,4 +17,11 @@ const model = [
     },
 ];
 
-export default CompleteFields(model);
+const model = {
+    config : {
+        autoFill : true,
+    },
+    fields : fields
+};
+
+export default model;

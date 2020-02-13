@@ -42,6 +42,26 @@ function getAnnounces() {
     );
 }
 
+function getAnnounceBySlug(slug) {
+    const requestOptions = {
+        headers: setHeaders('GET')
+    };
+
+    let url = `${config.api}/ads/slug/${slug}`;
+
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(res => res.json())
+        .then(json => {
+            if (json.success === false) throw json.msg;
+            else return json.data;
+        })
+        .catch(err => {
+                throw err;
+            }
+        );
+}
+
 function createAnnounce(data, token) {
     const requestOptions = {
         method : 'POST',
@@ -65,5 +85,6 @@ function createAnnounce(data, token) {
 export default {
     getAnnounces,
     getWPAnnounces,
+    getAnnounceBySlug,
     createAnnounce
 };

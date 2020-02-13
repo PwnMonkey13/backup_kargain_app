@@ -1,33 +1,37 @@
-import {useState, useEffect} from 'react';
-import {set as _set} from "lodash";
-
-const resolve = (path, obj = self, separator = '.') => {
-    const properties = Array.isArray(path) ? path : path.split(separator);
-    return properties.reduce((prev, curr) => prev && prev[curr], obj);
-};
+import {useState, useEffect } from 'react';
+import CompleteInput from "../components/form/Validations/CompleteInput";
+import {set as _set, get as _get} from "lodash";
 
 const extractInputs = (fields, inputs = []) => {
     return fields.reduce((carry, field) => {
         if (field.componentType === 'group') {
             return [...carry, ...extractInputs(field.fields, inputs)]
         } else if (field.componentType === 'input') {
-            return [...carry, field];
+            return [...carry, CompleteInput(field)];
         } else return carry;
     }, inputs);
 };
 
+const updatedFields = (fields, inputs) => {
+    return fields.map(field => {
+        if (field.componentType === "group") return {...field, fields : updatedFields(field.fields, inputs)};
+        else if (field.componentType === "input") return inputs.find(input => input.name === field.name);
+        else return field;
+    });
+};
+
 const useForm = (model, values, submitCallback) => {
-    const [fields, setFields] = useState(model);
+    const { config } = model;
+    const [fields, setFields] = useState(model.fields);
     const [ message, setMessage ] = useState('');
     const inputs = extractInputs(fields);
 
     useEffect(() => {
-        inputs.forEach(input => input.value = input.linked ? resolve(input.linked, values) : input.value);
-        setFields(fields.map(field => {
-            if (field.componentType !== "input") return field;
-            else return inputs.find(input => input.name === field.name);
-        }));
-    }, []);
+        if (values && config.autoFill) inputs.forEach(input => {
+            input.value = _get(values, input.name, input.value);
+        });
+        setFields(updatedFields(fields, inputs));
+    },[]);
 
     const handleChange = (name, value) => {
         let input = inputs.find(input => input.name === name);
@@ -37,10 +41,7 @@ const useForm = (model, values, submitCallback) => {
         parseInput(input);
         validateInput(input);
 
-        let updatedFields = fields.map(field =>
-            field.componentType !== "input" ? field : inputs.find(input => input.name === field.name));
-
-        setFields(updatedFields);
+        setFields(updatedFields(fields, inputs));
     };
 
     const handleSubmit = e => {
@@ -56,7 +57,9 @@ const useForm = (model, values, submitCallback) => {
 
     const prepareSubmit = (e, inputs) => {
         const form = inputs.reduce((carry, input) => {
-            if(input.value) carry[input.name] = input.value;
+            if(input.value){
+                carry[input.name] = input.value;
+            }
             return carry;
         }, {});
 

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
     Collapse,
     Navbar,
@@ -9,18 +9,41 @@ import {
     NavLink,
     FormGroup,
     Input,
-    DropdownMenu,
+    DropdownItem,
 } from 'reactstrap';
 import {UserContext} from '../components/Context/UserContext';
 import {getLogo} from '../libs/functions';
 
-const NavbarClient = ({loggedInUser, ...props}) => {
-    const {session } = useContext(UserContext);
+const NavbarClient = () => {
+    const {session} = useContext(UserContext);
     const [collapsed, setCollapsed] = useState(true);
     const toggleNavbar = () => setCollapsed(!collapsed);
+    const [open, setOpen] = useState(false);
+    const [avatar, setAvatar] = useState(null);
 
-    const getSessionAvatar = () => {
-        return loggedInUser.avatar || '/images/profile.png';
+    const toggleOpen = (e) => {
+        setOpen(!open);
+    };
+
+    useEffect(() => {
+        if (session.user) setAvatar(session.user.avatar);
+    }, [session]);
+
+    const DropdownUser = () => {
+        const menuClass = `dropdown-menu${open ? " show" : ""}`;
+        return (
+            <div className={menuClass} aria-labelledby="navbarDropdownMenuLink">
+                <DropdownItem>
+                    <NavLink tag="a" href={`/profile/${session.user.username}`}>Dashboard</NavLink>
+                </DropdownItem>
+                <DropdownItem>
+                    <NavLink tag="a" href="/profile/edit">Edit Profile</NavLink>
+                </DropdownItem>
+                <DropdownItem>
+                    <NavLink tag="a" href="/auth/logout">Log Out</NavLink>
+                </DropdownItem>
+            </div>
+        )
     };
 
     return (
@@ -31,36 +54,30 @@ const NavbarClient = ({loggedInUser, ...props}) => {
                 </NavbarBrand>
 
                 <Nav className="nav-right">
-                    <NavbarToggler onClick={toggleNavbar} className="mr-2" />
-                    { loggedInUser &&
-                    <>
-                        <NavItem className="dropdown dropdown-toggle"
-                             id="navbarDropdownMenuLink"
-                             role="button"
-                             data-toggle="dropdown"
-                             aria-haspopup="true"
-                             aria-expanded="false">
+                    <NavbarToggler onClick={toggleNavbar} className="mr-2"/>
+                    {session.isLoggedIn ?
+                        <>
+                            <NavItem className="dropdown-toggle" onClick={(e) => toggleOpen(e)}>
+                                {avatar &&
+                                <img className="rounded-circle" width="40" height="40" src={avatar} alt="avatar"/>
+                                }
+                                <DropdownUser/>
+                            </NavItem>
 
-                            <img className="rounded-circle" width="40" height="40" src={getSessionAvatar()} alt="avatar"/>
-
-                            <DropdownMenu tag="ul" aria-labelledby="navbarDropdownMenuLink">
-                                <NavItem>
-                                    <NavLink href="/profile"> Dashboard </NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/profile/edit"> Edit Profile </NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/auth/logout"> Log Out </NavLink>
-                                </NavItem>
-                            </DropdownMenu>
-                        </NavItem>
-
-                        <NavItem className="navbar_icon navbar-icon-notifications">
-                            <img width="25" height="25" src="/images/ring.svg" alt=""/>
-                            {/*<NotificationPins/>*/}
-                        </NavItem>
-                    </> }
+                            <NavItem className="navbar_icon navbar-icon-notifications">
+                                <img width="25" height="25" src="/images/ring.svg" alt=""/>
+                                {/*<NotificationPins/>*/}
+                            </NavItem>
+                        </> :
+                        <>
+                            <NavItem>
+                                <NavLink tag="a" href="/auth/login">Connexion</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink tag="a" href="/auth/register">S'enregistrer</NavLink>
+                            </NavItem>
+                        </>
+                    }
                 </Nav>
                 <Collapse isOpen={!collapsed} navbar>
                     <Nav navbar>
@@ -71,7 +88,8 @@ const NavbarClient = ({loggedInUser, ...props}) => {
                         </NavItem>
                         <NavItem>
                             <FormGroup className='form-inline search-header-wrapper m-auto'>
-                                <Input className="form-control" type="search" name="search" id="search" placeholder="Search"/>
+                                <Input className="form-control" type="search" name="search" id="search"
+                                       placeholder="Search"/>
                             </FormGroup>
                         </NavItem>
                     </Nav>
@@ -81,6 +99,5 @@ const NavbarClient = ({loggedInUser, ...props}) => {
     );
 };
 
-// export default withTranslation('navbar')(NavbarClient);
 export default NavbarClient;
 

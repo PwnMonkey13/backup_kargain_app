@@ -55,10 +55,6 @@ header {
 }
 
 main {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  padding: 1rem;
   margin: 0 auto;
 }
 
@@ -85,11 +81,6 @@ hr {
   border-top: 1px solid rgba(0,0,0,.1);
 }
 
-a {
-  text-decoration: none!important;
-  color: #00ad9f;
-}
-
 .main_layout {
   padding: 1rem;
 }
@@ -112,6 +103,11 @@ a {
   overflow: hidden;
 }
 
+.fixed-top{
+  position: fixed;
+  right: 0;
+}
+
 /**
  * Fix for Reactstrap
  **/
@@ -132,6 +128,7 @@ a {
   padding: 1rem;
   border-radius: 50px;
   font: 700 16px Quicksand;
+  text-decoration: none;
 
   &:hover {
     background-color: #569ffc;

@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import ValidationAlert from '../Validations/ValidationAlert';
 
 const EmailInput = ({ setInputs, ...props }) => {
-
     const [value, setValue] = useState(props.value);
 
     const onChange = (e) => {
@@ -31,7 +30,7 @@ const EmailInput = ({ setInputs, ...props }) => {
                     <input
                         name={props.name}
                         type={props.type}
-                        value={value}
+                        value={props.value}
                         onChange={onChange}
                         required={props.required}
                         disabled={props.disabled}

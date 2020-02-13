@@ -1,58 +1,54 @@
 import React from 'react'
 import Link from 'next/link'
-import { withRouter } from 'next/router'
-import Layout from '../../layouts/Layout'
 
 const Error = (props) => {
-    console.log(props);
-    if (props.query.action === 'register') {
-        return(
-            <Layout {...props} navmenu={false}>
-                <div className="text-center mb-5">
-                    <h1 className="display-4 mt-5 mb-3">Unable to sign in</h1>
-                    <p className="lead">An account associated with your email address already exists.</p>
-                    <p className="lead"><Link href="/auth/register"><a>Sign in with email or another service</a></Link></p>
-                </div>
-                <div className="row">
-                    <div className="col-sm-8 mr-auto ml-auto mb-5">
-                        <div className="text-muted">
-                            <h4 className="mb-2">Why am I seeing this?</h4>
-                            <p className="mb-2">
-                                It looks like you might have already signed up using another service.
-                            </p>
-                            <p className="mb-3">
-                                To protect your account, if you have perviously signed up
-                                using another service you must link accounts before you
-                                can use a different service to sign in.
-                            </p>
-                            <h4 className="mb-2">How do I fix this?</h4>
-                            <p className="mb-0">
-                                To sign in using another service, first sign in using your email address then link accounts.
-                            </p>
-                        </div>
+
+    const ActionRegister = (
+        <main>
+            <div className="text-center mb-5">
+                <h1 className="display-4 mt-5 mb-3">Unable to sign in</h1>
+                <p className="lead">An account associated with your email address already exists.</p>
+                <p className="lead"><Link href="/auth/register"><a>Sign in with email or another service</a></Link></p>
+            </div>
+            <div className="row">
+                <div className="col-sm-8 mr-auto ml-auto mb-5">
+                    <div className="text-muted">
+                        <h4 className="mb-2">Why am I seeing this?</h4>
+                        <p className="mb-2">
+                            It looks like you might have already signed up using another service.
+                        </p>
+                        <p className="mb-3">
+                            To protect your account, if you have perviously signed up
+                            using another service you must link accounts before you
+                            can use a different service to sign in.
+                        </p>
+                        <h4 className="mb-2">How do I fix this?</h4>
+                        <p className="mb-0">
+                            To sign in using another service, first sign in using your email address then link accounts.
+                        </p>
                     </div>
                 </div>
-            </Layout>
-        )
+            </div>
+        </main>
+    );
+
+    if (props.query.action === 'register') {
+        return <ActionRegister/>
     } else if (props.action === 'login' && props.type === 'token-invalid') {
         return(
-            <Layout {...props} navmenu={false}>
-                <div className="text-center mb-5">
-                    <h1 className="display-4 mt-5 mb-2">Link not valid</h1>
-                    <p className="lead">This sign in link is no longer valid.</p>
-                    <p className="lead"><Link href="/auth/login"><a>Get a new sign in link</a></Link></p>
-                </div>
-            </Layout>
+            <div className="text-center mb-5">
+                <h1 className="display-4 mt-5 mb-2">Link not valid</h1>
+                <p className="lead">This sign in link is no longer valid.</p>
+                <p className="lead"><Link href="/auth/login"><a>Get a new sign in link</a></Link></p>
+            </div>
         )
     } else {
         return(
-            <Layout {...props} navmenu={false}>
-                <div className="text-center mb-5">
-                    <h1 className="display-4 mt-5">Error signing in</h1>
-                    <p className="lead">An error occured while trying to sign in.</p>
-                    <p className="lead"><Link href="/auth"><a>Sign in with email or another service</a></Link></p>
-                </div>
-            </Layout>
+            <div className="text-center mb-5">
+                <h1 className="display-4 mt-5">Error signing in</h1>
+                <p className="lead">An error occured while trying to sign in.</p>
+                <p className="lead"><Link href="/auth"><a>Sign in with email or another service</a></Link></p>
+            </div>
         )
     }
 };

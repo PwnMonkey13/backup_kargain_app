@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import Link from 'next/link'
 import nextCookie from 'next-cookies'
 import { useRouter } from 'next/router';
 import { Row, Col } from 'reactstrap'
-import Layout from '../../layouts/Layout'
 import UsersService from '../../services/UsersService'
 import { UserContext } from '../../components/Context/UserContext';
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 import Tabs from "../../components/Tabs/Tabs";
 
-const Index = ({err, profile, ...props}) => {
-
+const Profile = (props) => {
+    console.log(props);
+    const { profile } = props;
     const router = useRouter();
     const { session, dispatch } = useContext(UserContext);
     const { dispatchModal } = useContext(ModalDialogContext);
@@ -46,7 +46,7 @@ const Index = ({err, profile, ...props}) => {
     };
 
     return ( profile ?
-        <>
+        <main>
             <Row>
                 <div className="top-profile-wrapper">
                     <img src={getProfileAvatar()} alt="" className="img-profile-wrapper"/>
@@ -170,19 +170,18 @@ const Index = ({err, profile, ...props}) => {
                     <p>Content 4</p>
                 </Tabs.Item>
             </Tabs>
-        </> : <p> TODO, unknown user</p>
+        </main> : <p> TODO, unknown user</p>
     );
 };
 
-Index.getInitialProps = async function(ctx) {
-    const {token} = nextCookie(ctx);
+Profile.getInitialProps = async function(ctx) {
     const { username } = ctx.query;
     try{
-        const profile = await UsersService.getUsers(username, token);
-        return { profile };
+        const profile = await UsersService.getUsers(username);
+        return { username, profile };
     } catch (err) {
-        return err;
+        return { err };
     }
 };
 
-export default Index;
+export default Profile;

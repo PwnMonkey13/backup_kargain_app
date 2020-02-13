@@ -1,146 +1,72 @@
-import React, { useState, useContext } from 'react';
-import { Container, Form } from 'reactstrap'
+import React, { useContext } from 'react';
 import { useRouter } from "next/router";
-
-import Layout from '../../layouts/Layout';
+import Link from "next/link";
+import {Col,Row} from 'reactstrap'
 import { UserContext } from '../../components/Context/UserContext';
 import AuthService from '../../services/AuthService'
-import Link from "next/link";
+import Divider from "../../components/form/Divider";
+import FormPanel from "../../components/form/FormPanel";
+import model from "../../components/form/Models/register-pro.model";
+import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 
-const LoginPage = () => {
-    const { dispatch } = useContext(UserContext);
+const RegisterPro = () => {
     const router = useRouter();
-    const $state = {
-        email : '',
-        company_name : '',
-        company_ID : '',
-        company_owner: '',
-        country : '',
-        city : '',
-        postalcode : '',
-        adresse : '',
-        tel : '',
-        username : '',
-        password : '',
-        confirm_pwd : '',
-        file_kbis : null,
-        file_id : null,
-        accept_legal : false,
-    };
+    const { dispatch } = useContext(UserContext);
+    const {dispatchModal} = useContext(ModalDialogContext);
+    const { redirect } = router.query;
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const state = $state.value;
-        if (!state.email) return;
-
-        AuthService.registerPro(state.email, state.password)
+    const handleSubmit = async (e, data) => {
+        AuthService.registerPro(data)
             .then(data => {
                 dispatch({ type : 'registerProSuccess', payload : data });
-                router.push('/account');
+                if (redirect) router.push({pathname: redirect});
+                else router.push(`/auth/callback?redirect=/profile/${data.user.username}`);
             }).catch(err => {
-            throw err;
+                dispatchModal({type: 'error', err});
         });
     };
 
-    // const oldForm = () => {
-    //     return(
-    //         <Form className="auth_form" onSubmit={handleSubmit}>
-    //             <h1>Connexion</h1>
-    //             <div className="form_container">
-    //                 <InputControlled required
-    //                                  type="email"
-    //                                  label="Email"
-    //                                  $flag={$state.at('email')}
-    //                 />
-    //                 <InputControlled required
-    //                                  label="Nom de société"
-    //                                  $flag={$state.at('company_name')}
-    //                 />
-    //                 <InputControlled required
-    //                                  label="ID société"
-    //                                  $flag={$state.at('company_ID')}
-    //                 />
-    //                 <InputControlled required
-    //                                  label="Gérant de la société"
-    //                                  $flag={$state.at('company_owner')}
-    //                 />
-    //                 <InputControlled required
-    //                                  label="Pays"
-    //                                  $flag={$state.at('country')}
-    //                 />
-    //                 <InputControlled required
-    //                                  label="Ville"
-    //                                  $flag={$state.at('city')}
-    //                 />
-    //                 <InputControlled required
-    //                                  label="Code Postal"
-    //                                  $flag={$state.at('postalcode')}
-    //                 />
-    //                 <InputControlled required
-    //                                  label="Adresse"
-    //                                  $flag={$state.at('adresse')}
-    //                 />
-    //                 <InputControlled required
-    //                                  type="tel"
-    //                                  label="Téléphone"
-    //                                  $flag={$state.at('tel')}
-    //                 />
-    //                 <InputControlled required
-    //                                  label="Nom d'utilisateur"
-    //                                  $flag={$state.at('username')}
-    //                 />
-    //                 <InputControlled required
-    //                                  type="password"
-    //                                  label="Mot de passe"
-    //                                  $flag={$state.at('password')}
-    //                 />
-    //                 <InputControlled required
-    //                                  type="password"
-    //                                  label="Confirmer mot de passe"
-    //                                  $flag={$state.at('confirm_pwd')}
-    //                 />
-    //                 <InputControlled
-    //                     type="file"
-    //                     label="Copie de l’extrait kbis de société"
-    //                     $flag={$state.at('file_kbis')}
-    //                 />
-    //                 <InputControlled
-    //                     type="file"
-    //                     label="Copie de la pièce identité du gérant"
-    //                     $flag={$state.at('file_id')}
-    //                 />
-    //                 <InputControlled
-    //                     label="J’ai lu et j’accepte les conditions générales d’utilisation"
-    //                     type="checkbox"
-    //                     required
-    //                     $flag={$state.at('accept_legal')}
-    //                 />
-    //
-    //                 <FormGroupCustom className="submit">
-    //                     <button className="btn btn-outline-primary" type="submit">S'enregistrer</button>
-    //                 </FormGroupCustom>
-    //             </div>
-    //         </Form>
-    //     )
-    // };
-
     return (
-        <Container>
-            <Link href="#">
-                <a className="register-fb">
-                    <img src="/images/fb.png" alt=""/>
-                    Se connecter avec Facebook
-                </a>
-            </Link>
+        <main>
+            <h1>Créer un compte Pro</h1>
+            <Row>
+                <Col className="social_providers" sm="12" md="5">
 
-            <Link href="#">
-                <a className="register-g">
-                    <img src="/images/g+.png" alt=""/>
-                    Se connecter avec Google+
-                </a>
-            </Link>
-        </Container>
+                    <Link href="#">
+                        <a className="register-fb">
+                            <img src="/images/fb.png" alt=""/>
+                            Se connecter avec Facebook
+                        </a>
+                    </Link>
+
+                    <Link href="#">
+                        <a className="register-g">
+                            <img src="/images/g+.png" alt=""/>
+                            Se connecter avec Google+
+                        </a>
+                    </Link>
+                    <Divider text="ou"/>
+                    <Link href="/auth/login">
+                        <a className="btn btn-outline-primary submit">
+                            Se connecter
+                        </a>
+                    </Link>
+                    <Link href="/auth/register">
+                        <a className="btn btn-outline-primary submit">
+                            Creer un compte client
+                        </a>
+                    </Link>
+                </Col>
+                <Col className="auth_form m-auto" sm="12" md="7">
+                    <FormPanel
+                        btnName="S'enregistrer"
+                        submitCallback={handleSubmit}
+                        model={model}
+                    />
+                </Col>
+            </Row>
+        </main>
     );
 };
 
-export default LoginPage;
+export default RegisterPro;

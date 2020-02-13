@@ -2,10 +2,10 @@ import React from 'react'
 import Link from 'next/link'
 import { Container } from 'reactstrap'
 
-const Error = ({ errorCode}) => {
+const Error = ({statusCode}) => {
     let response;
 
-    switch (errorCode) {
+    switch (statusCode) {
         case 200:
         case 404:
             response = (
@@ -37,9 +37,9 @@ const Error = ({ errorCode}) => {
     )
 };
 
-Error.getInitialProps = ({res, xhr}) => {
-    const errorCode = res ? res.statusCode : (xhr ? xhr.status : null);
-    return { errorCode }
+Error.getInitialProps = ({res, err}) => {
+    const statusCode = res ? res.statusCode : err ? err.statusCode : null;
+    return { statusCode }
 };
 
 export default Error;

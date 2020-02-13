@@ -1,109 +1,97 @@
-import React, { useState, useEffect, useContext } from 'react'
-import {useRouter} from "next/router";
+import React, {useState, useContext} from 'react'
 import classNames from 'classnames';
-import {TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from "reactstrap";
+import {TabContent, TabPane, Nav, NavItem, NavLink, Row, Col} from "reactstrap";
+import UsersService from "../../services/UsersService";
 import model from '../../components/form/Models/profile.edit.model';
 import FormPanel from '../../components/form/FormPanel';
 import {UserContext} from "../../components/Context/UserContext";
-import UsersService from '../../services/UsersService'
-import Layout from "../../layouts/Layout";
-import Header from "../../components/Header";
+import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 
 const Edit = (props) => {
-    const router = useRouter();
-    const { session, dispatch } = useContext(UserContext);
-    const [ state, setState] = useState({
-        user : session.user,
+    const {session, dispatchUser} = useContext(UserContext);
+    const {dispatchModal} = useContext(ModalDialogContext);
+    const [user, setUser] = useState(session.user);
+    const [state, setState] = useState({
         alertText: null,
         alertStyle: null,
-        activeTab : 1,
+        activeTab: 1,
     });
 
     const toggle = (tab) => {
         if (state.activeTab !== tab) {
-            setState({
-                ...state,
-                activeTab: tab
-            });
+            setState({...state, activeTab: tab});
         }
     };
 
-    const handleSubmit = async (e, inputs) => {
-        // e.preventDefault();
-        // const state = model.reduce((carry, m) => { return { ...carry, [m.name] : m.value }}, {});
-        // setState({
-        //     alertText: null,
-        //     alertStyle: null
-        // });
-
-        // UsersService.updateUser(state.user)
-        //     .then(data => {
-        //         setState({
-        //             alertText: 'Changes to your profile have been saved',
-        //             alertStyle: 'alert-success',
-        //         });
-        //     }).catch(err =>{
-        //         setState({
-        //             alertText: err,
-        //             alertStyle: 'alert-danger',
-        //         }
-        //     );
-        // })
+    const handleSubmit = async (e, data) => {
+        UsersService.updateUser(user.username, data, props.token)
+            .then(document => {
+                setUser(document);
+                dispatchUser(document);
+                dispatchModal({type : 'success', msg : 'User successufully updated' });
+            }).catch(err => {
+                dispatchModal({type: 'error', err});
+            }
+        )
     };
 
-    return(
-        <Layout>
-            <Row className="mt-4">
-                <Col xs="12" md="4" lg="4">
-                    <Nav tabs vertical>
-                        <NavItem>
-                            <NavLink
-                                className={classNames({active: state.activeTab === 1})}
-                                onClick={() => toggle(1)}>
-                                Compte
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink
-                                className={classNames({active: state.activeTab === 2})}
-                                onClick={() => toggle(2)}>
-                                Abonnements
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink
-                                className={classNames({active: state.activeTab === 3})}
-                                onClick={() => toggle(3)}>
-                                Paiements & factures
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink
-                                className={classNames({active: state.activeTab === 4})}
-                                onClick={() => toggle(4)}>
-                                Aide & contact
-                            </NavLink>
-                        </NavItem>
-                    </Nav>
-                </Col>
-                <Col xs="12" md="8" lg="8">
-                    <TabContent activeTab={state.activeTab}>
-                        <TabPane tabId={1}>
-                            <h4>Mes informations</h4>
-                            <FormPanel
-                                btnName="Enregistrer"
-                                submitCallback={handleSubmit}
-                                model={model}
-                                values={state.user}
-                            />
-                        </TabPane>
-                        <TabPane tabId={2}>
-                            <h4>Tab 2 Contents</h4>
-                        </TabPane>
-                    </TabContent>
-                </Col>
-            </Row>
-        </Layout>
+    return (
+        <Row className="mt-4">
+            <Col xs="12" md="4" lg="4">
+                <Nav tabs vertical>
+                    <NavItem>
+                        <NavLink
+                            className={classNames({active: state.activeTab === 1})}
+                            onClick={() => toggle(1)}>
+                            Compte
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink
+                            className={classNames({active: state.activeTab === 2})}
+                            onClick={() => toggle(2)}>
+                            Abonnements
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink
+                            className={classNames({active: state.activeTab === 3})}
+                            onClick={() => toggle(3)}>
+                            Paiements & factures
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink
+                            className={classNames({active: state.activeTab === 4})}
+                            onClick={() => toggle(4)}>
+                            Aide & contact
+                        </NavLink>
+                    </NavItem>
+                </Nav>
+            </Col>
+            <Col xs="12" md="8" lg="8">
+                <TabContent activeTab={state.activeTab}>
+                    <TabPane tabId={1}>
+                        <h2>Mes informations</h2>
+                        <FormPanel
+                            btnName="Enregistrer"
+                            submitCallback={handleSubmit}
+                            model={model}
+                            values={user}
+                        />
+                    </TabPane>
+                    <TabPane tabId={2}>
+                        <h2>Abonnements</h2>
+                    </TabPane>
+                    <TabPane tabId={2}>
+                        <h2>Paiements & Factures</h2>
+                    </TabPane>
+                    <TabPane tabId={2}>
+                        <h2>Aide & Contact</h2>
+                    </TabPane>
+                </TabContent>
+            </Col>
+        </Row>
     )
 };
 

@@ -1,60 +1,14 @@
 import React from 'react';
 import Link from "next/link";
+import AnnounceResume from "./AnnounceResume";
 
-const AnnounceCard = ({ announce, ...props}) => {
+const AnnounceCard = ({announce}) => {
 
     const getFullNameAuthor = () => {
         return (
             <p>
                 {announce.author.user_firstname.toUpperCase()} { announce.author.user_lastname.toUpperCase() }
             </p>
-        )
-    };
-
-    const displayEl = (val) => {
-        if(typeof val === "object"){
-            if(Array.isArray(val)){
-                return(
-                    <ul>
-                        { val.map((sub, index) => {
-                                return(
-                                    <li key={index}>
-                                        <p>{sub}</p>
-                                    </li>
-                                )
-                            }
-                        )}
-                    </ul>
-                )
-            } else{
-                return(
-                    <ul>
-                        { Object.entries(val).map(([key, sub]) => {
-                                return(
-                                    <li key={key}>
-                                        <p>{sub}</p>
-                                    </li>
-                                )
-                            }
-                        )}
-                    </ul>
-                )
-            }
-        } else return <p> { val } </p>
-    };
-
-    const FormResume = () => {
-        return(
-            <table>
-                <tbody>
-                    { Object.entries(announce).map(([key, val], index) => (
-                        <tr key={index}>
-                            <td>{key}</td>
-                            <td>{displayEl(val)}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
         )
     };
 
@@ -136,7 +90,7 @@ const AnnounceCard = ({ announce, ...props}) => {
 
     return(
         <div className="announce">
-            <FormResume/>
+            <AnnounceResume announce={announce}/>
         </div>
     )
 };

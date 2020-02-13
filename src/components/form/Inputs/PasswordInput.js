@@ -31,7 +31,7 @@ function PasswordInput({ setInputs, ...props }) {
                     <input
                         name={props.name}
                         type={hidden ? "password" : "text"}
-                        value={value}
+                        value={props.value}
                         onChange={onChange}
                         className={props.alert ? 'form-danger' : ''}
                     />

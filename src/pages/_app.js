@@ -1,53 +1,48 @@
 import React from 'react';
-import { DefaultSeo } from 'next-seo';
-import { UserContextProvider } from '../components/Context/UserContext'
-import { ModalDialogContextProvider } from '../components/Context/ModalDialogContext'
+import App from 'next/app';
+import {DefaultSeo} from 'next-seo';
+import {UserContextProvider} from '../components/Context/UserContext'
+import {ModalDialogContextProvider} from '../components/Context/ModalDialogContext'
 import Loading from '../components/Loading'
-import ModalExample from "../components/ModalExample";
 import SEO from '../next-seo.config';
 import nextCookie from "next-cookies";
 import Layout from "../layouts/Layout";
 import AuthService from "../services/AuthService";
+import PopupAlert from "../components/PopupAlert";
+import PopupLogin from "../components/PopupLogin";
 
-function MyApp({ Component, pageProps }) {
-    return (
-        <ModalDialogContextProvider>
-            <UserContextProvider>
-                {/*<Loading {...state} />*/}
-                <DefaultSeo {...SEO} />
-                <ModalExample/>
-                <Layout {...pageProps}>
-                    <Component {...pageProps} />
-                </Layout>
-            </UserContextProvider>
-        </ModalDialogContextProvider>
-    );
-}
+const MyApp = ({Component, pageProps}) => (
+    <ModalDialogContextProvider>
+        <UserContextProvider isLoggedIn={pageProps.isLoggedIn}>
+            {/*<Loading {...state} />*/}
+            <DefaultSeo {...SEO} />
+            <PopupAlert/>
+            { pageProps.requiredAuth === true && <PopupLogin/> }
+            <Layout {...pageProps}>
+                <Component/>
+            </Layout>
+        </UserContextProvider>
+    </ModalDialogContextProvider>
+);
 
-MyApp.getInitialProps = async ({Component, ctx}) => {
-    const {token} = nextCookie(ctx);
-    let originalUrl;
-    let pageProps = {};
+MyApp.getInitialProps = async (appContext) => {
+    const {token} = nextCookie(appContext.ctx);
+    let props = (appContext.Component.getInitialProps ? await appContext.Component.getInitialProps(appContext.ctx) : null) || {};
 
-    if (Component.getInitialProps) {
-        pageProps = await Component.getInitialProps(ctx);
+    if (props.statusCode && appContext.ctx.res) {
+        appContext.ctx.res.statusCode = props.statusCode
     }
-
-    originalUrl = ctx.req ?
-        ctx.req.get('host') + ctx.req.originalUrl :
-        window.location.hostname + (window.location.port ? ':' + window.location.port : '');
 
     if(token){
-        try{
-            const loggedInUser = await AuthService.authorize(token);
-            pageProps = {...pageProps, token, loggedInUser };
-        }catch (err) {
-            console.log(err);
-            pageProps = {...pageProps, token, err };
+        try {
+            const isLoggedIn = await AuthService.authorize(token);
+            props = {...props, token, isLoggedIn };
+        } catch (err) {
+            props = {err: err, loggedIn: false};
         }
-    }
+    } else props.loggedIn = false;
 
-    return { pageProps: {...pageProps, originalUrl }};
+    return {pageProps: {router: appContext.router, ...props}};
 };
 
 export default MyApp;

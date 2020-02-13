@@ -6,17 +6,20 @@ import ValidationAlert from '../Validations/ValidationAlert';
 
 const CheckboxMultipleInput = ({ setInputs, ...props }) => {
 
-    const [ state, setState ] = useState({
-        checkedItems: new Map()
-    });
+    const [ checkedItems, setCheckedItems ] = useState(new Map());
 
     const onChange = (e) => {
         const item = e.target.value;
         const isChecked = e.target.checked;
-        setState({ checkedItems: state.checkedItems.set(item, isChecked) });
-        const values = Array.from( state.checkedItems.keys());
-        setInputs(props.name, values);
+        setCheckedItems(checkedItems.set(item, isChecked));
     };
+
+    useEffect(() => {
+        if(checkedItems){
+            const values = Array.from(checkedItems.keys());
+            setInputs(props.name, values);
+        }
+    }, [checkedItems]);
 
     return (
         <div className={classNames(props.classname, 'form-field')}>
@@ -38,7 +41,7 @@ const CheckboxMultipleInput = ({ setInputs, ...props }) => {
                             <div className="d-flex col-4 col-lg-3 radio_field" key={index}>
                                 <Checkbox
                                     name={props.name}
-                                    checked={state.checkedItems.get(option.value)}
+                                    checked={checkedItems.get(option.value)}
                                     onChange={onChange}
                                     {...option}
                                 />

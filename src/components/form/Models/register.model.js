@@ -1,45 +1,43 @@
-import CompleteFields from "../Validations/CompleteFields";
-
-const model = [
+const fields = [
     {
         componentType : 'input',
+        type: 'text',
         name: 'firstname',
         label: 'Firstname',
-        type: 'text',
         required : true,
         display : 'inline',
     },
     {
         componentType : 'input',
+        type: 'text',
         name: 'lastname',
         label: 'Lastname',
-        type: 'text',
         required : true,
         display : 'inline',
     },
     {
         componentType : 'input',
+        type: 'email',
         name: 'email',
         label: 'Email',
-        type: 'email',
         required : true,
         display : 'inline',
     },
     {
         componentType : 'input',
+        type: 'password',
         name: 'password',
         id: 'password',
         label: 'Mot de passe',
-        type: 'password',
         required : true,
         display : 'inline',
     },
     {
         componentType : 'input',
+        type: 'password',
         name: 'confirm_pwd',
         id: 'confirm_pwd',
         label: 'Confirm password',
-        type: 'password',
         required : true,
         display : 'inline',
         match: {
@@ -49,12 +47,19 @@ const model = [
     },
     {
         componentType : 'input',
+        type: 'checkbox',
         name: 'confirm',
         label: 'J’ai lu et j’accepte les conditions générales d’utilisation',
-        type: 'checkbox',
         required: true,
         display : 'inline',
     }
 ];
 
-export default CompleteFields(model);
+const model = {
+    config : {
+        autoFill : true,
+    },
+    fields : fields
+};
+
+export default model;

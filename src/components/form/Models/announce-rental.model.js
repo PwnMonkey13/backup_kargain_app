@@ -1,4 +1,3 @@
-import CompleteFields from "../Validations/CompleteFields";
 import {SelectOptionsUtils} from "../../../libs/formFieldsUtils";
 import FieldsTranslalted from "../../../../public/locales/fr/fields";
 
@@ -181,7 +180,7 @@ const RadioChoicesPaints = [
 const SelectChoicesDoors = SelectOptionsUtils([ 2, 3, 4, 5]);
 const RadioChoicesVehicle = FieldsTranslalted.vehicleState;
 
-const model = [
+const fields = [
     {
         componentType: 'title',
         as : 'h3',
@@ -543,4 +542,11 @@ const model = [
     },
 ];
 
-export default CompleteFields(model);
+const model = {
+    config : {
+        autoFill : true,
+    },
+    fields : fields
+};
+
+export default model;

@@ -50,7 +50,7 @@ function NumberInput({ setInputs, ...props }) {
                         type="text"
                         required={props.required}
                         disabled={props.disabled}
-                        value={value}
+                        value={props.value}
                         onChange={onChange}
                         onKeyPress={onKeyPress}
                         placeholder={props.placeholder}

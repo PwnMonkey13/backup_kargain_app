@@ -74,7 +74,7 @@ function authorize(token) {
         .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
-            else return json.data.user;
+            else return json.isLoggedIn;
         })
         .catch(err => {
             throw err;

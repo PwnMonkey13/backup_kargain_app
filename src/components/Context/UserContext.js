@@ -1,9 +1,9 @@
-import React, { createContext, useReducer, useEffect } from 'react';
+import React, {createContext, useReducer, useEffect} from 'react';
 import Cookie from 'js-cookie';
 import AuthService from '../../services/AuthService'
 import useLocalStorage from '../../hooks/useLocalStorage'
-const UserContext = createContext({});
 
+const UserContext = createContext({});
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -17,8 +17,7 @@ const reducer = (state, action) => {
                 ...state,
                 isLoggedIn: false,
                 user: null,
-                token : null,
-                err : action.err
+                err: action.err
             };
         default:
             console.log('unknown action');
@@ -26,51 +25,56 @@ const reducer = (state, action) => {
     }
 };
 
-const UserContextProvider = ({ children }) => {
-    const [ loggedInUser, setLoggedInUser, clearLoggedInUser ] = useLocalStorage('loggedin_user', {});
+const UserContextProvider = ({isLoggedIn, children}) => {
+    const [loggedInUser, setLoggedInUser, clearLoggedInUser] = useLocalStorage('loggedin_user', {});
     const [session, dispatch] = useReducer(reducer, {
-        isLoggedIn: loggedInUser !== null && Cookie.get('token'),
-        user : loggedInUser
+        isLoggedIn: isLoggedIn,
+        user: isLoggedIn ? loggedInUser : null
     });
+
+    const dispatchUser = (user) => {
+        setLoggedInUser(user);
+        dispatch({type: 'set', payload: { user: user }});
+    };
 
     const dispatchProxy = (action) => {
         if (action.type === 'logout') {
             clearLoggedInUser();
             Cookie.remove('token');
-            dispatch({ type : 'logout'});
+            dispatch({type: 'logout'});
         }
         if (action.type === 'checkToken') {
             AuthService.authorize()
                 .then(data => {
-                    const { user } = data;
-                    dispatch({ type: 'set', payload : { user, isLoggedIn : true } });
+                    const {user} = data;
+                    dispatch({type: 'set', payload: {user, isLoggedIn: true}});
                 })
                 .catch(err => {
                     clearLoggedInUser();
                     Cookie.remove('token');
-                    dispatch({ type : 'logout', err });
+                    dispatch({type: 'logout', err});
                 });
 
-        } else if(action.type === 'loginSuccess') {
+        } else if (action.type === 'loginSuccess') {
             Cookie.set('token', action.payload.token);
             setLoggedInUser(action.payload.user);
-            dispatch({ type : 'set', payload : { user : action.payload.user , isLoggedIn : true } });
-       } else {
+            dispatch({type: 'set', payload: {user: action.payload.user, isLoggedIn: true}});
+        } else {
             dispatch(action);
-       }
+        }
     };
 
     useEffect(() => {
-        if(!session.isLoggedIn) dispatchProxy({ type : 'logout', err : "Unauthorized" })
+        if (!session.isLoggedIn) dispatchProxy({type: 'logout', err: "Unauthorized"})
     }, []);
 
     return (
-        <UserContext.Provider value={{ session, dispatch: dispatchProxy }}>
-            { children }
+        <UserContext.Provider value={{session, dispatch: dispatchProxy, dispatchUser}}>
+            {children}
         </UserContext.Provider>
     );
 };
 
 const UserContextConsumer = UserContext.Consumer;
 
-export { UserContext, UserContextProvider, UserContextConsumer };
+export {UserContext, UserContextProvider, UserContextConsumer};

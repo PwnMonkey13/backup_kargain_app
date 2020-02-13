@@ -1,28 +1,40 @@
-import React, { createContext, useReducer, useState } from 'react';
+import React, {createContext, useReducer, useState} from 'react';
 
 const ModalDialogContext = createContext({});
 
-const ModalDialogContextProvider = ({ children }) => {
-    const [ modalState, setModalState ] = useState({
-        active : false,
-        type : '',
-        msg : ''
+const ModalDialogContextProvider = ({children}) => {
+    const [modalState, setModalState] = useState({
+        active: false,
+        type: null,
+        msg: null,
+        err: null,
+        link: null
     });
 
-    const dispatchModal = (action) =>{
-        setModalState({ active : true, type : action.type, msg : action.msg || action.err.message });
-        setTimeout(()=>{
-            setModalState({ active : false, type : '', msg : '' });
-        }, 5000);
+    const dispatchModal = (action) => {
+        setModalState({
+            active: true,
+            ...action,
+        });
+
+        setTimeout(() => {
+            setModalState({
+                active: false,
+                type: null,
+                msg: null,
+                err: null,
+                link: null
+            });
+        }, 3000);
     };
 
     return (
-        <ModalDialogContext.Provider value={ { modalState, dispatchModal } }>
-            { children }
+        <ModalDialogContext.Provider value={{modalState, dispatchModal}}>
+            {children}
         </ModalDialogContext.Provider>
     );
 };
 
 const ModalDialogContextConsumer = ModalDialogContext.Consumer;
 
-export { ModalDialogContext, ModalDialogContextProvider, ModalDialogContextConsumer };
+export {ModalDialogContext, ModalDialogContextProvider, ModalDialogContextConsumer};
