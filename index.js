@@ -12,13 +12,9 @@ app.prepare().then(() => {
         return handle(req, res)
     });
 
-    server.get('/form', csrfProtection, function (req, res) {
-        // pass the csrfToken to the view
-        res.render('send', { csrfToken: req.csrfToken() })
-    });
-
     server.listen(config.port, err => {
         if (err) throw err;
         console.log(`There will be dragons: http://localhost:${config.port}`);
+        console.log(`db host : ${config.api}`);
     })
 });

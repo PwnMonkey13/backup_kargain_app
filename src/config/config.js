@@ -10,7 +10,7 @@ const dev = {
 };
 
 const prod = {
-    api: "https://api.kargain/v1",
+    api: "https://kargain-api.now.sh",
 };
 
 switch (process.env.NODE_ENV) {
