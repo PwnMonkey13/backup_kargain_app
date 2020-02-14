@@ -48,7 +48,7 @@ TextInput.defaultProps = {
     disabled: false,
     display: 'col',
     type: 'text',
-    value: 'fzefzefzf'
+    value: ''
 };
 
 export default TextInput;

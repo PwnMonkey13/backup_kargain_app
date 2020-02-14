@@ -25,7 +25,7 @@ const ModalDialogContextProvider = ({children}) => {
                 err: null,
                 link: null
             });
-        }, 3000);
+        }, 4000);
     };
 
     return (
