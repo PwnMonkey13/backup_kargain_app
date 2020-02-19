@@ -13,7 +13,6 @@ function getWPAnnounces(id = null) {
 
     return fetch(url)
         .then(handleResponse)
-        .then(res => res.json())
         .then(json => {
             return json;
         })
@@ -31,7 +30,6 @@ function getAnnounces() {
 
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
             else return json.data;
@@ -51,7 +49,6 @@ function getAnnounceBySlug(slug) {
 
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
             else return json.data;
@@ -72,7 +69,6 @@ function createAnnounce(data, token) {
     let url = `${config.api}/ads`;
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
             else return json.data;

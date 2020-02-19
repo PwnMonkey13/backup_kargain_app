@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext } from 'react';
+import {useState } from 'react';
 import {set as _set, get as _get} from "lodash";
 import CompleteInput from "../components/form/Validations/CompleteInput";
 
@@ -19,14 +19,14 @@ const useForm = (model = [], values = {}, submitCallback) => {
         }, []);
     }
 
-    const buildUpdatedFields = (fields, input) => {
+    const buildUpdatedFields = (fields, input = null) => {
         return fields.map(field => {
             if (field.fields) return {...field, fields: buildUpdatedFields(field.fields, input)};
             return input && input.name === field.name ? {...field, ...input} : field;
         });
     };
 
-    const updateFields = (input) => {
+    const updateFields = (input = null) => {
         if(input) setFields(fields => buildUpdatedFields(fields, input));
     };
 

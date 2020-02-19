@@ -14,7 +14,6 @@ function getUsers(username = null, token = null) {
 
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
             else return json.data;
@@ -51,7 +50,6 @@ function updateUser(username, updates, token) {
 
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
             else return json.data;

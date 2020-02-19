@@ -6,11 +6,10 @@ const global = {
 
 const dev = {
     api : "http://localhost:8080/api",
-    wp_rest_api : "http://localhost:5555/wp-json/wp/v2",
 };
 
 const prod = {
-    api: "https://kargain-api.now.sh",
+    api: "https://kargain-api.now.sh/api",
 };
 
 switch (process.env.NODE_ENV) {

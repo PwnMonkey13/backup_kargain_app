@@ -1,20 +1,26 @@
-const handleResponse = response => {
+import config from '../config/config';
 
-	if (!response.ok) {
-		if ([401, 403].includes(response.status)) {
-			throw "Session expirée. Merci de vous reconnecter";
-		}
-		else{
-			return response.json().then(json => {
-				if(json.success === false) throw Error(json.msg);
-			})
-			.catch(err => {
-				console.log(err);
-				throw err.message || err;
-			});
+const handleResponse = response => {
+	console.log(response);
+	if (response.ok) {
+		return response.json().then(json => {
+			if (json.success === false) throw json.msg;
+			return json;
+		}).catch(err => {
+			throw err.message || err;
+		});
+	}
+	else {
+		switch(response.status){
+			case 401:
+			case 403:
+				throw "Session expirée. Merci de vous reconnecter";
+			case 500:
+				throw config.isDev ? response.statusText : "Something failed on the server";
+			default:
+				throw response.statusText;
 		}
 	}
-	return response;
 };
 
 export default handleResponse;

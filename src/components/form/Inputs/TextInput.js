@@ -1,4 +1,4 @@
-import React, {memo, useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import classNames from 'classnames';
 import ValidationAlert from '../Validations/ValidationAlert';
 import useIsMounted from "../../../hooks/useIsMounted";

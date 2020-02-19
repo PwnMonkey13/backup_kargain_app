@@ -10,14 +10,15 @@ function login(email, password) {
         body: JSON.stringify({ email, password })
     };
 
+    console.log(`${config.api}/auth/login`);
     return fetch(`${config.api}/auth/login`, requestOptions)
         .then(handleResponse)
-        .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
             else return json.data;
         })
         .catch(err => {
+            console.log(err);
             throw err;
         }
     );
@@ -32,7 +33,6 @@ function register(user) {
 
     return fetch(`${config.api}/auth/register`, requestOptions)
         .then(handleResponse)
-        .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
             else return json;
@@ -52,7 +52,6 @@ function registerPro(form) {
 
     return fetch(`${config.api}/auth/register-pro`, requestOptions)
         .then(handleResponse)
-        .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
             else return json.data;
@@ -71,7 +70,6 @@ function authorize(token) {
 
     return fetch(`${config.api}/auth/authorize`, requestOptions)
         .then(handleResponse)
-        .then(res => res.json())
         .then(json => {
             if (json.success === false) throw json.msg;
             else return json.isLoggedIn;
