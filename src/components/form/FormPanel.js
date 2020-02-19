@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import useForm from '../../hooks/useForm';
 import classNames from 'classnames';
 import SwitchField from "./SwitchFields";
@@ -10,8 +10,8 @@ function FormPanel({className, btnName, submitCallback, values, model}) {
     return (
         <form className={classnames} onSubmit={setSubmit}>
             <div className="fields">
-                {fields.map((field, index) =>
-                    field !== undefined && <SwitchField key={index} field={field} setInputs={setFields}/>
+                {fields.map((field, index) => field !== undefined &&
+                    <SwitchField key={index} field={field} setInputs={setFields}/>
                 )}
                 <div className="submit">
                     <button className="btn btn-outline-primary" type="submit">{btnName}</button>

@@ -5,8 +5,11 @@ import model from "./form/Models/login.model";
 import AuthService from '../services/AuthService';
 import {UserContext} from "./Context/UserContext";
 import {ModalDialogContext} from "./Context/ModalDialogContext";
+import {useRouter} from "next/router";
 
-const PopupLogin = () => {
+export default (props) => {
+    console.log(props);
+    const router = useRouter();
     const {session, dispatch } = useContext(UserContext);
     const { dispatchModal } = useContext(ModalDialogContext);
     const [open, setOpen] = useState(!session.isLoggedIn);
@@ -14,8 +17,11 @@ const PopupLogin = () => {
     const handleSubmit = (e, data) => {
         AuthService.login(data.email, data.password)
             .then(data => {
+                const { user } = data;
+                console.log(user);
                 dispatch({ type : 'loginSuccess', payload : data });
-                dispatchModal({type : 'success', msg : 'connected' });
+                dispatchModal({type : 'success', msg : `Welcome back ${user.firstname}` });
+                router.push('/');
                 close();
             }).catch(err => {
                 dispatchModal({type : 'error', err });
@@ -41,5 +47,3 @@ const PopupLogin = () => {
         </Popup>
     )
 };
-
-export default PopupLogin;

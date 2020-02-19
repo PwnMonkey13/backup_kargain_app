@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import { Row, Col } from 'reactstrap'
 import ValidationAlert from '../Validations/ValidationAlert';
+import useIsMounted from "../../../hooks/useIsMounted";
 
-function RadioInput({setInputs, template, ...props }) {
-
+const RadioInput = ({setInputs, ...props }) => {
+    const isMountRef = useIsMounted();
     const [value, setValue] = useState(props.value);
-    const onChange = (e) => {
+
+    const onChange = useCallback(e => {
         setValue(e.target.value);
-    };
+    },[]);
 
     useEffect(() => {
-        if(value) setInputs(props.name, value);
+        if(isMountRef && value) setInputs(props.name, value);
     }, [value]);
 
     return (
@@ -35,7 +37,7 @@ function RadioInput({setInputs, template, ...props }) {
                                     value={choice.value}
                                     onChange={onChange}
                                     checked={choice.value === value}
-                                    className={props.classnameInput}
+                                    className={props.classname}
                                 />
                                 <label> {choice.label} </label>
                             </div>
@@ -46,9 +48,7 @@ function RadioInput({setInputs, template, ...props }) {
             <ValidationAlert content={props.alert} />
         </div>
     )
-}
-
-export default RadioInput;
+};
 
 RadioInput.defaultProps = {
     required: false,
@@ -56,3 +56,7 @@ RadioInput.defaultProps = {
     display : 'col',
     type : 'radio',
 };
+
+export default RadioInput;
+
+

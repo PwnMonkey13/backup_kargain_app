@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { memo, useState, useContext, useEffect, useCallback } from 'react';
 import classNames from "classnames";
 import NiceSelect, {components} from "react-select";
 import ValidationAlert from '../Validations/ValidationAlert';
+import useIsMounted from "../../../hooks/useIsMounted";
 
 const CustomClearText = () => 'clear all';
 const ClearIndicator = props => {
@@ -19,32 +20,24 @@ const ClearIndicator = props => {
         </div>
     );
 };
-
 const ClearIndicatorStyles = (base, state) => ({
     ...base,
     cursor: 'pointer',
     color: state.isFocused ? 'blue' : 'black',
 });
 
-const Option = (props) => {
-    return (
-        <components.Option {...props}>
-            <img width="50" src="" alt=""/>
-            <div>{props.value}</div>
-            <div>{props.label}</div>
-        </components.Option>
-    );
-};
-
-function SelectInput({ setInputs, ...props }) {
+const SelectInput = ({setInputs, ...props}) => {
+    const isMountRef = useIsMounted();
     const [selected, setSelected] = useState(props.value);
 
-    const onChange = selectedOptions => {
-        setSelected(selectedOptions);
-    };
+    const onChange = useCallback((selectedOption) => {
+        setSelected(selectedOption);
+    },[]);
 
     useEffect(() => {
-        if(selected) setInputs(props.name, selected);
+        if(isMountRef && selected) {
+            setInputs(props.name, selected.value);
+        }
     }, [selected]);
 
     return (
@@ -74,9 +67,7 @@ function SelectInput({ setInputs, ...props }) {
             <ValidationAlert content={props.alert} />
         </div>
     )
-}
-
-export default SelectInput;
+};
 
 SelectInput.defaultProps = {
     required: false,
@@ -84,3 +75,7 @@ SelectInput.defaultProps = {
     multi : false,
     display : 'col',
 };
+
+export default SelectInput;
+
+

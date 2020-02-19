@@ -14,7 +14,6 @@ const PopupAlert = () => {
         setState({ ...modalState });
 
         return function cleanup(){
-            console.log('unmount');
             if(state.link) router.push(state.link);
         }
     }, [modalState]);

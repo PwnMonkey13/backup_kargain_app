@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import classNames from "classnames";
+import React, { memo, useState, useEffect, useCallback } from 'react';
+import classNames from "classnames"
 import {Row} from "reactstrap";
 import PropTypes from 'prop-types';
 import ValidationAlert from '../Validations/ValidationAlert';
+import useIsMounted from '../../../hooks/useIsMounted';
 
-const CheckboxMultipleInput = ({ setInputs, ...props }) => {
+const CheckboxMultipleInput = ({setInputs, ...props}) => {
+    const isMountRef = useIsMounted();
+    const [ checkedItems, setCheckedItems ] = useState([]);
 
-    const [ checkedItems, setCheckedItems ] = useState(new Map());
-
-    const onChange = (e) => {
-        const item = e.target.value;
+    const onChange = useCallback(e => {
+        const value = e.target.value;
         const isChecked = e.target.checked;
-        setCheckedItems(checkedItems.set(item, isChecked));
-    };
+        setCheckedItems(checkedItems => [...checkedItems, { value, isChecked}]);
+    },[]);
 
     useEffect(() => {
-        if(checkedItems){
-            const values = Array.from(checkedItems.keys());
+        if(isMountRef && checkedItems){
+            const values = checkedItems.filter(el => el.isChecked === true).map(el => el.value);
             setInputs(props.name, values);
         }
     }, [checkedItems]);
@@ -41,7 +42,7 @@ const CheckboxMultipleInput = ({ setInputs, ...props }) => {
                             <div className="d-flex col-4 col-lg-3 radio_field" key={index}>
                                 <Checkbox
                                     name={props.name}
-                                    checked={checkedItems.get(option.value)}
+                                    checked={checkedItems[option.value] === true }
                                     onChange={onChange}
                                     {...option}
                                 />
@@ -60,8 +61,7 @@ CheckboxMultipleInput.defaultProps = {
     required: false,
     disabled : false,
     display : 'col',
-    value : '',
-    values : []
+    value: ''
 };
 
 CheckboxMultipleInput.propTypes = {
@@ -72,15 +72,21 @@ CheckboxMultipleInput.propTypes = {
     options: PropTypes.array,
 };
 
-const Checkbox = ({ onChange, ...props }) => {
+const Checkbox = memo(({ onChange, ...props }) => {
+
+    const onCheckboxChange = (e) => {
+        console.log("onCheckboxChange");
+        onChange(e);
+    };
+
     return <input
         type={props.type}
         name={props.name}
         checked={props.checked}
-        onChange={onChange}
+        onChange={onCheckboxChange}
         {...props}
     />
-};
+});
 
 Checkbox.propTypes = {
     type: PropTypes.string,

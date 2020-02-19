@@ -21,7 +21,7 @@ const Index = () => {
     return (
         <main>
             <Row>
-                <Col md="10">
+                <Col md="12">
                     <div className="righ-filter-wrapper">
                         <div className="search-flex">
                             <p className="search-p-grey">Aucun filtre sélectionné</p>
@@ -44,12 +44,11 @@ const Index = () => {
                         </div>
 
                         <section>
-                            {announces && announces.map((announce, index) => {
-                                return (
-                                    <AnnounceCard key={index} announce={announce}/>
-                                )
-                            })}
+                            {announces && announces.map((announce, index) =>
+                                <AnnounceCard key={index} announce={announce}/>
+                            )}
                         </section>
+
                     </div>
                 </Col>
             </Row>

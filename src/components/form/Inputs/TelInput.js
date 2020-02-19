@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import PhoneInput from "react-phone-number-input/input";
 import flags from 'country-flag-icons/react/3x2'
 import 'react-phone-number-input/style.css'
@@ -8,9 +8,10 @@ import ValidationAlert from '../Validations/ValidationAlert';
 function TelInput({ setInputs, ...props }) {
 
     const [value, setValue] = useState(props.value);
-    const onChange = (e) => {
-        setValue(e);
-    };
+
+    const onChange = useCallback(e => {
+        setValue(e.target.value);
+    },[]);
 
     useEffect(() => {
         if(value) setInputs(props.name, value);

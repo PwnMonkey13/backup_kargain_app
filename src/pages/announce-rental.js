@@ -15,15 +15,21 @@ const Announce = (props) => {
     const [announce, setAnnounce] = useState({});
     const [displayFormResume, setDisplayFormResume] = useState(false);
     const [ createdAnnounceLink, setCreatedAnnounceLink] = useState(null);
+
+    useEffect(() => {
+        console.log(props.token);
+    },[props.token]);
+
     const handleSubmit = async (e, data) => {
         setAnnounce(data);
         // setDisplayFormResume(true);
         AnnounceService.createAnnounce(data, props.token)
             .then(doc => {
+                console.log(doc);
                 setCreatedAnnounceLink(`/announces/${doc.slug}`);
                 dispatchModal({type : 'success', msg : 'Announce created successufully', link : createdAnnounceLink  });
             }).catch(err => {
-            dispatchModal({type : 'error', err });
+                dispatchModal({type : 'error', err });
             }
         );
     };

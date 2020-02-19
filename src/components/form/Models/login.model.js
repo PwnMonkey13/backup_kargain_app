@@ -19,7 +19,7 @@ const fields = [
 
 const model = {
     config : {
-        autoFill : true,
+        autoFill : false,
     },
     fields : fields
 };

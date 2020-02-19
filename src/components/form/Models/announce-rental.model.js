@@ -101,6 +101,7 @@ const RadioChoicesEngine = [
         'value': 'semi-auto'
     },
 ];
+const RadioChoicesEmission = SelectOptionsUtils(['EURO1', 'EURO2', 'EURO3', 'EURO4', 'EURO5', 'EURO6']);
 const SelectChoicesBrandsAPI = SelectOptionsUtils(['Audi', 'BMW', 'Mercedes', 'Peugeot', 'Renault', 'Fiat']);
 const CheckboxOptionsEquipments = SelectOptionsUtils([
     "ABS","ESP","Régulateur de vitesse adaptatif","Soundsystem","Bluetooth","Hayon arrière électrique","CD","MP3","Start/Stop automatique","USB","Anti-patinage","Porte-bagages","Verrouillage centralisé sans clé","Rétroviseurs latéraux électriques","Airbags latéraux","Ordinateur de bord","Sieges ventilés","Direction assistée","Détecteur de pluie","Phares de jour","Vitres électriques","Anti-démarrage","Affichage tête haute","Jantes alliages","Toit ouvrant","Climatisation automatique","Phares au xénon","Volant en cuir","Kit mains libres","Régulateur de vitesses","Climatisation","Tappe de ski","Sièges massants","Volant multifonctions","Système de navigation","Sieges chauffants","Equipement handicapé","Sièges à réglage lombaire","Toit panoramique","Camera d’aide au stationnement","Radar de stationnement arrière","Pare-brise chauffant","Radar de stationnement avant","Suspension pneumatique","Airbag conducteur","Attache remorque","Phares directionnels","Airbag passager","Accoudoir","Chauffage auxiliaire","Pétales de changement de vitesse","Volant chauffant","4x4","Feux antibrouillard","Radio","Détecteur de lumière","LED phare de jour","Phares au LED","Porte coulissante","Écran tactile","Alarme","Le système d’appel d’urgence"
@@ -192,6 +193,8 @@ const fields = [
         type : 'text',
         label : 'Titre',
         name : 'title',
+        display : "inline",
+        fullWidth : true,
         required : true
     },
     {
@@ -199,11 +202,7 @@ const fields = [
         type: 'radio',
         name: 'category',
         label: 'Catégorie',
-        // required : true,
-        display : 'inline',
-        // linked : 'category',
-        classname : 'btn-group',
-        classnameInput : 'blablabla',
+        required : true,
         choices: RadioCategoryChoices
     },
     {
@@ -211,7 +210,7 @@ const fields = [
         type: 'radio',
         name: 'type',
         label: 'Type',
-        // required : true,
+        required : true,
         choices: RadioTypeChoices
     },
     {
@@ -237,16 +236,17 @@ const fields = [
                 name : 'manufacturer[version]',
                 label : 'Version',
                 options : SelectChoicesBrandsAPI
-            }
+            },
+            {
+                componentType : 'input',
+                type: 'YearSelect',
+                name: 'manufacturer[year]',
+                label : 'Année',
+                pattern : 'Y M',
+            },
         ]
     },
-    {
-        componentType : 'input',
-        type: 'YearSelect',
-        name: 'manufactureDate',
-        linked : 'manufacturer[make]',
-        pattern : 'Y M',
-    },
+
     {
         componentType : 'group',
         label: 'Prix',
@@ -331,8 +331,7 @@ const fields = [
         type: 'radio',
         name: 'emission',
         label: "Classe d\'émission",
-        // required : true,
-        choices: RadioChoicesEngine
+        choices: RadioChoicesEmission
     },
     {
         componentType : 'group',
@@ -374,7 +373,6 @@ const fields = [
         name: 'equipments',
         label: "Equipements",
         options: CheckboxOptionsEquipments,
-        // required : true,
     },
     {
         componentType : 'input',
@@ -400,7 +398,6 @@ const fields = [
         // required : true,
         options: SelectChoicesDoors
     },
-
     {
         componentType : 'input',
         type: 'radio',
@@ -409,21 +406,21 @@ const fields = [
         // required : true,
         choices: RadioChoicesExternalColor
     },
-    {
-        componentType : 'input',
-        type: 'checkbox-multiple',
-        name: 'materials',
-        label: "Matériaux",
-        // required : true,
-        options: RadioChoicesPaints
-    },
+    // {
+    //     componentType : 'input',
+    //     type: 'checkbox-multiple',
+    //     name: 'materials',
+    //     label: "Matériaux",
+    //     // required : true,
+    //     options: RadioChoicesPaints
+    // },
     {
         componentType : 'input',
         type: 'select',
         name: 'seats',
         linked : 'seats',
         label: "Nombre de places",
-        // required : true,
+        required : true,
         options: SelectOptionsUtils([2, 3, 4, 5])
     },
     {
@@ -443,7 +440,7 @@ const fields = [
         type: 'radio',
         name: 'vehicleState',
         label: 'Etat général',
-        // required : true,
+        required : true,
         choices: RadioChoicesVehicle
     },
     {
@@ -481,6 +478,7 @@ const fields = [
     },
     // {
     //     componentType : 'input',
+    //     name : 'tags',
     //     type: 'tags',
     // },
     {
@@ -489,10 +487,11 @@ const fields = [
         text : 'Photos',
         className : 'big-mt'
     },
-    {
-        componentType : 'input',
-        type: 'FileUpload',
-    },
+    // {
+    //     componentType : 'input',
+    //     type: 'FileUpload',
+    //     name : "cartegrise"
+    // },
     {
         componentType: 'title',
         as : 'h3',
@@ -520,9 +519,6 @@ const fields = [
                 name : 'seller[country]',
                 label : 'Pays',
                 options : [
-                    { value: 'france', label: 'France' },
-                    { value: 'spain', label: 'Espagne' },
-                    { value: 'italie', label: 'Italie' }
                 ]
             },
             {
@@ -544,7 +540,7 @@ const fields = [
 
 const model = {
     config : {
-        autoFill : true,
+        autoFill : false,
     },
     fields : fields
 };

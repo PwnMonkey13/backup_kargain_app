@@ -43,19 +43,20 @@ const UserContextProvider = ({isLoggedIn, children}) => {
             Cookie.remove('token');
             dispatch({type: 'logout'});
         }
-        if (action.type === 'checkToken') {
-            AuthService.authorize()
-                .then(data => {
-                    const {user} = data;
-                    dispatch({type: 'set', payload: {user, isLoggedIn: true}});
-                })
-                .catch(err => {
-                    clearLoggedInUser();
-                    Cookie.remove('token');
-                    dispatch({type: 'logout', err});
-                });
-
-        } else if (action.type === 'loginSuccess') {
+        // if (action.type === 'checkToken') {
+        //     AuthService.authorize()
+        //         .then(data => {
+        //             const {user} = data;
+        //             dispatch({type: 'set', payload: {user, isLoggedIn: true}});
+        //         })
+        //         .catch(err => {
+        //             clearLoggedInUser();
+        //             Cookie.remove('token');
+        //             dispatch({type: 'logout', err});
+        //         });
+        //
+        // }
+        else if (action.type === 'loginSuccess') {
             Cookie.set('token', action.payload.token);
             setLoggedInUser(action.payload.user);
             dispatch({type: 'set', payload: {user: action.payload.user, isLoggedIn: true}});

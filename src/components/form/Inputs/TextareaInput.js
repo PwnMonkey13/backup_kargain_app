@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import classNames from "classnames";
 import ValidationAlert from '../Validations/ValidationAlert';
+import useIsMounted from "../../../hooks/useIsMounted";
 
 function TextareaInput({setInputs, ...props}) {
-
+    const isMountRef = useIsMounted();
     const [value, setValue] = useState(props.value);
 
-    const onChange = (e) => {
+    const onChange = useCallback(e => {
         setValue(e.target.value);
-    };
+    },[]);
 
     useEffect(() => {
-        if(value) setInputs(props.name, value);
+        if(isMountRef && value) setInputs(props.name, value);
     }, [value]);
 
     return (

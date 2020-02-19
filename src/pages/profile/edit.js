@@ -26,6 +26,7 @@ const Edit = (props) => {
     const handleSubmit = async (e, data) => {
         UsersService.updateUser(user.username, data, props.token)
             .then(document => {
+                console.log(document);
                 setUser(document);
                 dispatchUser(document);
                 dispatchModal({type : 'success', msg : 'User successufully updated' });

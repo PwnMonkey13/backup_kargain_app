@@ -9,7 +9,6 @@ import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 import Tabs from "../../components/Tabs/Tabs";
 
 const Profile = (props) => {
-    console.log(props);
     const { profile } = props;
     const router = useRouter();
     const { session, dispatch } = useContext(UserContext);

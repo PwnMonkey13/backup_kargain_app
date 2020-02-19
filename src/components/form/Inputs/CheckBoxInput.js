@@ -1,17 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React, {memo, useState, useEffect, useCallback} from 'react';
 import classNames from "classnames";
 import PropTypes from 'prop-types';
 import ValidationAlert from '../Validations/ValidationAlert';
+import useIsMounted from "../../../hooks/useIsMounted";
 
-const CheckBoxInput = ({setInputs, ...props}) => {
-
+const CheckBoxInput = memo(({setInputs, ...props}) => {
+    const isMountRef = useIsMounted();
     const [checked, setChecked] = useState(props.value);
-    const onChange = (e) => {
+
+    const onChange = useCallback(e => {
         setChecked(e.target.checked);
-    };
+    },[]);
 
     useEffect(() => {
-        if (checked) setInputs(props.name, checked);
+        if (isMountRef && checked) setInputs(props.name, checked);
     }, [checked]);
 
     return (
@@ -38,7 +40,7 @@ const CheckBoxInput = ({setInputs, ...props}) => {
             <ValidationAlert content={props.alert}/>
         </div>
     )
-};
+});
 
 CheckBoxInput.defaultProps = {
     required: false,

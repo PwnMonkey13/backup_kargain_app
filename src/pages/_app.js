@@ -3,6 +3,8 @@ import App from 'next/app';
 import {DefaultSeo} from 'next-seo';
 import {UserContextProvider} from '../components/Context/UserContext'
 import {ModalDialogContextProvider} from '../components/Context/ModalDialogContext'
+import {FormContextProvider} from '../components/Context/FormContext'
+
 import Loading from '../components/Loading'
 import SEO from '../next-seo.config';
 import nextCookie from "next-cookies";
@@ -14,13 +16,15 @@ import PopupLogin from "../components/PopupLogin";
 const MyApp = ({Component, pageProps}) => (
     <ModalDialogContextProvider>
         <UserContextProvider isLoggedIn={pageProps.isLoggedIn}>
-            {/*<Loading {...state} />*/}
-            <DefaultSeo {...SEO} />
-            <PopupAlert/>
-            { pageProps.requiredAuth === true && <PopupLogin/> }
-            <Layout {...pageProps}>
-                <Component/>
-            </Layout>
+            <FormContextProvider>
+                {/*<Loading {...state} />*/}
+                <DefaultSeo {...SEO} />
+                <PopupAlert/>
+                { pageProps.requiredAuth === true && <PopupLogin pageProps={pageProps}/> }
+                <Layout {...pageProps}>
+                    <Component/>
+                </Layout>
+            </FormContextProvider>
         </UserContextProvider>
     </ModalDialogContextProvider>
 );

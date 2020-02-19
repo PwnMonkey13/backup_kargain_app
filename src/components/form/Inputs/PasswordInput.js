@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import classNames from "classnames";
 import ValidationAlert from '../Validations/ValidationAlert';
+import useIsMounted from "../../../hooks/useIsMounted";
 
-function PasswordInput({ setInputs, ...props }) {
+const PasswordInput = memo(({ setInputs, ...props }) => {
+    const isMountRef = useIsMounted();
     const [ hidden, setHidden ] = useState(props.hidden);
     const [value, setValue] = useState(props.value);
 
-    const onChange = (e) => {
+    const onChange = useCallback(e => {
         setValue(e.target.value);
-    };
+    },[]);
 
     useEffect(() => {
-        if(value) setInputs(props.name, value);
+        if(isMountRef && value) setInputs(props.name, value);
     }, [value]);
 
     return (
@@ -31,7 +33,7 @@ function PasswordInput({ setInputs, ...props }) {
                     <input
                         name={props.name}
                         type={hidden ? "password" : "text"}
-                        value={props.value}
+                        value={value}
                         onChange={onChange}
                         className={props.alert ? 'form-danger' : ''}
                     />
@@ -43,9 +45,7 @@ function PasswordInput({ setInputs, ...props }) {
             <ValidationAlert content={props.alert} />
         </div>
     )
-}
-
-export default PasswordInput;
+});
 
 PasswordInput.defaultProps = {
     required: false,
@@ -54,3 +54,7 @@ PasswordInput.defaultProps = {
     display : 'col',
     value : ''
 };
+
+export default PasswordInput;
+
+

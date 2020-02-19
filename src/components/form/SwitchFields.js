@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import Header from "../Header";
 import Divider from "./Divider";
 import SwitchInput from "./SwitchInputs";

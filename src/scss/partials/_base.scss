@@ -24,7 +24,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #111;
-  text-align: center;
   background-color: $bg_grey;
   font-family: $default-font, 'valeraRound' ,sans-serif;
 }
@@ -164,9 +163,12 @@ hr {
   }
 }
 
-
 .announce{
   margin: 1rem;
   padding: 1rem;
   border: 1px solid black;
+}
+
+.w100{
+  width: 100%;
 }

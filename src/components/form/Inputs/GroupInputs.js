@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import classNames from 'classnames';
 import {Row, Col, FormGroup} from 'reactstrap'
 import SwitchInput from "../SwitchInputs";
@@ -34,8 +34,10 @@ function GroupInputs({ fields, setInputs, ...props }) {
     )
 }
 
-export default GroupInputs;
-
 GroupInputs.defaultProps = {
     fields : []
 };
+
+export default memo(GroupInputs);
+
+

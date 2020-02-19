@@ -1,47 +1,42 @@
-import {useState, useEffect } from 'react';
-import CompleteInput from "../components/form/Validations/CompleteInput";
+import {useState, useEffect, useContext } from 'react';
 import {set as _set, get as _get} from "lodash";
+import CompleteInput from "../components/form/Validations/CompleteInput";
 
-const extractInputs = (fields, inputs = []) => {
-    return fields.reduce((carry, field) => {
-        if (field.componentType === 'group') {
-            return [...carry, ...extractInputs(field.fields, inputs)]
-        } else if (field.componentType === 'input') {
-            return [...carry, CompleteInput(field)];
-        } else return carry;
-    }, inputs);
-};
-
-const updatedFields = (fields, inputs) => {
-    return fields.map(field => {
-        if (field.componentType === "group") return {...field, fields : updatedFields(field.fields, inputs)};
-        else if (field.componentType === "input") return inputs.find(input => input.name === field.name);
-        else return field;
-    });
-};
-
-const useForm = (model, values, submitCallback) => {
-    const { config } = model;
+const useForm = (model = [], values = {}, submitCallback) => {
+    const config = model.config;
     const [fields, setFields] = useState(model.fields);
-    const [ message, setMessage ] = useState('');
     const inputs = extractInputs(fields);
+    const [ message, setMessage ] = useState('');
 
-    useEffect(() => {
-        if (values && config.autoFill) inputs.forEach(input => {
-            input.value = _get(values, input.name, input.value);
+    function extractInputs(fields){
+        return fields.reduce((carry, field) => {
+            if (field.fields) {
+                return [...carry, ...extractInputs(field.fields)]
+            } else if (field.componentType === 'input') {
+                if(config.autoFill) field.value = _get(values, field.name, field.value);
+                return [...carry, CompleteInput(field)];
+            } else return carry;
+        }, []);
+    }
+
+    const buildUpdatedFields = (fields, input) => {
+        return fields.map(field => {
+            if (field.fields) return {...field, fields: buildUpdatedFields(field.fields, input)};
+            return input && input.name === field.name ? {...field, ...input} : field;
         });
-        setFields(updatedFields(fields, inputs));
-    },[]);
+    };
+
+    const updateFields = (input) => {
+        if(input) setFields(fields => buildUpdatedFields(fields, input));
+    };
 
     const handleChange = (name, value) => {
-        let input = inputs.find(input => input.name === name);
-        if (!input) return;
-        input.value = value;
-
+        let input = inputs.find(i => i.name === name);
+        if(!input) return;
+        if(input.name === name) input.value = value;
         parseInput(input);
         validateInput(input);
-
-        setFields(updatedFields(fields, inputs));
+        updateFields(input);
     };
 
     const handleSubmit = e => {
@@ -50,7 +45,7 @@ const useForm = (model, values, submitCallback) => {
         let alerts = inputs.filter(i => i.alert);
         if(alerts.length){
             setMessage("Some fields are invalid or required");
-            setFields([...fields]);
+            updateFields();
         }
         else prepareSubmit(e, inputs);
     };

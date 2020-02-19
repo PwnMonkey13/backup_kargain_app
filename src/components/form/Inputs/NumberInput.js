@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import classNames from "classnames";
 import ValidationAlert from '../Validations/ValidationAlert';
+import useIsMounted from "../../../hooks/useIsMounted";
 
-function NumberInput({ setInputs, ...props }) {
-
+const NumberInput = memo(({ setInputs, ...props }) => {
+    const isMountRef = useIsMounted();
     const onKeyPress = e =>{
         const { charCode } = e,
             { integer, positive } = props,
@@ -27,7 +28,7 @@ function NumberInput({ setInputs, ...props }) {
     };
 
     useEffect(() => {
-        if(value) setInputs(props.name, value);
+        if(isMountRef && value) setInputs(props.name, value);
     }, [value]);
 
     return (
@@ -61,7 +62,7 @@ function NumberInput({ setInputs, ...props }) {
             </div>
         </div>
     )
-}
+});
 
 NumberInput.defaultProps = {
     integer: true,

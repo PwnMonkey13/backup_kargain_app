@@ -10734,7 +10734,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #111;
-  text-align: center;
   background-color: #f3f5f7;
   font-family: "Quicksand", "valeraRound", sans-serif;
 }
@@ -10882,6 +10881,10 @@ hr {
   margin: 1rem;
   padding: 1rem;
   border: 1px solid black;
+}
+
+.w100 {
+  width: 100%;
 }
 
 .circle_loader {

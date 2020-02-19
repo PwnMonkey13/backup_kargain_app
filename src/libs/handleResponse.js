@@ -9,6 +9,7 @@ const handleResponse = response => {
 				if(json.success === false) throw Error(json.msg);
 			})
 			.catch(err => {
+				console.log(err);
 				throw err.message || err;
 			});
 		}

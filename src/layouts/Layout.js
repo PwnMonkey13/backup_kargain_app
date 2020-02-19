@@ -7,9 +7,8 @@ import {ModalDialogContext} from "../components/Context/ModalDialogContext";
 
 // import LogRocket from 'logrocket';
 // LogRocket.init('p6ipds/kargain');
-// cookies.set('redirect_url', window.location.pathname, { path: '/' })
 
-const Layout = ({navmenu, fluid, children, ...rest}) => {
+const Layout = ({navmenu, fluid = true, children, ...rest}) => {
 
     useEffect(() => {
         if (!window.GA_INITIALIZED) {
