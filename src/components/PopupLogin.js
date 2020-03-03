@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import Popup from "reactjs-popup";
-import FormPanel from "./form/FormPanel";
-import model from "./form/Models/login.model";
+import FormPanel from "./Form/FormPanel";
+import model from "./Form/Models/login.model";
 import AuthService from '../services/AuthService';
 import {UserContext} from "./Context/UserContext";
 import {ModalDialogContext} from "./Context/ModalDialogContext";

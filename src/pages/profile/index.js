@@ -6,8 +6,7 @@ const Index = () => {
     const { session, dispatch } = useContext(UserContext);
     const router = useRouter();
     const { isLoggedIn, user } = session;
-    console.log(user);
-    return('');
+    return null;
 };
 
 export default Index;

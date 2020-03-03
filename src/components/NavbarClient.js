@@ -12,7 +12,7 @@ import {
     DropdownItem,
 } from 'reactstrap';
 import {UserContext} from '../components/Context/UserContext';
-import {getLogo} from '../libs/functions';
+import {getLogo} from '../libs/utils';
 
 const NavbarClient = () => {
     const {session} = useContext(UserContext);
@@ -28,6 +28,8 @@ const NavbarClient = () => {
     useEffect(() => {
         if (session.user) setAvatar(session.user.avatar);
     }, [session]);
+
+    console.log(session.user);
 
     const DropdownUser = () => {
         const menuClass = `dropdown-menu${open ? " show" : ""}`;
@@ -82,7 +84,7 @@ const NavbarClient = () => {
                 <Collapse isOpen={!collapsed} navbar>
                     <Nav navbar>
                         <NavItem className="px-3">
-                            <NavLink className="btn btn-outline-primary cta_nav_link" href="/announce-rental">
+                            <NavLink className="btn btn-outline-primary cta_nav_link" href="/deposer-une-annonce">
                                 Ajouter une annonce
                             </NavLink>
                         </NavItem>

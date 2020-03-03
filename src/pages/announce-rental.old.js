@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useContext} from "react";
 import { Row, Col } from 'reactstrap';
 import styled from 'styled-components';
-import model from '../components/form/Models/announce-rental.model';
-import FormPanel from '../components/form/FormPanel';
+import model from '../components/Form/Models/announce-rental.model';
+import FormPanel from '../components/Form/FormPanel';
 import {ModalDialogContext} from "../components/Context/ModalDialogContext";
 import ActiveLink from "../components/ActiveLink";
 import AnnounceService from '../services/AnnounceService';

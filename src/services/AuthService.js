@@ -6,11 +6,14 @@ import config from '../config/config';
 function login(email, password) {
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ email, password })
     };
 
-    console.log(`${config.api}/auth/login`);
     return fetch(`${config.api}/auth/login`, requestOptions)
         .then(handleResponse)
         .then(json => {

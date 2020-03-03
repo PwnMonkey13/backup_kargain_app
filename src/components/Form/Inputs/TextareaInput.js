@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from "prop-types";
 import classNames from "classnames";
 import ValidationAlert from '../Validations/ValidationAlert';
 import useIsMounted from "../../../hooks/useIsMounted";
 
-function TextareaInput({setInputs, ...props}) {
+function TextareaInput({...props}) {
     const isMountRef = useIsMounted();
     const [value, setValue] = useState(props.value);
 
@@ -12,7 +13,7 @@ function TextareaInput({setInputs, ...props}) {
     },[]);
 
     useEffect(() => {
-        if(isMountRef && value) setInputs(props.name, value);
+        // if(isMountRef && value) setInputs(props.name, value);
     }, [value]);
 
     return (
@@ -31,8 +32,6 @@ function TextareaInput({setInputs, ...props}) {
                     name={props.name}
                     type={props.type}
                     rows={props.rows}
-                    value={value}
-                    onChange={onChange}
                     className={props.alert ? 'form-danger' : ''}
                 />
             </div>
@@ -40,6 +39,11 @@ function TextareaInput({setInputs, ...props}) {
         </div>
     )
 }
+
+TextareaInput.propTypes = {
+    name : PropTypes.string.isRequired,
+    label : PropTypes.string.isRequired
+};
 
 TextareaInput.defaultProps = {
     required: false,

@@ -1,19 +1,28 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from "next/router";
 import Link from "next/link";
-import FormPanel from '../../components/form/FormPanel';
+// import Cookies from 'js-cookie';
+import { withCookies, Cookies } from 'react-cookie';
+import FormPanel from '../../components/Form/FormPanel';
 import AuthService from '../../services/AuthService';
 import { UserContext } from '../../components/Context/UserContext';
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
-import model from '../../components/form/Models/login.model';
+import model from '../../components/Form/Models/login.model';
 import {Col, Row} from "reactstrap";
-import Divider from "../../components/form/Divider";
+import Divider from "../../components/Form/Divider";
 
-const LoginPage = () => {
+const LoginPage = (props) => {
+    const {cookies} = props;
+    console.log(cookies);
     const router = useRouter();
     const { dispatch } = useContext(UserContext);
     const { dispatchModal } = useContext(ModalDialogContext);
     const { redirect } = router.query;
+
+    useEffect(()=> {
+        cookies.remove('token');
+        dispatch({type: 'logout'});
+    },[]);
 
     const handleSubmit = async (e, data) => {
         AuthService.login(data.email, data.password)
@@ -69,4 +78,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default withCookies(LoginPage);

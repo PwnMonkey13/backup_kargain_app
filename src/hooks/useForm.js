@@ -1,6 +1,6 @@
 import {useState } from 'react';
 import {set as _set, get as _get} from "lodash";
-import CompleteInput from "../components/form/Validations/CompleteInput";
+import CompleteInput from "../components/Form/Validations/CompleteInput";
 
 const useForm = (model = [], values = {}, submitCallback) => {
     const config = model.config;

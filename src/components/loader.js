@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Loader = ({fullscreen}) => {
     return (
@@ -8,6 +9,10 @@ const Loader = ({fullscreen}) => {
             </svg>
         </span>
     )
+};
+
+Loader.defaultProps = {
+    fullscreen: true,
 };
 
 export default Loader;

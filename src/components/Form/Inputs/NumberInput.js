@@ -1,10 +1,16 @@
 import React, { memo, useState, useEffect, useCallback } from 'react';
+import PropTypes from "prop-types";
 import classNames from "classnames";
-import ValidationAlert from '../Validations/ValidationAlert';
+import {FormGroup} from 'reactstrap';
 import useIsMounted from "../../../hooks/useIsMounted";
+import ValidationError from "../Validations/ValidationError";
 
-const NumberInput = memo(({ setInputs, ...props }) => {
+const NumberInput = memo(({ register, errors, ...props }) => {
+    if(props.positive) props.value = Math.abs(Number(props.value));
+    if(props.integer) props.value = Math.round( props.value );
+    const [value, setValue] = useState(props.value);
     const isMountRef = useIsMounted();
+
     const onKeyPress = e =>{
         const { charCode } = e,
             { integer, positive } = props,
@@ -19,22 +25,9 @@ const NumberInput = memo(({ setInputs, ...props }) => {
         }
     };
 
-    if(props.positive) props.value = Math.abs(Number(props.value));
-    if(props.integer) props.value = Math.round( props.value );
-
-    const [value, setValue] = useState(props.value);
-    const onChange = (e) => {
-        setValue(e.target.value);
-    };
-
-    useEffect(() => {
-        if(isMountRef && value) setInputs(props.name, value);
-    }, [value]);
-
     return (
-        <div className={classNames(props.classname, 'form-field')}>
-            <div className={classNames(props.classname, {'form-field-row': props.display === 'inline'})}>
-
+        <FormGroup>
+            <div className={classNames(props.classname, {"form-field-row": props.inline})}>
                 <div className="label">
                     {props.label &&
                         <h4>
@@ -47,30 +40,30 @@ const NumberInput = memo(({ setInputs, ...props }) => {
 
                 <div className="input">
                     <input
+                        ref={register}
                         name={props.name}
                         type="text"
                         required={props.required}
                         disabled={props.disabled}
-                        value={props.value}
-                        onChange={onChange}
                         onKeyPress={onKeyPress}
                         placeholder={props.placeholder}
-                        className={props.alert ? 'form-danger' : ''}
                     />
                 </div>
-                <ValidationAlert content={props.alert} />
             </div>
-        </div>
+            {errors && <ValidationError errors={errors} name={props.name} />}
+        </FormGroup>
     )
 });
+
+NumberInput.propTypes = {
+    name: PropTypes.string.isRequired,
+};
 
 NumberInput.defaultProps = {
     integer: true,
     positive: false,
     required: false,
     disabled : false,
-    display : 'col',
-    value : null
 };
 
 export default NumberInput;

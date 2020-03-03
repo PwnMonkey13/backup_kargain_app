@@ -1,3 +1,4 @@
+export { default as GroupInputs } from './GroupInputs';
 export { default as TelInput } from './TelInput';
 export { default as FileInput } from './FileInput';
 export { default as NumberInput } from './NumberInput';

@@ -1,6 +1,5 @@
 import React, {createContext, useReducer, useEffect} from 'react';
-import Cookie from 'js-cookie';
-import AuthService from '../../services/AuthService'
+import Cookies from 'js-cookie';
 import useLocalStorage from '../../hooks/useLocalStorage'
 
 const UserContext = createContext({});
@@ -39,8 +38,9 @@ const UserContextProvider = ({isLoggedIn, children}) => {
 
     const dispatchProxy = (action) => {
         if (action.type === 'logout') {
+            console.log('dispatch logout');
             clearLoggedInUser();
-            Cookie.remove('token');
+            Cookies.remove('token', { path: '/' }); // removed!
             dispatch({type: 'logout'});
         }
         // if (action.type === 'checkToken') {
@@ -51,13 +51,12 @@ const UserContextProvider = ({isLoggedIn, children}) => {
         //         })
         //         .catch(err => {
         //             clearLoggedInUser();
-        //             Cookie.remove('token');
+        //             Cookies.remove('name', { path: '' }) // removed!
         //             dispatch({type: 'logout', err});
         //         });
         //
         // }
         else if (action.type === 'loginSuccess') {
-            Cookie.set('token', action.payload.token);
             setLoggedInUser(action.payload.user);
             dispatch({type: 'set', payload: {user: action.payload.user, isLoggedIn: true}});
         } else {

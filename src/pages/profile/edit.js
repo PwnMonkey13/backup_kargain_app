@@ -2,8 +2,8 @@ import React, {useState, useContext} from 'react'
 import classNames from 'classnames';
 import {TabContent, TabPane, Nav, NavItem, NavLink, Row, Col} from "reactstrap";
 import UsersService from "../../services/UsersService";
-import model from '../../components/form/Models/profile.edit.model';
-import FormPanel from '../../components/form/FormPanel';
+import model from '../../components/Form/Models/profile.edit.model';
+import FormPanel from '../../components/Form/FormPanel';
 import {UserContext} from "../../components/Context/UserContext";
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 

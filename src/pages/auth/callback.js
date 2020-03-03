@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {useRouter} from 'next/router'
+import {withRouter, useRouter} from 'next/router'
 import Loader from '../../components/Loader'
 import Link from "next/link";
 
@@ -23,4 +23,4 @@ const Callback = (props) => {
     );
 };
 
-export default Callback;
+export default withRouter(Callback);

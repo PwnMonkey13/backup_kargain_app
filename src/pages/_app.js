@@ -4,7 +4,6 @@ import {DefaultSeo} from 'next-seo';
 import {UserContextProvider} from '../components/Context/UserContext'
 import {ModalDialogContextProvider} from '../components/Context/ModalDialogContext'
 import {FormContextProvider} from '../components/Context/FormContext'
-
 import Loading from '../components/Loading'
 import SEO from '../next-seo.config';
 import nextCookie from "next-cookies";
@@ -29,24 +28,25 @@ const MyApp = ({Component, pageProps}) => (
     </ModalDialogContextProvider>
 );
 
-MyApp.getInitialProps = async (appContext) => {
-    const {token} = nextCookie(appContext.ctx);
-    let props = (appContext.Component.getInitialProps ? await appContext.Component.getInitialProps(appContext.ctx) : null) || {};
+MyApp.getInitialProps = async (app) => {
+    const {token} = nextCookie(app.ctx);
+    let pageProps = (app.Component.getInitialProps ? await app.Component.getInitialProps(app.ctx) : null) || {};
 
-    if (props.statusCode && appContext.ctx.res) {
-        appContext.ctx.res.statusCode = props.statusCode
+    if (pageProps.statusCode && app.ctx.res) {
+        app.ctx.res.statusCode = pageProps.statusCode
     }
 
+    // if(pageProps.requiredAuth && token){
     if(token){
         try {
             const isLoggedIn = await AuthService.authorize(token);
-            props = {...props, token, isLoggedIn };
+            pageProps = {...pageProps, token, isLoggedIn };
         } catch (err) {
-            props = {err: err, loggedIn: false};
+            pageProps = {...pageProps, err: err, loggedIn: false};
         }
-    } else props.loggedIn = false;
+    } else  pageProps = {...pageProps, err: "missing token", loggedIn: false};
 
-    return {pageProps: {router: appContext.router, ...props}};
+    return { pageProps: {...pageProps}};
 };
 
 export default MyApp;

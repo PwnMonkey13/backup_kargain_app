@@ -62,7 +62,7 @@ const Profile = (props) => {
                                 && session.user.username === profile.username &&
                                 <div>
                                     <Link href={`/profile/edit`}>
-                                    <a className="btn btn-outline-dark">Editer profil</a>
+                                        <a className="btn btn-outline-dark">Editer profil</a>
                                     </Link>
                                 </div>
                             }

@@ -5,10 +5,10 @@ import {Container, Col, Row} from 'reactstrap'
 import Layout from '../../layouts/Layout';
 import {UserContext} from '../../components/Context/UserContext';
 import {ModalDialogContext} from '../../components/Context/ModalDialogContext';
-import Divider from '../../components/form/Divider'
-import FormPanel from "../../components/form/FormPanel";
+import Divider from '../../components/Form/Divider'
+import FormPanel from "../../components/Form/FormPanel";
 import AuthService from '../../services/AuthService'
-import model from "../../components/form/Models/register.model"
+import model from "../../components/Form/Models/register.model"
 
 const LoginPage = () => {
     const router = useRouter();

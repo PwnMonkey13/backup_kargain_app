@@ -4,9 +4,9 @@ import Link from "next/link";
 import {Col,Row} from 'reactstrap'
 import { UserContext } from '../../components/Context/UserContext';
 import AuthService from '../../services/AuthService'
-import Divider from "../../components/form/Divider";
-import FormPanel from "../../components/form/FormPanel";
-import model from "../../components/form/Models/register-pro.model";
+import Divider from "../../components/Form/Divider";
+import FormPanel from "../../components/Form/FormPanel";
+import model from "../../components/Form/Models/register-pro.model";
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 
 const RegisterPro = () => {

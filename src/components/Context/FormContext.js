@@ -1,37 +1,50 @@
-import React, {createContext, useReducer} from 'react';
-import useLocalStorage from '../../hooks/useLocalStorage'
+import React, {createContext, useEffect, useReducer} from "react";
+import {flatten, inflate} from 'flattenjs';
+import useLocalStorage from "../../hooks/useLocalStorage";
+import useIsMounted from "../../hooks/useIsMounted";
 
 const FormContext = createContext({});
 
 const reducer = (state, action) => {
-    if (action.type === 'update') {
+    if (action.type === "update") {
         return {
             ...state,
-            [action.name]: action.value
+            ...action.payload
         };
+    } else if (action.type === "clear") {
+        return {};
     } else {
-        console.log('unknown action');
+        console.log("unknown action");
     }
 };
 
 const FormContextProvider = ({children}) => {
-    const [formDataLS, setFormDataLS, clearFormDataLS] = useLocalStorage('formData', {});
-    const [formDataState, dispatch] = useReducer(reducer, {});
+    const isMountRef = useIsMounted();
+    const [ getFormData, setFormData, clearFormData ] = useLocalStorage("formData");
+    const [formDataContext, dispatch] = useReducer(reducer, getFormData);
 
-    const dispatchFormUpdate = (action) => {
-        if (action.type === 'update') {
-            dispatch(action);
-            // setFormDataLS({...formDataState, [action.name]: action.value});
-        } else if (action.type === 'clear') {
-            dispatch({type: 'clear', payload: {}});
-            clearFormDataLS();
-        } else {
-            console.log('form reducer action not set');
-        }
+    const dispatchFormUpdate = (updates) => {
+        // dispatch({type: "update", payload: flatten(updates)});
+        dispatch({type: "update", payload: updates});
+
     };
 
+    const dispatchFormClear = () => {
+        dispatch({type: "clear", payload: {}});
+        clearFormData();
+    };
+
+    useEffect(() => {
+        if(isMountRef){
+            // const updatedDataContext = inflate(formDataContext);
+            // const updatedDataContext = formDataContext;
+            // setFormData(updatedDataContext);
+            setFormData(formDataContext);
+        }
+    }, [formDataContext]);
+
     return (
-        <FormContext.Provider value={{formDataState, dispatchFormUpdate}}>
+        <FormContext.Provider value={{formDataContext, dispatchFormUpdate, dispatchFormClear }}>
             {children}
         </FormContext.Provider>
     );

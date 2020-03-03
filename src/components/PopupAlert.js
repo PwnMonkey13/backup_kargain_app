@@ -26,10 +26,10 @@ const PopupAlert = () => {
 
     return (
         <Modal isOpen={state.active} toggle={toggleModal} onClick={toggleModal}>
-            <ModalBody className={Classnames}>
-                { state.type === "error" ? state.err : state.msg }
-                { state.link && <Link href={state.link}>See page</Link> }
-            </ModalBody>
+            {/*<ModalBody className={Classnames}>*/}
+            {/*    { state.type === "error" ? state.err : state.msg }*/}
+            {/*    { state.link && <Link href={state.link}>See page</Link> }*/}
+            {/*</ModalBody>*/}
         </Modal>
     );
 };

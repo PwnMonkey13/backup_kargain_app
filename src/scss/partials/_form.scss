@@ -25,6 +25,14 @@
   margin: 1rem 0;
 }
 
+p.error {
+  color: #bf1650;
+  &:before{
+    display: inline;
+    content: "⚠ ";
+  }
+}
+
 .label {
   min-width: 3rem;
 
@@ -36,7 +44,6 @@
     white-space: nowrap;
   }
 }
-
 
 .input {
   display: flex;
@@ -53,6 +60,78 @@
   padding: 4px 8px;
   font-weight: 700;
   font-size: .8em;
+}
+
+.form-check{
+  align-items: center;
+  padding-left: 0;
+  margin: .5rem;
+  position: relative;
+  cursor: pointer;
+  display:inline-block;
+
+  input[type="radio"] {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+  }
+
+  label{
+    display: inline-block;
+    background-color: #ddd;
+    padding: 10px 20px;
+    font-family: sans-serif, Arial;
+    font-size: 16px;
+    border: 2px solid #444;
+    border-radius: 4px;
+    margin-bottom: .5rem
+  }
+
+  input[type="radio"]+label {
+    position: relative;
+    padding: 8px 10px 8px 35px;
+    background: #f3f3f3;
+    color: #495057;
+    display: block;
+    cursor: pointer;
+    min-width: 10rem;
+    border: 1px solid gainsboro;
+    transition-property: background,box-shadow;
+    transition-duration: .4s;
+  }
+
+  input[type="radio"]+label:before{
+    content: " ";
+    position: absolute;
+    top: 50%;
+    margin-top: -10px;
+    left: 10px;
+    height: 18px;
+    width: 18px;
+    background: #fff;
+    border-radius: 10px;
+  }
+
+  input[type="radio"]:checked+label:after{
+    content: " ";
+    position: absolute;
+    left: 15px;
+    top: calc(50% - 5px);
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    background: #307edd;
+  }
+
+  input[type="radio"]:checked + label {
+    background-color:#bfb;
+    border-color: #4c4;
+  }
+
+  input[type="radio"]:focus + label {
+    border: 2px dashed #444;
+  }
+
 }
 
 .submit {
