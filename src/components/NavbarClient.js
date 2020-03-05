@@ -29,8 +29,6 @@ const NavbarClient = () => {
         if (session.user) setAvatar(session.user.avatar);
     }, [session]);
 
-    console.log(session.user);
-
     const DropdownUser = () => {
         const menuClass = `dropdown-menu${open ? " show" : ""}`;
         return (

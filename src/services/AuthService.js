@@ -21,7 +21,6 @@ function login(email, password) {
             else return json.data;
         })
         .catch(err => {
-            console.log(err);
             throw err;
         }
     );

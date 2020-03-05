@@ -11,7 +11,7 @@
     "mixw": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "mixp": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "build": "next build",
-    "start": "next start",
+    "start  ": "next start",
     "dev": "next",
     "nodemon": "cross-env NODE_ENV=development nodemon index.js",
     "prod": "cross-env NODE_ENV=production nodemon index.js",

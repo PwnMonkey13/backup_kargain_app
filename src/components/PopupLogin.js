@@ -8,7 +8,6 @@ import {ModalDialogContext} from "./Context/ModalDialogContext";
 import {useRouter} from "next/router";
 
 export default (props) => {
-    console.log(props);
     const router = useRouter();
     const {session, dispatch } = useContext(UserContext);
     const { dispatchModal } = useContext(ModalDialogContext);
@@ -18,7 +17,6 @@ export default (props) => {
         AuthService.login(data.email, data.password)
             .then(data => {
                 const { user } = data;
-                console.log(user);
                 dispatch({ type : 'loginSuccess', payload : data });
                 dispatchModal({type : 'success', msg : `Welcome back ${user.firstname}` });
                 router.push('/');

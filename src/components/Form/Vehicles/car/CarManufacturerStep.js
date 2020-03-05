@@ -17,12 +17,12 @@ const CarManufacturerStep = ({formConfig, onSubmitStep, prevStep, nextStep, ...p
     });
 
     const triggerSubmit = () => {
-        console.log("triggerSubmit");
+        // console.log("triggerSubmit");
         formRef.current.dispatchEvent(new Event('submit'))
     };
 
     useEffect(() => {
-        console.log('mounted');
+        // console.log('mounted');
         const popularMakesId = [
             3, // AlphaRomeo
             9, // Audi
@@ -46,7 +46,7 @@ const CarManufacturerStep = ({formConfig, onSubmitStep, prevStep, nextStep, ...p
             .catch(err => console.log(err));
 
         return function cleanup() {
-            console.log('niktamere');
+            // console.log('niktamere');
         }
     }, []);
 

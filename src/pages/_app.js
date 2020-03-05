@@ -31,11 +31,9 @@ const MyApp = ({Component, pageProps}) => (
 MyApp.getInitialProps = async (app) => {
     const {token} = nextCookie(app.ctx);
     let pageProps = (app.Component.getInitialProps ? await app.Component.getInitialProps(app.ctx) : null) || {};
-
     if (pageProps.statusCode && app.ctx.res) {
         app.ctx.res.statusCode = pageProps.statusCode
     }
-
     // if(pageProps.requiredAuth && token){
     if(token){
         try {
@@ -45,7 +43,6 @@ MyApp.getInitialProps = async (app) => {
             pageProps = {...pageProps, err: err, loggedIn: false};
         }
     } else  pageProps = {...pageProps, err: "missing token", loggedIn: false};
-
     return { pageProps: {...pageProps}};
 };
 

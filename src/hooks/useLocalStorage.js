@@ -6,7 +6,6 @@ function useLocalStorage(key, initialValue = {}, listen = false) {
     const isBrowser = typeof window != 'undefined';
 
     useEffect(() => {
-
         if (isBrowser && listen) {
             window.addEventListener('storage', function () {
                 setStoredValue(get);
@@ -32,7 +31,6 @@ function useLocalStorage(key, initialValue = {}, listen = false) {
     }
 
     const set = value => {
-        console.log("DOUUU");
         try {
             const valueToStore = value instanceof Function ? value(storedValue) : value;
             setStoredValue(valueToStore);

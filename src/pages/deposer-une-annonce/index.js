@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import Link from 'next/link'
-import { withRouter } from 'next/router'
+import { Container } from 'reactstrap';
+import  { withRouter } from 'next/router'
 import {FormContext} from "../../components/Context/FormContext";
 
 const Page = (props) => {
@@ -12,69 +13,21 @@ const Page = (props) => {
     },[]);
 
     return (
-        <>
+        <Container>
             <h1 className="cbm-title--page">Vendre sa voiture</h1>
             <Link href={`${router.pathname}/form`}>
                 <a className="btn btn-outline-dark">Accéder au formulaire Kargain</a>
             </Link>
-            <SectionTop/>
             <SectionEngagemnts/>
-        </>
+        </Container>
     )
 };
 
-const SectionTop = () => {
-    return (
-        <section className="cbm-sellPage--top">
-            <article className="cbm-sellPage--yourself">
-                <img src="https://www.lacentrale.fr/static/fragment-layout/sellYourSelfImg-5d284846.png"
-                     className="cbm--hiddenPhone" alt=""/>
-                <div className="cbm-title--section">Vendre vous-même
-                    <span className="cbm-lineBreak">sur La Centrale ®</span>
-                </div>
-                <ul className="cbm-sell--bullets">
-                    <li>
-                        <span>
-                            <span className="cbm-bullet--plus">+</span>
-                        </span>
-                        <span className="cbm-bullet--text">
-                            <strong>Gratuit</strong> pour <strong>tous les véhicules</strong>
-                        </span>
-                    </li>
-                    <li className="cbm-seeMore">Voir plus
-                        <div className="cbm--downArrow">&gt;</div>
-                    </li>
-                    <span className="cbm--hiddenPhone">
-                        <li>
-                            <span>
-                                <span className="cbm-bullet--plus">+</span>
-                            </span>
-                            <span className="cbm-bullet--text">Une visibilité maximale de votre annonce</span>
-                        </li>
-                        <li>
-                            <span>
-                                <span className="cbm-bullet--plus">+</span>
-                            </span>
-                            <span
-                                className="cbm-bullet--text">Tout compris : modifications gratuites, inclus 50 photos</span>
-                        </li>
-                        <li>
-                            <span>
-                                <span className="cbm-bullet--moins">-</span>
-                            </span>
-                            <span className="cbm-bullet--text cbm-longLib">Un délai de vente plus long, vous organisez et gérez les visites et les formalités administratives vous-même</span>
-                        </li>
-                    </span>
-                </ul>
-            </article>
-        </section>
-    )
-};
 const SectionEngagemnts = () => {
     return (
         <section className="cbm-section--bottom">
             <h2 className="cbm-title--section">
-                Les engagements <i className="cbm-sprite--partnersLC"/>
+                Nos engagements <i className="cbm-sprite--partnersLC"/>
             </h2>
 
             <dl>

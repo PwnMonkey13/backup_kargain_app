@@ -1,9 +1,6 @@
 import config from '../config/config';
 
 const handleResponse = response => {
-	const headers = response.headers;
-	console.log(headers);
-
 	if (response.ok) {
 		return response.json().then(json => {
 			if (json.success === false) throw json.msg;
