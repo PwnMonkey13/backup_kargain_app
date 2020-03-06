@@ -27,8 +27,8 @@ const ClearIndicatorStyles = (base, state) => ({
     color: state.isFocused ? 'blue' : 'black',
 });
 
-const SelectInput = ({label, display, alert, classname, required, inline, disabled, errors, ...rest}) => {
-    const {control, rules, name, defaultValue, ...innerProps} = rest;
+const SelectInput = ({label, display, alert, classname, required, inline, disabled, errors, ...props}) => {
+    const {control, rules, name, defaultValue, ...innerProps} = props;
     const controllerProps = {control, rules, name, defaultValue};
 
     return (
@@ -43,15 +43,18 @@ const SelectInput = ({label, display, alert, classname, required, inline, disabl
                 </div>
             }
 
-            <Controller
-                as={<NiceSelect
-                    components={{clearValue: ClearIndicator}}
-                    styles={{clearIndicator: ClearIndicatorStyles}}
-                    {...innerProps}
-                />}
-                onChange={([selected]) => ({value: selected})}
-                {...controllerProps}
-            />
+            <div className={classNames('fg-field input', props.fullwidth ? "w100" : '')}>
+                <Controller
+                    as={<NiceSelect
+                        className="w-100"
+                        components={{clearValue: ClearIndicator}}
+                        styles={{clearIndicator: ClearIndicatorStyles}}
+                        {...innerProps}
+                    />}
+                    onChange={([selected]) => ({value: selected})}
+                    {...controllerProps}
+                />
+            </div>
 
             {
                 errors && <ValidationError errors={errors} name={name}/>

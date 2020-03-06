@@ -1,24 +1,14 @@
 import React, { memo, useState, useEffect, useCallback } from 'react';
 import classNames from "classnames";
-import ValidationAlert from '../Validations/ValidationAlert';
-import useIsMounted from "../../../hooks/useIsMounted";
+import ValidationError from "../Validations/ValidationError";
+import {FormGroup} from "reactstrap";
 
-const PasswordInput = memo(({ setInputs, ...props }) => {
-    const isMountRef = useIsMounted();
-    const [ hidden, setHidden ] = useState(props.hidden);
-    const [value, setValue] = useState(props.value);
-
-    const onChange = useCallback(e => {
-        setValue(e.target.value);
-    },[]);
-
-    useEffect(() => {
-        if(isMountRef && value) setInputs(props.name, value);
-    }, [value]);
+const PasswordInput = memo(({name, classname, register, errors, ...props}) => {
+    const [ hidden, setHidden ] = useState(true);
 
     return (
-        <div className={classNames(props.classname, 'form-field')}>
-            <div className={classNames(props.classname, {'form-field-row': props.display === 'inline'})}>
+        <div className={classNames(classname, 'form-field')}>
+            <div className={classNames(classname, props.inline ? 'form-field-row' : '')}>
                 {props.label &&
                     <div className="label">
                         <h4>
@@ -31,18 +21,18 @@ const PasswordInput = memo(({ setInputs, ...props }) => {
 
                 <div className="input">
                     <input
-                        name={props.name}
+                        ref={register}
+                        name={name}
                         type={hidden ? "password" : "text"}
-                        value={value}
-                        onChange={onChange}
-                        className={props.alert ? 'form-danger' : ''}
+                        required={props.required}
+                        disabled={props.disabled}
                     />
                     <span className="password__show"
                           onClick={() => setHidden(!hidden)}> {hidden ? 'Show' : 'Hide'}
                     </span>
                 </div>
             </div>
-            <ValidationAlert content={props.alert} />
+            {errors && <ValidationError errors={errors} name={name}/>}
         </div>
     )
 });
@@ -52,7 +42,6 @@ PasswordInput.defaultProps = {
     disabled : false,
     hidden : true,
     display : 'col',
-    value : ''
 };
 
 export default PasswordInput;

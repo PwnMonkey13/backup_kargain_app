@@ -1,21 +1,29 @@
 import React, { useContext } from 'react';
 import { useRouter } from "next/router";
 import Link from "next/link";
-import {Col,Row} from 'reactstrap'
+import {Col,Row} from 'reactstrap';
+import {useForm} from "react-hook-form";
 import { UserContext } from '../../components/Context/UserContext';
 import AuthService from '../../services/AuthService'
 import Divider from "../../components/Form/Divider";
-import FormPanel from "../../components/Form/FormPanel";
-import model from "../../components/Form/Models/register-pro.model";
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
+import {TextInput, SelectInput, EmailInput, PasswordInput, CheckBoxInput} from "../../components/Form/Inputs";
+
+const formConfig = {
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    validateCriteriaMode: "all",
+};
 
 const RegisterPro = () => {
     const router = useRouter();
+    const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
+
     const { dispatch } = useContext(UserContext);
     const {dispatchModal} = useContext(ModalDialogContext);
     const { redirect } = router.query;
 
-    const handleSubmit = async (e, data) => {
+    const onSubmit = async (e, data) => {
         AuthService.registerPro(data)
             .then(data => {
                 dispatch({ type : 'registerProSuccess', payload : data });
@@ -58,11 +66,108 @@ const RegisterPro = () => {
                     </Link>
                 </Col>
                 <Col className="auth_form m-auto" sm="12" md="7">
-                    <FormPanel
-                        btnName="S'enregistrer"
-                        submitCallback={handleSubmit}
-                        model={model}
-                    />
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <TextInput
+                            label="Nom de société"
+                            name="company_name"
+                            required
+                            inline
+                            register={register({required : 'Required'})}
+                        />
+                        <TextInput
+                            label="SIREN de la société"
+                            name="company_ID"
+                            required
+                            inline
+                            register={register({required : 'Required'})}
+                        />
+                        <TextInput
+                            label="Gérant de la société"
+                            name="company_owner"
+                            required
+                            inline
+                            register={register({required : 'Required'})}
+                        />
+                        <SelectInput
+                            label="Pays"
+                            name="address.country"
+                            required
+                            inline
+                            control={control}
+                            register={register({required : 'Required'})}
+                            options={[
+                                { value: 'france', label: 'France' },
+                                { value: 'spain', label: 'Espagne' },
+                                { value: 'italie', label: 'Italie' }
+                            ]}
+                        />
+                        <TextInput
+                            label="Ville ou code postal"
+                            name="address.postalcode"
+                            required
+                            inline
+                            register={register({required : 'Required'})}
+                        />
+                        <TextInput
+                            label="Adresse"
+                            name="address.address"
+                            required
+                            inline
+                            register={register({required : 'Required'})}
+                        />
+                        <TextInput
+                            label="Nom"
+                            name="lastname"
+                            required
+                            inline
+                            register={register({required : 'Required'})}
+                        />
+                        <TextInput
+                            label="Prénom"
+                            name="firstname"
+                            required
+                            inline
+                            register={register({required : 'Required'})}
+                        />
+                        <EmailInput
+                            label="Email"
+                            name="email"
+                            required
+                            inline
+                            register={register({required : 'Required'})}
+                        />
+                        <PasswordInput
+                            label="Mot de passe"
+                            name="password"
+                            required
+                            inline
+                            register={register({required : 'Required'})}
+                        />
+                        <PasswordInput
+                            label="Confirmer mot de passe"
+                            name="confirm_pwd"
+                            required
+                            inline
+                            register={register({
+                                required : 'Required',
+                                validate: {
+                                    matchesPreviousPassword: (value) => {
+                                        const { password } = getValues();
+                                        return password === value || 'Passwords should match!';
+                                    },
+                                }
+                            })}
+                        />
+                        <CheckBoxInput
+                            label="J’ai lu et j’accepte les conditions générales d’utilisation"
+                            name="confirm"
+                            required
+                            inline
+                            register={register({
+                                required : 'Required',
+                            })}
+                        />
+                    </form>
                 </Col>
             </Row>
         </main>

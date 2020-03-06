@@ -2,21 +2,27 @@ import React, {useContext} from 'react';
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {Container, Col, Row} from 'reactstrap'
-import Layout from '../../layouts/Layout';
 import {UserContext} from '../../components/Context/UserContext';
 import {ModalDialogContext} from '../../components/Context/ModalDialogContext';
 import Divider from '../../components/Form/Divider'
-import FormPanel from "../../components/Form/FormPanel";
 import AuthService from '../../services/AuthService'
-import model from "../../components/Form/Models/register.model"
+import {useForm} from "react-hook-form";
+import {TextInput, EmailInput, PasswordInput, CheckBoxInput } from "../../components/Form/Inputs";
 
-const LoginPage = () => {
+const formConfig = {
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    validateCriteriaMode: "all",
+};
+
+const LoginPage = (props) => {
     const router = useRouter();
     const {dispatch} = useContext(UserContext);
     const {dispatchModal} = useContext(ModalDialogContext);
+    const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
     const { redirect } = router.query;
 
-    const handleSubmit = async (e, data) => {
+    const onSubmit = async (data) => {
         AuthService.register(data)
             .then(data => {
                 dispatch({type: 'set', payload: {user: {email: data.document.email}}});
@@ -58,11 +64,65 @@ const LoginPage = () => {
                     </Link>
                 </Col>
                 <Col className="auth_form m-auto" sm="12" md="7">
-                    <FormPanel
-                        btnName="S'enregistrer"
-                        submitCallback={handleSubmit}
-                        model={model}
-                    />
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="fields">
+                            <TextInput
+                                label="Prénom"
+                                name="firstname"
+                                required
+                                inline
+                                register={register({required : 'Required'})}
+                            />
+                            <TextInput
+                                label="Nom"
+                                name="lastname"
+                                required
+                                inline
+                                register={register({required : 'Required'})}
+                            />
+                            <EmailInput
+                                label="Email"
+                                name="email"
+                                required
+                                inline
+                                register={register({required : 'Required'})}
+                            />
+                            <PasswordInput
+                                label="Mot de passe"
+                                name="password"
+                                required
+                                inline
+                                register={register({required : 'Required'})}
+                            />
+                            <PasswordInput
+                                label="Confirmer mot de passe"
+                                name="confirm_pwd"
+                                required
+                                inline
+                                register={register({
+                                required : 'Required',
+                                validate: {
+                                    matchesPreviousPassword: (value) => {
+                                        const { password } = getValues();
+                                        return password === value || 'Passwords should match!';
+                                    },
+                                }
+                            })}
+                            />
+                            <CheckBoxInput
+                                label="J’ai lu et j’accepte les conditions générales d’utilisation"
+                                name="confirm"
+                                required
+                                inline
+                                register={register({
+                                    required : 'Required',
+                                })}
+                            />
+                        </div>
+                        <div className="submit">
+                            <button className="btn btn-outline-primary" type="submit">S'enregistrer</button>
+                        </div>
+                    </form>
                 </Col>
             </Row>
         </main>

@@ -57,6 +57,7 @@ const UserContextProvider = ({isLoggedIn, children}) => {
         //
         // }
         else if (action.type === 'loginSuccess') {
+            Cookies.set('token', action.payload.token);
             setLoggedInUser(action.payload.user);
             dispatch({type: 'set', payload: {user: action.payload.user, isLoggedIn: true}});
         } else {

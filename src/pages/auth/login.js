@@ -1,30 +1,28 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from "next/router";
 import Link from "next/link";
-// import Cookies from 'js-cookie';
-import { withCookies, Cookies } from 'react-cookie';
-import FormPanel from '../../components/Form/FormPanel';
+import {Col, Row} from "reactstrap";
+import {useForm} from "react-hook-form";
 import AuthService from '../../services/AuthService';
 import { UserContext } from '../../components/Context/UserContext';
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
-import model from '../../components/Form/Models/login.model';
-import {Col, Row} from "reactstrap";
 import Divider from "../../components/Form/Divider";
+import {EmailInput, PasswordInput } from "../../components/Form/Inputs";
+
+const formConfig = {
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    validateCriteriaMode: "all",
+};
 
 const LoginPage = (props) => {
-    const {cookies} = props;
-    console.log(cookies);
+    const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
     const router = useRouter();
     const { dispatch } = useContext(UserContext);
     const { dispatchModal } = useContext(ModalDialogContext);
     const { redirect } = router.query;
 
-    useEffect(()=> {
-        cookies.remove('token');
-        dispatch({type: 'logout'});
-    },[]);
-
-    const handleSubmit = async (e, data) => {
+    const onSubmit = async (data) => {
         AuthService.login(data.email, data.password)
             .then(data => {
                 dispatch({type: 'loginSuccess', payload: data});
@@ -67,15 +65,31 @@ const LoginPage = (props) => {
                     </Link>
                 </Col>
                 <Col className="auth_form m-auto" sm="12" md="7">
-                    <FormPanel
-                        btnName="Connection"
-                        submitCallback={handleSubmit}
-                        model={model}
-                    />
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="fields">
+                            <EmailInput
+                                label="Email"
+                                name="email"
+                                required
+                                inline
+                                register={register({required : 'Required'})}
+                            />
+                            <PasswordInput
+                                label="Mot de passe"
+                                name="password"
+                                required
+                                inline
+                                register={register({required : 'Required'})}
+                            />
+                        </div>
+                        <div className="submit">
+                            <button className="btn btn-outline-primary" type="submit">Se connecter</button>
+                        </div>
+                    </form>
                 </Col>
             </Row>
         </main>
     );
 };
 
-export default withCookies(LoginPage);
+export default LoginPage;

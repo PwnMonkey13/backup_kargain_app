@@ -9,6 +9,7 @@ import {
     NavLink,
     FormGroup,
     Input,
+    Dropdown,
     DropdownItem,
 } from 'reactstrap';
 import {UserContext} from '../components/Context/UserContext';
@@ -18,21 +19,20 @@ const NavbarClient = () => {
     const {session} = useContext(UserContext);
     const [collapsed, setCollapsed] = useState(true);
     const toggleNavbar = () => setCollapsed(!collapsed);
-    const [open, setOpen] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [avatar, setAvatar] = useState(null);
 
-    const toggleOpen = (e) => {
-        setOpen(!open);
-    };
+    const toggle = () => setDropdownOpen(prevState => !prevState);
 
     useEffect(() => {
         if (session.user) setAvatar(session.user.avatar);
     }, [session]);
 
+    console.log(dropdownOpen);
+
     const DropdownUser = () => {
-        const menuClass = `dropdown-menu${open ? " show" : ""}`;
         return (
-            <div className={menuClass} aria-labelledby="navbarDropdownMenuLink">
+            <Dropdown className="dropdown-menu-right" isOpen={dropdownOpen} toggle={toggle} tag="div">
                 <DropdownItem>
                     <NavLink tag="a" href={`/profile/${session.user.username}`}>Dashboard</NavLink>
                 </DropdownItem>
@@ -42,7 +42,7 @@ const NavbarClient = () => {
                 <DropdownItem>
                     <NavLink tag="a" href="/auth/logout">Log Out</NavLink>
                 </DropdownItem>
-            </div>
+            </Dropdown>
         )
     };
 
@@ -54,10 +54,10 @@ const NavbarClient = () => {
                 </NavbarBrand>
 
                 <Nav className="nav-right">
-                    <NavbarToggler onClick={toggleNavbar} className="mr-2"/>
+                    <NavbarToggler  className="mr-2"/>
                     {session.isLoggedIn ?
                         <>
-                            <NavItem className="dropdown-toggle" onClick={(e) => toggleOpen(e)}>
+                            <NavItem onClick={(e) => setDropdownOpen(e)}>
                                 {avatar &&
                                 <img className="rounded-circle" width="40" height="40" src={avatar} alt="avatar"/>
                                 }

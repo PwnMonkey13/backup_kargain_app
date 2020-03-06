@@ -1,13 +1,13 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {memo, useState, useEffect, useCallback} from 'react';
 import {FormGroup} from 'reactstrap';
 import PropTypes from "prop-types";
 import classNames from 'classnames';
 import ValidationError from "../Validations/ValidationError";
 
-const TextInput = ({register, errors, ...props}) => {
+const TextInput = memo(({name, register, classname, errors, ...props}) => {
     return (
-        <FormGroup>
-            <div className={classNames(props.classname, {"form-field-row": props.inline})}>
+        <div className={classNames(classname, 'form-field')}>
+            <div className={classNames(classname, props.inline ? 'form-field-row' : '')}>
                 {props.label &&
                 <div className="fg-label label">
                     <h4>
@@ -21,18 +21,18 @@ const TextInput = ({register, errors, ...props}) => {
                     <input
                         type="text"
                         ref={register}
-                        name={props.name}
+                        name={name}
                         disabled={props.disabled}
                         className={classNames(props.fullwidth ? "w100" : '')}
                     />
                 </div>
             </div>
             {
-                errors && <ValidationError errors={errors} name={props.name}/>
+                errors && <ValidationError errors={errors} name={name}/>
             }
-        </FormGroup>
+        </div>
     )
-};
+});
 
 TextInput.propTypes = {
     name: PropTypes.string.isRequired,

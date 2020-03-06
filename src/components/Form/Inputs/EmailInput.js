@@ -1,23 +1,12 @@
 import React, { memo, useState, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
-import ValidationAlert from '../Validations/ValidationAlert';
-import useIsMounted from "../../../hooks/useIsMounted";
+import ValidationError from "../Validations/ValidationError";
 
-const EmailInput = memo(({ setInputs, ...props }) => {
-    const isMountRef = useIsMounted();
-    const [value, setValue] = useState(props.value);
-
-    const onChange = useCallback(e => {
-        setValue(e.target.value);
-    },[]);
-
-    useEffect(() => {
-        if(isMountRef && value) setInputs(props.name, value);
-    }, [value]);
+const EmailInput = memo(({ name, classname, register, errors, ...props }) => {
 
     return (
-        <div className={classNames(props.classname, 'form-field')}>
-            <div className={classNames(props.classname, { 'form-field-row' : props.display === 'inline' })}>
+        <div className={classNames(classname, 'form-field')}>
+            <div className={classNames(classname, props.inline ? 'form-field-row' : '')}>
                 { props.label &&
                     <div className="label">
                         <h4>
@@ -30,17 +19,15 @@ const EmailInput = memo(({ setInputs, ...props }) => {
 
                 <div className="input">
                     <input
-                        name={props.name}
-                        type={props.type}
-                        value={value}
-                        onChange={onChange}
+                        name={name}
+                        ref={register}
+                        type="text"
                         required={props.required}
                         disabled={props.disabled}
-                        className={props.alert ? 'form-danger' : ''}
                     />
                 </div>
             </div>
-            <ValidationAlert content={props.alert} />
+            {errors && <ValidationError errors={errors} name={name}/>}
         </div>
     )
 });
@@ -49,7 +36,6 @@ EmailInput.defaultProps = {
     required: false,
     disabled : false,
     display : 'col',
-    value : ''
 };
 
 export default EmailInput;

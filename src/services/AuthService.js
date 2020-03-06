@@ -6,8 +6,8 @@ import config from '../config/config';
 function login(email, password) {
     const requestOptions = {
         method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
+        // withCredentials: true,
+        // credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },

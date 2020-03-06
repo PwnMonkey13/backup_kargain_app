@@ -31,7 +31,7 @@ function getMakes(makes) {
     }
 
     const url = buildUrl(params);
-    return fetch(url, requestParams)
+    return fetch(url)
         .then(function(response) {
             if (response.status >= 400) {
                 throw new Error("Bad response from server");
