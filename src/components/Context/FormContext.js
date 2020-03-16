@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useReducer} from "react";
+import React, {useMemo, useCallback, createContext, useEffect, useReducer} from "react";
 import {flatten, inflate} from 'flattenjs';
 import useLocalStorage from "../../hooks/useLocalStorage";
 import useIsMounted from "../../hooks/useIsMounted";
@@ -15,18 +15,18 @@ const reducer = (state, action) => {
         return {};
     } else {
         console.log("unknown action");
+        return state;
     }
 };
 
 const FormContextProvider = ({children}) => {
     const isMountRef = useIsMounted();
-    const [ getFormData, setFormData, clearFormData ] = useLocalStorage("formData");
+    const [getFormData, setFormData, clearFormData ] = useLocalStorage("formData", {currentStep : 0});
     const [formDataContext, dispatch] = useReducer(reducer, getFormData);
 
     const dispatchFormUpdate = (updates) => {
         // dispatch({type: "update", payload: flatten(updates)});
         dispatch({type: "update", payload: updates});
-
     };
 
     const dispatchFormClear = () => {
@@ -43,6 +43,8 @@ const FormContextProvider = ({children}) => {
         }
     }, [formDataContext]);
 
+    console.log("formContextProvider render");
+
     return (
         <FormContext.Provider value={{formDataContext, dispatchFormUpdate, dispatchFormClear }}>
             {children}
@@ -50,6 +52,4 @@ const FormContextProvider = ({children}) => {
     );
 };
 
-const FormContextConsumer = FormContext.Consumer;
-
-export {FormContext, FormContextProvider, FormContextConsumer};
+export {FormContext, FormContextProvider};

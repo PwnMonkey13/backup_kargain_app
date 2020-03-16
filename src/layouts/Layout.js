@@ -1,6 +1,7 @@
 import React, {useEffect, useContext} from 'react'
 import {initGA, logPageView} from '../libs/analytics'
 import {Container} from 'reactstrap'
+import styled from 'styled-components'
 import NavbarClient from '../components/NavbarClient'
 import Footer from '../components/Footer'
 import {ModalDialogContext} from "../components/Context/ModalDialogContext";
@@ -19,22 +20,20 @@ const Layout = ({navmenu, fluid = true, children, ...rest}) => {
     }, []);
 
     return (
-        <div className="main_layout">
-            {navmenu !== false && <NavbarClient/>}
-            <MainBody fluid={fluid}>
+        <>
+            <NavbarClient/>
+            <MainBody>
                 {React.cloneElement(children,  rest)}
             </MainBody>
             <Footer/>
-        </div>
+        </>
     )
 };
 
-const MainBody = ({fluid, children}) => {
-    return (
-        <Container fluid={fluid} style={{marginTop: '5rem'}}>
-            {children}
-        </Container>
-    )
-};
+const MainBody = ({children}) => (
+    <main className="main mt-4">
+        {children}
+    </main>
+);
 
 export default Layout;

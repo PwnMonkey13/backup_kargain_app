@@ -1,3 +1,4 @@
+export { default as FieldWrapper } from './FieldWrapper';
 export { default as GroupInputs } from './GroupInputs';
 export { default as TelInput } from './TelInput';
 export { default as FileInput } from './FileInput';

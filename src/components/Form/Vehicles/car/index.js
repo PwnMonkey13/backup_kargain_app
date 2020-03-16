@@ -2,11 +2,11 @@ import React, { useContext } from "react";
 import { useRouter} from "next/router";
 import FormWizard from "../../FormWizard";
 import AnnounceService from '../../../../services/AnnounceService';
-import CarDetailsStep from "./CarDetailsStep";
-import CarManufacturerStep from "./CarManufacturerStep";
-import CarDetailsStep2 from "./CarDetailsStep2";
-import CarStatusStep from "./CarStatusStep";
 import {ModalDialogContext} from "../../../Context/ModalDialogContext";
+import Step0_CarManufacturer from "./Step0_CarManufacturer";
+import Step1_CarDetails from "./Step1_CarDetails";
+import Step2_CarDetails from "./Step2_CarDetails";
+import Step3_CarStatus from "./Step3_CarStatus";
 
 const CarForm = (props) => {
     const {dispatchModal} = useContext(ModalDialogContext);
@@ -26,15 +26,15 @@ const CarForm = (props) => {
         );
     };
 
-    console.log('loaded');
-
     return (
-        <FormWizard prevRoute="/deposer-une-annonce" onFinalSubmit={onFinalSubmit}>
-            <CarManufacturerStep/>
-            <CarDetailsStep/>
-            <CarDetailsStep2/>
-            <CarStatusStep/>
-        </FormWizard>
+        <>
+            <FormWizard prevRoute="/deposer-une-annonce" onFinalSubmit={onFinalSubmit}>
+                <Step0_CarManufacturer/>
+                <Step1_CarDetails/>
+                <Step2_CarDetails/>
+                <Step3_CarStatus/>
+            </FormWizard>
+        </>
     );
 };
 

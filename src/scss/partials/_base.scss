@@ -17,15 +17,23 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  min-width: 350px;
+  min-width: 300px;
 }
 
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #111;
-  background-color: $bg_grey;
   font-family: $default-font, 'valeraRound' ,sans-serif;
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@media print, screen and (min-width: 50em){
+  body {
+    padding-top: 5rem;
+  }
 }
 
 article,
@@ -49,16 +57,64 @@ svg {
 }
 
 header {
-  background-color: #ffffff;
-  box-shadow: rgba(0, 0, 0, 0.05) 0 10px 20px 1px;
+  height: 5rem;
+  border-bottom: 1px solid #eaecec;
+  background-color: #fff;
+  box-shadow: 0 2px 13px rgba(61,63,65,0.08);
+  border-bottom: 1px solid gainsboro;
+  padding: 0;
+
+  .logo{
+    display: inline-block;
+    max-width: 14.375rem;
+    vertical-align: middle;
+  }
+
+  @media screen and (max-width: 49.9375em){
+    .header .logo {
+      width: 10rem;
+    }
+  }
+}
+
+@media (min-width: 50em){
+  header {
+    position: fixed;
+    height: 5rem;
+    z-index: 800;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
+}
+
+@media print, screen and (min-width: 64em){
+  header {
+    padding: 0 0 0 .625rem;
+  }
+}
+
+.row{
+  width: 100%;
 }
 
 main {
+  display: block;
   margin: 0 auto;
+  position: relative;
+
+  &:not(.--alt-margin){
+    padding-bottom: 3.125rem;
+  }
 }
 
-h1{
+h1 {
   text-align:center;
+  font-size: 1rem;
+  color: #444 ;
+  margin: 0;
+  font-weight: 700;
+  float: left;
 }
 
 h3{
@@ -171,8 +227,4 @@ hr {
   margin: 1rem;
   padding: 1rem;
   border: 1px solid black;
-}
-
-.w100{
-  width: 100%;
 }

@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
+import styled from 'styled-components'
 import {
     Collapse,
     Navbar,
@@ -28,8 +29,6 @@ const NavbarClient = () => {
         if (session.user) setAvatar(session.user.avatar);
     }, [session]);
 
-    console.log(dropdownOpen);
-
     const DropdownUser = () => {
         return (
             <Dropdown className="dropdown-menu-right" isOpen={dropdownOpen} toggle={toggle} tag="div">
@@ -47,19 +46,35 @@ const NavbarClient = () => {
     };
 
     return (
-        <header className="fixed-top">
+        <header className="header">
             <Navbar color="light" light expand="md">
                 <NavbarBrand className="nav" href="/">
-                    <img src={getLogo()} style={{width: 100, marginTop: -7}} alt="logo"/>
+                    <img src={getLogo()} alt="logo"/>
                 </NavbarBrand>
 
+                <Collapse isOpen={!collapsed} navbar>
+                    <Nav navbar>
+                        <NavItem className="px-3">
+                            <NavLink className="btn btn-outline-primary cta_nav_link" href="/deposer-une-annonce">
+                                Ajouter une annonce
+                            </NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <FormGroup className='form-inline search-header-wrapper m-auto'>
+                                <Input className="form-control" type="search" name="search" id="search"
+                                       placeholder="Rechercher"/>
+                            </FormGroup>
+                        </NavItem>
+                    </Nav>
+                </Collapse>
+
                 <Nav className="nav-right">
-                    <NavbarToggler  className="mr-2"/>
+                    <NavbarToggler className="mr-2"/>
                     {session.isLoggedIn ?
                         <>
                             <NavItem onClick={(e) => setDropdownOpen(e)}>
-                                {avatar &&
-                                <img className="rounded-circle" width="40" height="40" src={avatar} alt="avatar"/>
+                                {
+                                    avatar && <img className="rounded-circle" width="40" height="40" src={avatar} alt="avatar"/>
                                 }
                                 <DropdownUser/>
                             </NavItem>
@@ -79,21 +94,6 @@ const NavbarClient = () => {
                         </>
                     }
                 </Nav>
-                <Collapse isOpen={!collapsed} navbar>
-                    <Nav navbar>
-                        <NavItem className="px-3">
-                            <NavLink className="btn btn-outline-primary cta_nav_link" href="/deposer-une-annonce">
-                                Ajouter une annonce
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <FormGroup className='form-inline search-header-wrapper m-auto'>
-                                <Input className="form-control" type="search" name="search" id="search"
-                                       placeholder="Search"/>
-                            </FormGroup>
-                        </NavItem>
-                    </Nav>
-                </Collapse>
             </Navbar>
         </header>
     );

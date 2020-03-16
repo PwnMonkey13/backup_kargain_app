@@ -1,9 +1,8 @@
 import React, { useRef, useContext} from "react";
-import Router, { withRouter } from 'next/router'
+import Router, { withRouter } from 'next/router';
+import styled from 'styled-components';
 import {Col, Row} from "reactstrap";
 import {useForm } from "react-hook-form";
-import path from 'path';
-import styled from 'styled-components';
 import {FormContext} from '../../Context/FormContext';
 
 const VehicleTypeSelectorStep = ({handleSelectType, formConfig, prevStep, nextStep, ...props}) => {
@@ -37,9 +36,14 @@ const VehicleTypeSelectorStep = ({handleSelectType, formConfig, prevStep, nextSt
     };
 
     const triggerSubmit = () => {
-        console.log("triggerSubmit");
         formRef.current.dispatchEvent(new Event('submit'))
     };
+
+    const VehicleChoice = styled.label`
+        margin : 0;
+        min-height:4rem;
+        display:flex;
+    `;
 
     return(
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
@@ -47,15 +51,15 @@ const VehicleTypeSelectorStep = ({handleSelectType, formConfig, prevStep, nextSt
                 { tabsRadio && tabsRadio.map((tab, index) => {
                     return (
                         <Col key={index} md={3} className="ml-auto">
-                            <div className="form-check">
+                            <div className="form-check form-check-vehicle m-0">
                                 <input id={`name_${index}`}
                                        type="radio"
                                         name="vehicleType"
                                         value={tab.value}
                                         ref={register}
-                                        onChange={triggerSubmit}
+                                        onChange={() => triggerSubmit()}
                                 />
-                                <label htmlFor={`name_${index}`}>
+                                <label htmlFor={`name_${index}`} style={{minHeight:'5rem'}}>
                                     <img src={`/images/${tab.img}`} alt=""/>
                                 </label>
                             </div>
