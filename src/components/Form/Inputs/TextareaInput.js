@@ -5,27 +5,19 @@ import ValidationAlert from '../Validations/ValidationAlert';
 import useIsMounted from "../../../hooks/useIsMounted";
 import ValidationError from "../Validations/ValidationError";
 
-function TextareaInput({...props}) {
-    const isMountRef = useIsMounted();
-    const [value, setValue] = useState(props.value);
-
-    const onChange = useCallback(e => {
-        setValue(e.target.value);
-    },[]);
-
-    useEffect(() => {
-        // if(isMountRef && value) setInputs(props.name, value);
-    }, [value]);
+function TextareaInput({name, register, errors, ...props}) {
 
     return (
         <>
             <textarea
                 name={props.name}
+                ref={register}
+                placeholder={props.placeholder}
+                disabled={props.disabled}
+                className="input-field m-0"
                 type={props.type}
                 rows={props.rows}
-                className={props.alert ? 'form-danger' : ''}
             />
-            <ValidationAlert content={props.alert}/>
             { errors && <ValidationError errors={errors} name={name} /> }
         </>
     )
@@ -36,7 +28,7 @@ TextareaInput.propTypes = {
 };
 
 TextareaInput.defaultProps = {
-    rows: 10,
+    rows: 5,
 };
 
 export default TextareaInput;

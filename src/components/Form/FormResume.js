@@ -1,6 +1,5 @@
 import React, {memo, useContext, useEffect, useState} from 'react'
 import styled from "styled-components";
-import {FormContext} from '../../components/Context/FormContext';
 
 const Aside = styled.aside`
         border: 1px solid #dce0e0;
@@ -23,20 +22,10 @@ const Title = styled.div`
   `;
 
 const Content = styled.div`
-        padding: 1.25rem;
+        padding: .25rem;
     `;
 
-const FormResume = memo(({stepChanges, props}) => {
-    console.log(stepChanges);
-    const {formDataContext, dispatchFormUpdate} = useContext(FormContext);
-    const mapper = [
-        {
-            "manufacturer[make]" : "Marque",
-            "manufacturer[model]" : "Modele",
-            "manufacturer[generation]" : "Version",
-            "manufacturer[year]" : "Année",
-        }
-    ];
+const FormResume = memo(({resumeModel, formValues, props}) => {
 
     return (
         <Aside className="cell small-12 medium-4 large-3">
@@ -44,32 +33,30 @@ const FormResume = memo(({stepChanges, props}) => {
                 <Title className="price-title">
                     <p className="--alt-margin">Votre annonce</p>
                 </Title>
+
                 <Content className="price-content">
-                    { Object.keys(mapper).map(key => {
-                        console.log(formDataContext[key]);
-                        if(formDataContext[key]){
-                            if(typeof formDataContext[key] === 'object'){
-                                return(
-                                    <div className="price-options">
-                                        <div className="price-row align-middle">
-                                            <span className="col">Fibres métalliques</span>
-                                            <span className="icon-circle tiny hollow secondary price-action-delete">
-                                                <i className="icon icon-delete"/>
-                                            </span>
-                                        </div>
-                                    </div>
-                                )
-                            }
-                            else{
-                                return(
-                                    <div className="price-row ">
-                                        <div className="col shrink">Commune à livrer :</div>
-                                        <div className="col shrink --strong location-name">MARSEILLE 7E ARRONDISSEMENT</div>
-                                        <span className="small"><sup>3</sup></span>
-                                    </div>
-                                )
-                            }
-                        }
+                    { resumeModel.map((stepLabels, index) => {
+                        return(
+                            <section key={index} className="resumeStep">
+                                { Object.keys(stepLabels).map((key, index2) => {
+                                    if(formValues[key]){
+                                        return(
+                                            <div key={index2} className="row">
+                                                <div className="col">
+                                                    <span className="col">{stepLabels[key]} : </span>
+                                                </div>
+                                                <div className="col shrink strong">
+                                                    <span className="col">
+                                                        {typeof formValues[key] === 'object' ? formValues[key].label : formValues[key] }
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+
+                                })}
+                            </section>
+                        )
                     })}
                 </Content>
             </div>

@@ -1,7 +1,7 @@
-import React from "react";
+import React, {memo} from "react";
 import classnames from 'classnames';
 
-const Divider = ({text, vertical}) => {
+const Divider = memo(({text, vertical}) => {
     const Classnames = classnames(
         'divider_stick',
         vertical ? 'vertical' : '',
@@ -10,9 +10,9 @@ const Divider = ({text, vertical}) => {
     return (
         <div className={Classnames}>
             <hr/>
-            { text && <span>{text}</span> }
+            { text && <span><strong>{text}</strong></span> }
         </div>
     )
-};
+});
 
 export default Divider;

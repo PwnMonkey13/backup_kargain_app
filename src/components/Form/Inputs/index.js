@@ -1,5 +1,3 @@
-export { default as FieldWrapper } from './FieldWrapper';
-export { default as GroupInputs } from './GroupInputs';
 export { default as TelInput } from './TelInput';
 export { default as FileInput } from './FileInput';
 export { default as NumberInput } from './NumberInput';
@@ -11,3 +9,4 @@ export { default as CheckBoxInput } from './CheckBoxInput';
 export { default as CheckboxMultipleInput } from './CheckboxMultipleInput';
 export { default as SelectInput } from './SelectInput';
 export { default as PasswordInput } from "./PasswordInput";
+export { default as LocationSearchInput } from './LocationSearchInput';

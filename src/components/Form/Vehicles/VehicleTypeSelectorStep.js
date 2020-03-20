@@ -5,45 +5,43 @@ import {Col, Row} from "reactstrap";
 import {useForm } from "react-hook-form";
 import {FormContext} from '../../Context/FormContext';
 
-const VehicleTypeSelectorStep = ({handleSelectType, formConfig, prevStep, nextStep, ...props}) => {
-    const { router } = props;
+const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
     const formRef = useRef(null);
-    const { register, handleSubmit} = useForm(formConfig);
+    const {register, handleSubmit} = useForm();
     const {dispatchFormUpdate} = useContext(FormContext);
 
     const tabsRadio = [
         {
             value : 'car',
+            label : 'Voiture',
             img : 'tab-car.png'
         },
         {
-            name : 'moto',
+            value : 'moto',
+            label : 'Moto/Scooter',
             img : 'tab-moto.png'
         },
         {
-            name : 'bus',
+            value : 'bus',
+            label : 'Bus/Camion',
             img : 'tab-bus.png'
         },
         {
-            name : 'utility',
+            value : 'utility',
+            label : 'Utilitaire',
             img : 'tab-gruz.png'
         }
     ];
-
-    const onSubmit = (data) => {
-        dispatchFormUpdate(data);
-        handleSelectType(data.vehicleType);
-    };
 
     const triggerSubmit = () => {
         formRef.current.dispatchEvent(new Event('submit'))
     };
 
-    const VehicleChoice = styled.label`
-        margin : 0;
-        min-height:4rem;
-        display:flex;
-    `;
+    const onSubmit = (data) => {
+        const tab = tabsRadio.find(tab => tab.value === data.vehicleType);
+        dispatchFormUpdate( {"vehicleType" : { value : tab.value, label : tab.label} });
+        handleSelectType(data.vehicleType);
+    };
 
     return(
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
@@ -71,4 +69,4 @@ const VehicleTypeSelectorStep = ({handleSelectType, formConfig, prevStep, nextSt
     )
 };
 
-export default withRouter(VehicleTypeSelectorStep);
+export default VehicleTypeSelectorStep;

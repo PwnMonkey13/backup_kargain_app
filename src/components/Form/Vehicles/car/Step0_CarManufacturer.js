@@ -1,14 +1,29 @@
 import React, {memo, useContext, useEffect, useRef, useState} from "react";
-import {FieldWrapper, GroupInputs, SelectInput, TextInput} from "../../Inputs";
+import MaskedInput from "react-input-mask";
+import { SelectInput, TextInput} from "../../Inputs";
 import CarApiService from "../../../../services/CarApiService";
 import {ModalDialogContext} from "../../../Context/ModalDialogContext";
 import useIsMounted from "../../../../hooks/useIsMounted";
+import StepNavigation from "../../StepNavigation";
+import Divider from "../../Divider";
+import FieldWrapper from "../../FieldWrapper";
+import GroupInputs from "../../GroupInputs";
+import VinDecoderService from "../../../../services/VinDecoderService";
 
-const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSkipStep, onSubmitStep, prevStep, nextStep, ...rest}) => {
+// const Input = React.memo(props => {
+//     const { name, inputRef, value, maskChar, ...inputProps } = props;
+//     return <input value={value} name={name} ref={inputRef} {...inputProps} />;
+// });
+//
+// const isNotFilledTel = v =>
+//     v && v.indexOf("_") === -1 ? undefined : "Phone number is required.";
+
+const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, triggerSkipStep, onSubmitStep, prevStep, nextStep, ...rest}) => {
     const formRef = useRef(null);
     const isMounted = useIsMounted();
     const {dispatchModal} = useContext(ModalDialogContext);
-    const {watch, control, errors, getValues, register, formState, handleSubmit} = methods;
+    const {watch, control, errors, setValue, getValues, register, formState, handleSubmit} = methods;
+    const [vinDecoded, storeVinDecoded] = useState(null);
     const [manufacturersData, setManufacturersData] = useState({
         makes: [],
         models: [],
@@ -16,24 +31,48 @@ const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSki
         years: []
     });
 
+    const [tel, setTel] = useState("");
+
     const triggerSubmit = () => {
         console.log("triggerSubmitStep");
         formRef.current.dispatchEvent(new Event('submit'));
     };
 
+    const isValidVIN = async (value) => {
+        if (value) {
+            const match = /[a-zA-Z0-9]{9}[a-zA-Z0-9-]{2}[0-9]{6}/.test(value);
+            if (match) {
+                try {
+                    const result = await VinDecoderService.decodeVINFree(value);
+                    storeVinDecoded(result);
+                } catch (err) {
+                    dispatchModal({type: 'error', err});
+                }
+            } else return "INVALID VIN NUMBER";
+        }
+    };
+
+    useEffect(()=>{
+        if(isMounted && vinDecoded != null){
+            setValue('manufacturer', {'make': {label: vinDecoded['Make'], value: vinDecoded['Make']}});
+            setValue('manufacturer', {'model': {label: vinDecoded['Model'], value: vinDecoded['Model']}});
+            setValue('manufacturer', {'year': {label: vinDecoded['ModelYear'], value: vinDecoded['ModelYear']}});
+        }
+    },[vinDecoded]);
+
     useEffect(() => {
-        if(isMounted){
+        if (isMounted) {
             const values = getValues();
             const findDefault = Object.keys(values).find(key => values[key] && values[key].value === "other");
             if (findDefault) nextStep();
         }
     }, [getValues()]);
 
-    useEffect(() => {
-        if(isMounted){
-            triggerSubmit();
-        }
-    }, [watch('manufacturer.year')]);
+    // useEffect(() => {
+    //     if (isMounted) {
+    //         triggerSubmit();
+    //     }
+    // }, [watch('manufacturer.year')]);
 
     useEffect(() => {
         const popularMakesId = [
@@ -51,10 +90,11 @@ const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSki
             140, // Toyota
             133 // Susuki
         ];
+        console.log('fetch makes');
         CarApiService.getMakes(popularMakesId)
             .then(cars => {
-                const makesOptions = cars.map(car => ({value: car.make_id, label: car.make}));
-                const defaultOption = {value: "other", label: "Autre"};
+                const makesOptions = cars.map(car => ({value: car.make, label: car.make}));
+                const defaultOption = {value: "other", label: "Je ne sais pas/Autre"};
                 setManufacturersData(manufacturersData => (
                     {...manufacturersData, makes: [...makesOptions, defaultOption]})
                 );
@@ -68,13 +108,13 @@ const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSki
     }, []);
 
     useEffect(() => {
-        if (watch('manufacturer.make')) {
+        if (watch('manufacturer.make') && vinDecoded == null) {
             const makeID = watch('manufacturer.make').value;
             if (!isNaN(makeID)) {
                 CarApiService.getMakeModels(makeID)
                     .then(models => {
-                        const modelsOptions = models.map(model => ({value: model.model_id, label: model.model}));
-                        const defaultOption = {value: "other", label: "Autre"};
+                        const modelsOptions = models.map(model => ({value: model.model, label: model.model}));
+                        const defaultOption = {value: "other", label: "Je ne sais pas/Autre"};
                         setManufacturersData(manufacturersData => (
                             {...manufacturersData, models: [...modelsOptions, defaultOption]})
                         );
@@ -87,7 +127,7 @@ const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSki
     }, [watch('manufacturer.make')]);
 
     useEffect(() => {
-        if (watch('manufacturer.model')) {
+        if (watch('manufacturer.model') && vinDecoded == null) {
             const makeID = watch('manufacturer.make').value;
             const modelID = watch('manufacturer.model').value;
 
@@ -95,9 +135,9 @@ const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSki
                 CarApiService.getCarGenerations(makeID, modelID)
                     .then(generations => {
                         const generationsOptions = generations.map(
-                            ({generation_id, generation}) => ({value: generation_id, label: generation})
+                            ({generation_id, generation}) => ({value: generation, label: generation})
                         );
-                        const defaultOption = {value: "other", label: "Autre"};
+                        const defaultOption = {value: "other", label: "Je ne sais pas/Autre"};
                         setManufacturersData(manufacturersData => (
                             {...manufacturersData, generations: [...generationsOptions, defaultOption]})
                         );
@@ -110,7 +150,7 @@ const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSki
     }, [watch('manufacturer.model')]);
 
     useEffect(() => {
-        if (watch('manufacturer.generation')) {
+        if (watch('manufacturer.generation') && vinDecoded == null) {
             const makeID = watch('manufacturer.make').value;
             const modelID = watch('manufacturer.model').value;
             const generationID = watch('manufacturer.generation').value;
@@ -132,19 +172,55 @@ const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSki
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
-            <button type="button" onClick={()=>console.log(getValues())}>CLICK</button>
+            <button type="button" onClick={()=> {
+                console.log(getValues());
+                console.log(errors);
+                }}>CLICK</button>
 
-            <FieldWrapper label="VIN">
+            {/*<div>*/}
+            {/*    <MaskedInput*/}
+            {/*        name="maskedInputTel"*/}
+            {/*        value={tel}*/}
+            {/*        inputRef={register({*/}
+            {/*            validate: {*/}
+            {/*                inputTelRequired: isNotFilledTel*/}
+            {/*            }*/}
+            {/*        })}*/}
+            {/*        mask="+7 (999) 999-99-99"*/}
+            {/*        alwaysShowMask*/}
+            {/*        onChange={e => setTel(e.target.value)}*/}
+            {/*    >*/}
+            {/*        <Input type="tel" autoComplete="tel-national" />*/}
+            {/*    </MaskedInput>*/}
+            {/*    {errors.maskedInputTel && <p>{errors.maskedInputTel.message}</p>}*/}
+            {/*</div>*/}
+
+            <FieldWrapper as="h3" label="Saisissez le numéro VIN de votre véhicule" labelTop tooltip={{
+                icon : "?",
+                template : "default",
+                content : "<p>Le numéro VIN, où Numéro d’Identification du Véhicule, est une série de caractères qui va permettre de distinguer tous les véhicules partout dans le monde. " +
+                    "<br> Vous pourrez retrouver ce numéro à plusieurs endroits de votre voiture et sera indispensable pour certaines démarches administratives" +
+                    "<br>Pour plus d'informations : " +
+                    "<a href=\"https://www.boutiqueobdfacile.fr/blog/numero-vin-p73.html\">https://www.boutiqueobdfacile.fr/blog/numero-vin-p73.html</a> </p>"
+            }}>
                 <TextInput
                     name="vin"
-                    placeholder="VIN number"
-                    register={register}
+                    placeholder="Ex: 1C4RJFBG4FC812166"
                     errors={errors}
+                    // onBlur={(e) => collectStepChanges({name : "vin", label : e.target.value})}
+                    register={
+                        register({
+                            validate : {
+                                isValidVIN : value => isValidVIN(value)
+                            }
+                        })
+                    }
                 />
             </FieldWrapper>
 
-            <GroupInputs label="Sélectionnez votre voiture" labelTop>
+            <Divider text="ou"/>
 
+            <GroupInputs label="Sélectionnez votre voiture" labelTop vertical>
                 <FieldWrapper label="Marque" labelTop>
                         <SelectInput
                             name="manufacturer.make"
@@ -152,10 +228,14 @@ const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSki
                             control={control}
                             rules={{required: "Field required"}}
                             options={manufacturersData['makes']}
+                            onChange={([selected, option]) => {
+                                collectStepChanges({name : option.name, label : selected.label});
+                                return selected
+                            }}
                         />
                 </FieldWrapper>
 
-                {watch('manufacturer.make') &&
+                {/*{watch('manufacturer.make') &&*/}
                     <FieldWrapper label="Modele" labelTop>
                         <SelectInput
                             name="manufacturer.model"
@@ -164,11 +244,15 @@ const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSki
                             rules={{required: "Field required"}}
                             errors={errors}
                             control={control}
+                            onChange={([selected, option]) => {
+                                collectStepChanges({name : option.name, label : selected.label});
+                                return selected
+                            }}
                         />
                     </FieldWrapper>
-                }
+                {/*}*/}
 
-                {watch('manufacturer.model') &&
+                {/*{watch('manufacturer.model') &&*/}
                     <FieldWrapper label="Version" labelTop>
                         <SelectInput
                             name="manufacturer.generation"
@@ -177,11 +261,15 @@ const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSki
                             control={control}
                             rules={{required: "Field required"}}
                             errors={errors}
+                            onChange={([selected, option]) => {
+                                collectStepChanges({name : option.name, label : selected.label});
+                                return selected
+                            }}
                         />
                     </FieldWrapper>
-                }
+                {/*}*/}
 
-                {watch('manufacturer.generation') &&
+                {/*{watch('manufacturer.generation') &&*/}
                     <FieldWrapper label="Année" labelTop>
                         <SelectInput
                             name="manufacturer.year"
@@ -190,14 +278,19 @@ const Step0_CarManufacturer = memo(({methods, formConfig, getUpdates, triggerSki
                             control={control}
                             rules={{required: "Field required"}}
                             errors={errors}
+                            onChange={([selected, option]) => {
+                                collectStepChanges({name : option.name, label : selected.label});
+                                return selected
+                            }}
                         />
                     </FieldWrapper>
-                }
+                {/*}*/}
             </GroupInputs>
 
             <button className="btn" onClick={triggerSkipStep}>Passer cette étape</button>
+            <StepNavigation prev={prevStep} submit />
         </form>
     )
-});
+};
 
 export default Step0_CarManufacturer;

@@ -1,12 +1,12 @@
-import React from "react";
+import React, {memo} from "react";
 import classNames from "classnames";
 import {Col, Row} from "reactstrap";
 import ToolTipWrapper from "./ToolTipWrapper";
-import Header from "../../Header";
+import Header from "../Header";
 
 const GroupInputs = ({children, ...props}) => {
     const {as, label, labelHtml, required, labelTop, vertical, tooltip} = props;
-    const cols = children.length === 2 ? 6 : 4;
+    const cols = vertical ? 12 : children.length === 2 ? 6 : 4;
     const labelProps = labelHtml || label ? {
         dangerouslySetInnerHTML: labelHtml ? {__html: labelHtml} : null,
         children: label ? label : null
@@ -25,7 +25,12 @@ const GroupInputs = ({children, ...props}) => {
         labelTop ? 'align-items-center' : '',
     );
 
-    console.log('render groupiNputs');
+    const classnamesFieldsRow = classNames(
+        'justify-content-center',
+        vertical ? "flex-column" : '',
+        vertical ? "align-items-center" : ''
+    );
+
     if (labelTop) {
         return (
             <div className={classnamesFieldGroup}>
@@ -38,25 +43,23 @@ const GroupInputs = ({children, ...props}) => {
                     )}
                 </Header>
 
-                <div className={classNames('fg-group-wrapper')}>
-                    {
-                        Array.isArray(children) ? (
-                            <Row className={classNames(vertical ? "flex-column" : '')}>
-                                {
-                                    children.map((child, index) => (
-                                        <Col key={index} className="fg-field-wrapper" xs={12} sm={6} md={cols} lg={cols}
-                                             xl={cols}>
-                                            {child}
-                                        </Col>
-                                    ))
-                                }
-                            </Row>
-                        ) : children
-                    }
-                    {
-                        tooltip && <ToolTipWrapper {...tooltip}/>
-                    }
-                </div>
+                {
+                    Array.isArray(children) ? (
+                        <Row className={classnamesFieldsRow}>
+                            {
+                                children.map((child, index) => (
+                                    <Col key={index} className="fg-field-wrapper" xs={12} sm={6} md={cols} lg={cols}
+                                         xl={cols}>
+                                        {child}
+                                    </Col>
+                                ))
+                            }
+                        </Row>
+                    ) : children
+                }
+                {
+                    tooltip && <ToolTipWrapper {...tooltip}/>
+                }
             </div>
         )
     } else
@@ -105,4 +108,4 @@ GroupInputs.defaultProps = {
     as: 'h3'
 };
 
-export default GroupInputs;
+export default memo(GroupInputs);

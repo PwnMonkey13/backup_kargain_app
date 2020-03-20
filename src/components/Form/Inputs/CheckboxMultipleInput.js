@@ -1,11 +1,10 @@
-import React, { memo, useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import classNames from "classnames"
-import {FormGroup, Row} from "reactstrap";
+import {Row, Col} from "reactstrap";
 import PropTypes from 'prop-types';
 import ValidationError from "../Validations/ValidationError";
-import {Controller} from "react-hook-form";
 
-const CheckboxMultipleInput = ({register, errors, inline, label, classname, options, defaultChecked, ...rest}) => {
+const CheckboxMultipleInput = ({register, errors, vertical, classname, options, defaultChecked, ...rest}) => {
     const {control, rules, name, defaultValue, ...innerProps} = rest;
     const controllerProps = {control, rules, name, defaultValue};
     console.log(defaultChecked);
@@ -21,38 +20,32 @@ const CheckboxMultipleInput = ({register, errors, inline, label, classname, opti
     // console.log(defaultChecked);
 
     return (
-        <FormGroup className={classNames(classname, {"form-field-row": inline})}>
-            {label &&
-                <div className="fg-label label">
-                    <h4>
-                        {label}
-                        {innerProps.required && <span className="required_label">*</span>} :
-                    </h4>
-                </div>
-            }
-            <Row>
+        <>
+            <Row className={classNames('d-flex', vertical ? 'd-flex flex-column' : '')}>
                 {options && options.map((option, index) => {
-                    const isChecked = defaultChecked ?
-                        defaultChecked.find(value => value.toLowerCase() === option.value.toLowerCase()) : false;
-                    console.log(isChecked);
+                    const isChecked = defaultChecked ? defaultChecked.find(value => value.toLowerCase() === option.value.toLowerCase()) : false;
 
                     return (
-                        <div key={index} className="d-flex col-4 col-lg-3 radio_field">
-                            <input
-                                ref={register}
-                                id={`${name}_${index}`}
-                                type="checkbox"
-                                name={`${name}`}
-                                defaultChecked={isChecked}
-                                value={option.value}
-                                {...innerProps}
-                            />
-                            <label htmlFor={`${name}_${index}`}> {option.label} </label>
-                        </div>
+                        <Col key={index} md={4} lg={3}>
+                            <div className={classNames('form-check', 'my-2')}>
+                                <input
+                                    type="checkbox"
+                                    ref={register}
+                                    id={`${name}_${index}`}
+                                    name={name}
+                                    defaultChecked={isChecked}
+                                    value={option.value}
+                                    {...innerProps}
+                                />
+                                <label htmlFor={`${name}_${index}`}> {option.label} </label>
+                            </div>
+                        </Col>
                     )
-                })}
+                })
+                }
             </Row>
-        </FormGroup>
+            {errors && <ValidationError errors={errors} name={name}/>}
+        </>
     )
 };
 

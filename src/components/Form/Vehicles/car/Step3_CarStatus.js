@@ -1,18 +1,16 @@
 import React, {useRef, useContext} from 'react';
-import Header from "../../../Header";
-import {FieldWrapper, NumberInput, RadioInput, SelectInput, TextareaInput} from "../../Inputs";
+import {NumberInput, RadioInput, SelectInput, TextareaInput } from "../../Inputs";
 import {RadioChoicesVehicle} from "../../../../libs/fieldsOptions";
 import StepNavigation from "../../StepNavigation";
 import {SelectOptionsUtils} from "../../../../libs/formFieldsUtils";
+import GroupInputs from "../../GroupInputs";
+import FieldWrapper from "../../FieldWrapper";
 
 const CarDetailsStep = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props}) => {
     const {watch, control, errors, getValues, register, formState, handleSubmit} = methods;
 
     return (
         <form className="form_wizard" onSubmit={handleSubmit(onSubmitStep)}>
-            <h2> Informations détaillées sur le véhicle </h2>
-            <Header as="h3" text="Données du véhicule" className="big-mt"/>
-            <Header as="h3" text="Etat du véhicule" className="big-mt"/>
 
             <FieldWrapper label="Etat général">
                 <RadioInput
@@ -55,9 +53,6 @@ const CarDetailsStep = ({methods, formConfig, onSubmitStep, prevStep, nextStep, 
                 />
             </FieldWrapper>
 
-
-            <Header as="h3" text="A propos" className="big-mt"/>
-
             <FieldWrapper label="Description">
                 <TextareaInput
                     name="description"
@@ -67,23 +62,33 @@ const CarDetailsStep = ({methods, formConfig, onSubmitStep, prevStep, nextStep, 
                 />
             </FieldWrapper>
 
-            <Header as="h3" text="Fiches techniques" className="big-mt"/>
+            <GroupInputs label="Informations sur le vendeur" labelTop vertical>
+                <FieldWrapper label="Pays">
+                    <SelectInput
+                        name="seller.country"
+                        options={[]}
+                        placeholder="Select number of seats"
+                        control={control}
+                        errors={errors}
+                    />
+                </FieldWrapper>
 
-            <Header as="h3" text="Données du vendeur" className="big-mt"/>
+                <FieldWrapper label="Ville ou code postal">
+                    <NumberInput
+                        name="seller.postalcode"
+                        errors={errors}
+                        register={register({ required: 'Title is required' })}
+                    />
+                </FieldWrapper>
 
-            <FieldWrapper>
-                <SelectInput
-                    label="Pays"
-                    name="seller[country]"
-                    options={[]}
-                    placeholder="Select number of seats"
-                    control={control}
-                    errors={errors}
-                />
-
-                <NumberInput label="Ville ou code postal" name="seller[postalcode]"/>
-                <NumberInput label="Numéro de téléphone" name="seller[phone]" nicename="Tel"/>
-            </FieldWrapper>
+                <FieldWrapper label="Numéro de téléphone">
+                    <NumberInput
+                        name="seller.phone"
+                        errors={errors}
+                        register={register({ required: 'Title is required' })}
+                    />
+                </FieldWrapper>
+            </GroupInputs>
 
             <StepNavigation prev={prevStep} submitLabel="Créer mon annonce" submit />
         </form>

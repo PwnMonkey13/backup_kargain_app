@@ -7,6 +7,7 @@ import Step0_CarManufacturer from "./Step0_CarManufacturer";
 import Step1_CarDetails from "./Step1_CarDetails";
 import Step2_CarDetails from "./Step2_CarDetails";
 import Step3_CarStatus from "./Step3_CarStatus";
+import Header from "../../../Header";
 
 const CarForm = (props) => {
     const {dispatchModal} = useContext(ModalDialogContext);
@@ -26,13 +27,34 @@ const CarForm = (props) => {
         );
     };
 
+    const resumeModel = [
+        {
+            "vehicleType" : 'Type de véhicule'
+        },
+        {
+            "vin" : "Immat. VIN",
+            "manufacturer.make" : "Marque",
+            "manufacturer.model" : "Modele",
+            "manufacturer.generation" : "Version",
+            "manufacturer.year" : "Année",
+        }
+    ];
+
     return (
         <>
-            <FormWizard prevRoute="/deposer-une-annonce" onFinalSubmit={onFinalSubmit}>
-                <Step0_CarManufacturer/>
-                <Step1_CarDetails/>
-                <Step2_CarDetails/>
-                <Step3_CarStatus/>
+            <Header as="h2" className="big-mt text-center">
+                Vendez votre voiture
+            </Header>
+            <FormWizard id="demo1" classname="demo_form"
+                        prevRoute="/deposer-une-annonce"
+                        resumeModel={resumeModel}
+                        onFinalSubmit={onFinalSubmit}>
+
+                <Step0_CarManufacturer title="Sélection du véhicule"/>
+                <Step1_CarDetails title="Description du véhicule"/>
+                <Step2_CarDetails title="Description du véhicule (suite)" nobreadcrumb/>
+                <Step3_CarStatus title="Etat du véhicule"/>
+
             </FormWizard>
         </>
     );

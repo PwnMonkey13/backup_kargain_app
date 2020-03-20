@@ -5,14 +5,15 @@ import DynamicLoadVehicleForm from "../../components/Form/DynamicLoadVehicleForm
 
 const Page = () => {
     const [ vehicleType, setVehicleType ] = useState(null);
+
     const handleSelectType = (type) => {
         setVehicleType(type);
     };
+
     return(
         <Container fluid className="annonce1-wrapper-container">
-            <h2 className="big-mt text-center">Ajouter votre annonce</h2>
             { !vehicleType ? <VehicleTypeSelectorStep handleSelectType={handleSelectType}/> :
-                <DynamicLoadVehicleForm vehicleTye={vehicleType}/>
+                <DynamicLoadVehicleForm vehicleType={vehicleType}/>
             }
         </Container>
     )

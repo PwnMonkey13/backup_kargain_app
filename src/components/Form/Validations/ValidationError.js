@@ -5,7 +5,6 @@ const ValidationError = ({errors, name}) => {
     return (
         <ErrorMessage errors={errors} name={name}>
             {({message, messages}) => {
-                console.log(name, message);
                 if(!message && !messages) return '';
                 else if(message != null){
                     return <p className="error">{ message }</p>

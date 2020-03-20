@@ -1,10 +1,12 @@
 import React, {useRef, useContext} from 'react';
 import Header from "../../../Header";
-import {FieldWrapper, CheckboxMultipleInput, NumberInput, RadioInput, SelectInput} from "../../Inputs";
+import { CheckboxMultipleInput, NumberInput, RadioInput, SelectInput} from "../../Inputs";
 import { CheckboxOptionsEquipments, RadioChoicesEmission, RadioChoicesExternalColor, RadioChoicesPaints, SelectChoicesDoors } from "../../../../libs/fieldsOptions";
 import StepNavigation from "../../StepNavigation";
 import {SelectOptionsUtils} from "../../../../libs/formFieldsUtils";
 import FormStepDebug from "../../../FormStepDebug";
+import FieldWrapper from "../../FieldWrapper";
+import GroupInputs from "../../GroupInputs";
 
 const CarDetailsStep = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props}) => {
     const formRef = useRef(null);
@@ -12,7 +14,6 @@ const CarDetailsStep = ({methods, formConfig, onSubmitStep, prevStep, nextStep, 
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
-            <h2> Informations de base sur le véhicle </h2>
             <Header as="h3" text="Données du véhicule" className="big-mt"/>
 
             <FieldWrapper label="Classe d'émission">
@@ -24,33 +25,41 @@ const CarDetailsStep = ({methods, formConfig, onSubmitStep, prevStep, nextStep, 
                 />
             </FieldWrapper>
 
-            <FieldWrapper label="Consommation">
-                <NumberInput label="Mixte"
-                             name="consumption[mixt]"
-                             register={register}
-                             errors={errors}
-                />
+            <GroupInputs label="Consommation" labelTop vertical>
+                <FieldWrapper label="Mixte">
+                    <NumberInput
+                        name="consumption.mixt"
+                        register={register}
+                        errors={errors}
+                    />
+                </FieldWrapper>
 
-                <NumberInput label="Ville"
-                             name="consumption[city]"
-                             register={register}
-                             errors={errors}
-                />
+                <FieldWrapper label="Ville">
+                    <NumberInput
+                        name="consumption.city"
+                        register={register}
+                        errors={errors}
+                    />
+                </FieldWrapper>
 
-                <NumberInput label="Route"
-                             name="consumption[road]"
-                             register={register}
-                             errors={errors}
-                />
+                <FieldWrapper label="Route">
+                    <NumberInput
+                        name="consumption.road"
+                        register={register}
+                        errors={errors}
+                    />
+                </FieldWrapper>
 
-                <NumberInput label="CO2"
-                             name="consumption[gkm]"
-                             register={register}
-                             errors={errors}
-                />
-            </FieldWrapper>
+                <FieldWrapper label="CO2">
+                    <NumberInput
+                        name="consumption.gkm"
+                        register={register}
+                        errors={errors}
+                    />
+                </FieldWrapper>
+            </GroupInputs>
 
-            <FieldWrapper label="Equipements">
+            <FieldWrapper label="Equipements" labelTop>
                 <CheckboxMultipleInput
                        name="equipments"
                        options={CheckboxOptionsEquipments}
@@ -62,19 +71,19 @@ const CarDetailsStep = ({methods, formConfig, onSubmitStep, prevStep, nextStep, 
 
             <FieldWrapper label="Couleur extérieure">
                 <RadioInput
-                            name="externalColor"
-                            options={RadioChoicesExternalColor}
-                            register={register}
-                            errors={errors}
+                    name="externalColor"
+                    options={RadioChoicesExternalColor}
+                    register={register}
+                    errors={errors}
                 />
             </FieldWrapper>
 
             <FieldWrapper label="Peinture">
                 <RadioInput
-                            name="paint"
-                            options={RadioChoicesPaints}
-                            register={register}
-                            errors={errors}
+                    name="paint"
+                    options={RadioChoicesPaints}
+                    register={register}
+                    errors={errors}
                 />
             </FieldWrapper>
 
@@ -90,10 +99,10 @@ const CarDetailsStep = ({methods, formConfig, onSubmitStep, prevStep, nextStep, 
 
             <FieldWrapper label="Couleur intérieure">
                 <RadioInput
-                            name="internalColor"
-                            options={RadioChoicesExternalColor}
-                            register={register}
-                            errors={errors}
+                    name="internalColor"
+                    options={RadioChoicesExternalColor}
+                    register={register}
+                    errors={errors}
                 />
             </FieldWrapper>
 
@@ -118,7 +127,6 @@ const CarDetailsStep = ({methods, formConfig, onSubmitStep, prevStep, nextStep, 
             </FieldWrapper>
 
             <StepNavigation prev={prevStep} submit />
-            <FormStepDebug getValues={getValues} formState={formState} errors={errors}/>
         </form>
     );
 };

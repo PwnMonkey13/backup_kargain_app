@@ -1,12 +1,13 @@
 import React, {useState, useEffect, memo} from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
+import { Row, Col} from 'reactstrap';
 import ValidationError from "../Validations/ValidationError";
 
-const RadioInput = ({name, register, inline, options, errors, ...props}) => {
+const RadioInput = ({name, register, vertical, options, errors, ...props}) => {
     return (
         <>
-            <div className={classNames('d-flex', !inline ? 'd-flex flex-column' : '')}>
+            <Row className={classNames('d-flex', vertical ? 'd-flex flex-column' : '')}>
                 {options && options.map((option, index) => {
                     let labelProps = {
                         dangerouslySetInnerHTML : option.labelHtml ? {__html: option.labelHtml} : null,
@@ -27,7 +28,7 @@ const RadioInput = ({name, register, inline, options, errors, ...props}) => {
                         </div>
                     );
                 })}
-            </div>
+            </Row>
             { errors && <ValidationError errors={errors} name={name} /> }
         </>
     )

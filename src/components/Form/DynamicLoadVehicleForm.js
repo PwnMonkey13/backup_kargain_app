@@ -4,16 +4,13 @@ import PropTypes from "prop-types";
 // import DelayedFallback from "../DelayedFallback";
 // import Loader from "../Loader";
 
-const deferImport = promise =>
-    new Promise(resolve => setTimeout(() => resolve(promise), 2000));
-
-const DynamicLoadVehicleForm = ({vehicleTye}) => {
-    const DynamicComponent = dynamic(import(`./Vehicles/${vehicleTye}`));
+const DynamicLoadVehicleForm = ({vehicleType}) => {
+    const DynamicComponent = dynamic(import(`./Vehicles/${vehicleType}`));
     return <DynamicComponent/>;
 };
 
 DynamicLoadVehicleForm.propTypes = {
-    vehicleTye : PropTypes.string.isRequired,
+    vehicleType : PropTypes.string.isRequired,
 };
 
 export default DynamicLoadVehicleForm;
