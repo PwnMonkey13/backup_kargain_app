@@ -94,10 +94,6 @@ header {
   }
 }
 
-.row{
-  width: 100%;
-}
-
 main {
   display: block;
   margin: 0 auto;
@@ -120,15 +116,13 @@ h1 {
 h3{
   color: #3d4248;
   font: 700 23px Quicksand;
-  margin-top: 60px;
-  margin-bottom: 0;
+  margin: 1rem 0;
 }
 
 h4{
   color: #000;
   font: 500 17px Quicksand;
   margin: 1rem 0;
-  text-align: left;
 }
 
 hr {
@@ -147,6 +141,10 @@ hr {
 .icon-spin {
   display: inline-block;
   animation: spin 1s infinite linear;
+}
+
+.strong {
+  font-weight: 600;
 }
 
 @keyframes spin {
