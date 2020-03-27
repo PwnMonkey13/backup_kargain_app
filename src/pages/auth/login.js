@@ -87,7 +87,6 @@ const LoginPage = (props) => {
                         <FieldWrapper label="Type" required>
                             <EmailInput
                                 name="email"
-                                required
                                 inline
                                 errors={errors}
                                 control={control}

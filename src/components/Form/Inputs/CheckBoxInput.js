@@ -21,7 +21,6 @@ const CheckBoxInput = memo(({name, required, rules, control, errors, ...props}) 
                         :
                     </label>
                 }
-
             </div>
             {errors && <ValidationError errors={errors} name={name}/>}
         </>
