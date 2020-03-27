@@ -2,16 +2,17 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useRouter } from "next/router";
 import Link from "next/link";
 import {Col, Row} from "reactstrap";
+import styled from "styled-components";
 import {useForm} from "react-hook-form";
 import AuthService from '../../services/AuthService';
 import { UserContext } from '../../components/Context/UserContext';
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 import Divider from "../../components/Form/Divider";
-import {EmailInput, PasswordInput } from "../../components/Form/Inputs";
+import {EmailInput, PasswordInput, RadioInput} from "../../components/Form/Inputs";
+import FieldWrapper from "../../components/Form/FieldWrapper";
 
 const formConfig = {
     mode: 'onChange',
-    reValidateMode: 'onChange',
     validateCriteriaMode: "all",
 };
 
@@ -35,60 +36,81 @@ const LoginPage = (props) => {
         );
     };
 
+    const Main = styled.main`
+    padding : 1rem
+`;
+
+    const AuthForm = styled.form`
+        max-width: 40rem;
+        margin: 3rem auto;
+    `;
+
+    const Left = styled.div`
+        display:flex;
+        flex-direction:column
+    `;
+
     return (
-        <main>
+        <Main>
             <h1>Se connecter</h1>
             <Row>
-                <Col className="social_providers" sm="12" md="5">
-                    <Link href="#">
-                        <a className="register-fb">
-                            <img src="/images/fb.png" alt=""/>
-                            Se connecter avec Facebook
-                        </a>
-                    </Link>
-                    <Link href="#">
-                        <a className="register-g">
-                            <img src="/images/g+.png" alt=""/>
-                            Se connecter avec Google+
-                        </a>
-                    </Link>
-                    <Divider text="ou"/>
-                    <Link href='/auth/register'>
-                        <a className="btn btn-outline-primary submit">
-                            Créer un compte
-                        </a>
-                    </Link>
-                    <Link href="/auth/register-pro">
-                        <a className="btn btn-outline-primary submit">
-                            S'enregistrer en tant que Pro
-                        </a>
-                    </Link>
+                <Col className="m-auto" sm="12" md="5">
+                    <Left>
+                        <Link href="#">
+                            <a className="register-fb">
+                                <img src="/images/fb.png" alt=""/>
+                                Se connecter avec Facebook
+                            </a>
+                        </Link>
+                        <Link href="#">
+                            <a className="register-g">
+                                <img src="/images/g+.png" alt=""/>
+                                Se connecter avec Google+
+                            </a>
+                        </Link>
+                        <Divider text="ou"/>
+                        <Link href='/auth/register'>
+                            <a className="btn btn-outline-primary submit">
+                                Créer un compte
+                            </a>
+                        </Link>
+                        <Link href="/auth/register-pro">
+                            <a className="btn btn-outline-primary submit">
+                                S'enregistrer en tant que Pro
+                            </a>
+                        </Link>
+                    </Left>
                 </Col>
-                <Col className="auth_form m-auto" sm="12" md="7">
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="fields">
+
+                <Col className="m-auto" sm="12" md="7">
+                    <AuthForm onSubmit={handleSubmit(onSubmit)}>
+                        <FieldWrapper label="Type" required>
                             <EmailInput
-                                label="Email"
                                 name="email"
                                 required
                                 inline
-                                register={register({required : 'Required'})}
+                                errors={errors}
+                                control={control}
+                                rules={{required : 'Required'}}
                             />
+                        </FieldWrapper>
+
+                        <FieldWrapper label="Mot de passe" required>
                             <PasswordInput
-                                label="Mot de passe"
                                 name="password"
-                                required
-                                inline
-                                register={register({required : 'Required'})}
+                                errors={errors}
+                                control={control}
+                                rules={{required : 'Required'}}
                             />
-                        </div>
+                        </FieldWrapper>
+
                         <div className="submit">
                             <button className="btn btn-outline-primary" type="submit">Se connecter</button>
                         </div>
-                    </form>
+                    </AuthForm>
                 </Col>
             </Row>
-        </main>
+        </Main>
     );
 };
 

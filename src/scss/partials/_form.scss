@@ -1,3 +1,5 @@
+@import "~bootstrap/scss/functions";
+
 button, input, textarea {
   padding: .5rem 1rem;
   border: none;
@@ -57,26 +59,6 @@ p.error {
   }
 }
 
-.label {
-  min-width: 3rem;
-
-  label {
-    text-align: end;
-    margin-bottom: 0;
-    color: #000;
-    font-weight: $font-weight-bold;
-    white-space: nowrap;
-  }
-}
-
-.input {
-  display: flex;
-  vertical-align: middle;
-  justify-content: flex-start;
-  align-items: center;
-  position: relative;
-}
-
 .password__show {
   cursor: pointer;
   position: absolute;
@@ -84,91 +66,6 @@ p.error {
   padding: 4px 8px;
   font-weight: 700;
   font-size: .8em;
-}
-
-.form-check-vehicle{
-  min-height: 5rem;
-  text-align: center;
-  margin: 0 auto;
-  justify-content: center;
-
-  label{
-    display: flex;
-
-    img{
-      object-fit:contain;
-    }
-  }
-}
-
-.form-check{
-  display: flex;
-  align-items: center;
-  padding-left: 0;
-  margin: .5rem;
-  position: relative;
-  cursor: pointer;
-
-  input[type="radio"] {
-    position: absolute;
-    z-index: -1;
-    opacity: 0;
-  }
-
-  label{
-    display: inline-block;
-    background-color: #ddd;
-    padding: 10px 20px;
-    font-family: sans-serif, Arial;
-    font-size: 16px;
-    border: 2px solid #444;
-    border-radius: 4px;
-    margin-bottom: .5rem
-  }
-
-  input[type="radio"]+label {
-    position: relative;
-    padding: 8px 10px 8px 35px;
-    background: #f3f3f3;
-    color: #495057;
-    cursor: pointer;
-    min-width: 10rem;
-    border: 1px solid gainsboro;
-    transition-property: background,box-shadow;
-    transition-duration: .4s;
-  }
-
-  input[type="radio"]+label:before{
-    content: " ";
-    position: absolute;
-    top: 50%;
-    margin-top: -10px;
-    left: 10px;
-    height: 18px;
-    width: 18px;
-    background: #fff;
-    border-radius: 10px;
-  }
-
-  input[type="radio"]:checked+label:after{
-    content: " ";
-    position: absolute;
-    left: 15px;
-    top: calc(50% - 5px);
-    height: 8px;
-    width: 8px;
-    border-radius: 50%;
-    background: #307edd;
-  }
-
-  input[type="radio"]:checked + label {
-    background-color:#bfb;
-    border-color: #4c4;
-  }
-
-  input[type="radio"]:focus + label {
-    border: 2px dashed #444;
-  }
 }
 
 .form-group {
@@ -179,20 +76,44 @@ p.error {
   margin: 1rem;
 }
 
-.form-field-row {
-  @extend .row;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: baseline;
-}
-
 .fg-group-wrapper{
   padding: 1rem;
 }
 
-.fg-field-wrapper{
+.fg-label{
+  display: flex;
+  justify-content: flex-end;
+  text-align: center;
+  position: relative;
+  min-width: 3rem;
+  font-weight: $font-weight-bold;
 
+  @include media-breakpoint-down(md) {
+    text-align: center!important;
+  }
+
+  //@include media-breakpoint-up(md) { ... }
+  //@include media-breakpoint-up(lg) { ... }
+  //@include media-breakpoint-up(xl) { ... }
+}
+
+.select-field{
+  display: block;
+  position: relative;
+}
+
+.input-field{
+  display: flex;
+  align-items: baseline;
+  vertical-align: middle;
+  justify-content: flex-start;
+  width: 100%;
+  position: relative;
+
+  & > input{
+    width: 100%;
+    background-color: rgb(232, 240, 254) !important;
+  }
 }
 
 .invalid {
@@ -206,6 +127,95 @@ p.error {
 
 .validation-error {
   border: 1px solid red;
+}
+
+.form-check{
+  padding: 0;
+  margin: 0;
+  position: relative;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+  }
+
+  label{
+    flex: 1;
+    display: inline-block;
+    background-color: #ddd;
+    padding: 10px 20px;
+    font-family: sans-serif, Arial;
+    border-radius: 4px;
+  }
+
+  input+label{
+    position: relative;
+    padding: 8px 10px 8px 35px;
+    background: #f3f3f3;
+    color: #495057;
+    cursor: pointer;
+    border: 1px solid gainsboro;
+    transition-property: background,box-shadow;
+    transition-duration: .4s;
+  }
+
+  input+label:before{
+    content: " ";
+    position: absolute;
+    top: 50%;
+    margin-top: -10px;
+    left: 10px;
+    height: 14px;
+    width: 14px;
+    background: #fff;
+    border-radius: 10px;
+  }
+
+  input[type="checkbox"]+label:before{
+    border-radius: unset;
+  }
+
+  input:checked+label:after{
+    content: " ";
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background: #307edd;
+  }
+
+  input[type="checkbox"]:checked+label:after{
+    border-radius: unset;
+  }
+
+  input:checked + label {
+    background-color:#bfb;
+    border-color: #4c4;
+  }
+
+  input:focus + label {
+    border: 2px dashed #444;
+  }
+}
+
+.form-check-vehicle{
+  min-height: 5rem;
+  text-align: center;
+  margin: 0 auto;
+  justify-content: center;
+
+  label{
+    display: flex;
+    justify-content: center;
+
+    img{
+      object-fit:contain;
+    }
+  }
 }
 
 .nice-select {

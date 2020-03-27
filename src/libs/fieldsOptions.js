@@ -179,4 +179,5 @@ export const RadioChoicesPaints = [
     }
 ];
 export const SelectChoicesDoors = SelectOptionsUtils([2, 3, 4, 5]);
-export const RadioChoicesVehicle = FieldsTranslalted.vehicleState;
+export const RadioGeneralStateVehicle = FieldsTranslalted.GeneralStateVehicle;
+export const RadioFunctionVehicle = FieldsTranslalted.VehicleFunction;

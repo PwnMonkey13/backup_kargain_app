@@ -1,62 +1,31 @@
-import React, {memo, useState, useEffect, useCallback} from 'react';
-import classNames from "classnames";
+import React, {memo} from 'react';
 import PropTypes from 'prop-types';
-import ValidationAlert from '../Validations/ValidationAlert';
-import useIsMounted from "../../../hooks/useIsMounted";
+import ClassNames from "classnames";
+import ValidationError from "../Validations/ValidationError";
 
-const CheckBoxInput = memo(({setInputs, ...props}) => {
-    const isMountRef = useIsMounted();
-    const [checked, setChecked] = useState(props.value);
-
-    const onChange = useCallback(e => {
-        setChecked(e.target.checked);
-    },[]);
-
-    useEffect(() => {
-        if (isMountRef && checked) setInputs(props.name, checked);
-    }, [checked]);
-
+const CheckBoxInput = memo(({name, required, rules, control, errors, ...props}) => {
+    const classnames = ClassNames('d-flex', {'w-100' : props.fullwidth});
     return (
-        <div className={classNames(props.classname, 'form-field')}>
-            <div className={classNames(props.classname, {'form-field-row': props.display === 'inline'})}>
-
+        <>
+            <div className={classnames}>
                 <input
                     className="radio_field"
-                    type={props.type}
-                    name={props.name}
-                    checked={checked}
-                    onChange={onChange}
+                    type="checkbox"
+                    name={name}
                 />
 
                 {props.label &&
-                <label>
-                    {props.label}
-                    {props.required && <span className="required_label">*</span>}
-                    :
-                </label>
+                    <label>
+                        {props.label}
+                        {props.required && <span className="required_label">*</span>}
+                        :
+                    </label>
                 }
 
             </div>
-            <ValidationAlert content={props.alert}/>
-        </div>
+            {errors && <ValidationError errors={errors} name={name}/>}
+        </>
     )
 });
-
-CheckBoxInput.defaultProps = {
-    required: false,
-    disabled: false,
-    checked: false,
-    display: 'col',
-    value: '',
-    options: []
-};
-
-CheckBoxInput.propTypes = {
-    required: PropTypes.bool,
-    disabled: PropTypes.bool,
-    checked: PropTypes.bool,
-    display: PropTypes.string,
-    value: PropTypes.any,
-};
 
 export default CheckBoxInput;

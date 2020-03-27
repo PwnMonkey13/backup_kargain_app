@@ -1,11 +1,7 @@
 import React, {memo} from 'react';
-import NiceSelect from "react-select";
-import {Controller} from "react-hook-form";
-import {flatten, inflate} from 'flattenjs';
+import NiceSelect, {components} from "react-select";
 import PropTypes from "prop-types";
 import ValidationError from "../Validations/ValidationError";
-import {TextInput} from "./index";
-import ClassNames from "classnames";
 
 const CustomClearText = () => "clear all";
 const ClearIndicator = props => {
@@ -21,26 +17,29 @@ const ClearIndicator = props => {
         </div>
     );
 };
-const ClearIndicatorStyles = (base, state) => ({
-    ...base,
-    cursor: "pointer",
-    color: state.isFocused ? "blue" : "black"
-});
+const Menu = props => props.options.length ? <components.Menu {...props}>{props.children}</components.Menu> : null;
+
 const customStyles = {
+    menu: (provided, state) => ({
+        ...provided,
+        width: state.selectProps.width,
+        borderBottom: '1px dotted pink',
+        color: state.selectProps.menuColor,
+        padding: 20,
+    }),
+    control: (_, { selectProps: { width }}) => ({
+        width: width,
+        flex: 1
+    }),
     option: (provided, state) => ({
         ...provided,
         borderBottom: '1px dotted pink',
         color: state.isSelected ? 'red' : 'blue',
         padding: 20,
     }),
-    control: () => ({
-        // none of react-select's styles are passed to <Control />
-        width: 200,
-    }),
     singleValue: (provided, state) => {
         const opacity = state.isDisabled ? 0.5 : 1;
         const transition = 'opacity 300ms';
-
         return { ...provided, opacity, transition };
     }
 };
@@ -56,25 +55,21 @@ const SelectInput = memo(({name, control, rules, errors, ...props}) => {
         );
     }
 
-    const classnames = ClassNames("input-field", {'w-100' : props.fullwidth,});
-
     return (
         <>
-            <Controller
-                as={<NiceSelect
-                    components={{clearValue: ClearIndicator}}
+            <div className="select-field">
+                <NiceSelect
+                    name={name}
+                    ref={control.register(rules)}
                     styles={{customStyles}}
-                    width='auto'
-                    defaultValue={defaultValues}
+                    width='200px'
                     options={options}
-                />}
-                className={classnames}
-                isClearable
-                name={name}
-                control={control}
-                rules={rules}
-                onChange={props.onChange}
-            />
+                    defaultValue={defaultValues}
+                    placeholder={props.placeholder}
+                    components={{clearValue: ClearIndicator, Menu}}
+
+                />
+            </div>
             {errors && <ValidationError errors={errors} name={name} />}
         </>
     )

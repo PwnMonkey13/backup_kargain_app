@@ -2,92 +2,63 @@ import React, {memo} from "react";
 import classNames from "classnames";
 import {Col, Row} from "reactstrap";
 import ToolTipWrapper from "./ToolTipWrapper";
-import Header from "../Header";
 import PropTypes from "prop-types";
 
-const FieldWrapper = memo(({children, ...props}) => {
-    const {as, label, labelHtml, required, labelTop, tooltip } = props;
-    const labelProps = labelHtml || label ? {
-        dangerouslySetInnerHTML: labelHtml ? {__html: labelHtml} : null,
-        children: label ? label : null
-    } : null;
+const FieldWrapper = ({as : Header, children, ...props}) => {
+    const {label, required, labelTop, tooltip } = props;
 
-    const classnamesHeader = classNames(
-        "fg-label",
-        "fg-label-field",
-        labelTop ? 'text-center' : 'text-right'
+    const FieldRow = classNames(
+        'fg-field-row',
+        'my-2',
+        'align-items-baseline',
+        { 'justify-content-end' : !labelTop},
+        { 'align-items-center' : labelTop},
+        { 'flex-column' : labelTop}
     );
 
-    const classnamesFieldGroup = classNames(
-        'fg-field-wrapper',
-        'justify-content-center',
-        { 'align-items-center' : labelTop}
+    const FieldLabel = classNames(
+        'fg-label',
+        labelTop ? 'justify-content-center align-items-center' : 'justify-content-end'
     );
 
-    const classnamesField = classNames(
-        'd-flex',
-        'flex-column',
+    const FieldWrap = classNames(
         { 'justify-content-center' : labelTop },
-        'align-items-baseline'
+        {'flex-column' : labelTop},
+
     );
 
-    if(labelTop){
-        return(
-            <div className={classnamesFieldGroup}>
-                <section className="position-relative">
-                    <Header as={as} className={classnamesHeader} {...labelProps}>
-                        {!labelProps.dangerouslySetInnerHTML && (
-                            <>
-                                {label}
-                                {required && <span className="required_label">*</span>}
-                            </>
-                        )}
-                    </Header >
-                    {
-                        tooltip && <ToolTipWrapper {...tooltip}/>
-                    }
-                </section>
-                <section className={classnamesField}>
-                    {children}
-                </section>
-            </div>
-        )
-    }
-    else return (
-        <Row className={classnamesFieldGroup}>
-            {labelProps && (
-                <Col sm={12} md={3}>
-                    <section className="position-relative">
-                        <Header as={as} className={classnamesHeader} {...labelProps}>
-                            {!labelProps.dangerouslySetInnerHTML && (
-                                <>
-                                    {label}
-                                    {required && <span className="required_label">*</span>}
-                                </>
-                            )}
-                        </Header >
+    return (
+        <Row className={FieldRow}>
+            {label && (
+                <Col sm={12} md={labelTop ? 12 : 4}>
+                    <div className={FieldLabel}>
+                        <Header>
+                            {label}
+                            {required && <span className="required_label">*</span>}
+                        </Header>
                         {
                             tooltip && <ToolTipWrapper {...tooltip}/>
                         }
-                    </section>
+                    </div>
                 </Col>
             )}
-            <Col sm={12} md={labelProps ? 9 : 12}>
-                <div className={classNames('fg-field-wrapper', 'my-2')}>
+            <Col sm={12} md={labelTop ? 12 : 8}>
+                <div className={FieldWrap}>
                     {children}
                 </div>
             </Col>
         </Row>
     );
-});
+};
 
 FieldWrapper.propTypes = {
     labelTop: PropTypes.bool,
+    as : PropTypes.string
 };
 
 FieldWrapper.defaultProps = {
     labelTop : false,
-    as : 'h4'
+    as : "label"
 };
 
 export default FieldWrapper;

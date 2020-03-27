@@ -5,9 +5,8 @@ import AnnounceService from '../../../../services/AnnounceService';
 import {ModalDialogContext} from "../../../Context/ModalDialogContext";
 import Step0_CarManufacturer from "./Step0_CarManufacturer";
 import Step1_CarDetails from "./Step1_CarDetails";
-import Step2_CarDetails from "./Step2_CarDetails";
-import Step3_CarStatus from "./Step3_CarStatus";
-import Header from "../../../Header";
+import Step2_CarStatus from "./Step2_CarStatus";
+import Step3_CarOwner from "./Step3_CarOwner";
 
 const CarForm = (props) => {
     const {dispatchModal} = useContext(ModalDialogContext);
@@ -42,9 +41,6 @@ const CarForm = (props) => {
 
     return (
         <>
-            <Header as="h2" className="big-mt text-center">
-                Vendez votre voiture
-            </Header>
             <FormWizard id="demo1" classname="demo_form"
                         prevRoute="/deposer-une-annonce"
                         resumeModel={resumeModel}
@@ -52,18 +48,18 @@ const CarForm = (props) => {
 
                 <Step0_CarManufacturer title="Sélection du véhicule"/>
                 <Step1_CarDetails title="Description du véhicule"/>
-                <Step2_CarDetails title="Description du véhicule (suite)" nobreadcrumb/>
-                <Step3_CarStatus title="Etat du véhicule"/>
+                <Step2_CarStatus title="Etat du véhicule"/>
+                <Step3_CarOwner title="Informations sur le vendeur"/>
 
             </FormWizard>
         </>
     );
 };
 
-CarForm.getInitialProps = function() {
-    return {
-        requiredAuth : true,
-    };
-};
+// CarForm.getInitialProps = function() {
+//     return {
+//         requiredAuth : true,
+//     };
+// };
 
 export default CarForm;

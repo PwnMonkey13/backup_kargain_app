@@ -1,6 +1,5 @@
-const withCSS = require('@zeit/next-css');
 
-module.exports = withCSS({
+module.exports = {
     webpack(config, options) {
         if (!options.defaultLoaders) {
             throw new Error(
@@ -8,16 +7,36 @@ module.exports = withCSS({
             )
         }
 
+        // config.module.rules.push({
+        //     test: /\.svg$/,
+        //     issuer: {
+        //         test: /\.(js|ts)x?$/,
+        //     },
+        //     use: ['@svgr/webpack'],
+        // });
+
         config.module.rules.push({
-            test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-            use: {
-                loader: 'url-loader',
-                options: {
-                    limit: 100000
+            test: /\.svg$/,
+            use: [
+                // 'svg-inline-loader',
+                'svg-loader'
+            ]
+        });
+
+        config.module.rules.push({
+            test: /\.(png|jpe?g|gif|eot|ttf|woff|woff2)$/,
+            use: [
+                'file-loader',
+                'image-webpack-loader',
+                {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 100000
+                    }
                 }
-            }
+            ]
         });
 
         return config
     }
-});
+};

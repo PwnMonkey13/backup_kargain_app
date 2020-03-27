@@ -2,7 +2,6 @@ import React, {memo, useContext, useEffect, useCallback, useState, useMemo} from
 import {FormContext} from '../../components/Context/FormContext';
 import {useRouter} from "next/router";
 import {Col, Row} from 'reactstrap';
-import "react-step-progress-bar/styles.css";
 import {ProgressBar} from "react-step-progress-bar";
 import useIsMounted from "../../hooks/useIsMounted";
 import useLocalStorage from "../../hooks/useLocalStorage";
@@ -22,7 +21,7 @@ const FormWizard = ({resumeModel, onFinalSubmit, children, prevRoute, ...props})
     const {formDataContext, dispatchFormUpdate} = useContext(FormContext);
     const [getFormData] = useLocalStorage('formData', {}, true);
     const [activeStep, setActiveStep] = useState(getFormData.currentStep || 0);
-    const [maxActiveStep, setMaxActiveStep ]= useState(activeStep);
+    const [maxActiveStep, setMaxActiveStep ]= useState(steps.length);
     const [pourcent, setPourcent] = useState(() => calculatePourcent(activeStep, steps.length));
     const [stepChanges, setStepChanges] = useState([]);
 
@@ -68,9 +67,6 @@ const FormWizard = ({resumeModel, onFinalSubmit, children, prevRoute, ...props})
         dispatchFormUpdate(data);
         nextStep()
     },[]);
-
-    console.log('render FormWizard');
-    console.log(formDataContext);
 
     return (
         <main id={props.id} className={props.className}>

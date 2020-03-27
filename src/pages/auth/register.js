@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import Link from "next/link";
 import {useRouter} from "next/router";
+import styled from "styled-components";
 import {Container, Col, Row} from 'reactstrap'
 import {UserContext} from '../../components/Context/UserContext';
 import {ModalDialogContext} from '../../components/Context/ModalDialogContext';
@@ -8,10 +9,10 @@ import Divider from '../../components/Form/Divider'
 import AuthService from '../../services/AuthService'
 import {useForm} from "react-hook-form";
 import {TextInput, EmailInput, PasswordInput, CheckBoxInput } from "../../components/Form/Inputs";
+import FieldWrapper from "../../components/Form/FieldWrapper";
 
 const formConfig = {
     mode: 'onChange',
-    reValidateMode: 'onChange',
     validateCriteriaMode: "all",
 };
 
@@ -33,99 +34,125 @@ const LoginPage = (props) => {
             })
     };
 
+    const Main = styled.main`
+        padding : 1rem
+    `;
+
+    const Left = styled.div`
+        display:flex;
+        flex-direction:column
+    `;
+
+    const AuthForm = styled.form`
+        max-width: 40rem;
+        margin: 3rem auto;
+    `;
+
     return (
-        <main>
+        <Main>
             <h1>Créer un compte</h1>
             <Row>
-                <Col className="social_providers" sm="12" md="5">
-                    <Link href="#">
-                        <a className="register-fb">
-                            <img src="/images/fb.png" alt=""/>
-                            Se connecter avec Facebook
-                        </a>
-                    </Link>
+                <Col className="m-auto" sm="12" md="5">
+                    <Left>
+                        <Link href="#">
+                            <a className="register-fb">
+                                <img src="/images/fb.png" alt=""/>
+                                Se connecter avec Facebook
+                            </a>
+                        </Link>
 
-                    <Link href="#">
-                        <a className="register-g">
-                            <img src="/images/g+.png" alt=""/>
-                            Se connecter avec Google+
-                        </a>
-                    </Link>
-                    <Divider text="ou"/>
-                    <Link href="/auth/login">
-                        <a className="btn btn-outline-primary submit">
-                            Se connecter
-                        </a>
-                    </Link>
-                    <Link href="/auth/register-pro">
-                        <a className="btn btn-outline-primary submit">
-                            Créer un compte Pro
-                        </a>
-                    </Link>
+                        <Link href="#">
+                            <a className="register-g">
+                                <img src="/images/g+.png" alt=""/>
+                                Se connecter avec Google+
+                            </a>
+                        </Link>
+                        <Divider text="ou"/>
+                        <Link href="/auth/login">
+                            <a className="btn btn-outline-primary submit">
+                                Se connecter
+                            </a>
+                        </Link>
+                        <Link href="/auth/register-pro">
+                            <a className="btn btn-outline-primary submit">
+                                Créer un compte Pro
+                            </a>
+                        </Link>
+                    </Left>
+
                 </Col>
-                <Col className="auth_form m-auto" sm="12" md="7">
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="fields">
+                <Col className="m-auto" sm="12" md="6" lg="7">
+                    <AuthForm onSubmit={handleSubmit(onSubmit)}>
+                        <FieldWrapper label="Prénom" required>
                             <TextInput
-                                label="Prénom"
                                 name="firstname"
-                                required
-                                inline
-                                register={register({required : 'Required'})}
+                                errors={errors}
+                                control={control}
+                                rules={{required : 'Required'}}
                             />
+                        </FieldWrapper>
+
+                        <FieldWrapper label="Nom" required>
                             <TextInput
-                                label="Nom"
                                 name="lastname"
-                                required
-                                inline
-                                register={register({required : 'Required'})}
+                                errors={errors}
+                                control={control}
+                                rules={{required : 'Required'}}
                             />
+                        </FieldWrapper>
+
+                        <FieldWrapper label="Email" required>
                             <EmailInput
-                                label="Email"
                                 name="email"
-                                required
-                                inline
-                                register={register({required : 'Required'})}
+                                errors={errors}
+                                control={control}
+                                rules={{required : 'Required'}}
                             />
+                        </FieldWrapper>
+
+                        <FieldWrapper label="Mot de passe" required>
                             <PasswordInput
-                                label="Mot de passe"
                                 name="password"
-                                required
-                                inline
-                                register={register({required : 'Required'})}
+                                errors={errors}
+                                control={control}
+                                rules={{required : 'Required'}}
                             />
+                        </FieldWrapper>
+
+                        <FieldWrapper label="Confirmer mot de passe" required>
                             <PasswordInput
-                                label="Confirmer mot de passe"
                                 name="confirm_pwd"
-                                required
-                                inline
-                                register={register({
-                                required : 'Required',
-                                validate: {
-                                    matchesPreviousPassword: (value) => {
-                                        const { password } = getValues();
-                                        return password === value || 'Passwords should match!';
-                                    },
-                                }
-                            })}
-                            />
-                            <CheckBoxInput
-                                label="J’ai lu et j’accepte les conditions générales d’utilisation"
-                                name="confirm"
-                                required
-                                inline
-                                register={register({
+                                errors={errors}
+                                control={control}
+                                rules={{
                                     required : 'Required',
-                                })}
+                                    validate: {
+                                        matchesPreviousPassword: (value) => {
+                                            const { password } = getValues();
+                                            return password === value || 'Passwords should match!';
+                                        },
+                                    }
+                                }}
                             />
-                        </div>
+                        </FieldWrapper>
+
+                        <FieldWrapper>
+                            <CheckBoxInput
+                                name="confirm"
+                                label="J’ai lu et j’accepte les conditions générales d’utilisation"
+                                errors={errors}
+                                control={control}
+                                rules={{required : 'Required'}}
+                            />
+                        </FieldWrapper>
+
                         <div className="submit">
                             <button className="btn btn-outline-primary" type="submit">S'enregistrer</button>
                         </div>
-                    </form>
+                    </AuthForm>
                 </Col>
             </Row>
-        </main>
+        </Main>
     );
 };
 

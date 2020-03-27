@@ -1,9 +1,11 @@
 import React from "react";
-import Layout from "../layouts/Layout";
+import { Container } from 'reactstrap'
 
-function About() {
+const About = () => {
+
     return (
-        <Layout>
+        <Container>
+
             <h1>À propos de Kargain</h1>
             <h2>Bienvenue dans le monde Kargain, le réseau international de l'automobile ouvert à l'usage public.</h2>
 
@@ -12,8 +14,8 @@ function About() {
 
             <h2>Mission</h2>
             <p>La mission de Kargain : contribution à la modernisation marché de l’automobile, basée sur un contenu convivial et fiable.</p>
-        </Layout>
+        </Container>
     )
-}
+};
 
 export default About;

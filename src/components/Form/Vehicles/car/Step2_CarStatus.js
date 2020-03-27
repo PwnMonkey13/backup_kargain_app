@@ -1,22 +1,35 @@
 import React, {useRef, useContext} from 'react';
-import {NumberInput, RadioInput, SelectInput, TextareaInput } from "../../Inputs";
-import {RadioChoicesVehicle} from "../../../../libs/fieldsOptions";
+import Header from "../../../Header";
+import {RadioInput, SelectInput, TextareaInput} from "../../Inputs";
+import {RadioGeneralStateVehicle, RadioFunctionVehicle } from "../../../../libs/fieldsOptions";
 import StepNavigation from "../../StepNavigation";
 import {SelectOptionsUtils} from "../../../../libs/formFieldsUtils";
-import GroupInputs from "../../GroupInputs";
 import FieldWrapper from "../../FieldWrapper";
 
-const CarDetailsStep = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props}) => {
-    const {watch, control, errors, getValues, register, formState, handleSubmit} = methods;
+const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props}) => {
+    const formRef = useRef(null);
+    const {watch, control, errors, handleSubmit} = methods;
 
     return (
-        <form className="form_wizard" onSubmit={handleSubmit(onSubmitStep)}>
+        <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
+            <Header text="Etat du véhicule"/>
+
+            <FieldWrapper label="Fonction du véhicule">
+                <RadioInput
+                    name="vehicleFunction"
+                    options={RadioFunctionVehicle}
+                    control={control}
+                    rules={{ required: 'Title is required' }}
+                    errors={errors}
+                />
+            </FieldWrapper>
 
             <FieldWrapper label="Etat général">
                 <RadioInput
                     name="vehicleState"
-                    options={RadioChoicesVehicle}
-                    register={register({ required: 'Title is required' })}
+                    options={RadioGeneralStateVehicle}
+                    control={control}
+                    rules={{ required: 'Title is required' }}
                     errors={errors}
                 />
             </FieldWrapper>
@@ -62,37 +75,9 @@ const CarDetailsStep = ({methods, formConfig, onSubmitStep, prevStep, nextStep, 
                 />
             </FieldWrapper>
 
-            <GroupInputs label="Informations sur le vendeur" labelTop vertical>
-                <FieldWrapper label="Pays">
-                    <SelectInput
-                        name="seller.country"
-                        options={[]}
-                        placeholder="Select number of seats"
-                        control={control}
-                        errors={errors}
-                    />
-                </FieldWrapper>
-
-                <FieldWrapper label="Ville ou code postal">
-                    <NumberInput
-                        name="seller.postalcode"
-                        errors={errors}
-                        register={register({ required: 'Title is required' })}
-                    />
-                </FieldWrapper>
-
-                <FieldWrapper label="Numéro de téléphone">
-                    <NumberInput
-                        name="seller.phone"
-                        errors={errors}
-                        register={register({ required: 'Title is required' })}
-                    />
-                </FieldWrapper>
-            </GroupInputs>
-
-            <StepNavigation prev={prevStep} submitLabel="Créer mon annonce" submit />
+            <StepNavigation prev={prevStep} submit />
         </form>
     );
 };
 
-export default CarDetailsStep;
+export default Step;

@@ -1,13 +1,13 @@
 import React from "react";
-import Layout from "../layouts/Layout";
+import { Container } from 'reactstrap'
 
-function Confidentiality() {
+const Confidentiality = () => {
     return (
-        <Layout>
+        <Container>
             <h1>Confidentiality</h1>
             <h2>@TODO</h2>
-        </Layout>
+        </Container>
     )
-}
+};
 
 export default Confidentiality;

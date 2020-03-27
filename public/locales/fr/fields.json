@@ -343,9 +343,11 @@
             "label": "Autre"
         }
     ],
-    "vehicleState": [{
+
+    "GeneralStateVehicle": [
+        {
             "value": "new-car",
-            "label": "Neuve"
+            "label": "Neuf"
         },
         {
             "value": "occasion",
@@ -354,6 +356,13 @@
         {
             "value": "collection",
             "label": "Collection"
+        }
+    ],
+
+    "VehicleFunction": [
+        {
+            "value": "personal-car",
+            "label": "Véhicule personel"
         },
         {
             "value": "driving-school-car",

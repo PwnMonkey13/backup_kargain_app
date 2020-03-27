@@ -1,27 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { memo } from 'react';
 import PropTypes from "prop-types";
-import classNames from "classnames";
-import ValidationAlert from '../Validations/ValidationAlert';
-import useIsMounted from "../../../hooks/useIsMounted";
 import ValidationError from "../Validations/ValidationError";
 
-function TextareaInput({name, register, errors, ...props}) {
-
+const TextareaInput = memo(({name, control, rules, errors, ...props}) => {
     return (
         <>
             <textarea
                 name={props.name}
-                ref={register}
+                ref={control.register(rules)}
                 placeholder={props.placeholder}
                 disabled={props.disabled}
                 className="input-field m-0"
-                type={props.type}
                 rows={props.rows}
             />
             { errors && <ValidationError errors={errors} name={name} /> }
         </>
     )
-}
+});
 
 TextareaInput.propTypes = {
     name : PropTypes.string.isRequired,
@@ -29,6 +24,7 @@ TextareaInput.propTypes = {
 
 TextareaInput.defaultProps = {
     rows: 5,
+    rules : {}
 };
 
 export default TextareaInput;

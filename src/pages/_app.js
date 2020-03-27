@@ -1,10 +1,10 @@
 import React from 'react';
-import App from 'next/app';
+import Router from "next/router";
 import {DefaultSeo} from 'next-seo';
+import NextProgress from "../components/NextProgress";
 import {UserContextProvider} from '../components/Context/UserContext'
 import {ModalDialogContextProvider} from '../components/Context/ModalDialogContext'
 import {FormContextProvider} from '../components/Context/FormContext'
-import Loading from '../components/Loading'
 import SEO from '../next-seo.config';
 import nextCookie from "next-cookies";
 import Layout from "../layouts/Layout";
@@ -12,21 +12,38 @@ import AuthService from "../services/AuthService";
 import PopupAlert from "../components/PopupAlert";
 import PopupLogin from "../components/PopupLogin";
 
-const MyApp = ({Component, pageProps}) => (
-    <ModalDialogContextProvider>
-        <UserContextProvider isLoggedIn={pageProps.isLoggedIn}>
-            <FormContextProvider>
-                {/*<Loading {...state} />*/}
-                <DefaultSeo {...SEO} />
-                <PopupAlert/>
-                { pageProps.requiredAuth === true && <PopupLogin pageProps={pageProps}/> }
-                <Layout {...pageProps}>
-                    <Component/>
-                </Layout>
-            </FormContextProvider>
-        </UserContextProvider>
-    </ModalDialogContextProvider>
-);
+import "react-step-progress-bar/styles.css";
+import 'react-phone-input-2/lib/style.css'
+import '../components/SelectCountriesFlags/scss/react-flags-select.scss';
+
+const MyApp = ({Component, pageProps}) => {
+
+    Router.events.on('routeChangeStart', () => {
+        console.log("route start changed");
+    });
+    Router.events.on('routeChangeComplete', () => {
+        console.log("route end changed");
+    });
+    Router.events.on('routeChangeError', () => {
+        console.log("route error changed");
+    });
+
+    return(
+        <ModalDialogContextProvider>
+            <UserContextProvider isLoggedIn={pageProps.isLoggedIn}>
+                <FormContextProvider>
+                    <NextProgress/>
+                    <DefaultSeo {...SEO} />
+                    <PopupAlert/>
+                    { pageProps.requiredAuth === true && <PopupLogin pageProps={pageProps}/> }
+                    <Layout {...pageProps}>
+                        <Component/>
+                    </Layout>
+                </FormContextProvider>
+            </UserContextProvider>
+        </ModalDialogContextProvider>
+    );
+};
 
 MyApp.getInitialProps = async (app) => {
     const {token} = nextCookie(app.ctx);

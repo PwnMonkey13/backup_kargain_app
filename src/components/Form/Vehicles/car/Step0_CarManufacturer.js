@@ -1,14 +1,14 @@
 import React, {memo, useContext, useEffect, useRef, useState} from "react";
 import MaskedInput from "react-input-mask";
-import { SelectInput, TextInput} from "../../Inputs";
+import {NumberInput, SelectInput, TextInput} from "../../Inputs";
 import CarApiService from "../../../../services/CarApiService";
 import {ModalDialogContext} from "../../../Context/ModalDialogContext";
 import useIsMounted from "../../../../hooks/useIsMounted";
 import StepNavigation from "../../StepNavigation";
 import Divider from "../../Divider";
 import FieldWrapper from "../../FieldWrapper";
-import GroupInputs from "../../GroupInputs";
 import VinDecoderService from "../../../../services/VinDecoderService";
+import Header from "../../../Header";
 
 // const Input = React.memo(props => {
 //     const { name, inputRef, value, maskChar, ...inputProps } = props;
@@ -177,24 +177,6 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
                 console.log(errors);
                 }}>CLICK</button>
 
-            {/*<div>*/}
-            {/*    <MaskedInput*/}
-            {/*        name="maskedInputTel"*/}
-            {/*        value={tel}*/}
-            {/*        inputRef={register({*/}
-            {/*            validate: {*/}
-            {/*                inputTelRequired: isNotFilledTel*/}
-            {/*            }*/}
-            {/*        })}*/}
-            {/*        mask="+7 (999) 999-99-99"*/}
-            {/*        alwaysShowMask*/}
-            {/*        onChange={e => setTel(e.target.value)}*/}
-            {/*    >*/}
-            {/*        <Input type="tel" autoComplete="tel-national" />*/}
-            {/*    </MaskedInput>*/}
-            {/*    {errors.maskedInputTel && <p>{errors.maskedInputTel.message}</p>}*/}
-            {/*</div>*/}
-
             <FieldWrapper as="h3" label="Saisissez le numéro VIN de votre véhicule" labelTop tooltip={{
                 icon : "?",
                 template : "default",
@@ -220,72 +202,73 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
 
             <Divider text="ou"/>
 
-            <GroupInputs label="Sélectionnez votre voiture" labelTop vertical>
-                <FieldWrapper label="Marque" labelTop>
-                        <SelectInput
-                            name="manufacturer.make"
-                            placeholder="Select a car make"
-                            control={control}
-                            rules={{required: "Field required"}}
-                            options={manufacturersData['makes']}
-                            onChange={([selected, option]) => {
-                                collectStepChanges({name : option.name, label : selected.label});
-                                return selected
-                            }}
-                        />
+            <Header text="Sélectionnez votre voiture"/>
+
+            <FieldWrapper label="Marque" labelTop>
+                    <SelectInput
+                        name="manufacturer.make"
+                        placeholder="Select a car make"
+                        control={control}
+                        errors={errors}
+                        rules={{required: 'Title is required!'}}
+                        options={manufacturersData['makes']}
+                        onChange={([selected, option]) => {
+                            collectStepChanges({name : option.name, label : selected.label});
+                            return selected
+                        }}
+                    />
+            </FieldWrapper>
+
+            {/*{watch('manufacturer.make') &&*/}
+                <FieldWrapper label="Modele" labelTop>
+                    <SelectInput
+                        name="manufacturer.model"
+                        placeholder="Select a car model"
+                        options={manufacturersData['models']}
+                        control={control}
+                        errors={errors}
+                        rules={{required: 'Title is required!'}}
+                        onChange={([selected, option]) => {
+                            collectStepChanges({name : option.name, label : selected.label});
+                            return selected
+                        }}
+                    />
                 </FieldWrapper>
+            {/*}*/}
 
-                {/*{watch('manufacturer.make') &&*/}
-                    <FieldWrapper label="Modele" labelTop>
-                        <SelectInput
-                            name="manufacturer.model"
-                            placeholder="Select a car model"
-                            options={manufacturersData['models']}
-                            rules={{required: "Field required"}}
-                            errors={errors}
-                            control={control}
-                            onChange={([selected, option]) => {
-                                collectStepChanges({name : option.name, label : selected.label});
-                                return selected
-                            }}
-                        />
-                    </FieldWrapper>
-                {/*}*/}
+            {/*{watch('manufacturer.model') &&*/}
+                <FieldWrapper label="Version" labelTop>
+                    <SelectInput
+                        name="manufacturer.generation"
+                        placeholder="Select car version"
+                        options={manufacturersData['generations']}
+                        control={control}
+                        errors={errors}
+                        rules={{required: 'Title is required!'}}
+                        onChange={([selected, option]) => {
+                            collectStepChanges({name : option.name, label : selected.label});
+                            return selected
+                        }}
+                    />
+                </FieldWrapper>
+            {/*}*/}
 
-                {/*{watch('manufacturer.model') &&*/}
-                    <FieldWrapper label="Version" labelTop>
-                        <SelectInput
-                            name="manufacturer.generation"
-                            placeholder="Select car version"
-                            options={manufacturersData['generations']}
-                            control={control}
-                            rules={{required: "Field required"}}
-                            errors={errors}
-                            onChange={([selected, option]) => {
-                                collectStepChanges({name : option.name, label : selected.label});
-                                return selected
-                            }}
-                        />
-                    </FieldWrapper>
-                {/*}*/}
-
-                {/*{watch('manufacturer.generation') &&*/}
-                    <FieldWrapper label="Année" labelTop>
-                        <SelectInput
-                            name="manufacturer.year"
-                            placeholder="Select car year"
-                            options={manufacturersData['years']}
-                            control={control}
-                            rules={{required: "Field required"}}
-                            errors={errors}
-                            onChange={([selected, option]) => {
-                                collectStepChanges({name : option.name, label : selected.label});
-                                return selected
-                            }}
-                        />
-                    </FieldWrapper>
-                {/*}*/}
-            </GroupInputs>
+            {/*{watch('manufacturer.generation') &&*/}
+                <FieldWrapper label="Année" labelTop>
+                    <SelectInput
+                        name="manufacturer.year"
+                        placeholder="Select car year"
+                        options={manufacturersData['years']}
+                        control={control}
+                        errors={errors}
+                        rules={{required: 'Title is required!'}}
+                        onChange={([selected, option]) => {
+                            collectStepChanges({name : option.name, label : selected.label});
+                            return selected
+                        }}
+                    />
+                </FieldWrapper>
+            {/*}*/}
 
             <button className="btn" onClick={triggerSkipStep}>Passer cette étape</button>
             <StepNavigation prev={prevStep} submit />

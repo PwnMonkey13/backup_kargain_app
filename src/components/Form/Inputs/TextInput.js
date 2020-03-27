@@ -1,29 +1,23 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import classNames from "classnames";
-import {Row, Col, FormGroup} from "reactstrap";
 import ValidationError from "../Validations/ValidationError";
 import ClassNames from "classnames";
 
-const TextInput = ({name, register, errors, ...props}) => {
-
-    const classnames = ClassNames(
-        "input-field",
-        {
-            'w-100' : props.fullwidth,
-        }
-    );
+const TextInput = ({name, rules, control, errors, ...props}) => {
+    const classnames = ClassNames("input-field", {'w-100' : props.fullwidth});
 
     return (
         <>
-            <input className={classnames}
-                   type="text"
-                   ref={register}
-                   name={name}
-                   placeholder={props.placeholder}
-                   disabled={props.disabled}
-                   onBlur={props.onBlur}
-            />
+            <div className={classnames}>
+                <input
+                       type="text"
+                       ref={control.register(rules)}
+                       name={name}
+                       placeholder={props.placeholder}
+                       disabled={props.disabled}
+                       onBlur={props.onBlur}
+                />
+            </div>
             {errors && <ValidationError errors={errors} name={name}/>}
         </>
     );
@@ -31,6 +25,10 @@ const TextInput = ({name, register, errors, ...props}) => {
 
 TextInput.propTypes = {
     name: PropTypes.string.isRequired,
+};
+
+TextInput.defaultProps = {
+    rules: {},
 };
 
 export default TextInput;

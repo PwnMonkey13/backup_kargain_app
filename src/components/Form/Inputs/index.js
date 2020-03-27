@@ -10,3 +10,4 @@ export { default as CheckboxMultipleInput } from './CheckboxMultipleInput';
 export { default as SelectInput } from './SelectInput';
 export { default as PasswordInput } from "./PasswordInput";
 export { default as LocationSearchInput } from './LocationSearchInput';
+export { default as GeoCitiesInput } from './GeoCitiesInput';

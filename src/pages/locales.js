@@ -1,13 +1,13 @@
 import React from "react";
-import Layout from "../layouts/Layout";
+import { Container } from 'reactstrap'
 
-function Locales() {
+const Locales = () => {
     return (
-        <Layout>
+        <Container>
             <h1>Locales</h1>
             <h2>@TODO</h2>
-        </Layout>
+        </Container>
     )
-}
+};
 
 export default Locales;

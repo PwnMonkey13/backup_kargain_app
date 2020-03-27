@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import PlacesAutocomplete, {geocodeByAddress, getLatLng} from "react-places-autocomplete";
 
+// these options will bias the autocomplete predictions toward Sydney, Australia with a radius of 2000 meters,
+// and limit the results to addresses only
+const searchOptions = {
+    // location: new window.google.maps.LatLng(-34, 151),
+    radius: 2000,
+    types: ['address'],
+    // types: ['locality', 'country']
+};
+
 const LocationSearchInput = () => {
     const [ state, setState ] = useState({ address: '' });
 
@@ -21,7 +30,7 @@ const LocationSearchInput = () => {
             onChange={handleChange}
             onSelect={handleSelect}
             // shouldFetchSuggestions={state.address.length > 3}
-            // searchOptions={{ types: ['locality', 'country'] }}
+            searchOptions={searchOptions}
             >
             {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                 <div>

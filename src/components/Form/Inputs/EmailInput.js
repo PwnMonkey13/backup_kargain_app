@@ -1,26 +1,42 @@
-import React, {memo} from 'react';
-import ValidationError from "../Validations/ValidationError";
+import React, {memo, useEffect} from 'react';
+import ClassNames from "classnames";
+import ValidationError from '../Validations/ValidationError'
+import ValidationsRules from '../Validations/ValidationRules'
+import PropTypes from "prop-types";
 
-const EmailInput = memo(({name, classname, register, errors, ...props}) => {
+const EmailInput = ({name, required, classname, rules, control, errors, ...props}) => {
+    const classnames = ClassNames("input-field", {'w-100': props.fullwidth});
+    const { validate } = rules;
+    let validations = {
+        validate: {
+            isEmail: val => ValidationsRules.checkIsEmail(val) || "Invalid email",
+            ...validate
+        }
+    };
 
     return (
         <>
-            <input className="input-field"
-                   name={name}
-                   ref={register}
-                   type="text"
-                   placeholder={props.placeholder}
-                   required={props.required}
-                   disabled={props.disabled}
-            />
+            <div className={classnames}>
+                <input
+                    type="email"
+                    name={name}
+                    ref={control.register(validations)}
+                    placeholder={props.placeholder}
+                    required={props.required}
+                    disabled={props.disabled}
+                />
+            </div>
             {errors && <ValidationError errors={errors} name={name}/>}
         </>
     )
-});
+};
+
+EmailInput.propTypes = {
+    name: PropTypes.string.isRequired,
+};
 
 EmailInput.defaultProps = {
-    required: false,
-    disabled: false,
+    rules: {}
 };
 
 export default EmailInput;

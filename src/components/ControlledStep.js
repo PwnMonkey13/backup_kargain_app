@@ -1,7 +1,7 @@
 import React, {memo} from "react";
 import styled from "styled-components";
 import {useForm} from "react-hook-form";
-const _ = require("lodash");
+// const _ = require("lodash");
 
 const StepSection = styled.section`
      border: 1px solid #dce0e0;
@@ -29,8 +29,9 @@ const Step = ({step, ...props}) => {
     )
 };
 
-const propsAreEqual = (prevProps, nextProps) => {
-    return _.isEqual(prevProps, nextProps);
-};
+// const propsAreEqual = (prevProps, nextProps) => {
+//     return _.isEqual(prevProps, nextProps);
+// };
 
-export default memo(Step, propsAreEqual);
+export default Step;
+// export default memo(Step, propsAreEqual);
