@@ -1,22 +1,13 @@
 import React, {memo, useContext, useEffect, useRef, useState} from "react";
-import MaskedInput from "react-input-mask";
-import {NumberInput, SelectInput, TextInput} from "../../Inputs";
-import CarApiService from "../../../../services/CarApiService";
-import {ModalDialogContext} from "../../../Context/ModalDialogContext";
-import useIsMounted from "../../../../hooks/useIsMounted";
-import StepNavigation from "../../StepNavigation";
 import Divider from "../../Divider";
-import FieldWrapper from "../../FieldWrapper";
-import VinDecoderService from "../../../../services/VinDecoderService";
 import Header from "../../../Header";
-
-// const Input = React.memo(props => {
-//     const { name, inputRef, value, maskChar, ...inputProps } = props;
-//     return <input value={value} name={name} ref={inputRef} {...inputProps} />;
-// });
-//
-// const isNotFilledTel = v =>
-//     v && v.indexOf("_") === -1 ? undefined : "Phone number is required.";
+import FieldWrapper from "../../FieldWrapper";
+import StepNavigation from "../../StepNavigation";
+import useIsMounted from "../../../../hooks/useIsMounted";
+import {NumberInput, SelectInput, TextInput} from "../../Inputs";
+import VinDecoderService from "../../../../services/VinDecoderService";
+import {ModalDialogContext} from "../../../Context/ModalDialogContext";
+import CarApiService from "../../../../services/vehicles/CarApiService";
 
 const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, triggerSkipStep, onSubmitStep, prevStep, nextStep, ...rest}) => {
     const formRef = useRef(null);
@@ -31,7 +22,21 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
         years: []
     });
 
-    const [tel, setTel] = useState("");
+    const popularMakesId = [
+        3, // AlphaRomeo
+        9, // Audi
+        16, // BMW
+        107, // Peugeot
+        117, // Renault
+        28, // Citroen
+        147, // Volkswagen
+        48, // Ford
+        88, // Mercedes-Benz
+        102, // Opel
+        47, // Fiat
+        140, // Toyota
+        133 // Susuki
+    ];
 
     const triggerSubmit = () => {
         console.log("triggerSubmitStep");
@@ -75,21 +80,6 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
     // }, [watch('manufacturer.year')]);
 
     useEffect(() => {
-        const popularMakesId = [
-            3, // AlphaRomeo
-            9, // Audi
-            16, // BMW
-            107, // Peugeot
-            117, // Renault
-            28, // Citroen
-            147, // Volkswagen
-            48, // Ford
-            88, // Mercedes-Benz
-            102, // Opel
-            47, // Fiat
-            140, // Toyota
-            133 // Susuki
-        ];
         console.log('fetch makes');
         CarApiService.getMakes(popularMakesId)
             .then(cars => {
@@ -172,10 +162,6 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
-            <button type="button" onClick={()=> {
-                console.log(getValues());
-                console.log(errors);
-                }}>CLICK</button>
 
             <FieldWrapper as="h3" label="Saisissez le numéro VIN de votre véhicule" labelTop tooltip={{
                 icon : "?",
@@ -189,14 +175,12 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
                     name="vin"
                     placeholder="Ex: 1C4RJFBG4FC812166"
                     errors={errors}
-                    // onBlur={(e) => collectStepChanges({name : "vin", label : e.target.value})}
-                    register={
-                        register({
-                            validate : {
-                                isValidVIN : value => isValidVIN(value)
-                            }
-                        })
-                    }
+                    control={control}
+                    rules={{
+                        validate : {
+                            isValidVIN : value => isValidVIN(value)
+                        }
+                    }}
                 />
             </FieldWrapper>
 

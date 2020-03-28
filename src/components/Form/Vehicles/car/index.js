@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { useRouter} from "next/router";
+import React, {useContext} from "react";
+import {useRouter} from "next/router";
 import FormWizard from "../../FormWizard";
 import AnnounceService from '../../../../services/AnnounceService';
 import {ModalDialogContext} from "../../../Context/ModalDialogContext";
@@ -18,48 +18,40 @@ const CarForm = (props) => {
             .then(doc => {
                 console.log(doc);
                 const link = `/announces/${doc.slug}`;
-                dispatchModal({type : 'success', msg : 'Announce created successufully', link });
+                dispatchModal({type: 'success', msg: 'Announce created successufully', link});
                 router.push(link);
             }).catch(err => {
-                dispatchModal({type : 'error', err });
+                dispatchModal({type: 'error', err});
             }
         );
     };
 
     const resumeModel = [
         {
-            "vehicleType" : 'Type de véhicule'
+            "vehicleType": 'Type de véhicule'
         },
         {
-            "vin" : "Immat. VIN",
-            "manufacturer.make" : "Marque",
-            "manufacturer.model" : "Modele",
-            "manufacturer.generation" : "Version",
-            "manufacturer.year" : "Année",
+            "vin": "Immat. VIN",
+            "manufacturer.make": "Marque",
+            "manufacturer.model": "Modele",
+            "manufacturer.generation": "Version",
+            "manufacturer.year": "Année",
         }
     ];
 
     return (
         <>
-            <FormWizard id="demo1" classname="demo_form"
+            <FormWizard classname="cars_form"
                         prevRoute="/deposer-une-annonce"
                         resumeModel={resumeModel}
                         onFinalSubmit={onFinalSubmit}>
-
                 <Step0_CarManufacturer title="Sélection du véhicule"/>
                 <Step1_CarDetails title="Description du véhicule"/>
                 <Step2_CarStatus title="Etat du véhicule"/>
                 <Step3_CarOwner title="Informations sur le vendeur"/>
-
             </FormWizard>
         </>
     );
 };
-
-// CarForm.getInitialProps = function() {
-//     return {
-//         requiredAuth : true,
-//     };
-// };
 
 export default CarForm;

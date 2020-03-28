@@ -1,29 +1,24 @@
-// import fetch from 'isomorphic-unfetch';
-import config from '../config/config';
-import handleResponse from "../libs/handleResponse";
+import fetch from 'isomorphic-unfetch';
+import config from '../../config/config';
+import handleResponse from "../../libs/handleResponse";
 const queryString = require('query-string');
 
-const BASE_API_URL = `${config.api}/vehicles/cars`;
-const BASE_API_PARAMS = {format: 'json'};
-
-function buildUrl(params) {
-    params = {...BASE_API_PARAMS, ...params};
-    return `${BASE_API_URL}?${queryString.stringify(params)}`;
+function buildUrl(url, params) {
+    return Object.keys(params).length ? `${url}?${queryString.stringify(params)}` : url;
 }
 
 function getMakes(makes) {
-    let params = {select: 'make'};
-    if (makes) {
-        if (Array.isArray(makes)) {
-            makes = makes.map(make => Number(make)).filter(make => !isNaN(make)).join(',');
-        } else {
-            if (typeof makes === "string") makes = Number(filter);
-            if (isNaN(makes)) return console.log('make param is not a number');
-        }
-        params = {...params, make_id: makes};
+    let params = {};
+    let makesParams = null;
+    console.log(makes);
+    if (makes && Array.isArray(makes)) {
+        makesParams = makes.filter(make => typeof make === "string").join(',');
+        params = {...params, filter : makesParams};
     }
 
-    const url = buildUrl(params);
+    const url = buildUrl(`${config.api}/vehicles/internal/motorcycles/makes`, params);
+    console.log(url);
+
     return fetch(url)
         .then(handleResponse)
         .then(json => {

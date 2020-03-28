@@ -1,9 +1,9 @@
 import React from 'react';
 
-const MotoDetailsStep = () => {
+const Step1_MotoDetails = () => {
     return(
         <p> salut </p>
     );
 };
 
-export default MotoDetailsStep;
+export default Step1_MotoDetails;

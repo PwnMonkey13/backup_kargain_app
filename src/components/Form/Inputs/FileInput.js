@@ -1,5 +1,4 @@
 import React from 'react';
-import ValidationAlert from '../Validations/ValidationAlert';
 
 /* list of supported file types */
 const FileAcceptTypes = (types = []) => types.map(function(x) { return '.' + x; }).join(',');
