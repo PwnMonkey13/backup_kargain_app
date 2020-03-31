@@ -3,7 +3,7 @@ import {useRouter} from "next/router";
 import FormWizard from "../../../components/Form/FormWizard";
 import AnnounceService from '../../../services/AnnounceService';
 import {ModalDialogContext} from "../../../components/Context/ModalDialogContext";
-import Step1_CamperDetails from "../../../components/Form/Vehicles/camper/Step1_CamperDetails";
+import Step1_CamperDetails from "../../../components/Vehicles/camper/Step1_CamperDetails";
 
 const CarForm = (props) => {
     const {dispatchModal} = useContext(ModalDialogContext);

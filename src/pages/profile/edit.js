@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import {TabContent, TabPane, Nav, NavItem, NavLink, Row, Col} from "reactstrap";
 import UsersService from "../../services/UsersService";
 import model from '../../components/Form/Models/profile.edit.model';
-import FormPanel from '../../components/Form/FormPanel';
 import {UserContext} from "../../components/Context/UserContext";
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 
@@ -74,12 +73,6 @@ const Edit = (props) => {
                 <TabContent activeTab={state.activeTab}>
                     <TabPane tabId={1}>
                         <h2>Mes informations</h2>
-                        <FormPanel
-                            btnName="Enregistrer"
-                            submitCallback={handleSubmit}
-                            model={model}
-                            values={user}
-                        />
                     </TabPane>
                     <TabPane tabId={2}>
                         <h2>Abonnements</h2>

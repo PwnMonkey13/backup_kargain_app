@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 const EmailInput = ({name, required, classname, rules, control, errors, ...props}) => {
     const classnames = ClassNames("input-field", {'w-100': props.fullwidth});
     const { validate } = rules;
+
     let validations = {
         validate: {
             isEmail: val => ValidationsRules.checkIsEmail(val) || "Invalid email",

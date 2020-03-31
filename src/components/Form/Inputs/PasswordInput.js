@@ -2,7 +2,7 @@ import React, {memo, useState} from 'react';
 import ValidationError from "../Validations/ValidationError";
 import ClassNames from "classnames";
 
-const PasswordInput = memo(({name, register, errors, ...props}) => {
+const PasswordInput = memo(({name, control, rules, errors, ...props}) => {
     const [hidden, setHidden] = useState(true);
 
     const classnames = ClassNames("input-field", {'w-100' : props.fullwidth});
@@ -11,8 +11,8 @@ const PasswordInput = memo(({name, register, errors, ...props}) => {
         <>
             <div className={classnames}>
                 <input
-                   ref={register}
-                   name={name}
+                    name={name}
+                    ref={control.register(rules)}
                    type={hidden ? "password" : "text"}
                    placeholder={props.placeholder}
                    required={props.required}

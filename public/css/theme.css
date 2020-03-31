@@ -10288,6 +10288,7 @@ header .logo {
 main {
   display: block;
   margin: 0 auto;
+  padding: 1rem;
   position: relative;
 }
 
@@ -10441,6 +10442,10 @@ hr {
   .lead {
     font-size: 1.5em;
   }
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  background: unset;
 }
 
 .announce {

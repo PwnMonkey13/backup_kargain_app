@@ -18,7 +18,7 @@ import {getLogo} from '../libs/utils';
 
 const NavbarClient = () => {
     const {session} = useContext(UserContext);
-    const [collapsed, setCollapsed] = useState(true);
+    const [collapsed, setCollapsed] = useState(false);
     const toggleNavbar = () => setCollapsed(!collapsed);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [avatar, setAvatar] = useState(null);

@@ -1,11 +1,6 @@
 import React from 'react';
 import Link from "next/link";
 
-const capitalize = (s) => {
-    if (typeof s !== 'string') return ''
-    return s.charAt(0).toUpperCase() + s.slice(1)
-};
-
 class Announce{
     constructor(ad) {
         this.announce =  ad;

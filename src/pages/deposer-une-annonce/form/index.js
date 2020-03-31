@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Container } from 'reactstrap';
-import VehicleTypeSelectorStep from "../../../components/Form/Vehicles/VehicleTypeSelectorStep";
-
 import {useRouter} from "next/router";
+import VehicleTypeSelectorStep from "../../../components/Vehicles/VehicleTypeSelectorStep";
+
 const path = require('path');
 
 const Page = () => {

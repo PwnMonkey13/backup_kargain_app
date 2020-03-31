@@ -7,12 +7,22 @@ import UsersService from '../../services/UsersService'
 import { UserContext } from '../../components/Context/UserContext';
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 import Tabs from "../../components/Tabs/Tabs";
+import {SelectOptionsUtils} from "../../libs/formFieldsUtils";
+import NiceSelect from 'react-select'
+import {useForm} from "react-hook-form";
+import SelectInput from "../../components/Form/Inputs/SelectInput";
+
+const formConfig = {
+    mode: 'onChange',
+    validateCriteriaMode: "all",
+};
 
 const Profile = (props) => {
     const { profile } = props;
     const router = useRouter();
     const { session, dispatch } = useContext(UserContext);
     const { dispatchModal } = useContext(ModalDialogContext);
+    const {watch, control, errors, setValue, getValues, register, formState, handleSubmit} = useForm(formConfig);
 
     const getProfileAvatar = () => {
        return profile.avatar || 'images/profile.png';
@@ -95,43 +105,52 @@ const Profile = (props) => {
 
             <Tabs defaultActive={0} classname="nav-tabs-profile" id="myTab">
                 <Tabs.Item id="home-tab" title="Vitrine">
-                    <div className="profile-marque-wrapper">
-                        <div className="dropdown-wrapper ml-0">
-                            <span>Catégorie :</span>
-                            <select>
-                                <option value="1">Voiture</option>
-                                <option value="1">A6</option>
-                                <option value="1">A7</option>
-                            </select>
-                        </div>
-                        <div className="dropdown-wrapper ml-0">
-                            <span>Marque :</span>
-                            <select>
-                                <option value="1">Audi</option>
-                                <option value="1">A6</option>
-                                <option value="1">A7</option>
-                            </select>
-                        </div>
-                        <div className="d-flex align-items-end flex-column">
-                            <div className="dropdown-wrapper ml-0 drop-mb">
-                                <span>Modèle :</span>
-                                <select>
-                                    <option value="1">A5</option>
-                                    <option value="1">A6</option>
-                                    <option value="1">A7</option>
-                                </select>
+                    <form>
+                        <div className="profile-marque-wrapper">
+                            <div className="dropdown-wrapper ml-0">
+                                <span>Catégorie :</span>
+                                <div style={{width:'220px'}}>
+                                    <SelectInput
+                                        name="car"
+                                        control={control}
+                                        options={SelectOptionsUtils(['A5','A6','A7'])}
+                                    />
+                                </div>
+
                             </div>
-                            <div className="dropdown-wrapper dropdown-wrapper-alone">
-                                <span>Trier par :</span>
-                                <select>
-                                    <option value="1">Prix croissant</option>
-                                    <option value="1">A6</option>
-                                    <option value="1">A7</option>
-                                </select>
+                            <div className="dropdown-wrapper ml-0">
+                                <span>Marque :</span>
+                                <div style={{width:'220px'}}>
+                                    <SelectInput
+                                        name="car"
+                                        control={control}
+                                        options={SelectOptionsUtils(['A5','A6','A7'])}
+                                    />
+                                </div>                          </div>
+                            <div className="d-flex align-items-end flex-column">
+                                <div className="dropdown-wrapper ml-0 drop-mb">
+                                    <span>Modèle :</span>
+                                    <div style={{width:'220px'}}>
+                                        <SelectInput
+                                            name="car"
+                                            control={control}
+                                            options={SelectOptionsUtils(['A5','A6','A7'])}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="dropdown-wrapper dropdown-wrapper-alone">
+                                    <span>Trier par :</span>
+                                    <div style={{width:'220px'}}>
+                                        <SelectInput
+                                            name="car"
+                                            control={control}
+                                            options={SelectOptionsUtils(['A5','A6','A7'])}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="cars-profile-wrapper cars-profile-wrapper-no-stock cars-profile-wrapper-border">
+                        <div className="cars-profile-wrapper cars-profile-wrapper-no-stock cars-profile-wrapper-border">
                             <div className="car-profile-wrapper">
                                 <p className="probeg">50 jours restants</p>
                                 <div className="car-profile-img-container">
@@ -142,12 +161,12 @@ const Profile = (props) => {
                                 <div className="car-profile-footer">
                                     <div className="comments-views-wrapper">
                                         <div className="comment-count-wrapper eye-view">
-                                            <div className="eye-img"></div>
+                                            <div className="eye-img"/>
                                             6
                                         </div>
                                         <a href="#" className="comment-count-wrapper comment-count-wrapper2">
                                             <img src="images/comment.svg" alt=""/>
-                                                6
+                                            6
                                         </a>
                                     </div>
                                     <div className="mod-sup-wrapper">
@@ -158,6 +177,7 @@ const Profile = (props) => {
                                 </div>
                             </div>
                         </div>
+                    </form>
                 </Tabs.Item>
                 <Tabs.Item id="profile-tab" title="Location">
                     <p>Content 2</p>

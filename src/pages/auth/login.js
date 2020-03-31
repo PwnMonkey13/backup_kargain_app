@@ -1,29 +1,35 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, {useContext} from 'react';
 import { useRouter } from "next/router";
-import Link from "next/link";
-import {Col, Row} from "reactstrap";
-import styled from "styled-components";
 import {useForm} from "react-hook-form";
-import AuthService from '../../services/AuthService';
-import { UserContext } from '../../components/Context/UserContext';
-import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
-import Divider from "../../components/Divider";
-import {EmailInput, PasswordInput, RadioGroupInput} from "../../components/Form/Inputs";
+import styled from "styled-components";
+import {EmailInput, PasswordInput} from "../../components/Form/Inputs";
 import FieldWrapper from "../../components/Form/FieldWrapper";
+import {Col, Row} from "reactstrap";
+import Link from "next/link";
+import Divider from "../../components/Divider";
+import AuthService from '../../services/AuthService';
+import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
+import {UserContext} from "../../components/Context/UserContext";
 
 const formConfig = {
     mode: 'onChange',
     validateCriteriaMode: "all",
 };
 
+const Left = styled.div`
+        display:flex;
+        flex-direction:column
+    `;
+
 const LoginPage = (props) => {
-    const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
     const router = useRouter();
+    const { redirect } = router.query;
     const { dispatch } = useContext(UserContext);
     const { dispatchModal } = useContext(ModalDialogContext);
-    const { redirect } = router.query;
+    const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
 
-    const onSubmit = async (data) => {
+    const onSubmit = (data) => {
+        console.log(data);
         AuthService.login(data.email, data.password)
             .then(data => {
                 dispatch({type: 'loginSuccess', payload: data});
@@ -36,22 +42,8 @@ const LoginPage = (props) => {
         );
     };
 
-    const Main = styled.main`
-    padding : 1rem
-`;
-
-    const AuthForm = styled.form`
-        max-width: 40rem;
-        margin: 3rem auto;
-    `;
-
-    const Left = styled.div`
-        display:flex;
-        flex-direction:column
-    `;
-
     return (
-        <Main>
+        <div>
             <h1>Se connecter</h1>
             <Row>
                 <Col className="m-auto" sm="12" md="5">
@@ -81,16 +73,18 @@ const LoginPage = (props) => {
                         </Link>
                     </Left>
                 </Col>
-
                 <Col className="m-auto" sm="12" md="7">
-                    <AuthForm onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <button onClick={()=> getValues()}>CLICK</button>
+
+                        <input type="text" name="firstName" ref={register} />
+
                         <FieldWrapper label="Type" required>
                             <EmailInput
                                 name="email"
                                 inline
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
                             />
                         </FieldWrapper>
 
@@ -99,17 +93,16 @@ const LoginPage = (props) => {
                                 name="password"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
                             />
                         </FieldWrapper>
 
                         <div className="submit">
                             <button className="btn btn-outline-primary" type="submit">Se connecter</button>
                         </div>
-                    </AuthForm>
+                    </form>
                 </Col>
             </Row>
-        </Main>
+        </div>
     );
 };
 

@@ -3,10 +3,10 @@ import {useRouter} from "next/router";
 import FormWizard from "../../../components/Form/FormWizard";
 import AnnounceService from '../../../services/AnnounceService';
 import {ModalDialogContext} from "../../../components/Context/ModalDialogContext";
-import Step0_CarManufacturer from "../../../components/Form/Vehicles/car/Step0_CarManufacturer";
-import Step1_CarDetails from "../../../components/Form/Vehicles/car/Step1_CarDetails";
-import Step2_CarStatus from "../../../components/Form/Vehicles/car/Step2_CarStatus";
-import Step3_CarOwner from "../../../components/Form/Vehicles/car/Step3_CarOwner";
+import Step0_CarManufacturer from "../../../components/Vehicles/car/Step0_CarManufacturer";
+import Step1_CarDetails from "../../../components/Vehicles/car/Step1_CarDetails";
+import Step2_CarStatus from "../../../components/Vehicles/car/Step2_CarStatus";
+import Step3_CarOwner from "../../../components/Vehicles/car/Step3_CarOwner";
 
 const CarForm = (props) => {
     const {dispatchModal} = useContext(ModalDialogContext);

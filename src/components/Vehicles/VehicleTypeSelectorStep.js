@@ -1,9 +1,7 @@
 import React, { useRef, useContext} from "react";
-import Router, { withRouter } from 'next/router';
-import styled from 'styled-components';
 import {Col, Row} from "reactstrap";
 import {useForm } from "react-hook-form";
-import {FormContext} from '../../Context/FormContext';
+import {FormContext} from "../Context/FormContext";
 
 const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
     const formRef = useRef(null);
