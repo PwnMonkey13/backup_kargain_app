@@ -3,23 +3,6 @@ import window from 'global'
 
 function useLocalStorage(key, initialValue = {}, listen = false) {
     const [storedValue, setStoredValue] = useState(get);
-    const isBrowser = typeof window != 'undefined';
-
-    useEffect(() => {
-        if (isBrowser && listen) {
-            window.addEventListener('storage', function () {
-                setStoredValue(get);
-            });
-        }
-
-        return function cleanup() {
-            if (isBrowser && listen) {
-                window.removeEventListener('storage', function () {
-                    console.log("stop listening LS");
-                });
-            }
-        }
-    }, []);
 
     function get() {
         try {
@@ -34,7 +17,7 @@ function useLocalStorage(key, initialValue = {}, listen = false) {
         try {
             const valueToStore = value instanceof Function ? value(storedValue) : value;
             setStoredValue(valueToStore);
-            window.localStorage.setItem(key, JSON.stringify(valueToStore));
+            window.localStorage.setItem(key, JSON.stringify(value));
         } catch (err) {
             throw err;
         }

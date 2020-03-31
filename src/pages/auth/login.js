@@ -7,8 +7,8 @@ import {useForm} from "react-hook-form";
 import AuthService from '../../services/AuthService';
 import { UserContext } from '../../components/Context/UserContext';
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
-import Divider from "../../components/Form/Divider";
-import {EmailInput, PasswordInput, RadioInput} from "../../components/Form/Inputs";
+import Divider from "../../components/Divider";
+import {EmailInput, PasswordInput, RadioGroupInput} from "../../components/Form/Inputs";
 import FieldWrapper from "../../components/Form/FieldWrapper";
 
 const formConfig = {

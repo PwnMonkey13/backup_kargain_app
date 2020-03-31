@@ -1,7 +1,10 @@
 import React, {memo} from 'react';
+import dynamic from "next/dynamic";
 import NiceSelect, {components} from "react-select";
 import PropTypes from "prop-types";
 import ValidationError from "../Validations/ValidationError";
+import {Controller} from "react-hook-form";
+import classNames from "classnames";
 
 const CustomClearText = () => "clear all";
 const ClearIndicator = props => {
@@ -17,7 +20,6 @@ const ClearIndicator = props => {
         </div>
     );
 };
-
 const Menu = props => {
     return(
         <>
@@ -26,12 +28,10 @@ const Menu = props => {
         </>
     )
 };
-
 const menuHeaderStyle = {
     padding: '8px 12px',
     color: 'white',
 };
-
 const MenuOptions = props => {
     return(
         <>
@@ -89,7 +89,6 @@ const customStyles = {
 
 const SelectInput = memo(({name, control, rules, errors, ...props}) => {
     const { options, selected } = props;
-
     let defaultValues = [];
     if(selected && Array.isArray(selected)){
         defaultValues = selected.reduce((carry, selected) =>
@@ -98,20 +97,28 @@ const SelectInput = memo(({name, control, rules, errors, ...props}) => {
         );
     }
 
+    const InputClasses = classNames(
+        'select-field',
+        props.className,
+    );
+
     return (
         <>
-            <div className="select-field">
-                <NiceSelect
+            <div className={InputClasses}>
+                <Controller
+                    instanceId={name}
                     name={name}
-                    ref={control.register(rules)}
-                    styles={{customStyles}}
-                    width='200px'
-                    options={options}
-                    // forwardProps={{featured : props.featured}}
-                    defaultValue={defaultValues}
-                    placeholder={props.placeholder}
-                    components={{clearValue: ClearIndicator }}
-
+                    control={control}
+                    rules={rules}
+                    as={ <NiceSelect
+                        styles={{customStyles}}
+                        width='200px'
+                        defaultValue={defaultValues}
+                        placeholder={props.placeholder}
+                        components={{clearValue: ClearIndicator }}
+                        options={options}
+                        forwardProps={{featured : props.featured}}
+                    />}
                 />
             </div>
             {errors && <ValidationError errors={errors} name={name} />}

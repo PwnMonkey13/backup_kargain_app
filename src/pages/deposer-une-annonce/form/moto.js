@@ -1,12 +1,12 @@
 import React, {useContext} from "react";
-import FormWizard from "../../FormWizard";
+import FormWizard from "../../../components/Form/FormWizard";
 import {useRouter} from "next/router";
-import Step0_MotosSelector from "./Step0_MotosSelector";
-import Step1_MotoDetails from "./Step1_MotoDetails";
-import Step2_CarStatus from "../car/Step2_CarStatus";
-import Step3_CarOwner from "../car/Step3_CarOwner";
-import AnnounceService from "../../../../services/AnnounceService";
-import {ModalDialogContext} from "../../../Context/ModalDialogContext";
+import Step0_MotosSelector from "../../../components/Form/Vehicles/moto/Step0_MotosSelector";
+import Step1_MotoDetails from "../../../components/Form/Vehicles/moto/Step1_MotoDetails";
+import Step2_MotoStatus from "../../../components/Form/Vehicles/moto/Step2_MotoStatus";
+import Step3_CarOwner from "../../../components/Form/Vehicles/car/Step3_CarOwner";
+import AnnounceService from "../../../services/AnnounceService";
+import {ModalDialogContext} from "../../../components/Context/ModalDialogContext";
 
 const MotorCyclesForm = (props) => {
     const {dispatchModal} = useContext(ModalDialogContext);
@@ -28,16 +28,25 @@ const MotorCyclesForm = (props) => {
     };
 
     return (
-        <FormWizard classname="motorcycles_form"
-                    prevRoute="/deposer-une-annonce"
-                    resumeModel={resumeModel}
-                    onFinalSubmit={onFinalSubmit}>
+        <FormWizard
+            keyLS="moto"
+            classname="motorcycles_form"
+            prevRoute="/deposer-une-annonce"
+            resumeModel={resumeModel}
+            onFinalSubmit={onFinalSubmit}
+        >
             <Step0_MotosSelector title="Sélection du véhicule"/>
             <Step1_MotoDetails title="Description du véhicule"/>
-            <Step2_CarStatus title="Etat du véhicule"/>
+            <Step2_MotoStatus title="Etat du véhicule"/>
             <Step3_CarOwner title="Informations sur le vendeur"/>
         </FormWizard>
     );
+};
+
+MotorCyclesForm.getInitialProps = () => {
+    return {
+        formKey : "moto"
+    }
 };
 
 export default MotorCyclesForm;

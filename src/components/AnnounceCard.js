@@ -4,11 +4,12 @@ import Link from "next/link";
 const capitalize = (s) => {
     if (typeof s !== 'string') return ''
     return s.charAt(0).toUpperCase() + s.slice(1)
-}
+};
 
 class Announce{
     constructor(ad) {
         this.announce =  ad;
+        console.log(this.announce);
     }
 
     getTitle(){
@@ -17,8 +18,8 @@ class Announce{
 
     getSubTitle() {
         return Object.entries(this.manufacturer)
-            .filter(([key, val]) => val != null)
-            .map(([key, val]) => val.toUpperCase())
+            .filter(([key, item]) => item != null)
+            .map(([key, item]) => typeof item === "object" ? item.value.toUpperCase() : item.toUpperCase())
             .join(' | ');
     }
 
@@ -35,6 +36,14 @@ class Announce{
             year: this.announce.manufacturer.year,
             version: this.announce.manufacturer.version,
         };
+    }
+
+    getPrice(){
+        return this.announce.price ? this.announce.price : "20000"
+    }
+
+    getPriceHT(){
+        return this.announce.priceHT ? this.announce.priceHT : "20000"
     }
 
     get slug(){
@@ -79,6 +88,8 @@ class Author{
 }
 
 const AnnounceCard = ({announce : ad}) => {
+    console.log(ad);
+
     const announce = new Announce(ad);
 
     const Legacy = () => {
@@ -129,7 +140,10 @@ const AnnounceCard = ({announce : ad}) => {
                             <img src="images/convert.svg" alt=""/>
                         </a>
                     </div>
-                    <p className="price-annonce">20 000 €TTC <span>16 000 €HT</span></p>
+                    <p className="price-annonce">
+                        { announce.getPrice()} €TTC
+                        <span> {announce.getPriceHT()} €HT</span>
+                    </p>
                 </div>
                 <p className="hashes-wrapper">
                     <a href="#">#hashtag</a>

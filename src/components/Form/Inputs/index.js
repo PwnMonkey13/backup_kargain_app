@@ -1,9 +1,11 @@
+import RadioGroupInput from "./RadioGroupInput";
+
 export { default as TelInput } from './TelInput';
 export { default as FileInput } from './FileInput';
 export { default as NumberInput } from './NumberInput';
 export { default as TextInput } from './TextInput';
 export { default as EmailInput } from './EmailInput';
-export { default as RadioInput } from './RadioInput';
+export { default as RadioGroupInput } from './RadioGroupInput';
 export { default as TextareaInput } from './TextareaInput';
 export { default as CheckBoxInput } from './CheckBoxInput';
 export { default as CheckboxMultipleInput } from './CheckboxMultipleInput';
@@ -11,3 +13,4 @@ export { default as SelectInput } from './SelectInput';
 export { default as PasswordInput } from "./PasswordInput";
 export { default as LocationSearchInput } from './LocationSearchInput';
 export { default as GeoCitiesInput } from './GeoCitiesInput';
+export { default as RangeInput } from './RangeInput';

@@ -1,26 +1,23 @@
-import React, {memo, useContext, useEffect, useCallback, useState, useMemo} from 'react'
-import {FormContext} from '../../components/Context/FormContext';
-import {useRouter} from "next/router";
+import React, {useContext, useEffect, useCallback, useState} from 'react'
+import PropTypes from "prop-types";
 import {Col, Row} from 'reactstrap';
 import {ProgressBar} from "react-step-progress-bar";
-import useIsMounted from "../../hooks/useIsMounted";
-import useLocalStorage from "../../hooks/useLocalStorage";
-import DebugLocalStorage from "../DebugLocalStorage";
 import FormResume from "./FormResume";
-import ControlledStep from '../ControlledStep';
+import ControlledStep from './ControlledStep';
 import BreadcrumbSteps from "./BreadcrumbSteps";
+import useIsMounted from "../../hooks/useIsMounted";
+import DebugLocalStorage from "../DebugLocalStorage";
+import {FormContext} from '../../components/Context/FormContext';
 
 const calculatePourcent = (current, length) => {
     return ((current + 1) / (length + 1)) * 100
 };
 
-const FormWizard = ({resumeModel, onFinalSubmit, children, prevRoute, ...props}) => {
-    const router = useRouter();
+const FormWizard = ({debug, formKey, resumeModel, onFinalSubmit, children, prevRoute, ...props}) => {
     const isMounted = useIsMounted();
-    const [steps, setSteps] = useState(Array.isArray(children) ? children.filter(child => child.props.hidden !== true) : [children]);
+    const steps = Array.isArray(children) ? children.filter(child => child.props.hidden !== true) : children ? [children] : [];
     const {formDataContext, dispatchFormUpdate} = useContext(FormContext);
-    const [getFormData] = useLocalStorage('formData', {}, true);
-    const [activeStep, setActiveStep] = useState(getFormData.currentStep || 0);
+    const [activeStep, setActiveStep] = useState(formDataContext.currentStep || 0);
     const [maxActiveStep, setMaxActiveStep ]= useState(steps.length);
     const [pourcent, setPourcent] = useState(() => calculatePourcent(activeStep, steps.length));
     const [stepChanges, setStepChanges] = useState([]);
@@ -28,7 +25,7 @@ const FormWizard = ({resumeModel, onFinalSubmit, children, prevRoute, ...props})
     const formConfig = {
         mode: 'onChange',
         validateCriteriaMode: "all",
-        defaultValues: getFormData
+        defaultValues: formDataContext
     };
 
     useEffect(() => {
@@ -89,19 +86,32 @@ const FormWizard = ({resumeModel, onFinalSubmit, children, prevRoute, ...props})
                 </Col>
             </Row>
 
-            <Row>
-                <Col>
-                    <div>
-                        <h2> formContext </h2>
-                        <pre>{JSON.stringify(formDataContext, null, 2)}</pre>
-                    </div>
-                </Col>
-                <Col>
-                    <DebugLocalStorage value="formData"/>
-                </Col>
-            </Row>
+            { debug && (
+                <Row>
+                    <Col>
+                        <div>
+                            <h2> formContext </h2>
+                            <pre>{JSON.stringify(formDataContext, null, 2)}</pre>
+                        </div>
+                    </Col>
+                    <Col>
+                        <DebugLocalStorage value="formData"/>
+                    </Col>
+                </Row>
+            )}
+
         </main>
     )
+};
+
+FormWizard.propTypes = {
+    formKey: PropTypes.string.isRequired,
+    debug: PropTypes.bool
+};
+
+FormWizard.defaultProps = {
+    formKey : '',
+    debug : false
 };
 
 export default FormWizard;

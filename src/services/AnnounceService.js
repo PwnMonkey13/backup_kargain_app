@@ -21,9 +21,13 @@ function getWPAnnounces(id = null) {
         });
 }
 
-function getAnnounces() {
+function getAnnounces(sorters, filters) {
+    const body = {sorters, filters};
+
     const requestOptions = {
-        headers: setHeaders('GET')
+        method : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body : JSON.stringify(body)
     };
 
     let url = `${config.api}/ads`;
@@ -31,6 +35,7 @@ function getAnnounces() {
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => {
+            console.log(json);
             if (json.success === false) throw json.msg;
             else return json.data;
         })

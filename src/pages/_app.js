@@ -14,7 +14,9 @@ import PopupLogin from "../components/PopupLogin";
 
 import "react-step-progress-bar/styles.css";
 import 'react-phone-input-2/lib/style.css'
+import 'react-input-range/lib/css/index.css';
 import '../components/SelectCountriesFlags/scss/react-flags-select.scss';
+
 
 const MyApp = ({Component, pageProps}) => {
 
@@ -31,7 +33,7 @@ const MyApp = ({Component, pageProps}) => {
     return(
         <ModalDialogContextProvider>
             <UserContextProvider isLoggedIn={pageProps.isLoggedIn}>
-                <FormContextProvider>
+                <FormContextProvider formKey={pageProps.formKey}>
                     <NextProgress/>
                     <DefaultSeo {...SEO} />
                     <PopupAlert/>
@@ -47,20 +49,22 @@ const MyApp = ({Component, pageProps}) => {
 
 MyApp.getInitialProps = async (app) => {
     const {token} = nextCookie(app.ctx);
-    let pageProps = (app.Component.getInitialProps ? await app.Component.getInitialProps(app.ctx) : null) || {};
-    if (pageProps.statusCode && app.ctx.res) {
-        app.ctx.res.statusCode = pageProps.statusCode
+    let props = (app.Component.getInitialProps ? await app.Component.getInitialProps(app.ctx) : null) || {};
+
+    if (props.statusCode && app.ctx.res) {
+        app.ctx.res.statusCode = props.statusCode
     }
-    // if(pageProps.requiredAuth && token){
+
     if(token){
         try {
             const isLoggedIn = await AuthService.authorize(token);
-            pageProps = {...pageProps, token, isLoggedIn };
+            props = {...props, token, isLoggedIn };
         } catch (err) {
-            pageProps = {...pageProps, err: err, loggedIn: false};
+            props = {...props, err: err, loggedIn: false};
         }
-    } else  pageProps = {...pageProps, err: "missing token", loggedIn: false};
-    return { pageProps: {...pageProps}};
+    } else  props = {...props, loggedIn: false};
+
+    return { pageProps: props};
 };
 
 export default MyApp;

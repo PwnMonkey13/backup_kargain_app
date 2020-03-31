@@ -152,7 +152,6 @@ p.error {
 
   input+label{
     position: relative;
-    padding: 8px 10px 8px 35px;
     background: #f3f3f3;
     color: #495057;
     cursor: pointer;
@@ -161,31 +160,39 @@ p.error {
     transition-duration: .4s;
   }
 
-  input+label:before{
-    content: " ";
-    position: absolute;
-    top: 50%;
-    margin-top: -10px;
-    left: 10px;
-    height: 14px;
-    width: 14px;
-    background: #fff;
-    border-radius: 10px;
+  &:not(.no-input){
+
+    input+label {
+      padding: 8px 10px 8px 35px;
+    }
+
+    input+label:before{
+      content: " ";
+      position: absolute;
+      top: 50%;
+      margin-top: -10px;
+      left: 10px;
+      height: 14px;
+      width: 14px;
+      background: #fff;
+      border-radius: 10px;
+    }
+
+    input:checked+label:after{
+      content: " ";
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      height: 10px;
+      width: 10px;
+      border-radius: 50%;
+      background: #307edd;
+    }
+
   }
 
   input[type="checkbox"]+label:before{
     border-radius: unset;
-  }
-
-  input:checked+label:after{
-    content: " ";
-    position: absolute;
-    left: 12px;
-    top: 12px;
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-    background: #307edd;
   }
 
   input[type="checkbox"]:checked+label:after{
@@ -203,7 +210,6 @@ p.error {
 }
 
 .form-check-vehicle{
-  min-height: 5rem;
   text-align: center;
   margin: 0 auto;
   justify-content: center;

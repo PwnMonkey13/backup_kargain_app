@@ -1,19 +1,18 @@
 import React from "react";
 import {Row} from "reactstrap";
+import PropTypes from "prop-types";
 import classNames from "classnames";
 import styled from "styled-components";
-import PropTypes from "prop-types";
+
+const Button = styled.button`
+      padding: 2rem;
+      margin: 10px;
+      margin-top: 40px;
+      padding: 10px;
+      border: 1px solid;
+`;
 
 const StepNavigation = ({prev, prevLabel, next, nextLabel, submit, submitLabel, ...props}) => {
-
-    const Button = styled.button`
-          padding: 2rem;
-          margin: 10px;
-          margin-top: 40px;
-          padding: 10px;
-          border: 1px solid;
-    `;
-
     return (
         <Row className={classNames('form_navigation', 'justify-content-around')}>
 

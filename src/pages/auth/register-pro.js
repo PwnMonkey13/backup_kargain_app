@@ -5,7 +5,7 @@ import {Col,Row} from 'reactstrap';
 import {useForm} from "react-hook-form";
 import { UserContext } from '../../components/Context/UserContext';
 import AuthService from '../../services/AuthService'
-import Divider from "../../components/Form/Divider";
+import Divider from "../../components/Divider";
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 import {TextInput, SelectInput, EmailInput, PasswordInput, CheckBoxInput} from "../../components/Form/Inputs";
 import styled from "styled-components";

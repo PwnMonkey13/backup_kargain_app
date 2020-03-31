@@ -26,11 +26,16 @@ const NumberInput = memo(({name, rules, control, errors, ...props }) => {
         }
     };
 
-    console.log("render number");
+    const InputClasses = classNames(
+        'input',
+        "input-field",
+        {'w-100' : props.fullwidth},
+        props.className,
+    );
 
     return (
         <>
-            <div className="input">
+            <div className={InputClasses}>
                 <input
                     type="text"
                     name={name}

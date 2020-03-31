@@ -1,4 +1,4 @@
-// import fetch from 'isomorphic-unfetch';
+import fetch from 'isomorphic-unfetch';
 import config from '../../config/config';
 import handleResponse from "../../libs/handleResponse";
 const queryString = require('query-string');

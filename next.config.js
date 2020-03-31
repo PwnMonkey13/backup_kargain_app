@@ -7,6 +7,8 @@ module.exports = {
             )
         }
 
+        config.resolve.mainFields = ["main", "browser", "module"];
+
         // config.module.rules.push({
         //     test: /\.svg$/,
         //     issuer: {

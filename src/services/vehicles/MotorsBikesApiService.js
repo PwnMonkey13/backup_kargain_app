@@ -10,15 +10,12 @@ function buildUrl(url, params) {
 function getMakes(makes) {
     let params = {};
     let makesParams = null;
-    console.log(makes);
     if (makes && Array.isArray(makes)) {
         makesParams = makes.filter(make => typeof make === "string").join(',');
         params = {...params, filter : makesParams};
     }
 
     const url = buildUrl(`${config.api}/vehicles/internal/motorcycles/makes`, params);
-    console.log(url);
-
     return fetch(url)
         .then(handleResponse)
         .then(json => {
@@ -31,10 +28,10 @@ function getMakes(makes) {
     );
 }
 
-function getMakeModels(make_id) {
-    if (!make_id || isNaN(make_id)) throw 'make param is not a number';
-    let params = {select: 'model', make_id};
-    let url = buildUrl(params);
+function getMakeModels(make) {
+    if (!make) throw 'make param is required';
+    const url = `${config.api}/vehicles/internal/motorcycles/${make}/models`;
+
     return fetch(url)
         .then(handleResponse)
         .then(json => {
