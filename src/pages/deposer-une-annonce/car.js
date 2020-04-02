@@ -13,15 +13,12 @@ const CarForm = (props) => {
     const router = useRouter();
 
     const onFinalSubmit = data => {
-        console.log(data);
         AnnounceService.createAnnounce(data, props.token)
             .then(doc => {
-                console.log(doc);
                 const link = `/announces/${doc.slug}`;
                 dispatchModal({type: 'success', msg: 'Announce created successufully', link});
                 router.push(link);
             }).catch(err => {
-            console.log(err);
             dispatchModal({type: 'error', err});
             }
         );
