@@ -6,9 +6,7 @@ import AnnounceService from '../services/AnnounceService';
 import HomeFilters from "../components/HomeFilters";
 import AnnounceCard from '../components/AnnounceCard';
 import useIsMounted from "../hooks/useIsMounted";
-import {createSorter} from "../libs/utils";
 import Header from "../components/Header";
-import _ from 'lodash';
 import {SelectOptionsUtils} from "../libs/formFieldsUtils";
 
 const Index = (props) => {
@@ -34,7 +32,6 @@ const Index = (props) => {
     useEffect(() => {
         fetchAnnounces();
     }, [state.sorters, state.filters]);
-
 
     const updateFilters = (filters) => {
         setState(state =>({

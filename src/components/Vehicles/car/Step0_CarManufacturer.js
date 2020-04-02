@@ -39,7 +39,6 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
     ];
 
     const triggerSubmit = () => {
-        console.log("triggerSubmitStep");
         formRef.current.dispatchEvent(new Event('submit'));
     };
 
@@ -86,7 +85,7 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
         console.log('fetch makes');
         CarApiService.getMakes(popularMakesId)
             .then(cars => {
-                const makesOptions = cars.map(car => ({value: car.make, label: car.make}));
+                const makesOptions = cars.map(car => ({value: car.make_id, label: car.make}));
                 const defaultOption = {value: "other", label: "Je ne sais pas/Autre"};
                 setManufacturersData(manufacturersData => (
                     {...manufacturersData, makes: [...makesOptions, defaultOption]})
@@ -103,10 +102,10 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
     useEffect(() => {
         if (watch('manufacturer.make') && vinDecoded == null) {
             const makeID = watch('manufacturer.make').value;
-            if (!isNaN(makeID)) {
+            if (!isNaN(makeID)){
                 CarApiService.getMakeModels(makeID)
                     .then(models => {
-                        const modelsOptions = models.map(model => ({value: model.model, label: model.model}));
+                        const modelsOptions = models.map(model => ({value: model.model_id, label: model.model}));
                         const defaultOption = {value: "other", label: "Je ne sais pas/Autre"};
                         setManufacturersData(manufacturersData => (
                             {...manufacturersData, models: [...modelsOptions, defaultOption]})
@@ -123,12 +122,11 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
         if (watch('manufacturer.model') && vinDecoded == null) {
             const makeID = watch('manufacturer.make').value;
             const modelID = watch('manufacturer.model').value;
-
             if (!isNaN(makeID) && !isNaN(modelID)) {
                 CarApiService.getCarGenerations(makeID, modelID)
                     .then(generations => {
                         const generationsOptions = generations.map(
-                            ({generation_id, generation}) => ({value: generation, label: generation})
+                            ({generation_id, generation}) => ({value: generation_id, label: generation})
                         );
                         const defaultOption = {value: "other", label: "Je ne sais pas/Autre"};
                         setManufacturersData(manufacturersData => (
@@ -158,13 +156,19 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
                     })
                     .catch(err => {
                         dispatchModal({type: 'error', err});
-                    });
+                    }
+                );
             }
         }
     }, [watch('manufacturer.generation')]);
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
+
+            <button type="button" onClick={()=> {
+                console.log(getValues());
+                console.log(errors);
+            }}>CLICK</button>
 
             <FieldWrapper as="h3" label="Saisissez le numéro VIN de votre voiture" labelTop tooltip={{
                 icon : "?",

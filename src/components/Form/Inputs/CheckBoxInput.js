@@ -9,9 +9,10 @@ const CheckBoxInput = memo(({name, required, rules, control, errors, ...props}) 
         <>
             <div className={classnames}>
                 <input
+                    name={name}
+                    ref={control.register(rules)}
                     className="radio_field"
                     type="checkbox"
-                    name={name}
                 />
 
                 {props.label &&

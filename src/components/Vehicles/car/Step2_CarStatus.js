@@ -8,10 +8,11 @@ import FieldWrapper from "../../Form/FieldWrapper";
 
 const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props}) => {
     const formRef = useRef(null);
-    const {watch, control, errors, handleSubmit} = methods;
+    const {watch, getValues, control, errors, handleSubmit} = methods;
 
     return (
-        <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
+        <form className="form_wizard" onSubmit={handleSubmit(onSubmitStep)}>
+
             <Header text="Etat du véhicule"/>
 
             <FieldWrapper label="Fonction du véhicule">

@@ -10241,12 +10241,6 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   position: relative;
 }
 
-svg {
-  display: block;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 header {
   height: 5rem;
   border-bottom: 1px solid #eaecec;

@@ -13,6 +13,7 @@ const TextInput = ({name, rules, control, errors, ...props}) => {
                        type="text"
                        ref={control.register(rules)}
                        name={name}
+                       defaultValue={props.defaultValue}
                        placeholder={props.placeholder}
                        disabled={props.disabled}
                        onBlur={props.onBlur}

@@ -30,12 +30,11 @@ function getAnnounces(sorters, filters) {
         body : JSON.stringify(body)
     };
 
-    let url = `${config.api}/ads`;
+    let url = `${config.api}/ads/paginate`;
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => {
-            console.log(json);
             if (json.success === false) throw json.msg;
             else return json.data;
         })

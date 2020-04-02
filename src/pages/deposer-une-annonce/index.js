@@ -1,23 +1,32 @@
-import React, { useContext, useEffect } from "react";
-import Link from 'next/link'
+import React, {useContext, useEffect, useState} from "react";
 import { Container } from 'reactstrap';
 import  { withRouter } from 'next/router'
+import Header from "../../components/Header";
+import { Shield, CheckCircle, FileText } from 'react-feather';
 import {FormContext} from "../../components/Context/FormContext";
+import VehicleTypeSelectorStep from "../../components/Vehicles/VehicleTypeSelectorStep";
+
+const path = require('path');
 
 const Page = (props) => {
     const { router } = props;
+    const [ vehicleType, setVehicleType ] = useState(null);
     const {dispatchFormClear} = useContext(FormContext);
 
     useEffect(()=> {
         dispatchFormClear();
     },[]);
 
+    const handleSelectType = (type) => {
+        setVehicleType(type);
+    };
+
+    if(vehicleType) router.push(path.resolve(router.route, vehicleType.toLowerCase()));
+
     return (
-        <Container>
-            <h1 className="cbm-title--page">Vendre sa voiture</h1>
-            <Link href={`${router.pathname}/form`}>
-                <a className="btn btn-outline-dark">Accéder au formulaire Kargain</a>
-            </Link>
+        <Container fluid className="annonce1-wrapper-container">
+            <Header as="h1">Vendez votre véhicule</Header>
+            <VehicleTypeSelectorStep handleSelectType={handleSelectType}/>
             <SectionEngagemnts/>
         </Container>
     )
@@ -25,32 +34,32 @@ const Page = (props) => {
 
 const SectionEngagemnts = () => {
     return (
-        <section className="cbm-section--bottom">
-            <h2 className="cbm-title--section">
-                Nos engagements <i className="cbm-sprite--partnersLC"/>
+        <section>
+            <h2>
+                Les engagements Kargain
             </h2>
 
             <dl>
                 <dt>
-                    <i className="cbm-sprite--shieldBlue"/><br/>Bouclier anti-fraude La Centrale
+                    <Shield /> Bouclier anti-fraude La Centrale
                 </dt>
-                <dd className="cbm-shortCommitment">
+                <dd>
                     Données personnelles 100% protégées : vos nom, adresse et email ne
                     sont jamais affichés sur le site. Votre numéro de téléphone est remplacé par un numéro Sécuritel qui
                     redirige les appels sur votre téléphone.
                 </dd>
                 <dt>
-                    <i className="cbm-sprite--dealBlue"/><br/>Expertise
+                    <CheckCircle/> Expertise
                 </dt>
-                <dd className="cbm-shortCommitment">
+                <dd>
                     <strong>Annonces enrichies</strong> : les données techniques
                     (consommation, chevaux, dimensions...) de votre véhicule et un rapport de son historique (changement
                     de propriétaires, contrôles techniques) seront automatiquement ajoutés à votre annonce.
                 </dd>
                 <dt>
-                    <i className="cbm-sprite--expertiseBlue"/><br/>Forfait tout inclus
+                    <FileText/> Forfait tout inclus
                 </dt>
-                <dd className="cbm-shortCommitment">
+                <dd>
                     <strong>Tout est compris dans le forfait</strong> : publication de
                     votre annonce jusqu'à la vente*, modifications gratuites et illimitées, jusqu'à 50 photos sur votre
                     annonce, protection de votre numéro de téléphone

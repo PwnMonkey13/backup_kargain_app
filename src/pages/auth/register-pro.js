@@ -16,6 +16,11 @@ const formConfig = {
     validateCriteriaMode: "all",
 };
 
+const Left = styled.div`
+    display:flex;
+    flex-direction:column
+`;
+
 const RegisterPro = () => {
     const router = useRouter();
     const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
@@ -23,7 +28,8 @@ const RegisterPro = () => {
     const {dispatchModal} = useContext(ModalDialogContext);
     const { redirect } = router.query;
 
-    const onSubmit = async (e, data) => {
+    const onSubmit = (form) => {
+        const { confirm, confirm_pwd, ...data} = form;
         AuthService.registerPro(data)
             .then(data => {
                 dispatch({ type : 'registerProSuccess', payload : data });
@@ -34,26 +40,12 @@ const RegisterPro = () => {
         });
     };
 
-    const Main = styled.main`
-        padding : 1rem
-    `;
-
-    const Left = styled.div`
-        display:flex;
-        flex-direction:column
-    `;
-
-    const AuthForm = styled.form`
-        max-width: 40rem;
-        margin: 3rem auto;
-    `;
-
     return (
-        <Main>
+        <main>
             <h1>Créer un compte Pro</h1>
             <Row>
                 <Col className="m-auto" sm="12" md="5">
-                    <Left>
+                    <div className="flex-column">
                         <Link href="#">
                             <a className="register-fb">
                                 <img src="/images/fb.png" alt=""/>
@@ -78,14 +70,14 @@ const RegisterPro = () => {
                                 Creer un compte client
                             </a>
                         </Link>
-                    </Left>
+                    </div>
                 </Col>
                 <Col className="m-auto" sm="12" md="7">
-                    <AuthForm onSubmit={handleSubmit(onSubmit)}>
+                    <form className="mt-3 mx-auto" onSubmit={handleSubmit(onSubmit)}>
 
                         <FieldWrapper label="Nom de société">
                             <TextInput
-                                name="company_name"
+                                name="company.name"
                                 errors={errors}
                                 control={control}
                                 rules={{required : 'Required'}}
@@ -94,7 +86,7 @@ const RegisterPro = () => {
 
                         <FieldWrapper label="SIREN de la société">
                             <TextInput
-                                name="company_ID"
+                                name="company.siren"
                                 errors={errors}
                                 control={control}
                                 rules={{required : 'Required'}}
@@ -103,7 +95,7 @@ const RegisterPro = () => {
 
                         <FieldWrapper label="Gérant de la société">
                             <TextInput
-                                name="company_owner"
+                                name="company.owner"
                                 errors={errors}
                                 control={control}
                                 rules={{required : 'Required'}}
@@ -112,22 +104,16 @@ const RegisterPro = () => {
 
                         <FieldWrapper label="Pays">
                             <SelectInput
-                                label=""
-                                name="address.country"
+                                name="country"
                                 errors={errors}
                                 control={control}
                                 rules={{required : 'Required'}}
-                                options={[
-                                    { value: 'france', label: 'France' },
-                                    { value: 'spain', label: 'Espagne' },
-                                    { value: 'italie', label: 'Italie' }
-                                ]}
                             />
                         </FieldWrapper>
 
                         <FieldWrapper label="Ville ou code postal">
                             <TextInput
-                                name="address.postalcode"
+                                name="postalcode"
                                 errors={errors}
                                 control={control}
                                 rules={{required : 'Required'}}
@@ -136,7 +122,7 @@ const RegisterPro = () => {
 
                         <FieldWrapper label="Adresse">
                             <TextInput
-                                name="address.address"
+                                name="address"
                                 errors={errors}
                                 control={control}
                                 rules={{required : 'Required'}}
@@ -205,10 +191,10 @@ const RegisterPro = () => {
                                 rules={{required : 'Required'}}
                             />
                         </FieldWrapper>
-                    </AuthForm>
+                    </form>
                 </Col>
             </Row>
-        </Main>
+        </main>
     );
 };
 

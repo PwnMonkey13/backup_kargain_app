@@ -37,12 +37,6 @@ const FormWizard = ({debug, formKey, resumeModel, onFinalSubmit, children, prevR
         }
     }, [activeStep]);
 
-    const handleSubmitForm = () => {
-        const {currentStep, ...formData} = formDataContext;
-        console.log("end form reached");
-        onFinalSubmit(formData);
-    };
-
     const collectStepChanges = useCallback(item => {
         setStepChanges(stepChanges => ({...stepChanges, [item.name] : item.label }))
     },[]);
@@ -60,10 +54,17 @@ const FormWizard = ({debug, formKey, resumeModel, onFinalSubmit, children, prevR
         setActiveStep(activeStep => activeStep + 1);
     },[]);
 
-    const onSubmitStep = useCallback((data) => {
+    const onSubmitStep = useCallback((data, triggerEnd = false) => {
         dispatchFormUpdate(data);
-        nextStep()
+        if(triggerEnd) handleSubmitForm();
+        else nextStep()
     },[]);
+
+    const handleSubmitForm = () => {
+        const {currentStep, ...formData} = formDataContext;
+        console.log("end form reached");
+        onFinalSubmit(formData);
+    };
 
     return (
         <main id={props.id} className={props.className}>

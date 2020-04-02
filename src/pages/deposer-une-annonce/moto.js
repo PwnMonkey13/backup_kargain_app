@@ -1,12 +1,12 @@
 import React, {useContext} from "react";
-import FormWizard from "../../../components/Form/FormWizard";
+import FormWizard from "../../components/Form/FormWizard";
 import {useRouter} from "next/router";
-import AnnounceService from "../../../services/AnnounceService";
-import {ModalDialogContext} from "../../../components/Context/ModalDialogContext";
-import Step0_MotosSelector from "../../../components/Vehicles/moto/Step0_MotosSelector";
-import Step1_MotoDetails from "../../../components/Vehicles/moto/Step1_MotoDetails";
-import Step2_MotoStatus from "../../../components/Vehicles/moto/Step2_MotoStatus";
-import Step3_CarOwner from "../../../components/Vehicles/car/Step3_CarOwner";
+import AnnounceService from "../../services/AnnounceService";
+import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
+import Step0_MotosSelector from "../../components/Vehicles/moto/Step0_MotosSelector";
+import Step1_MotoDetails from "../../components/Vehicles/moto/Step1_MotoDetails";
+import Step2_MotoStatus from "../../components/Vehicles/moto/Step2_MotoStatus";
+import Step3_CarOwner from "../../components/Vehicles/car/Step3_CarOwner";
 
 const MotorCyclesForm = (props) => {
     const {dispatchModal} = useContext(ModalDialogContext);

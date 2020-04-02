@@ -1,7 +1,7 @@
 import React, {useState, useEffect, memo} from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import { Row, Col} from 'reactstrap';
+import { Row } from 'reactstrap';
 import ValidationError from "../Validations/ValidationError";
 
 const RadioGroupInput = memo(({name, control, rules, errors, options, ...props}) => {

@@ -15,12 +15,7 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
     });
 
     return (
-        <form className="form_wizard" onSubmit={handleSubmit(onSubmitStep)}>
-
-            <button type="button" onClick={()=> {
-                console.log(getValues());
-                console.log(errors);
-            }}>CLICK</button>
+        <form className="form_wizard" onSubmit={handleSubmit((data => onSubmitStep(data, true)))}>
 
             <Header text="Informations sur le vendeur" />
 

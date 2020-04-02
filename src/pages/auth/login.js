@@ -16,11 +16,6 @@ const formConfig = {
     validateCriteriaMode: "all",
 };
 
-const Left = styled.div`
-        display:flex;
-        flex-direction:column
-    `;
-
 const LoginPage = (props) => {
     const router = useRouter();
     const { redirect } = router.query;
@@ -28,9 +23,8 @@ const LoginPage = (props) => {
     const { dispatchModal } = useContext(ModalDialogContext);
     const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
 
-    const onSubmit = (data) => {
-        console.log(data);
-        AuthService.login(data.email, data.password)
+    const onSubmit = (form) => {
+        AuthService.login(form.email, form.password)
             .then(data => {
                 dispatch({type: 'loginSuccess', payload: data});
                 if (redirect) router.push({pathname: redirect});
@@ -43,11 +37,11 @@ const LoginPage = (props) => {
     };
 
     return (
-        <div>
+        <main>
             <h1>Se connecter</h1>
             <Row>
                 <Col className="m-auto" sm="12" md="5">
-                    <Left>
+                    <div className="flex-column">
                         <Link href="#">
                             <a className="register-fb">
                                 <img src="/images/fb.png" alt=""/>
@@ -71,10 +65,10 @@ const LoginPage = (props) => {
                                 S'enregistrer en tant que Pro
                             </a>
                         </Link>
-                    </Left>
+                    </div>
                 </Col>
                 <Col className="m-auto" sm="12" md="7">
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form className="mt-3 mx-auto" onSubmit={handleSubmit(onSubmit)}>
                         <button onClick={()=> getValues()}>CLICK</button>
 
                         <input type="text" name="firstName" ref={register} />
@@ -102,7 +96,7 @@ const LoginPage = (props) => {
                     </form>
                 </Col>
             </Row>
-        </div>
+        </main>
     );
 };
 

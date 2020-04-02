@@ -21,6 +21,7 @@ const EmailInput = ({name, required, classname, rules, control, errors, ...props
                 <input
                     type="email"
                     name={name}
+                    defaultValue={props.defaultValue}
                     ref={control.register(validations)}
                     placeholder={props.placeholder}
                     required={props.required}
