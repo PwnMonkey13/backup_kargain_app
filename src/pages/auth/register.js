@@ -19,7 +19,7 @@ const formConfig = {
 const LoginPage = (props) => {
     const router = useRouter();
     const {dispatch} = useContext(UserContext);
-    const {dispatchModal} = useContext(ModalDialogContext);
+    const {dispatchModal, dispatchModalError} = useContext(ModalDialogContext);
     const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
     const { redirect } = router.query;
 
@@ -31,7 +31,7 @@ const LoginPage = (props) => {
                 if (redirect) router.push({pathname: redirect});
                 else router.push('/auth/callback?redirect=/auth/check-email');
             }).catch(err => {
-                dispatchModal({type: 'error', err});
+            dispatchModalError({err});
             }
         )
     };

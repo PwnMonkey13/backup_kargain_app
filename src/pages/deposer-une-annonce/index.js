@@ -34,7 +34,7 @@ const Page = (props) => {
 
 const SectionEngagemnts = () => {
     return (
-        <section>
+        <section className="my-4">
             <h2>
                 Les engagements Kargain
             </h2>

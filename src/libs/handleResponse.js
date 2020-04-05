@@ -2,23 +2,36 @@ import config from '../config/config';
 
 const handleResponse = response => {
 	if (response.ok) {
-		return response.json().then(json => {
-			if (json.success === false) throw json.msg;
-			return json;
-		}).catch(err => {
-			throw err.message || err;
-		});
+		return response.json()
+			.then(json => {
+				if (json.success === false) throw json.error;
+				return json;
+			})
+			.catch(err => {
+				let error = new Error(err.message);
+				error.code = err.code;
+				error.name = err.name;
+				throw error;
+			}
+		);
 	}
 	else {
+		let msg = null;
 		switch(response.status){
 			case 401:
 			case 403:
-				throw "Session expirée. Merci de vous reconnecter";
+				msg = "Session expirée. Merci de vous reconnecter";
+				break;
 			case 500:
-				throw config.isDev ? response.statusText : "Something failed on the server";
+				msg = config.isDev ? response.statusText : "Something failed on the server";
+				break;
 			default:
-				throw response.statusText;
+				msg = response.statusText;
+				break;
 		}
+		let err = new Error(msg);
+		err.code = response.status;
+		err.name = err.statusCode
 	}
 };
 

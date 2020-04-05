@@ -24,11 +24,19 @@ const PopupAlert = () => {
         state.type === "error" ? 'alert-danger' : 'alert-success',
     );
 
+    const getMessage = () => {
+        if(state.msg) return state.msg;
+        if(state.type === "error"){
+            if(typeof state.err === "object") return typeof state.err === "object" ? state.err.message : state.err;
+        }
+        else return null;
+    };
+
     return (
         <Modal isOpen={state.active} toggle={toggleModal} onClick={toggleModal}>
             <ModalBody className={Classnames}>
-                {/*{ state.type === "error" ? state.err : state.msg }*/}
-                { state.link && <Link href={state.link}>See page</Link> }
+                <p> { getMessage() } </p>
+                <p> { state.link && <Link href={state.link}>See page</Link> } </p>
             </ModalBody>
         </Modal>
     );

@@ -2,6 +2,7 @@ import React, { useRef, useContext} from "react";
 import {Col, Row} from "reactstrap";
 import {useForm } from "react-hook-form";
 import {FormContext} from "../Context/FormContext";
+import Header from "../Header";
 
 const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
     const formRef = useRef(null);
@@ -27,6 +28,14 @@ const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
         {
             value : 'utility',
             label : 'Utilitaire',
+            img : 'tab-gruz.png'
+        }
+    ];
+
+    const othersForm = [
+        {
+            value : 'camper',
+            label : 'Camping car',
             img : 'tab-gruz.png'
         }
     ];
@@ -63,6 +72,30 @@ const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
                     )
                 })}
             </Row>
+
+            { othersForm && (
+                <div>
+                    <Header as="h3" text="Autres types de véhicules"/>
+                    <div className="m-2">
+                        <Row>
+                            { othersForm.map((tab, index) => {
+                                return (
+                                    <div className="form-check m-0">
+                                        <input id={`name_second_${index}`}
+                                               type="radio"
+                                               name="vehicleType"
+                                               value={tab.value}
+                                               ref={register}
+                                               onChange={() => triggerSubmit()}
+                                        />
+                                        <label htmlFor={`name_second_${index}`}>{tab.label}</label>
+                                    </div>
+                                )
+                            })}
+                        </Row>
+                    </div>
+                </div>
+            )}
         </form>
     )
 };

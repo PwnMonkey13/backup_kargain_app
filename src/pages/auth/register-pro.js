@@ -25,7 +25,7 @@ const RegisterPro = () => {
     const router = useRouter();
     const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
     const { dispatch } = useContext(UserContext);
-    const {dispatchModal} = useContext(ModalDialogContext);
+    const {dispatchModalError} = useContext(ModalDialogContext);
     const { redirect } = router.query;
 
     const onSubmit = (form) => {
@@ -36,7 +36,7 @@ const RegisterPro = () => {
                 if (redirect) router.push({pathname: redirect});
                 else router.push(`/auth/callback?redirect=/profile/${data.user.username}`);
             }).catch(err => {
-                dispatchModal({type: 'error', err});
+            dispatchModalError({err});
         });
     };
 

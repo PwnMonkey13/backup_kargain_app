@@ -70,22 +70,35 @@ const FormWizard = ({debug, formKey, resumeModel, onFinalSubmit, children, prevR
         <main id={props.id} className={props.className}>
             <BreadcrumbSteps activeStepIndex={activeStep} steps={steps} setStep={setStep} maxActiveStep={maxActiveStep}/>
             <ProgressBar percent={pourcent} filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"/>
-            <Row className="mx-auto px-2 my-4">
-                <Col md={8} lg={9}>
-                    <ControlledStep
-                        step={steps[activeStep]}
-                        collectStepChanges={collectStepChanges}
-                        onSubmitStep={onSubmitStep}
-                        prevStep={prevStep}
-                        nextStep={nextStep}
-                        formConfig={formConfig}
-                        handleSubmitForm={handleSubmitForm}
-                    />
-                </Col>
-                <Col md={4} lg={3}>
-                    <FormResume resumeModel={resumeModel} formValues={{...formDataContext, ...stepChanges}}/>
-                </Col>
-            </Row>
+            {props.enableResume ? (
+                <Row className="mx-auto px-2 my-4">
+                    <Col md={8} lg={9}>
+                        <ControlledStep
+                            step={steps[activeStep]}
+                            collectStepChanges={collectStepChanges}
+                            onSubmitStep={onSubmitStep}
+                            prevStep={prevStep}
+                            nextStep={nextStep}
+                            formConfig={formConfig}
+                            handleSubmitForm={handleSubmitForm}
+                        />
+                    </Col>
+                    <Col md={4} lg={3}>
+                        <FormResume resumeModel={resumeModel} formValues={{...formDataContext, ...stepChanges}}/>
+                    </Col>
+                </Row>
+            ) : (
+                <ControlledStep
+                    step={steps[activeStep]}
+                    collectStepChanges={collectStepChanges}
+                    onSubmitStep={onSubmitStep}
+                    prevStep={prevStep}
+                    nextStep={nextStep}
+                    formConfig={formConfig}
+                    handleSubmitForm={handleSubmitForm}
+                />
+                )
+            }
 
             { debug && (
                 <Row>
@@ -107,12 +120,14 @@ const FormWizard = ({debug, formKey, resumeModel, onFinalSubmit, children, prevR
 
 FormWizard.propTypes = {
     formKey: PropTypes.string.isRequired,
-    debug: PropTypes.bool
+    debug: PropTypes.bool,
+    enableResume : PropTypes.bool
 };
 
 FormWizard.defaultProps = {
     formKey : '',
-    debug : false
+    debug : false,
+    enableResume : false
 };
 
 export default FormWizard;

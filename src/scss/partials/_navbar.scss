@@ -1,4 +1,9 @@
 header{
+  .navbar-collapse.collapse.show{
+    background-color: white;
+    z-index: 999
+  }
+
   nav.navbar {
     margin: auto;
     padding: 0 1rem;

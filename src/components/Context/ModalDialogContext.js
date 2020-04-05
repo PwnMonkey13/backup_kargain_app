@@ -11,7 +11,8 @@ const ModalDialogContextProvider = ({children}) => {
         link: null
     });
 
-    const dispatchModal = (action) => {
+    const dispatchModal = ({persist, ...action}) => {
+        const timeout = persist ? 4000000 : 4000;
         setModalState({
             active: true,
             ...action,
@@ -25,11 +26,13 @@ const ModalDialogContextProvider = ({children}) => {
                 err: null,
                 link: null
             });
-        }, 4000);
+        }, timeout);
     };
 
+    const dispatchModalError = (action) => dispatchModal({...action, type : "error"});
+
     return (
-        <ModalDialogContext.Provider value={{modalState, dispatchModal}}>
+        <ModalDialogContext.Provider value={{modalState, dispatchModal, dispatchModalError}}>
             {children}
         </ModalDialogContext.Provider>
     );

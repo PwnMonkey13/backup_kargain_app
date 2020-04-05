@@ -5,13 +5,13 @@ import ToolTipWrapper from "./ToolTipWrapper";
 import PropTypes from "prop-types";
 
 const FieldWrapper = ({as : Header, children, ...props}) => {
-    const {label, required, labelTop, tooltip } = props;
+    const {required, center, label, labelTop, tooltip } = props;
 
     const FieldRow = classNames(
         'fg-field-row',
         'my-2',
         'align-items-baseline',
-        { 'justify-content-end' : !labelTop},
+        labelTop ? center ? 'justify-content-center' : 'justify-content-end' : '',
         { 'align-items-center' : labelTop},
         { 'flex-column' : labelTop}
     );

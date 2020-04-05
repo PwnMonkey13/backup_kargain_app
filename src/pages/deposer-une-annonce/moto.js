@@ -9,7 +9,7 @@ import Step2_MotoStatus from "../../components/Vehicles/moto/Step2_MotoStatus";
 import Step3_CarOwner from "../../components/Vehicles/car/Step3_CarOwner";
 
 const MotorCyclesForm = (props) => {
-    const {dispatchModal} = useContext(ModalDialogContext);
+    const {dispatchModal, dispatchModalError} = useContext(ModalDialogContext);
     const resumeModel = [];
     const router = useRouter();
 
@@ -21,7 +21,7 @@ const MotorCyclesForm = (props) => {
                 dispatchModal({type: 'success', msg: 'Announce created successufully', link});
                 router.push(link);
             }).catch(err => {
-                dispatchModal({type: 'error', err});
+            dispatchModalError({err});
             }
         );
     };

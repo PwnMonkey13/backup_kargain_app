@@ -20,7 +20,7 @@ const LoginPage = (props) => {
     const router = useRouter();
     const { redirect } = router.query;
     const { dispatch } = useContext(UserContext);
-    const { dispatchModal } = useContext(ModalDialogContext);
+        const { dispatchModal,dispatchModalError} = useContext(ModalDialogContext);
     const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
 
     const onSubmit = (form) => {
@@ -30,7 +30,7 @@ const LoginPage = (props) => {
                 if (redirect) router.push({pathname: redirect});
                 else router.push(`/auth/callback?redirect=/profile/${data.user.username}`);
             }).catch(err => {
-                dispatchModal({type : 'error', err});
+            dispatchModalError({err});
                 if(redirect) router.push({ pathname : redirect});
             }
         );
@@ -69,11 +69,8 @@ const LoginPage = (props) => {
                 </Col>
                 <Col className="m-auto" sm="12" md="7">
                     <form className="mt-3 mx-auto" onSubmit={handleSubmit(onSubmit)}>
-                        <button onClick={()=> getValues()}>CLICK</button>
 
-                        <input type="text" name="firstName" ref={register} />
-
-                        <FieldWrapper label="Type" required>
+                        <FieldWrapper label="Email" required>
                             <EmailInput
                                 name="email"
                                 inline
@@ -89,6 +86,12 @@ const LoginPage = (props) => {
                                 control={control}
                             />
                         </FieldWrapper>
+
+                        <div className="text-right">
+                            <Link href="/auth/forgotten">
+                                <a className=""> mot de passe oublié</a>
+                            </Link>
+                        </div>
 
                         <div className="submit">
                             <button className="btn btn-outline-primary" type="submit">Se connecter</button>

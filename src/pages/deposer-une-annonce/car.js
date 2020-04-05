@@ -9,7 +9,7 @@ import Step2_CarStatus from "../../components/Vehicles/car/Step2_CarStatus";
 import Step3_CarOwner from "../../components/Vehicles/car/Step3_CarOwner";
 
 const CarForm = (props) => {
-    const {dispatchModal} = useContext(ModalDialogContext);
+    const {dispatchModal, dispatchModalError} = useContext(ModalDialogContext);
     const router = useRouter();
 
     const onFinalSubmit = data => {
@@ -19,7 +19,7 @@ const CarForm = (props) => {
                 dispatchModal({type: 'success', msg: 'Announce created successufully', link});
                 router.push(link);
             }).catch(err => {
-            dispatchModal({type: 'error', err});
+            dispatchModalError({err});
             }
         );
     };
@@ -43,6 +43,7 @@ const CarForm = (props) => {
             classname="cars_form"
             prevRoute="/deposer-une-annonce"
             resumeModel={resumeModel}
+            enableResume={true}
             onFinalSubmit={onFinalSubmit}
         >
             <Step0_CarManufacturer title="Sélection du véhicule"/>
