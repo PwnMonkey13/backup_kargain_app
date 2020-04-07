@@ -8,17 +8,14 @@ function login(email, password) {
         method: 'POST',
         // withCredentials: true,
         // credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
     };
 
     return fetch(`${config.api}/auth/login`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
             throw err;
@@ -36,8 +33,7 @@ function register(user) {
     return fetch(`${config.api}/auth/register`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json;
+            return json;
         })
         .catch(err => {
             throw err;
@@ -55,8 +51,7 @@ function registerPro(form) {
     return fetch(`${config.api}/auth/register-pro`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
             throw err;
@@ -73,8 +68,7 @@ function authorize(token) {
     return fetch(`${config.api}/auth/authorize`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.isLoggedIn;
+            return json.isLoggedIn;
         })
         .catch(err => {
             throw err;
@@ -110,8 +104,7 @@ function forgotPassword(email){
     return fetch(`${config.api}/auth/forgot-password`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
             throw err;
@@ -131,8 +124,7 @@ function resetPassword(token, password) {
     return fetch(`${config.api}/auth/reset-password`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
             throw err;

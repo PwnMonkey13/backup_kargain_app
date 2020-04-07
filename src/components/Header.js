@@ -4,7 +4,14 @@ import classNames from "classnames";
 
 const Header = ({as, text, className, children, ...props}) => {
     const classnames = classNames(className, 'text-center');
-    return React.createElement(as, { className : classnames}, [text, children]);
+    let styles = {};
+    let el = as;
+    if(props.p) el = 'p';
+    if(props.white) styles.color = "white";
+    return React.createElement(el, {
+        className : classnames,
+        style : styles,
+    }, [text, children]);
 };
 
 Header.propTypes = {

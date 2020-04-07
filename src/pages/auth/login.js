@@ -20,7 +20,7 @@ const LoginPage = (props) => {
     const router = useRouter();
     const { redirect } = router.query;
     const { dispatch } = useContext(UserContext);
-        const { dispatchModal,dispatchModalError} = useContext(ModalDialogContext);
+    const { dispatchModal,dispatchModalError} = useContext(ModalDialogContext);
     const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
 
     const onSubmit = (form) => {
@@ -30,7 +30,7 @@ const LoginPage = (props) => {
                 if (redirect) router.push({pathname: redirect});
                 else router.push(`/auth/callback?redirect=/profile/${data.user.username}`);
             }).catch(err => {
-            dispatchModalError({err});
+                dispatchModalError({err});
                 if(redirect) router.push({ pathname : redirect});
             }
         );
@@ -84,6 +84,11 @@ const LoginPage = (props) => {
                                 name="password"
                                 errors={errors}
                                 control={control}
+                                rules={{
+                                    required : 'field required',
+                                    minLength: { value : 6, message : "Min 6 chars" },
+                                    // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
+                                }}
                             />
                         </FieldWrapper>
 

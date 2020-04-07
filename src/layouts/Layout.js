@@ -1,10 +1,10 @@
 import React, {useEffect, useContext} from 'react'
 import {initGA, logPageView} from '../libs/analytics'
-import {Container} from 'reactstrap'
-import styled from 'styled-components'
 import NavbarClient from '../components/NavbarClient'
 import Footer from '../components/Footer'
-import {ModalDialogContext} from "../components/Context/ModalDialogContext";
+// import ScrollToTop from "../components/ScrollToTop";
+import { ArrowUp } from 'react-feather';
+import ScrollUpButton from "react-scroll-up-button";
 
 // import LogRocket from 'logrocket';
 // LogRocket.init('p6ipds/kargain');
@@ -26,12 +26,19 @@ const Layout = ({navmenu, fluid = true, children, ...rest}) => {
                 {React.cloneElement(children,  rest)}
             </MainBody>
             <Footer/>
+            <ScrollUpButton
+                ShowAtPosition={150}
+                EasingType='easeOutCubic'
+                AnimationDuration={500}
+                ContainerClassName="scroll_to_top"
+                style={{height:'30px', width:'30px', border:'3px solid gainsboro'}}>
+            </ScrollUpButton>
         </>
     )
 };
 
 const MainBody = ({children}) => (
-    <main className="main mt-4">
+    <main className="main">
         {children}
     </main>
 );

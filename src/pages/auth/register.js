@@ -102,7 +102,11 @@ const LoginPage = (props) => {
                                 name="password"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
+                                rules={{
+                                    required : 'field required',
+                                    minLength: { value : 6, message : "Min 6 chars" },
+                                    // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
+                                }}
                             />
                         </FieldWrapper>
 
@@ -113,6 +117,7 @@ const LoginPage = (props) => {
                                 control={control}
                                 rules={{
                                     required : 'Required',
+                                    minLength: { value : 6, message : "Min 6 chars" },
                                     validate: {
                                         matchesPreviousPassword: (value) => {
                                             const { password } = getValues();

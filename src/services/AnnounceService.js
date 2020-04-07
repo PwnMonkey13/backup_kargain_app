@@ -2,41 +2,33 @@ import fetch from 'isomorphic-unfetch';
 import handleResponse from '../libs/handleResponse';
 import config from '../config/config';
 import setHeaders from "../libs/authHeaders";
+import querystring from "querystring";
 
-function getWPAnnounces(id = null) {
+const buildUrl = (url, endpoint = '/', params = null) => {
+    if(params) return `${url}${endpoint}?${querystring.stringify(params)}`;
+    else return `${url}${endpoint}`;
+};
+
+const objToBase64 = (obj) => {
+    let data = JSON.stringify(obj);
+    let buff = new Buffer(data);
+    return buff.toString('base64');
+};
+
+function getAnnounces({filters, ...params}) {
     const requestOptions = {
-        headers: setHeaders('GET')
+        method : 'GET',
     };
 
-    let url = `${config.wp_rest_api}/announces`;
-    if(id) url += `/${id}`;
-
-    return fetch(url)
-        .then(handleResponse)
-        .then(json => {
-            return json;
-        })
-        .catch(err => {
-            throw err;
-        });
-}
-
-function getAnnounces(sorters, filters) {
-    const body = {sorters, filters};
-
-    const requestOptions = {
-        method : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body : JSON.stringify(body)
-    };
-
-    let url = `${config.api}/ads/paginate`;
+    console.log(filters);
+    const obfuscatedFilters = objToBase64(filters);
+    let url = buildUrl(config.api, `/ads/announces/${obfuscatedFilters}`, params);
+    console.log(url);
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
             throw err;
@@ -54,8 +46,7 @@ function getAnnounceBySlug(slug) {
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
                 throw err;
@@ -74,8 +65,7 @@ function createAnnounce(data, token) {
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
             throw err;
@@ -84,7 +74,6 @@ function createAnnounce(data, token) {
 
 export default {
     getAnnounces,
-    getWPAnnounces,
     getAnnounceBySlug,
     createAnnounce
 };

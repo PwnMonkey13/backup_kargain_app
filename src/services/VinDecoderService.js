@@ -20,9 +20,7 @@ const fetchAPI = (url) => {
     return fetch(url)
         .then(handleResponse)
         .then(json => {
-            console.log(json);
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
             throw err;

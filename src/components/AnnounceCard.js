@@ -4,7 +4,6 @@ import Link from "next/link";
 class Announce{
     constructor(ad) {
         this.announce =  ad;
-        console.log(this.announce);
     }
 
     getTitle(){
@@ -83,8 +82,6 @@ class Author{
 }
 
 const AnnounceCard = ({announce : ad}) => {
-    console.log(ad);
-
     const announce = new Announce(ad);
 
     const Legacy = () => {
@@ -118,21 +115,23 @@ const AnnounceCard = ({announce : ad}) => {
                 </div>
                 <div className="annonce-slider3">
                     <div>
-                        <a href="#"><img src="images/slider1.png" alt=""/></a>
+                        <a href="#">
+                            {/*<img src="images/slider1.png" alt=""/>*/}
+                        </a>
                     </div>
                 </div>
                 <div className="price-stars-wrapper">
                     <div className="icons-profile-wrapper">
                         <div className="icons-star-prof icons-star-current">
-                            <img src="images/star.svg" alt=""/>
+                            <img src="images/svg/star.svg" alt=""/>
                             <span>15</span>
                         </div>
                         <a href="#" className="icons-star-prof">
-                            <img src="images/comment.svg" alt=""/>
+                            <img src="images/svg/comment.svg" alt=""/>
                             <span>7</span>
                         </a>
                         <a href="#" className="icons-star-prof icons-star-prof-convert">
-                            <img src="images/convert.svg" alt=""/>
+                            <img src="images/svg/convert.svg" alt=""/>
                         </a>
                     </div>
                     <p className="price-annonce">

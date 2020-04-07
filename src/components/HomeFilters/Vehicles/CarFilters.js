@@ -68,7 +68,7 @@ const CarFilters = ({control, errors, ...props}) => {
                 errors={errors}
             />
 
-            <Header as="label" text="Kilométrage"/>
+            <Header as="label" text="Kilométrage (km)"/>
             <div className="d-flex">
                 <NumberInput
                     name="mileage.from"
@@ -87,14 +87,24 @@ const CarFilters = ({control, errors, ...props}) => {
                 />
             </div>
 
-            <Header as="label" text="Cylindrée"/>
-            <NumberInput
-                name="engine.cylinder"
-                className="mb-2 p-0"
-                placeholder="cm3"
-                control={control}
-                errors={errors}
-            />
+            <Header as="label" text="Cylindrée (cm3)"/>
+            <div className="d-flex">
+                <NumberInput
+                    name="engine.cylinder.from"
+                    className="mb-2 mx-1"
+                    placeholder="de"
+                    control={control}
+                    errors={errors}
+                />
+                <NumberInput
+                    name="engine.cylinder.to"
+                    className="mb-2 mx-1"
+                    placeholder="a"
+                    control={control}
+                    errors={errors}
+                />
+            </div>
+
 
             <Header as="label" text="Nombre de portes"/>
             <SelectInput

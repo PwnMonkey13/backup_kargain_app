@@ -16,8 +16,7 @@ function fetchAddresses(params){
     return fetch(url)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .then(data => {
             if(data.features) return data.features;
@@ -34,9 +33,7 @@ function fetchVipocoCities(query){
     return fetch(url)
         .then(handleResponse)
         .then(json => {
-            console.log(json);
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .then(data => {
             if(data.cities) return data.cities;

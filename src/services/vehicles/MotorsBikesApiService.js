@@ -19,8 +19,7 @@ function getMakes(makes) {
     return fetch(url)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
             throw err;
@@ -35,8 +34,7 @@ function getMakeModels(make) {
     return fetch(url)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
             throw err;
@@ -53,8 +51,7 @@ function getCarGenerations(make_id, model_id) {
     return fetch(url)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
             throw err;
@@ -71,8 +68,7 @@ function getCarYearsVersion(make_id, model_id, generation_id) {
     return fetch(url)
         .then(handleResponse)
         .then(json => {
-            if (json.success === false) throw json.msg;
-            else return json.data;
+            return json.data;
         })
         .catch(err => {
             throw err;

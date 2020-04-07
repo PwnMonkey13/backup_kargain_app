@@ -50,9 +50,10 @@ const HomeFilters = memo(({filters, updateFilters}) => {
 
         const migration = {
             'vehicleType': {rule: 'strict'},
-            'adType': null,
+            'adType': {rule: 'strict'},
             'manufacturer.make.value': null,
-            'engine.cylinder': null,
+            'engine.cylinder.from': {type: "number", rule: 'min', ref: 'engine.cylinder'},
+            'engine.cylinder.to': {type: "number", rule: 'max', ref: 'engine.cylinder'},
             'engine.type.value' : null,
             'engine.gas.value': null,
             'mileage.from': {type: "number", rule: 'min', ref: 'mileage'},
@@ -82,7 +83,7 @@ const HomeFilters = memo(({filters, updateFilters}) => {
 
     return (
         <Form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-            {/*<button onClick={() => console.log(getValues())}>CLICK</button>*/}
+            <button type="button" onClick={()=>console.log(getValues())}>CLICK</button>
             <button type="submit">Appliquer filtres</button>
             <Header as="h4" text="Filtrer par :"/>
 
@@ -91,14 +92,20 @@ const HomeFilters = memo(({filters, updateFilters}) => {
                 noInputClass
                 control={control}
                 errors={errors}
-                options={SelectOptionsUtils(["Location", 'Vente Pro', 'Vente'])}
+                options={[
+                    {
+                        label : 'Location',
+                        value : 'rent'
+                    },
+                    {
+                        label : 'Vente',
+                        checked : true,
+                        value : 'sale'
+                    }]
+                }
             />
 
             <VehicleTypeSelector
-                getVehicleType={data => {
-                    const type = data.toLowerCase();
-                    setVehicleType(type);
-                }}
                 name="vehicleType"
                 control={control}
             />
@@ -114,6 +121,8 @@ const HomeFilters = memo(({filters, updateFilters}) => {
 });
 
 HomeFilters.defaultProps = {
+    vehicleType: 'car',
+    adType: 'rent',
     filters: {
         vehicleType: 'car'
     }

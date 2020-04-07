@@ -30,7 +30,7 @@ const RadioGroupInput = memo(({name, control, rules, errors, options, ...props})
                                 name={name}
                                 value={option.value}
                                 defaultChecked={option.checked}
-                                disabled={props.disabled}
+                                disabled={option.disabled}
                             />
                             <label htmlFor={`${name}_${index}`} className="form-check-label" {...labelProps} />
                         </div>

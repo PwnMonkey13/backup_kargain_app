@@ -9,6 +9,7 @@ const tabsRadio = [
     },
     {
         value : 'moto',
+        checked: true,
         label : 'Moto/Scooter',
         img : 'tab-moto.png'
     },
@@ -24,12 +25,7 @@ const tabsRadio = [
     }
 ];
 
-const VehicleTypeSelector = ({name, control, getVehicleType, ...props}) => {
-
-    const onChangeSelect = (e) => {
-        const type = e.target.value;
-        getVehicleType(type);
-    };
+const VehicleTypeSelector = ({name, control, rules, ...props}) => {
 
     return(
         <Row className="justify-content-center">
@@ -39,9 +35,9 @@ const VehicleTypeSelector = ({name, control, getVehicleType, ...props}) => {
                         <input id={`name_${index}`}
                                type="radio"
                                name={name}
+                               ref={control.register(rules)}
                                value={tab.value}
-                               ref={control.register}
-                               onChange={onChangeSelect}
+                               defaultChecked={tab.checked}
                         />
                         <label className="p-2" htmlFor={`name_${index}`}>
                             <img

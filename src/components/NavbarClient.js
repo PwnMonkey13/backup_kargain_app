@@ -42,7 +42,7 @@ const NavbarClient = () => {
                         </NavItem>
 
                         <NavItem className="p-2 navbar_icon navbar-icon-notifications">
-                            <img width="25" height="25" src="/images/ring.svg" alt=""/>
+                            <img width="25" height="25" src="/images/svg/ring.svg" alt=""/>
                             {/*<NotificationPins/>*/}
                         </NavItem>
                     </> :
