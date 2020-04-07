@@ -83,8 +83,8 @@ const HomeFilters = memo(({filters, updateFilters}) => {
 
     return (
         <Form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-            <button type="button" onClick={()=>console.log(getValues())}>CLICK</button>
-            <button type="submit">Appliquer filtres</button>
+            <button type="submit"><strong>Appliquer filtres</strong></button>
+            <button className="mt-2" type="button" onClick={()=>window.location.reload()}>Reinitialiser</button>
             <Header as="h4" text="Filtrer par :"/>
 
             <RadioGroupInput

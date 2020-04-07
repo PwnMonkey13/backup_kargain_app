@@ -20,10 +20,8 @@ function getAnnounces({filters, ...params}) {
         method : 'GET',
     };
 
-    console.log(filters);
     const obfuscatedFilters = objToBase64(filters);
     let url = buildUrl(config.api, `/ads/announces/${obfuscatedFilters}`, params);
-    console.log(url);
 
     return fetch(url, requestOptions)
         .then(handleResponse)
