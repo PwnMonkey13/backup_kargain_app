@@ -35,34 +35,39 @@ const HomeFilters = memo(({filters, updateFilters}) => {
         updateFilters(filters);
     }, []);
 
-    const prepareFilters = (data) => {
-        const flattened = flatten(data);
-        return Object.keys(flattened).reduce((carry, key) => {
-            if (flattened[key]) {
-                if (typeof flattened[key] === "string") carry[key] = flattened[key].toLowerCase();
-                else carry[key] = flattened[key];
-            }
-            return carry;
-        }, {});
-    };
-
     const filterData = data => {
-
         const migration = {
             'vehicleType': {rule: 'strict'},
             'adType': {rule: 'strict'},
-            'manufacturer.make.value': null,
+            'manufacturer.make.value': {},
+            'engine.type.value' : {},
+            'engine.gas.value': {},
             'engine.cylinder.from': {type: "number", rule: 'min', ref: 'engine.cylinder'},
             'engine.cylinder.to': {type: "number", rule: 'max', ref: 'engine.cylinder'},
-            'engine.type.value' : null,
-            'engine.gas.value': null,
-            'mileage.from': {type: "number", rule: 'min', ref: 'mileage'},
-            'mileage.to': {type: "number", rule: 'max', ref: 'mileage'},
             'price.min': {type: "number", rule: 'min', ref: 'price'},
             'price.max': {type: "number", rule: 'max', ref: 'price'},
-            'doors.value' : {type: "number", rule: 'min', ref: 'price'},
-            'seats.value': {type: "number", rule: 'min', ref: 'price'}
+            'mileage.from': {type: "number", rule: 'min', ref: 'mileage'},
+            'mileage.to': {type: "number", rule: 'max', ref: 'mileage'},
+            'power.kw.from': {type: "number", rule: 'min', ref: 'power.kw'},
+            'power.kw.to': {type: "number", rule: 'max', ref: 'power.kw'},
+            'emission.value' : {},
+            'consumption.gkm.from':  {type: "number", rule: 'min', ref: 'consumption.gkm'},
+            'consumption.gkm.to':  {type: "number", rule: 'min', ref: 'consumption.gkm'},
+            'doors.value': {},
+            'seats.value': {},
+            //TODO equipments
+            'equipments' : {type:"array", single : {}},
+            'paint.value': {},
+            'externalColor.value': {},
+            'internalColor.value': {},
         };
+
+        //TODO
+        const internalFields = [
+            'radius',
+            'seller.nationality.value',
+            'seller.address.value'
+        ];
 
         return Object.keys(data).reduce((carry, key) => {
             if (migration.hasOwnProperty(key)){
@@ -70,6 +75,17 @@ const HomeFilters = memo(({filters, updateFilters}) => {
                     carry[key] = {...migration[key], value: data[key]};
                     if(!carry[key].type) carry[key].type = typeof data[key];
                 } else carry[key] = {type: typeof data[key], value: data[key]};
+            }
+            return carry;
+        }, {});
+    };
+
+    const prepareFilters = (data) => {
+        const flattened = flatten(data);
+        return Object.keys(flattened).reduce((carry, key) => {
+            if (flattened[key]) {
+                if (typeof flattened[key] === "string") carry[key] = flattened[key].toLowerCase();
+                else carry[key] = flattened[key];
             }
             return carry;
         }, {});
@@ -85,6 +101,7 @@ const HomeFilters = memo(({filters, updateFilters}) => {
         <Form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
             <button type="submit"><strong>Appliquer filtres</strong></button>
             <button className="mt-2" type="button" onClick={()=>window.location.reload()}>Reinitialiser</button>
+            {/*<button className="mt-2" type="button" onClick={()=>console.log(getValues())}>CLICK</button>*/}
             <Header as="h4" text="Filtrer par :"/>
 
             <RadioGroupInput

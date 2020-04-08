@@ -21,9 +21,8 @@ Geocode.setRegion("fr");
  */
 export function geoCodeFromLatLng(lat = '48.8583701', lng = '2.2922926') {
     return Geocode.fromLatLng(lat, lng).then(
-        response => {
-            return response.results[0].formatted_address;
-        },
+        response =>
+            response.results[0],
         error => {
             throw error;
         }

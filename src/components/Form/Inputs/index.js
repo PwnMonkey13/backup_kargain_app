@@ -1,5 +1,3 @@
-import RadioGroupInput from "./RadioGroupInput";
-
 export { default as TelInput } from './TelInput';
 export { default as FileInput } from './FileInput';
 export { default as NumberInput } from './NumberInput';
@@ -13,4 +11,5 @@ export { default as SelectInput } from './SelectInput';
 export { default as PasswordInput } from "./PasswordInput";
 export { default as LocationSearchInput } from './LocationSearchInput';
 export { default as GeoCitiesInput } from './GeoCitiesInput';
-export { default as RangeInput } from './RangeInput';
+export { default as SliderInput } from './SliderInputUI';
+export { default as RangeSlider } from './RangeInputUI';

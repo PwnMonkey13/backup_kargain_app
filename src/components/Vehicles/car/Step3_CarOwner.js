@@ -52,20 +52,20 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                 />
             </FieldWrapper>
 
-            <FieldWrapper label="test Number">
-                <NumberInput
-                    name="test"
-                    errors={errors}
-                    control={control}
-                    rules={{
-                        required: "Field required",
-                        validate : {
-                            positive: value => parseInt(value, 10) > 0 || 'should be greater than 0',
-                            lessThanTen: value => parseInt(value, 10) < 10 || 'should be lower than 10'
-                        }
-                    }}
-                />
-            </FieldWrapper>
+            {/*<FieldWrapper label="test Number">*/}
+            {/*    <NumberInput*/}
+            {/*        name="test"*/}
+            {/*        errors={errors}*/}
+            {/*        control={control}*/}
+            {/*        rules={{*/}
+            {/*            required: "Field required",*/}
+            {/*            validate : {*/}
+            {/*                positive: value => parseInt(value, 10) > 0 || 'should be greater than 0',*/}
+            {/*                lessThanTen: value => parseInt(value, 10) < 10 || 'should be lower than 10'*/}
+            {/*            }*/}
+            {/*        }}*/}
+            {/*    />*/}
+            {/*</FieldWrapper>*/}
 
             <FieldWrapper label="Numéro de téléphone">
                 <TelInput

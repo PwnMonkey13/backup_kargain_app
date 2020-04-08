@@ -8,6 +8,8 @@ const Header = ({as, text, className, children, ...props}) => {
     let el = as;
     if(props.p) el = 'p';
     if(props.white) styles.color = "white";
+    if(props.strong) styles.fontWeight = "bold";
+
     return React.createElement(el, {
         className : classnames,
         style : styles,

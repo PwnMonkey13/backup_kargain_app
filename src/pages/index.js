@@ -14,7 +14,7 @@ import Loader from "../components/Loader";
 const Index = (props) => {
     const isMounted = useIsMounted();
     const [state, setState] = useState({
-        loading : true,
+        loading: true,
         sorters: props.sorters,
         filters: {},
         page: 1,
@@ -25,7 +25,7 @@ const Index = (props) => {
     const fetchAnnounces = () => {
         const {sorters, filters, page} = state;
         const {size} = props;
-        setState(state => ({...state, loading : true }));
+        setState(state => ({...state, loading: true}));
 
         AnnounceService.getAnnounces({sorters, filters, page, size})
             .then(data => {
@@ -33,7 +33,7 @@ const Index = (props) => {
                     ...state,
                     announces: data.announces,
                     total: data.total,
-                    loading : false,
+                    loading: false,
                 }));
             }).catch(err => {
                 throw err;
@@ -46,11 +46,11 @@ const Index = (props) => {
     }, [state.sorters, state.filters, state.page]);
 
     useEffect(() => {
-        if(isMounted){
+        if (isMounted) {
             fetchAnnounces();
             window.scrollTo(0, 0);
         }
-    },[state.page]);
+    }, [state.page]);
 
     const handlePageChange = (page, e) => {
         setState(state => ({
@@ -107,7 +107,7 @@ const Index = (props) => {
 
     const MainComponent = () => {
         const {loading, announces} = state;
-        if(loading) return <Loader/>;
+        if (loading) return <Loader/>;
         else if (announces && announces.length > 0) {
             return (
                 <div>
@@ -205,12 +205,11 @@ const Index = (props) => {
     });
 
     const PaginateSituation = memo(() => {
-        const { announces, page} = state;
-        console.log(announces.length, page, props.size);
+        const {announces, page} = state;
         let tot = announces.length;
-        if(page > 1) tot += page * props.size;
-        return(
-            tot ? <p className="py-2 text-center">{ tot } announces sur { state.total} </p> : null
+        if (page > 1) tot += page * props.size;
+        return (
+            tot ? <p className="py-2 text-center">{tot} announces sur {state.total} </p> : null
         )
     });
 
@@ -219,10 +218,10 @@ const Index = (props) => {
             {state.announces &&
             <Header text={`${state.announces.length} ${state.announces.length > 1 ? 'résultats' : 'résultat'}`}/>}
             <Row>
-                <Col sm="12" md="3">
+                <Col sm="12" md="4">
                     <HomeFilters updateFilters={updateFilters}/>
                 </Col>
-                <Col sm="12" md="9">
+                <Col sm="12" md="8">
                     <section>
                         <TopSortComponent/>
                     </section>
@@ -239,7 +238,7 @@ const Index = (props) => {
 };
 
 Index.defaultProps = {
-    paginate : 3,
+    paginate: 3,
     size: 5,
     sorters: [
         {

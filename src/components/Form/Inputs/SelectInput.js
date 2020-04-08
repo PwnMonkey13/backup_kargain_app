@@ -112,7 +112,8 @@ const SelectInput = memo(({name, control, rules, errors, ...props}) => {
                     rules={rules}
                     as={ <NiceSelect
                         styles={{customStyles}}
-                        width='200px'
+                        width={props.width}
+                        isMulti={props.isMulti}
                         defaultValue={defaultValues}
                         placeholder={props.placeholder}
                         components={{clearValue: ClearIndicator }}
@@ -134,5 +135,7 @@ SelectInput.propTypes = {
 };
 
 SelectInput.defaultProps = {
-    'fullwidth' : true
+    isMulti : false,
+    width : "200px",
+    fullwidth : true
 };

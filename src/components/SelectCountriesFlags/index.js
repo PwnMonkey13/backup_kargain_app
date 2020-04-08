@@ -4,6 +4,8 @@ import Select, {components} from 'react-select';
 import ValidationError from "../Form/Validations/ValidationError";
 import countries from './countries';
 
+//TODO default flag
+
 const ReactFlagsSelect = ({name, rules, control, errors, ...props}) => {
 
     const options = Object.keys(countries).map(key => {
