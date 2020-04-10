@@ -3,13 +3,10 @@ import {useRouter} from "next/router";
 import FormWizard from "../../components/Form/FormWizard";
 import AnnounceService from '../../services/AnnounceService';
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
-import Step0_CarManufacturer from "../../components/Vehicles/car/Step0_CarManufacturer";
-import Step1_CarDetails from "../../components/Vehicles/car/Step1_CarDetails";
-import Step2_CarStatus from "../../components/Vehicles/car/Step2_CarStatus";
-import Step3_CarOwner from "../../components/Vehicles/car/Step3_CarOwner";
+import Step1_CamperDetails from "../../components/Vehicles/utility/Step1_UtiilityDetails";
 
-const CarForm = (props) => {
-    const {dispatchModal, dispatchModalError} = useContext(ModalDialogContext);
+const UtilityForm = (props) => {
+    const {dispatchModal} = useContext(ModalDialogContext);
     const router = useRouter();
 
     const onFinalSubmit = data => {
@@ -19,7 +16,7 @@ const CarForm = (props) => {
                 dispatchModal({type: 'success', msg: 'Announce created successufully', link});
                 router.push(link);
             }).catch(err => {
-            dispatchModalError({err});
+                dispatchModal({type: 'error', err});
             }
         );
     };
@@ -42,20 +39,17 @@ const CarForm = (props) => {
             formKey={props.formKey}
             prevRoute="/deposer-une-annonce"
             resumeModel={resumeModel}
-            // enableResume={true}
-            onFinalSubmit={onFinalSubmit}>
-            <Step0_CarManufacturer title="Sélection du véhicule"/>
-            <Step1_CarDetails title="Description du véhicule"/>
-            <Step2_CarStatus title="Etat du véhicule"/>
-            <Step3_CarOwner title="Votre annonce"/>
+            onFinalSubmit={onFinalSubmit}
+        >
+            <Step1_CamperDetails title="Description du véhicule"/>
         </FormWizard>
     );
 };
 
-CarForm.getInitialProps = () => {
+UtilityForm.getInitialProps = () => {
     return {
-        formKey : "car"
+        formKey : "utility"
     }
 };
 
-export default CarForm;
+export default UtilityForm;

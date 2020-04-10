@@ -4,6 +4,8 @@ import FormWizard from "../../components/Form/FormWizard";
 import AnnounceService from '../../services/AnnounceService';
 import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
 import Step1_CamperDetails from "../../components/Vehicles/camper/Step1_CamperDetails";
+import Step2_CarStatus from "../../components/Vehicles/car/Step2_CarStatus";
+import Step3_CarOwner from "../../components/Vehicles/car/Step3_CarOwner";
 
 const CarForm = (props) => {
     const {dispatchModal} = useContext(ModalDialogContext);
@@ -36,13 +38,14 @@ const CarForm = (props) => {
 
     return (
         <FormWizard
-            formKey="car"
-            classname="cars_form"
+            formKey={props.formKey}
             prevRoute="/deposer-une-annonce"
             resumeModel={resumeModel}
-            onFinalSubmit={onFinalSubmit}
-        >
+            onFinalSubmit={onFinalSubmit}>
             <Step1_CamperDetails title="Description du véhicule"/>
+            <Step2_CarStatus title="Etat du véhicule"/>
+            <Step3_CarOwner title="Votre annonce"/>
+
         </FormWizard>
     );
 };

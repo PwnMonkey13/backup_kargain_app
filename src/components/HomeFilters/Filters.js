@@ -3,27 +3,20 @@ import {useForm} from "react-hook-form";
 import {flatten} from "flattenjs";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import VehicleTypeSelector from "./VehicleTypeSelector";
+import VehicleTypeFilterSelector from "./VehicleTypeFilterSelector";
 import {RadioGroupInput, SelectInput} from "../Form/Inputs";
 import getFiltersVehicleComponent from './Vehicles';
 import Header from "../Header";
 import useIsMounted from "../../hooks/useIsMounted";
+import Spacer from "../Spacer";
 
-const Form = styled.form`
-     display: flex;
-     flex-direction: column;
-     border: 1px solid #dce0e0;
-     background-color: #f7f8f9;
-     border-radius: .1875rem;
-     background-color: #fff;
-     padding: 10px;
-  `;
-
-const HomeFilters = memo(({defaultFilters, updateFilters : fireFilters}) => {
+const Filters = memo(({defaultFilters, updateFilters : fireFilters}) => {
     const isMounted = useIsMounted();
     const formRef = useRef(null);
     const [filters, setFilters] = useState(defaultFilters);
     const DynamicFiltersComponent = getFiltersVehicleComponent(filters.vehicleType);
+
+    console.log(filters.vehicleType);
 
     const formConfig = {
         mode: 'onChange',
@@ -46,6 +39,7 @@ const HomeFilters = memo(({defaultFilters, updateFilters : fireFilters}) => {
     const filterProps = properties => {
         const allowedFields = {
             'vehicleType': {rule: 'strict'},
+            'vehicleFunctionUse.value' : {},
             'vehicleTypeSelect.value': {key : 'vehicleType'},
             'adType': {rule: 'strict'},
             'manufacturer.make.value': {},
@@ -60,13 +54,23 @@ const HomeFilters = memo(({defaultFilters, updateFilters : fireFilters}) => {
             'mileage.to': {type: "number", rule: 'max', ref: 'mileage'},
             'power.kw.from': {type: "number", rule: 'min', ref: 'power.kw'},
             'power.kw.to': {type: "number", rule: 'max', ref: 'power.kw'},
-            'emission.value' : {},
             'consumption.gkm.from':  {type: "number", rule: 'min', ref: 'consumption.gkm'},
             'consumption.gkm.to':  {type: "number", rule: 'min', ref: 'consumption.gkm'},
-            'doors.value': {},
-            'seats.value': {},
+            'doors.min': {type: "number", rule: 'min', ref: 'doors'},
+            'doors.max': {type: "number", rule: 'max', ref: 'doors'},
+            'seats.min': {type: "number", rule: 'min', ref: 'seats'},
+            'seats.max': {type: "number", rule: 'max', ref: 'seats'},
+            'bunks.min': {type: "number", rule: 'min', ref: 'seats'},
+            'bunks.max': {type: "number", rule: 'max', ref: 'seats'},
+            'driverCabin.min': {type: "number", rule: 'min', ref: 'driverCabin'},
+            'driverCabin.max': {type: "number", rule: 'max', ref: 'driverCabin'},
+            'hoursOfUse.from' : {type: "number", rule: 'min', ref: 'hoursOfUse'},
+            'hoursOfUse.to' : {type: "number", rule: 'max', ref: 'hoursOfUse'},
             //TODO equipments
             'equipments' : {type:"array", single : {}},
+            'bedType.value': {},
+            'materials.value': {},
+            'emission.value' : {},
             'paint.value': {},
             'externalColor.value': {},
             'internalColor.value': {},
@@ -116,20 +120,34 @@ const HomeFilters = memo(({defaultFilters, updateFilters : fireFilters}) => {
                     };
                 }
             }
-
-            console.log(data);
             fireFilters(filtersFlat);
         }
     },[filters]);
 
-    return (
-        <form className="d-flex flex-column form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-            <button type="submit"><strong>Appliquer filtres</strong></button>
+    const Form = styled.form`
+         display: flex;
+         flex-direction: column;
+         border: 1px solid #dce0e0;
+         background-color: #f7f8f9;
+         border-radius: .1875rem;
+         background-color: #fff;
+         padding: 10px;
+      `;
+
+    const ControlButtons = () => (
+        <div className="d-flex flex-column my-3">
+            <button className="btn btn-primary"type="submit"><strong>Appliquer filtres</strong></button>
             <button className="mt-2" type="button" onClick={()=>window.location.reload()}>Reinitialiser</button>
             {/*<button className="mt-2" type="button" onClick={()=>console.log(filters)}>CLICK</button>*/}
             {/*<button className="mt-2" type="button" onClick={()=>console.log(getValues())}>CLICK</button>*/}
-            <Header as="h4" text="Filtrer par :"/>
+        </div>
+    );
 
+    return (
+        <form className="d-flex flex-column form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+            <ControlButtons/>
+            <Header as="h2" text="Filtrer par :"/>
+            <Header p strong className="m-0" text="Type de d'annonce :"/>
             <RadioGroupInput
                 name="adType"
                 noInputClass
@@ -147,7 +165,8 @@ const HomeFilters = memo(({defaultFilters, updateFilters : fireFilters}) => {
                 }
             />
 
-            <VehicleTypeSelector
+            <Header p strong className="my-2" text="Type de véhicule :"/>
+            <VehicleTypeFilterSelector
                 name="vehicleType"
                 control={control}
             />
@@ -159,15 +178,18 @@ const HomeFilters = memo(({defaultFilters, updateFilters : fireFilters}) => {
                     watch={watch}
                 />
             )}
+
+            <Spacer/>
+            <ControlButtons/>
         </form>
     );
 });
 
-HomeFilters.defaultProps = {
+Filters.defaultProps = {
     defaultFilters: {
         vehicleType: 'car',
         adType: 'sale',
     }
 };
 
-export default HomeFilters;
+export default Filters;

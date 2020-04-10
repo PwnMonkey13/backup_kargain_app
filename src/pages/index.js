@@ -1,13 +1,11 @@
 import React, {memo, useEffect, useState} from 'react';
-import {Col, Row} from 'reactstrap'
-import NiceSelect from 'react-select';
-import styled from 'styled-components';
+import {Col, Row} from 'reactstrap';
+import Pagination from "react-paginating";
 import AnnounceService from '../services/AnnounceService';
-import HomeFilters from "../components/HomeFilters";
+import Filters from "../components/HomeFilters/Filters";
+import Sorters from "../components/HomeFilters/Sorters";
 import AnnounceCard from '../components/AnnounceCard';
 import Header from "../components/Header";
-import {SelectOptionsUtils} from "../libs/formFieldsUtils";
-import Pagination from "react-paginating";
 import useIsMounted from "../hooks/useIsMounted";
 import Loader from "../components/Loader";
 
@@ -187,11 +185,11 @@ const Index = (props) => {
             <Header text={`${state.announces.length} ${state.announces.length > 1 ? 'résultats' : 'résultat'}`}/>}
             <Row>
                 <Col sm="12" md="4">
-                    <HomeFilters updateFilters={updateFilters}/>
+                    <Filters updateFilters={updateFilters}/>
                 </Col>
                 <Col sm="12" md="8">
                     <section>
-                        <TopSortComponent updateSorter={updateSorter}/>
+                        <Sorters updateSorter={updateSorter}/>
                     </section>
                     <section className="d-flex flex-column align-items-center">
                         <PaginateSituation/>
@@ -208,66 +206,6 @@ const Index = (props) => {
 Index.defaultProps = {
     paginate: 3,
     size: 5,
-};
-
-const TopSortComponent = ({updateSorter}) => {
-    const [sorter, setSorter] = useState('');
-
-    const onHandleChange = (sort) => {
-        setSorter(sort);
-        updateSorter(sort);
-    };
-
-    const Container = styled.div`
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-        `;
-
-    const Div = styled.div`
-            margin : 1rem;
-            width : 10rem
-        `;
-
-    return (
-        <Container>
-            <span>Trier par :</span>
-            <Div>
-                <NiceSelect
-                    name="sort"
-                    options={[
-                        {
-                            label : "Les voitures les plus kilométrée",
-                            value : { key : 'mileage', desc : false }
-                        },
-                        {
-                            label : "Les voitures les moins kilométrée",
-                            value : { key : 'mileage', desc : true }
-                        },
-                        {
-                            label : "Les annonces les plus récentes",
-                            value : { key : 'createdAt', desc : true }
-                        },
-                        {
-                            label : "Les annonces les plus vieilles",
-                            value : { key : 'createdAt', desc : false }
-                        },
-                        {
-                            label : "Les voitures les plus chers",
-                            value : { key : 'price', desc : true }
-                        },
-                        {
-                            label : "Les voitures les moins chers",
-                            value : { key : 'price', desc : false }
-                        },
-                    ]}
-                    value={sorter}
-                    onChange={onHandleChange}
-                    classNames='w-100'
-                />
-            </Div>
-        </Container>
-    )
 };
 
 export default Index;

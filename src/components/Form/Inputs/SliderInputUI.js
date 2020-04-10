@@ -21,10 +21,7 @@ const RangeSlider = ({name, rules, control, errors, ...props}) => {
                     name={name}
                     control={control}
                     defaultValue={props.defaultValue}
-                    onChange={([, value]) => {
-                        console.log(value);
-                        return value;
-                    }}
+                    onChange={([, value]) => value}
                     as={<Slider
                         step={props.step}
                         min={props.min}

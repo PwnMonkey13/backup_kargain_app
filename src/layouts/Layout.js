@@ -38,7 +38,7 @@ const Layout = ({navmenu, fluid = true, children, ...rest}) => {
 };
 
 const MainBody = ({children}) => (
-    <main className="main">
+    <main className="main" style={{minHeight:'75vh'}}>
         {children}
     </main>
 );

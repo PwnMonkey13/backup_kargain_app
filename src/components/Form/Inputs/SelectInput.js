@@ -95,9 +95,7 @@ const SelectInput = memo(({name, control, rules, errors, ...props}) => {
     let defaultValues = [];
     if(selected && Array.isArray(selected)){
         defaultValues = selected.reduce((carry, selected) =>
-            ([...carry, options.find(option =>
-                option.value.toLowerCase() === selected.toString().toLowerCase())]),[]
-        );
+            ([...carry, options.find(option => option.value.toLowerCase() === selected.toString().toLowerCase())]),[]);
     }
 
     const InputClasses = classNames(
@@ -120,6 +118,7 @@ const SelectInput = memo(({name, control, rules, errors, ...props}) => {
                         width={props.width}
                         isClearable={props.isClearable}
                         isMulti={props.isMulti}
+                        isDisabled={props.disabled}
                         styles={{customStyles}}
                         defaultValue={defaultValues}
                         placeholder={props.placeholder}
@@ -145,5 +144,6 @@ SelectInput.defaultProps = {
     rules: {},
     isMulti : false,
     isClearable : true,
+    disabled : false,
     width : "200px",
 };

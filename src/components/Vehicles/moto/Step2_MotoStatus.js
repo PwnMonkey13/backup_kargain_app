@@ -1,7 +1,8 @@
 import React, {useRef} from 'react';
+import {Col, Row} from "reactstrap";
 import Header from "../../Header";
-import {RadioGroupInput, SelectInput, TextareaInput} from "../../Form/Inputs";
-import {RadioGeneralStateVehicle, RadioFunctionVehicle } from "./form.data.js";
+import {NumberInput, SelectInput, TextareaInput, TextInput} from "../../Form/Inputs";
+import {RadioVehicleGeneralState } from "./form.data.js";
 import StepNavigation from "../../Form/StepNavigation";
 import {SelectOptionsUtils} from "../../../libs/formFieldsUtils";
 import FieldWrapper from "../../Form/FieldWrapper";
@@ -14,20 +15,10 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
             <Header text="Etat du véhicule"/>
 
-            <FieldWrapper label="Fonction du véhicule">
-                <RadioGroupInput
-                    name="vehicleFunction"
-                    options={RadioFunctionVehicle}
-                    control={control}
-                    rules={{ required: 'Title is required' }}
-                    errors={errors}
-                />
-            </FieldWrapper>
-
             <FieldWrapper label="Etat général">
-                <RadioGroupInput
+                <SelectInput
                     name="vehicleState"
-                    options={RadioGeneralStateVehicle}
+                    options={RadioVehicleGeneralState}
                     control={control}
                     rules={{ required: 'Title is required' }}
                     errors={errors}
@@ -45,26 +36,31 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                 />
             </FieldWrapper>
 
-            <FieldWrapper label="Véhicule accidenté">
-                <SelectInput
-                    name="damages"
-                    options={SelectOptionsUtils([2, 3, 4, 5])}
-                    placeholder="Select number of damages"
-                    control={control}
-                    rules={{ required: "Field required" }}
-                    errors={errors}
-                />
-            </FieldWrapper>
-
-            <FieldWrapper label="Véhicule deffectueux">
-                <SelectInput
-                    name="defective"
-                    options={SelectOptionsUtils([2, 3, 4, 5])}
-                    control={control}
-                    rules={{ required: "Field required" }}
-                    errors={errors}
-                />
-            </FieldWrapper>
+            <Row>
+                <Col>
+                    <FieldWrapper label="Véhicule accidenté">
+                        <SelectInput
+                            name="damages"
+                            options={SelectOptionsUtils([2, 3, 4, 5])}
+                            placeholder="Select number of damages"
+                            control={control}
+                            rules={{ required: "Field required" }}
+                            errors={errors}
+                        />
+                    </FieldWrapper>
+                </Col>
+                <Col>
+                    <FieldWrapper label="Véhicule deffectueux">
+                        <SelectInput
+                            name="defective"
+                            options={SelectOptionsUtils([2, 3, 4, 5])}
+                            control={control}
+                            rules={{ required: "Field required" }}
+                            errors={errors}
+                        />
+                    </FieldWrapper>
+                </Col>
+            </Row>
 
             <FieldWrapper label="Description">
                 <TextareaInput
@@ -74,6 +70,9 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                     errors={errors}
                 />
             </FieldWrapper>
+
+            <p> TODO TAGS </p>
+            <p> TODO Damage selector </p>
 
             <StepNavigation prev={prevStep} submit />
         </form>

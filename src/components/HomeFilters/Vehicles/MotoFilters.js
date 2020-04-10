@@ -1,20 +1,15 @@
 import React, {memo, useContext, useEffect, useState} from "react";
+import PropTypes from "prop-types";
 import {MapPin} from "react-feather";
-import {
-    CheckboxOptionsEquipments,
-    RadioChoicesExternalColor,
-    RadioChoicesPaints,
-    RadioTypeChoices
-} from "../../Vehicles/moto/form.data";
+import { CheckboxOptionsEquipments, RadioChoicesExternalColor, RadioChoicesPaints, RadioTypeFunction } from "../../Vehicles/moto/form.data";
 import {GeoCitiesInput, NumberInput, SelectInput, SliderInput,} from "../../Form/Inputs";
 import MotorsBikesApiService from "../../../services/vehicles/MotorsBikesApiService";
 import {ModalDialogContext} from "../../Context/ModalDialogContext";
 import ReactFlagsSelect from "../../SelectCountriesFlags";
 import useAddress from "../../../hooks/useAddress";
 import Header from "../../Header";
-import PropTypes from "prop-types";
 
-const MotoFilters = memo(({control, errors, ...props}) => {
+const MotoFilters = memo(({control, watch, errors, ...props}) => {
     const [addressObj, address, geolocation] = useAddress();
     const [makes, setMakes] = useState([]);
     const {dispatchModalError} = useContext(ModalDialogContext);
@@ -79,7 +74,7 @@ const MotoFilters = memo(({control, errors, ...props}) => {
             <Header p strong className="my-2" text="Prix"/>
             <SliderInput
                 name="price"
-                defaultValue={[3000, 8000]}
+                defaultValue={[3000, 80000]}
                 min={1000}
                 max={100000}
                 step={1000}
@@ -92,7 +87,7 @@ const MotoFilters = memo(({control, errors, ...props}) => {
             <Header p strong className="my-2" text="Type de moto/scooter"/>
             <SelectInput
                 name="type"
-                options={RadioTypeChoices}
+                options={RadioTypeFunction}
                 control={control}
                 errors={errors}
             />

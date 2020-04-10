@@ -8,6 +8,10 @@ import {SelectInput, TextInput} from "../../Form/Inputs";
 import VinDecoderService from "../../../services/VinDecoderService";
 import {ModalDialogContext} from "../../Context/ModalDialogContext";
 import CarApiService from "../../../services/vehicles/CarApiService";
+import {Col, Row} from "reactstrap";
+import ToolTipWrapper from "../../Form/ToolTipWrapper";
+
+const ColCenter = ({children}) => <Col className="d-flex flex-column align-items-center">{children}</Col>;
 
 const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, triggerSkipStep, onSubmitStep, prevStep, nextStep, ...rest}) => {
     const formRef = useRef(null);
@@ -165,102 +169,104 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
 
-            <button type="button" onClick={()=> {
-                console.log(getValues());
-                console.log(errors);
-            }}>CLICK</button>
-
-            <FieldWrapper as="h3" label="Saisissez le numéro VIN de votre voiture" labelTop tooltip={{
-                icon : "?",
-                template : "default",
-                content : "<p>Le numéro VIN, où Numéro d’Identification du Véhicule, est une série de caractères qui va permettre de distinguer tous les véhicules partout dans le monde. " +
-                    "<br> Vous pourrez retrouver ce numéro à plusieurs endroits de votre voiture et sera indispensable pour certaines démarches administratives" +
-                    "<br>Pour plus d'informations : " +
-                    "<a href=\"https://www.boutiqueobdfacile.fr/blog/numero-vin-p73.html\">https://www.boutiqueobdfacile.fr/blog/numero-vin-p73.html</a> </p>"
-            }}>
-                <TextInput
-                    name="vin"
-                    placeholder="Ex: 1C4RJFBG4FC812166"
-                    errors={errors}
-                    control={control}
-                    rules={{
-                        validate : {
-                            isValidVIN : value => isValidVIN(value)
-                        }
-                    }}
-                />
-            </FieldWrapper>
+            <Row>
+                <ColCenter>
+                    <FieldWrapper label="Saisissez le numéro VIN de votre moto" tooltip={
+                        <ToolTipWrapper
+                            icon="?"
+                            template="default">
+                            <p> Le numéro VIN, où Numéro d’Identification du Véhicule, est une série de caractères qui va permettre de
+                                distinguer tous les véhicules partout dans le monde. <br/> Vous pourrez retrouver ce numéro à
+                                plusieurs endroits de votre voiture et sera indispensable pour certaines démarches administratives <br/>
+                                Pour plus d'informations : <a href="https://www.boutiqueobdfacile.fr/blog/numero-vin-p73.html">https://www.boutiqueobdfacile.fr/blog/numero-vin-p73.html</a>
+                            </p>
+                        </ToolTipWrapper>
+                    }>
+                        <TextInput
+                            name="vin"
+                            placeholder="Ex: 1C4RJFBG4FC812166"
+                            errors={errors}
+                            control={control}
+                            rules={{
+                                validate : {
+                                    isValidVIN : value => isValidVIN(value)
+                                }
+                            }}
+                        />
+                    </FieldWrapper>
+                </ColCenter>
+            </Row>
 
             <Divider text="ou"/>
 
             <Header text="Sélectionnez votre voiture"/>
 
-            <FieldWrapper label="Marque" labelTop>
-                    <SelectInput
-                        name="manufacturer.make"
-                        placeholder="Select a car make"
-                        control={control}
-                        errors={errors}
-                        rules={{required: 'Title is required!'}}
-                        options={manufacturersData['makes']}
-                        onChange={([selected, option]) => {
-                            collectStepChanges({name : option.name, label : selected.label});
-                            return selected
-                        }}
-                    />
-            </FieldWrapper>
-
-            {/*{watch('manufacturer.make') &&*/}
-                <FieldWrapper label="Modele" labelTop>
-                    <SelectInput
-                        name="manufacturer.model"
-                        placeholder="Select a car model"
-                        options={manufacturersData['models']}
-                        control={control}
-                        errors={errors}
-                        rules={{required: 'Title is required!'}}
-                        onChange={([selected, option]) => {
-                            collectStepChanges({name : option.name, label : selected.label});
-                            return selected
-                        }}
-                    />
-                </FieldWrapper>
-            {/*}*/}
-
-            {/*{watch('manufacturer.model') &&*/}
-                <FieldWrapper label="Version" labelTop>
-                    <SelectInput
-                        name="manufacturer.generation"
-                        placeholder="Select car version"
-                        options={manufacturersData['generations']}
-                        control={control}
-                        errors={errors}
-                        rules={{required: 'Title is required!'}}
-                        onChange={([selected, option]) => {
-                            collectStepChanges({name : option.name, label : selected.label});
-                            return selected
-                        }}
-                    />
-                </FieldWrapper>
-            {/*}*/}
-
-            {/*{watch('manufacturer.generation') &&*/}
-                <FieldWrapper label="Année" labelTop>
-                    <SelectInput
-                        name="manufacturer.year"
-                        placeholder="Select car year"
-                        options={manufacturersData['years']}
-                        control={control}
-                        errors={errors}
-                        rules={{required: 'Title is required!'}}
-                        onChange={([selected, option]) => {
-                            collectStepChanges({name : option.name, label : selected.label});
-                            return selected
-                        }}
-                    />
-                </FieldWrapper>
-            {/*}*/}
-
+            <Row>
+                <Col md={3}>
+                    <FieldWrapper label="Marque" labelTop>
+                        <SelectInput
+                            name="manufacturer.make"
+                            placeholder="Select a car make"
+                            control={control}
+                            errors={errors}
+                            rules={{required: 'Title is required!'}}
+                            options={manufacturersData['makes']}
+                            onChange={([selected, option]) => {
+                                collectStepChanges({name : option.name, label : selected.label});
+                                return selected
+                            }}
+                        />
+                    </FieldWrapper>
+                </Col>
+                <Col md={3}>
+                    <FieldWrapper label="Modele" labelTop>
+                        <SelectInput
+                            name="manufacturer.model"
+                            placeholder="Select a car model"
+                            options={manufacturersData['models']}
+                            control={control}
+                            errors={errors}
+                            disabled={!watch('manufacturer.make')}
+                            onChange={([selected, option]) => {
+                                collectStepChanges({name : option.name, label : selected.label});
+                                return selected
+                            }}
+                        />
+                    </FieldWrapper>
+                </Col>
+                <Col md={3}>
+                    <FieldWrapper label="Version" labelTop>
+                        <SelectInput
+                            name="manufacturer.generation"
+                            placeholder="Select car version"
+                            options={manufacturersData['model']}
+                            control={control}
+                            errors={errors}
+                            disabled={!watch('manufacturer.generation')}
+                            onChange={([selected, option]) => {
+                                collectStepChanges({name : option.name, label : selected.label});
+                                return selected
+                            }}
+                        />
+                    </FieldWrapper>
+                </Col>
+                <Col md={3}>
+                    <FieldWrapper label="Année" labelTop>
+                        <SelectInput
+                            name="manufacturer.year"
+                            placeholder="Select car year"
+                            options={manufacturersData['years']}
+                            control={control}
+                            errors={errors}
+                            disabled={!watch('manufacturer.generation')}
+                            onChange={([selected, option]) => {
+                                collectStepChanges({name : option.name, label : selected.label});
+                                return selected
+                            }}
+                        />
+                    </FieldWrapper>
+                </Col>
+            </Row>
             <button className="btn" onClick={triggerSkipStep}>Passer cette étape</button>
             <StepNavigation prev={prevStep} submit />
         </form>

@@ -25,68 +25,65 @@ const tabsRadio = [
         value : 'utility',
         label : 'Utilitaire',
         img : 'tab-gruz.png'
-    }
-];
-
-const othersFormOptions = [
-    {
-        value : 'bus',
-        label : 'Bus',
-    },
-    {
-        value : 'truck',
-        label : 'Camion',
     },
     {
         value : 'camper',
         label : 'Camping car',
+        img : 'tab-camper.png'
     },
+    {
+        value : 'truck',
+        label : 'Camion',
+        img : 'tab-gruz.png'
+    },
+    {
+        value : 'bus',
+        label : 'Bus',
+        img : 'tab-bus.png'
+    }
 ];
+
+const othersFormOptions = [];
 
 const Div = styled.div`
     border : 1px solid gainsboro;
     padding : .5rem 1rem
 `;
 
-const VehicleTypeSelector = ({name, control, rules, ...props}) => {
-    const radioRef = useRef();
-
-    useEffect(() => {
-        control.register(name, rules);
-    },[]);
+const VehicleTypeFilterSelector = ({name, control, rules, ...props}) => {
 
     return(
-        <div>
+        <section>
             <Row className="justify-content-center">
                 { tabsRadio && tabsRadio.map((tab, index) => {
                     return (
-                        <div key={index} className="form-check no-input form-check-vehicle m-1">
-
-                            <input id={`name_${index}`}
-                                   ref={control.register(rules)}
-                                   type="radio"
-                                   name={name}
-                                   value={tab.value}
-                                   defaultChecked={tab.checked}
-                            />
-                            <label className="p-2" htmlFor={`name_${index}`}>
-                                <img
-                                    src={`/images/${tab.img}`}
-                                    height="30"
-                                    width="40"
-                                    alt={tab.label}
-                                    title={tab.label}
+                        <Col key={index} xs={6} sm={4} lg={6}>
+                            <div className="form-check no-input form-check-vehicle m-1">
+                                <input id={`name_${index}`}
+                                       ref={control.register(rules)}
+                                       type="radio"
+                                       name={name}
+                                       value={tab.value}
+                                       defaultChecked={tab.checked}
                                 />
-                            </label>
-                        </div>
+                                <label className="p-2" htmlFor={`name_${index}`}>
+                                    <img
+                                        src={`/images/${tab.img}`}
+                                        height="30"
+                                        width="40"
+                                        alt={tab.label}
+                                        title={tab.label}
+                                    />
+                                </label>
+                            </div>
+                        </Col>
                     )
                 })}
             </Row>
 
-            <Divider/>
-
-            { othersFormOptions && (
+            { othersFormOptions && othersFormOptions.length > 0 && (
                 <>
+                    <Divider/>
                     <Header p text="Autres types de véhicules"/>
                     <SelectInput
                         name={`${name}Select`}
@@ -100,8 +97,8 @@ const VehicleTypeSelector = ({name, control, rules, ...props}) => {
                     />
                 </>
             )}
-        </div>
+        </section>
     )
 };
 
-export default VehicleTypeSelector;
+export default VehicleTypeFilterSelector;

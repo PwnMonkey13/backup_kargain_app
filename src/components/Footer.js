@@ -1,9 +1,16 @@
 import React from 'react'
 import Link from 'next/link'
+import styled from 'styled-components'
 
 const Footer = ({t, ...props}) => {
+
+    const FixedFooter = styled.footer`
+        // position:fixed;
+        // bottom:0
+    `;
+
     return(
-        <footer className="menu-footer">
+        <FixedFooter className="menu-footer">
             <ul>
                 <li>
                     <Link href="/about">
@@ -26,7 +33,7 @@ const Footer = ({t, ...props}) => {
                     </Link>
                 </li>
             </ul>
-        </footer>
+        </FixedFooter>
     );
 };
 

@@ -1,7 +1,6 @@
 import {SelectOptionsUtils} from "../../../libs/formFieldsUtils";
-import FieldsTranslalted from "../../../../public/locales/fr/fields";
 
-export const RadioTypeChoices = [
+export const RadioTypeFunction = [
     {
         'label': 'Intégrale',
         'value': 'full'
@@ -27,7 +26,6 @@ export const RadioTypeChoices = [
         'value': 'other'
     },
 ];
-
 export const RadioChoicesGas = [
     {
         'label': 'Diesel',
@@ -108,7 +106,6 @@ export const CheckboxOptionsEquipments = SelectOptionsUtils([
     "Verrouillage central",
     "Anti-demarrage"
 ]);
-
 export const RadioChoicesExternalColor = [
     {
         "value": "noir",
@@ -181,7 +178,6 @@ export const RadioChoicesPaints = [
         "label": "Autre"
     }
 ];
-
 export const RadioChoicesMaterials = [
     {
         "value": "Alcantre",
@@ -208,6 +204,37 @@ export const RadioChoicesMaterials = [
         "label": "autre"
     }
 ];
-
-export const RadioGeneralStateVehicle = FieldsTranslalted.GeneralStateVehicle;
-export const RadioFunctionVehicle = FieldsTranslalted.VehicleFunction;
+export const RadioVehicleGeneralState = [
+    {
+        "value": "neuf",
+        "label": "Neuf"
+    },
+    {
+        "value": "occasion",
+        "label": "Occasion"
+    },
+    {
+        "value": "collection",
+        "label": "Collection"
+    },
+    {
+        "value": "school-driving-car",
+        "label": "Véhicule auto-école"
+    },
+    {
+        "value": "after-rental",
+        "label": "Après location"
+    },
+    {
+        "value": "taxi",
+        "label": "Taxi"
+    },
+    {
+        "value": "company-car",
+        "label": "Véhicule de société"
+    },
+    {
+        "value": "demo-car",
+        "label": "Véhicule de démonstration"
+    },
+];

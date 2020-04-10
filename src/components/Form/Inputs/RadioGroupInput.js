@@ -13,7 +13,8 @@ const RadioGroupInput = memo(({name, control, rules, errors, options, ...props})
 
     const InputClasses = classNames(
         props.noInputClass ? 'no-input' : 'form-check',
-        'm-2'
+        'mx-2',
+        'my-1'
     );
 
     return (

@@ -1,11 +1,10 @@
 import React from 'react';
 import {useGeolocation} from "react-use";
-import ReactFlagsSelect from "../../SelectCountriesFlags";
-import {EmailInput, NumberInput, TelInput, TextInput, GeoCitiesInput} from "../../Form/Inputs";
+import {Col, Row} from "reactstrap";
+import {Email, NumberInput, TelInput, TextInput, GeoCitiesInput} from "../../Form/Inputs";
 import StepNavigation from "../../Form/StepNavigation";
 import FieldWrapper from "../../Form/FieldWrapper";
 import Header from "../../Header";
-import {Col, Row} from "reactstrap";
 
 const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props}) => {
     const {watch, control, errors, getValues, register, formState, handleSubmit} = methods;
@@ -17,6 +16,8 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
 
     return (
         <form className="form_wizard" onSubmit={handleSubmit((data => onSubmitStep(data, true)))}>
+
+            <Header text="Informations sur le vendeur" />
 
             <Row>
                 <Col>
@@ -44,6 +45,17 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                 </Col>
             </Row>
 
+            <FieldWrapper label="Numéro de téléphone">
+                <TelInput
+                    name="seller.phone"
+                    errors={errors}
+                    control={control}
+                    rules={{
+                        required : 'Field required',
+                    }}
+                />
+            </FieldWrapper>
+
             <FieldWrapper label="Adresse complete">
                 <GeoCitiesInput
                     enableGeoloc
@@ -58,35 +70,12 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
 
             <FieldWrapper label="CP/Ville">
                 <GeoCitiesInput
-                    // typeAPI="geo" // vicopo
                     typeAPI="vicopo"
                     name="seller.address"
                     control={control}
                     errors={errors}
                 />
             </FieldWrapper>
-
-            <p> TODO uploads </p>
-
-
-            {/*<FieldWrapper label="Ville ou code postal">*/}
-            {/*    <NumberInput*/}
-            {/*        name="seller.postalcode"*/}
-            {/*        errors={errors}*/}
-            {/*        register={register({ required: 'Title is required' })}*/}
-            {/*    />*/}
-            {/*</FieldWrapper>*/}
-
-            {/*<FieldWrapper label="Nationalité">*/}
-            {/*    <ReactFlagsSelect*/}
-            {/*        name="seller.nationality"*/}
-            {/*        errors={errors}*/}
-            {/*        control={control}*/}
-            {/*        rules={{*/}
-            {/*            required : "Field required"*/}
-            {/*        }}*/}
-            {/*    />*/}
-            {/*</FieldWrapper>*/}
 
             <StepNavigation prev={prevStep} submitLabel="Créer mon annonce" submit />
         </form>

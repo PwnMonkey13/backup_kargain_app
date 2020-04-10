@@ -1,7 +1,7 @@
 import {SelectOptionsUtils} from "../../../libs/formFieldsUtils";
 import FieldsTranslalted from "../../../../public/locales/fr/fields";
 
-export const RadioTypeChoices = [
+export const RadioTypeFunction = [
     {
         'label': 'Chopper',
         'value': 'chopper',
@@ -47,7 +47,20 @@ export const RadioTypeChoices = [
         'value': 'other'
     },
 ];
-
+export const RadioChoicesEngine = [
+    {
+        'label': 'Automatique',
+        'value': 'automatic',
+    },
+    {
+        'label': 'Manuelle',
+        'value': 'manual'
+    },
+    {
+        'label': 'Semi-automatique',
+        'value': 'semi-auto'
+    },
+];
 export const CheckboxOptionsEquipments = SelectOptionsUtils([
     "ABS",
     "ESP",
@@ -173,5 +186,45 @@ export const RadioChoicesMaterials = [
     }
 ];
 
-export const RadioGeneralStateVehicle = FieldsTranslalted.GeneralStateVehicle;
-export const RadioFunctionVehicle = FieldsTranslalted.VehicleFunction;
+export const RadioFunctionVehicle = [
+    {
+        "value": "personal-car",
+        "label": "Véhicule personel"
+    },
+    {
+        "value": "driving-school-car",
+        "label": "Véhicule auto-école"
+    },
+    {
+        "value": "post-rental",
+        "label": "Après location"
+    },
+    {
+        "value": "cab",
+        "label": "Taxi"
+    },
+    {
+        "value": "company-vehicle",
+        "label": "Véhicule de société"
+    },
+    {
+        "value": "demo-vehicle",
+        "label": "Véhicule de démonstration"
+    },
+    {
+        "value": "Pre-save-vehicle",
+        "label": "Pré-enregistré"
+    }
+];
+
+export const RadioVehicleGeneralState = SelectOptionsUtils([
+    "Neuve",
+    "Occasion",
+    "Collection",
+    "Véhicule auto-école",
+    "Après location",
+    "Taxi",
+    "Véhicule de société",
+    "Véhicule de démonstration",
+    "Pré-enregistré"
+]);

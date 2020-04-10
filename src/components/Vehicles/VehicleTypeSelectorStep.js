@@ -1,8 +1,10 @@
 import React, { useRef, useContext} from "react";
 import {Col, Row} from "reactstrap";
-import {useForm } from "react-hook-form";
-import {FormContext} from "../Context/FormContext";
+import styled from 'styled-components';
+import {useForm} from "react-hook-form";
 import Header from "../Header";
+import Divider from "../Divider";
+import {FormContext} from "../Context/FormContext";
 
 const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
     const formRef = useRef(null);
@@ -21,6 +23,11 @@ const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
             img : 'tab-moto.png'
         },
         {
+            value : 'camper',
+            label : 'Camping car',
+            img : 'tab-camper.png'
+        },
+        {
             value : 'bus',
             label : 'Bus/Camion',
             img : 'tab-bus.png'
@@ -32,13 +39,7 @@ const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
         }
     ];
 
-    const othersForm = [
-        {
-            value : 'camper',
-            label : 'Camping car',
-            img : 'tab-gruz.png'
-        }
-    ];
+    const othersForm = [];
 
     const triggerSubmit = () => {
         formRef.current.dispatchEvent(new Event('submit'))
@@ -50,12 +51,17 @@ const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
         handleSelectType(data.vehicleType);
     };
 
+    const Img = styled.img`
+        max-width:80px;
+        object-fit:contain;
+    `;
+
     return(
-        <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-            <Row>
+        <form className="form_wizard my-4" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+            <Row className="justify-content-center">
                 { tabsRadio && tabsRadio.map((tab, index) => {
                     return (
-                        <Col key={index} md={3} className="ml-auto">
+                        <Col key={index} xs={6} sm={3} md={3} lg={2}>
                             <div className="form-check form-check-vehicle m-0" style={{minHeight : '5rem'}}>
                                 <input id={`name_${index}`}
                                        type="radio"
@@ -65,11 +71,7 @@ const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
                                         onChange={() => triggerSubmit()}
                                 />
                                 <label htmlFor={`name_${index}`} style={{minHeight:'5rem'}}>
-                                    <img
-                                        src={`/images/${tab.img}`}
-                                        alt={tab.label}
-                                        title={tab.label}
-                                    />
+                                    <Img src={`/images/${tab.img}`} alt={tab.label} title={tab.label} />
                                 </label>
                             </div>
                         </Col>
@@ -77,8 +79,9 @@ const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
                 })}
             </Row>
 
-            { othersForm && (
-                <div>
+            { othersForm && othersForm.length !== 0 && (
+                <>
+                    <Divider/>
                     <Header as="h3" text="Autres types de véhicules"/>
                     <div className="m-2">
                         <Row>
@@ -98,7 +101,7 @@ const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
                             })}
                         </Row>
                     </div>
-                </div>
+                </>
             )}
         </form>
     )

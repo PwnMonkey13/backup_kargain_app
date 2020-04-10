@@ -4,26 +4,24 @@ import classNames from "classnames";
 import {Tooltip, Col, Row} from "reactstrap";
 import styled from "styled-components";
 
-function createMarkup(content) {
-    return {__html: content};
-}
-
 const ToolTipWrapper = (props) => {
     const [tooltipOpen, setTooltipOpen] = useState(false);
     const toggle = () => setTooltipOpen(!tooltipOpen);
     const tooltipRef = useRef(null);
 
-    useEffect(() => {
-        // console.log(tooltipRef.current);
-    }, [tooltipRef]);
-
+    console.log("efsefsef");
     return (
         <div className="fg-tooltip-wrapper">
             <span ref={tooltipRef} className={classNames("fg-tooltip", `fg-tooltip-${props.template}`, props.position)}> {props.icon} </span>
             {
                 tooltipRef && (
-                    <Tooltip placement={props.position} isOpen={tooltipOpen} target={tooltipRef} toggle={toggle}
-                             dangerouslySetInnerHTML={createMarkup(props.content)}/>
+                    <Tooltip
+                        placement={props.position}
+                        isOpen={tooltipOpen}
+                        target={tooltipRef}
+                        toggle={toggle}>
+                        {props.children}
+                    </Tooltip>
                 )
             }
         </div>
@@ -32,7 +30,6 @@ const ToolTipWrapper = (props) => {
 
 ToolTipWrapper.propTypes = {
     icon: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired
 };
 
 ToolTipWrapper.defaultProps = {

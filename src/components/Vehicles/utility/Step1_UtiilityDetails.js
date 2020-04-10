@@ -1,12 +1,15 @@
 import React, {useRef} from 'react';
 import { Row, Col } from 'reactstrap';
 import FieldWrapper from "../../Form/FieldWrapper";
-import {CheckboxMultipleInput, SelectInput, NumberInput, RadioGroupInput, TextInput} from "../../Form/Inputs";
-import {RadioFunctionVehicle, RadioChoicesEngine, CheckboxOptionsEquipments, RadioTypeFunction, RadioChoicesMaterials, RadioChoicesExternalColor, RadioChoicesPaints} from "./form.data.js";
+import {CheckboxMultipleInput, NumberInput, RadioGroupInput, SelectInput, TextInput} from "../../Form/Inputs";
+import {CheckboxOptionsEquipments, RadioTypeFunction, RadioChoicesMaterials, RadioChoicesExternalColor, RadioChoicesPaints} from "./form.data.js";
+import {RadioChoicesEmission, RadioChoicesEngine, RadioChoicesGas, RadioVehicleGeneralState} from "./form.data";
+import {SelectOptionsUtils} from "../../../libs/formFieldsUtils";
 import Header from "../../Header";
-import {RadioChoicesGas} from "../car/form.data";
+import {RadioFunctionVehicle} from "../moto/form.data";
+import StepNavigation from "../../Form/StepNavigation";
 
-const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props}) => {
+const Step1UtilityDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props}) => {
     const formRef = useRef(null);
     const {watch, control, errors, getValues, register, formState, handleSubmit} = methods;
 
@@ -14,11 +17,12 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
             <Row>
                 <Col>
-                    <FieldWrapper label="Type">
+                    <FieldWrapper label="Type" required>
                         <SelectInput name="vehicleFunction"
-                                     control={control}
-                                     errors={errors}
-                                     options={RadioTypeFunction}
+                                         options={RadioTypeFunction}
+                                         control={control}
+                                         errors={errors}
+                                         rules={{required: 'Title is required!'}}
                         />
                     </FieldWrapper>
                 </Col>
@@ -48,7 +52,7 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                 </Col>
                 <Col>
                     <FieldWrapper label="Cylindrée">
-                        <NumberInput name="vehicleEngine.cylinder"
+                        <NumberInput name="cylinder"
                                      control={control}
                                      errors={errors}
                         />
@@ -139,14 +143,60 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                 </Col>
             </Row>
 
+            <Header text="Données du véhicule"/>
+
+            <FieldWrapper label="Equipements">
+                <SelectInput
+                    name="equipments"
+                    options={CheckboxOptionsEquipments}
+                    defaultChecked={["ABS", "ESP"]}
+                    control={control}
+                    errors={errors}
+                />
+            </FieldWrapper>
+
             <Row>
                 <Col>
-                    <FieldWrapper label="Equipements">
+                    <FieldWrapper label="Nombre d'essieux">
                         <SelectInput
-                            name="equipments"
-                            isMulti
-                            options={CheckboxOptionsEquipments}
-                            defaultChecked={["Topcase", "Kickstarter"]}
+                            name="vehicleEngine.type"
+                            className="mb-2"
+                            options={RadioChoicesEngine}
+                            control={control}
+                            errors={errors}
+                        />
+                    </FieldWrapper>
+                </Col>
+                <Col>
+                    <FieldWrapper label="Cabines conducteur">
+                        <SelectInput
+                            name="driverCabin"
+                            options={SelectOptionsUtils([2, 3, 4, 5])}
+                            control={control}
+                            errors={errors}
+                        />
+                    </FieldWrapper>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col>
+                    <FieldWrapper label="Nombre de portes">
+                        <SelectInput
+                            name="doors"
+                            options={SelectOptionsUtils([2, 3, 4, 5])}
+                            placeholder="Select number of doors"
+                            control={control}
+                            errors={errors}
+                        />
+                    </FieldWrapper>
+                </Col>
+                <Col>
+                    <FieldWrapper label="Nombre de places">
+                        <SelectInput
+                            name="seats"
+                            options={SelectOptionsUtils([2, 3, 4, 5])}
+                            placeholder="Select number of seats"
                             control={control}
                             errors={errors}
                         />
@@ -185,9 +235,20 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                         />
                     </FieldWrapper>
                 </Col>
+                <Col>
+                    <FieldWrapper label="Couleur intérieure">
+                        <SelectInput
+                            name="internalColor"
+                            options={RadioChoicesExternalColor}
+                            control={control}
+                            errors={errors}
+                        />
+                    </FieldWrapper>
+                </Col>
             </Row>
+            <StepNavigation prev={prevStep} submit />
         </form>
     );
 };
 
-export default Step1_MotoDetails;
+export default Step1UtilityDetails;

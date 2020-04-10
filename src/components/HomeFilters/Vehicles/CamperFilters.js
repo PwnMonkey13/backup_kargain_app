@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {MapPin} from "react-feather";
-import Header from "../../Header";
 import {
     RadioTypeFunction,
     CheckboxOptionsEquipments,
@@ -10,15 +9,18 @@ import {
     RadioChoicesExternalColor,
     RadioChoicesGas,
     RadioChoicesPaints,
+    RadioChoicesMaterials,
     RadioVehicleGeneralState
-} from "../../Vehicles/car/form.data";
-import { SliderInput, NumberInput, SelectInput, GeoCitiesInput } from "../../Form/Inputs";
+} from "../../Vehicles/camper/form.data";
+import Header from "../../Header";
+import {SelectOptionsUtils} from "../../../libs/formFieldsUtils";
+import {SliderInput, NumberInput, SelectInput, GeoCitiesInput} from "../../Form/Inputs";
 import CarApiService from "../../../services/vehicles/CarApiService";
 import {ModalDialogContext} from "../../Context/ModalDialogContext";
 import ReactFlagsSelect from "../../SelectCountriesFlags";
 import useAddress from "../../../hooks/useAddress";
 
-const CarFilters = ({control, watch, errors, ...props}) => {
+const CamperFilters = ({control, watch, errors, ...props}) => {
     const [addressObj, address, geolocation] = useAddress();
     const [makes, setMakes] = useState([]);
     const {dispatchModalError} = useContext(ModalDialogContext);
@@ -95,24 +97,6 @@ const CarFilters = ({control, watch, errors, ...props}) => {
                 errors={errors}
             />
 
-            <Header p strong className="my-2" text="Cylindrée (cm3)"/>
-            <div className="d-flex">
-                <NumberInput
-                    name="vehicleEngine.cylinder.from"
-                    className="mb-2 mx-1"
-                    placeholder="de"
-                    control={control}
-                    errors={errors}
-                />
-                <NumberInput
-                    name="vehicleEngine.cylinder.to"
-                    className="mb-2 mx-1"
-                    placeholder="a"
-                    control={control}
-                    errors={errors}
-                />
-            </div>
-
             <Header p strong className="my-2" text="Prix"/>
             <SliderInput
                 name="price"
@@ -125,6 +109,60 @@ const CarFilters = ({control, watch, errors, ...props}) => {
                 suffix="€"
                 classNames="mb-2 my-4"
             />
+
+            <Header as="label" text="Kilométrage (km)"/>
+            <div className="d-flex">
+                <NumberInput
+                    name="mileage.from"
+                    className="mb-2 mx-1"
+                    placeholder="de"
+                    control={control}
+                    errors={errors}
+                />
+
+                <NumberInput
+                    name="mileage.to"
+                    className="mb-2 mx-1"
+                    placeholder="a"
+                    control={control}
+                    errors={errors}
+                />
+            </div>
+
+            <Header p strong className="my-2" text="Cylindrée (cm3)"/>
+            <div className="d-flex">
+                <NumberInput
+                    name="vehicleEngine.cylinder.from"
+                    className="mb-2 mx-1"
+                    placeholder="de"
+                    control={control}
+                    errors={errors}
+                />
+
+                <NumberInput
+                    name="vehicleEngine.cylinder.to"
+                    className="mb-2 mx-1"
+                    placeholder="a"
+                    control={control}
+                    errors={errors}
+                />
+            </div>
+
+            <Header p strong className="my-2" text="Puissance"/>
+            <div className="d-flex">
+                <NumberInput
+                    name="power.kw.from"
+                    className="mb-2 mx-1"
+                    control={control}
+                    errors={errors}
+                />
+                <NumberInput
+                    name="power.kw.to"
+                    className="mb-2 mx-1"
+                    control={control}
+                    errors={errors}
+                />
+            </div>
 
             <Header p strong className="my-2" text="Pays"/>
             <ReactFlagsSelect
@@ -164,41 +202,6 @@ const CarFilters = ({control, watch, errors, ...props}) => {
                 </>
             )}
 
-            <Header as="label" text="Kilométrage (km)"/>
-            <div className="d-flex">
-                <NumberInput
-                    name="mileage.from"
-                    className="mb-2 mx-1"
-                    placeholder="de"
-                    control={control}
-                    errors={errors}
-                />
-
-                <NumberInput
-                    name="mileage.to"
-                    className="mb-2 mx-1"
-                    placeholder="a"
-                    control={control}
-                    errors={errors}
-                />
-            </div>
-
-            <Header p strong className="my-2" text="Puissance"/>
-            <div className="d-flex">
-                <NumberInput
-                    name="power.kw.from"
-                    className="mb-2 mx-1"
-                    control={control}
-                    errors={errors}
-                />
-                <NumberInput
-                    name="power.kw.to"
-                    className="mb-2 mx-1"
-                    control={control}
-                    errors={errors}
-                />
-            </div>
-
             <Header p strong className="my-2" text="Etat du véhicule"/>
             <SelectInput
                 name="vehicleGeneralState"
@@ -230,19 +233,23 @@ const CarFilters = ({control, watch, errors, ...props}) => {
                 />
             </div>
 
-            <Header p strong className="my-2" text="Nombre de portes"/>
-            <div className="d-flex">
-                <NumberInput
-                    name="doors.from"
-                    control={control}
-                    errors={errors}
-                />
-                <NumberInput
-                    name="doors.to"
-                    control={control}
-                    errors={errors}
-                />
-            </div>
+            <Header p strong className="my-2" text="Equipements"/>
+            <SelectInput
+                name="equipments"
+                options={CheckboxOptionsEquipments}
+                isMulti
+                defaultChecked={["ABS", "ESP"]}
+                control={control}
+                errors={errors}
+            />
+
+            <Header p strong className="my-2" text="Peinture"/>
+            <SelectInput
+                name="paint"
+                options={RadioChoicesPaints}
+                control={control}
+                errors={errors}
+            />
 
             <Header p strong className="my-2" text="Nombre de places"/>
             <div className="d-flex">
@@ -258,12 +265,48 @@ const CarFilters = ({control, watch, errors, ...props}) => {
                 />
             </div>
 
-            <Header p strong className="my-2" text="Equipements"/>
+            <Header p strong className="my-2" text="Nombre de portes"/>
+            <div className="d-flex">
+                <NumberInput
+                    name="doors.from"
+                    control={control}
+                    errors={errors}
+                />
+                <NumberInput
+                    name="doors.to"
+                    control={control}
+                    errors={errors}
+                />
+            </div>
+
+            <Header p strong className="my-2" text="Nombre de couchettes"/>
+            <div className="d-flex">
+                <NumberInput
+                    name="bunks.from"
+                    control={control}
+                    errors={errors}
+                />
+                <NumberInput
+                    name="bunks.to"
+                    control={control}
+                    errors={errors}
+                />
+            </div>
+
+            <Header p strong className="my-2" text="Type de lit"/>
             <SelectInput
-                name="equipments"
-                options={CheckboxOptionsEquipments}
-                isMulti
-                defaultChecked={["ABS", "ESP"]}
+                name="bedType"
+                className="mb-2"
+                options={SelectOptionsUtils(['simple', 'double', 'depliant', 'gonflable'])}
+                placeholder="5"
+                control={control}
+                errors={errors}
+            />
+
+            <Header p strong className="my-2" text="Materiaux"/>
+            <SelectInput
+                name="internalColor"
+                options={RadioChoicesMaterials}
                 control={control}
                 errors={errors}
             />
@@ -295,10 +338,10 @@ const CarFilters = ({control, watch, errors, ...props}) => {
     )
 };
 
-CarFilters.propTypes = {
+CamperFilters.propTypes = {
     control: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
     watch: PropTypes.func
 };
 
-export default CarFilters;
+export default CamperFilters;
