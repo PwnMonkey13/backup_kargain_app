@@ -15,12 +15,13 @@ const objToBase64 = (obj) => {
     return buff.toString('base64');
 };
 
-function getAnnounces({filters, ...params}) {
+function getAnnounces({filters, sorter, ...params}) {
     const requestOptions = {
         method : 'GET',
     };
 
-    const obfuscatedFilters = objToBase64(filters);
+    const data = {filters, sorter};
+    const obfuscatedFilters = objToBase64(data);
     let url = buildUrl(config.api, `/ads/announces/${obfuscatedFilters}`, params);
 
     return fetch(url, requestOptions)

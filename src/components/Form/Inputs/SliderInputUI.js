@@ -4,9 +4,9 @@ import classNames from "classnames";
 import Slider from '@material-ui/core/Slider';
 import Tooltip from '@material-ui/core/Tooltip';
 import ValidationError from "../Validations/ValidationError";
+import {Controller} from "react-hook-form";
 
 const RangeSlider = ({name, rules, control, errors, ...props}) => {
-    const [value, setValue] = React.useState(props.defaultValue);
 
     const InputClasses = classNames(
         "input-field",
@@ -14,38 +14,37 @@ const RangeSlider = ({name, rules, control, errors, ...props}) => {
         props.classNames,
     );
 
-    const handleChange = (event, val) => {
-        setValue(val);
-        if(val && val.length > 0){
-            control.setValue(name, { min : val[0], max : val[1] });
-        }
-    };
-
-    useEffect(()=>{
-        control.register({ name }, rules )
-    },[]);
-
-    return (
+    return(
         <>
             <div className={InputClasses} style={{ width: '80%', margin : '0 auto' }}>
-                <Slider
-                    value={value}
-                    onChange={handleChange}
-                    valueLabelDisplay="on"
-                    step={props.step}
-                    min={props.min}
-                    max={props.max}
-                    ValueLabelComponent={(innerProps) => <ValueLabelComponent suffix={props.suffix} {...innerProps}/>}
+                <Controller
+                    name={name}
+                    control={control}
+                    defaultValue={props.defaultValue}
+                    onChange={([, value]) => {
+                        console.log(value);
+                        return value;
+                    }}
+                    as={<Slider
+                        step={props.step}
+                        min={props.min}
+                        max={props.max}
+                        valueLabelDisplay="on"
+                        ValueLabelComponent={(innerProps) => <ValueLabelComponent
+                            suffix={props.suffix} {...innerProps}
+                        />}
+                    />}
                 />
             </div>
             {errors && <ValidationError errors={errors} name={name}/>}
-        </>
+         </>
     );
 };
 
 RangeSlider.propTypes = {
     name: PropTypes.string.isRequired,
     min: PropTypes.number,
+    step: PropTypes.number,
     max: PropTypes.number
 };
 

@@ -1,14 +1,18 @@
 import React, {useContext, useEffect, useState} from "react";
+import PropTypes from "prop-types";
 import Header from "../../Header";
 import {
+    RadioChoicesType,
     CheckboxOptionsEquipments,
     RadioChoicesEmission,
     RadioChoicesEngine,
     RadioChoicesExternalColor,
     RadioChoicesGas,
-    RadioChoicesPaints } from "../../Vehicles/car/form.data";
+    RadioChoicesPaints,
+    RadioGeneralStateVehicle
+} from "../../Vehicles/car/form.data";
 import {SelectOptionsUtils} from "../../../libs/formFieldsUtils";
-import { SliderInput, RangeSlider, NumberInput, SelectInput, GeoCitiesInput } from "../../Form/Inputs";
+import { SliderInput, NumberInput, SelectInput, GeoCitiesInput } from "../../Form/Inputs";
 import CarApiService from "../../../services/vehicles/CarApiService";
 import {ModalDialogContext} from "../../Context/ModalDialogContext";
 import {MapPin} from "react-feather";
@@ -16,10 +20,10 @@ import Typography from "@material-ui/core/Typography";
 import ReactFlagsSelect from "../../SelectCountriesFlags";
 import useAddress from "../../../hooks/useAddress";
 
-const CarFilters = ({control, errors, ...props}) => {
-    const [geolocation, addressData, niceAddress] = useAddress();
+const CarFilters = ({control, watch, errors, ...props}) => {
+    const [addressObj, address, geolocation] = useAddress();
     const [makes, setMakes] = useState([]);
-    const {dispatchModal} = useContext(ModalDialogContext);
+    const {dispatchModalError} = useContext(ModalDialogContext);
     const popularMakesId = [
         3, // AlphaRomeo
         9, // Audi
@@ -36,6 +40,14 @@ const CarFilters = ({control, errors, ...props}) => {
         133 // Susuki
     ];
 
+    useEffect(()=>{
+        control.register({name : "geoloc"});
+    },[]);
+
+    useEffect(() => {
+        control.setValue("geoloc", geolocation);
+    },[geolocation]);
+
     useEffect(() => {
         CarApiService.getMakes(popularMakesId)
             .then(cars => {
@@ -44,9 +56,11 @@ const CarFilters = ({control, errors, ...props}) => {
                 setMakes([...makesOptions, defaultOption]);
             })
             .catch(err => {
-                dispatchModal({type: 'error', err});
+                dispatchModalError({err});
             });
     }, []);
+
+    const countrySelect = watch('country');
 
     return(
         <>
@@ -58,9 +72,17 @@ const CarFilters = ({control, errors, ...props}) => {
                 options={makes}
             />
 
+            <Header p strong className="my-2" text="Type de voiture"/>
+            <SelectInput
+                name="type"
+                options={RadioChoicesType}
+                control={control}
+                errors={errors}
+            />
+
             <Header p strong className="my-2" text="Boite de vitesse"/>
             <SelectInput
-                name="engine.type"
+                name="vehicleEngine.type"
                 options={RadioChoicesEngine}
                 control={control}
                 errors={errors}
@@ -68,7 +90,7 @@ const CarFilters = ({control, errors, ...props}) => {
 
             <Header p strong className="my-2" text="Carburant"/>
             <SelectInput
-                name="engine.gas"
+                name="vehicleEngine.gas"
                 className="mb-2"
                 options={RadioChoicesGas}
                 control={control}
@@ -78,14 +100,14 @@ const CarFilters = ({control, errors, ...props}) => {
             <Header p strong className="my-2" text="Cylindrée (cm3)"/>
             <div className="d-flex">
                 <NumberInput
-                    name="engine.cylinder.from"
+                    name="vehicleEngine.cylinder.from"
                     className="mb-2 mx-1"
                     placeholder="de"
                     control={control}
                     errors={errors}
                 />
                 <NumberInput
-                    name="engine.cylinder.to"
+                    name="vehicleEngine.cylinder.to"
                     className="mb-2 mx-1"
                     placeholder="a"
                     control={control}
@@ -94,51 +116,55 @@ const CarFilters = ({control, errors, ...props}) => {
             </div>
 
             <Header p strong className="my-2" text="Prix"/>
-            <RangeSlider
+            <SliderInput
                 name="price"
+                defaultValue={[10000, 80000]}
                 min={1000}
                 max={100000}
                 step={1000}
-                control={control}
                 errors={errors}
-                range
+                control={control}
                 suffix="€"
                 classNames="mb-2 my-4"
             />
 
-            <Header p strong className="my-2" text="Nationalité"/>
+            <Header p strong className="my-2" text="Pays"/>
             <ReactFlagsSelect
-                name="seller.nationality"
+                name="country"
                 errors={errors}
                 control={control}
             />
 
-            <Header p strong className="my-2">
-                <MapPin/> Adresse approximative : {niceAddress}
-            </Header>
+            { (countrySelect && countrySelect.value === "FR") && (
+                <>
+                    <Header p strong className="my-2">
+                        <MapPin/> Adresse approximative : {address}
+                    </Header>
 
-            <GeoCitiesInput
-                name="seller.address"
-                enableGeoloc
-                lat={geolocation.latitude}
-                long={geolocation.longitude}
-                typeAPI="geo" //vicopo
-                control={control}
-                errors={errors}
-            />
+                    <GeoCitiesInput
+                        name="location"
+                        enableGeoloc
+                        lat={geolocation.latitude}
+                        long={geolocation.longitude}
+                        typeAPI="geo" //vicopo
+                        control={control}
+                        errors={errors}
+                        />
 
-            <Header p strong className="my-2" text="Rayon"/>
-            <SliderInput
-                name="radius"
-                defaultValue={15}
-                min={1}
-                max={100}
-                step={5}
-                suffix="km"
-                control={control}
-                errors={errors}
-                classNames="mb-2 my-4"
-            />
+                    <Header p strong className="my-2" text="Rayon"/>
+                    <SliderInput
+                        name="radius"
+                        defaultValue={15}
+                        min={0}
+                        max={30}
+                        step={5}
+                        suffix="km"
+                        control={control}
+                        errors={errors}
+                        classNames="mb-2 my-4"
+                    />
+                </>
+            )}
 
             <Header as="label" text="Kilométrage (km)"/>
             <div className="d-flex">
@@ -251,8 +277,23 @@ const CarFilters = ({control, errors, ...props}) => {
                 control={control}
                 errors={errors}
             />
+
+            {/*<Header p strong className="my-2" text="Etat du véhicule"/>*/}
+            {/*<SelectInput*/}
+            {/*    name="vehicleGeneralState"*/}
+            {/*    options={RadioGeneralStateVehicle}*/}
+            {/*    control={control}*/}
+            {/*    errors={errors}*/}
+            {/*/>*/}
         </>
     )
 };
+
+CarFilters.propTypes = {
+    control: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired,
+    watch: PropTypes.func
+};
+
 
 export default CarFilters;

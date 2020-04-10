@@ -1,10 +1,9 @@
-import React from "react";
+import React, {useEffect} from "react";
 import PropTypes from "prop-types";
-import Select, {components} from 'react-select';
-import ValidationError from "../Form/Validations/ValidationError";
+import NiceSelect, {components} from 'react-select';
+import {Controller} from "react-hook-form";
 import countries from './countries';
-
-//TODO default flag
+import ValidationError from "../Form/Validations/ValidationError";
 
 const ReactFlagsSelect = ({name, rules, control, errors, ...props}) => {
 
@@ -15,6 +14,13 @@ const ReactFlagsSelect = ({name, rules, control, errors, ...props}) => {
             icon : <img src={`/images/flags/${key.toLowerCase()}.svg`} width="20" height="20" alt=""/>
         };
     });
+
+    let defaultValue = props.defaultValue &&
+        options.find(option => option.value === props.defaultValue);
+
+    useEffect(()=>{
+        control.setValue(name, defaultValue);
+    },[]);
 
     const SingleValue = (props) => (
         <components.SingleValue {...props}>
@@ -39,12 +45,19 @@ const ReactFlagsSelect = ({name, rules, control, errors, ...props}) => {
     return (
         <>
             <div className="select-field">
-                <Select
+                <Controller
+                    instanceId={name}
                     name={name}
-                    ref={control.register(rules)}
-                    components={ {SingleValue, Option } }
-                    defaultValue={options[0]}
-                    options={ options }
+                    control={control}
+                    rules={rules}
+                    onChange={props.onChange}
+                    as={<NiceSelect
+                        options={options}
+                        isClearable={props.isClearable}
+                        components={ {SingleValue, Option }}
+                        defaultValue={defaultValue}
+                        placeholder={props.placeholder}
+                   />}
                 />
             </div>
             {errors && <ValidationError errors={errors} name={name}/>}
@@ -54,10 +67,14 @@ const ReactFlagsSelect = ({name, rules, control, errors, ...props}) => {
 
 ReactFlagsSelect.propTypes = {
     name: PropTypes.string.isRequired,
+    control: PropTypes.object.isRequired,
+    isClearable : PropTypes.bool,
 };
 
 ReactFlagsSelect.defaultProps = {
     rules: {},
+    defaultValue : "FR",
+    isClearable : true,
 };
 
 export default ReactFlagsSelect;

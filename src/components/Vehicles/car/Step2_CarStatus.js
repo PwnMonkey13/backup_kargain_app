@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import Header from "../../Header";
 import {RadioGroupInput, SelectInput, TextareaInput} from "../../Form/Inputs";
-import {RadioGeneralStateVehicle, RadioFunctionVehicle } from "./form.data.js";
+import {RadioChoicesFunction} from "./form.data.js";
 import StepNavigation from "../../Form/StepNavigation";
 import {SelectOptionsUtils} from "../../../libs/formFieldsUtils";
 import FieldWrapper from "../../Form/FieldWrapper";
@@ -18,22 +18,22 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
             <FieldWrapper label="Fonction du véhicule">
                 <RadioGroupInput
                     name="vehicleFunction"
-                    options={RadioFunctionVehicle}
+                    options={RadioChoicesFunction}
                     control={control}
-                    rules={{ required: 'Title is required' }}
+                    // rules={{ required: 'Field is required' }}
                     errors={errors}
                 />
             </FieldWrapper>
 
-            <FieldWrapper label="Etat général">
-                <RadioGroupInput
-                    name="vehicleState"
-                    options={RadioGeneralStateVehicle}
-                    control={control}
-                    rules={{ required: 'Title is required' }}
-                    errors={errors}
-                />
-            </FieldWrapper>
+            {/*<FieldWrapper label="Etat général">*/}
+            {/*    <RadioGroupInput*/}
+            {/*        name="vehicleGeneralState"*/}
+            {/*        options={RadioGeneralStateVehicle}*/}
+            {/*        control={control}*/}
+            {/*        // rules={{ required: 'Field is required' }}*/}
+            {/*        errors={errors}*/}
+            {/*    />*/}
+            {/*</FieldWrapper>*/}
 
             <FieldWrapper label="Nombre de propriétaires">
                 <SelectInput
@@ -41,7 +41,7 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                     options={SelectOptionsUtils([2, 3, 4, 5])}
                     placeholder="Select number of owners"
                     control={control}
-                    rules={{ required: "Field required" }}
+                    // rules={{ required: "Field required" }}
                     errors={errors}
                 />
             </FieldWrapper>
@@ -52,7 +52,7 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                     options={SelectOptionsUtils([2, 3, 4, 5])}
                     placeholder="Select number of damages"
                     control={control}
-                    rules={{ required: "Field required" }}
+                    // rules={{ required: "Field required" }}
                     errors={errors}
                 />
             </FieldWrapper>
@@ -62,7 +62,7 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                     name="defective"
                     options={SelectOptionsUtils([2, 3, 4, 5])}
                     control={control}
-                    rules={{ required: "Field required" }}
+                    // rules={{ required: "Field required" }}
                     errors={errors}
                 />
             </FieldWrapper>
@@ -71,7 +71,7 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                 <TextareaInput
                     name="description"
                     control={control}
-                    rules={{ required: "Field required" }}
+                    // rules={{ required: "Field required" }}
                     errors={errors}
                 />
             </FieldWrapper>

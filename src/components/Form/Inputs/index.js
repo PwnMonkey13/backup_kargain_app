@@ -12,4 +12,3 @@ export { default as PasswordInput } from "./PasswordInput";
 export { default as LocationSearchInput } from './LocationSearchInput';
 export { default as GeoCitiesInput } from './GeoCitiesInput';
 export { default as SliderInput } from './SliderInputUI';
-export { default as RangeSlider } from './RangeInputUI';

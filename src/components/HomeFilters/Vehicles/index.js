@@ -1,7 +1,13 @@
 import CarFilters from './CarFilters';
+import MotoFilters from './MotoFilters';
 
-const Filters = {
-    car : CarFilters,
+export default function getFiltersVehicleComponent(type){
+    switch(type){
+        case 'car' :
+        default:
+            return CarFilters;
+        case 'moto':
+        case 'scooter':
+            return MotoFilters
+    }
 };
-
-export default Filters;

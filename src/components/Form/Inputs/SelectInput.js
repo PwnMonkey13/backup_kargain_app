@@ -1,12 +1,12 @@
 import React, {memo} from 'react';
-import dynamic from "next/dynamic";
 import NiceSelect, {components} from "react-select";
 import PropTypes from "prop-types";
-import ValidationError from "../Validations/ValidationError";
 import {Controller} from "react-hook-form";
 import classNames from "classnames";
+import ValidationError from "../Validations/ValidationError";
 
 const CustomClearText = () => "clear all";
+
 const ClearIndicator = props => {
     const {
         children = <CustomClearText/>,
@@ -20,6 +20,7 @@ const ClearIndicator = props => {
         </div>
     );
 };
+
 const Menu = props => {
     return(
         <>
@@ -28,10 +29,12 @@ const Menu = props => {
         </>
     )
 };
+
 const menuHeaderStyle = {
     padding: '8px 12px',
     color: 'white',
 };
+
 const MenuOptions = props => {
     return(
         <>
@@ -99,6 +102,7 @@ const SelectInput = memo(({name, control, rules, errors, ...props}) => {
 
     const InputClasses = classNames(
         'select-field',
+        'my-2',
         props.className,
     );
 
@@ -110,14 +114,16 @@ const SelectInput = memo(({name, control, rules, errors, ...props}) => {
                     name={name}
                     control={control}
                     rules={rules}
+                    onChange={props.onChange}
                     as={ <NiceSelect
-                        styles={{customStyles}}
+                        options={options}
                         width={props.width}
+                        isClearable={props.isClearable}
                         isMulti={props.isMulti}
+                        styles={{customStyles}}
                         defaultValue={defaultValues}
                         placeholder={props.placeholder}
-                        components={{clearValue: ClearIndicator }}
-                        options={options}
+                        components={{clearValue: ClearIndicator}}
                         forwardProps={{featured : props.featured}}
                     />}
                 />
@@ -132,10 +138,12 @@ export default SelectInput;
 SelectInput.propTypes = {
     name: PropTypes.string.isRequired,
     control: PropTypes.object.isRequired,
+    isClearable : PropTypes.bool,
 };
 
 SelectInput.defaultProps = {
+    rules: {},
     isMulti : false,
+    isClearable : true,
     width : "200px",
-    fullwidth : true
 };

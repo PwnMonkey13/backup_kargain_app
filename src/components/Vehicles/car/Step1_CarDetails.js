@@ -9,7 +9,7 @@ import {
     RadioChoicesExternalColor,
     RadioChoicesPaints,
     RadioChoicesMaterials,
-    RadioTypeChoices
+    RadioChoicesType
 } from "./form.data.js";
 import StepNavigation from "../../Form/StepNavigation";
 import FieldWrapper from "../../Form/FieldWrapper";
@@ -37,29 +37,37 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
 
             <FieldWrapper label="Type" required>
                 <RadioGroupInput name="type"
-                            options={RadioTypeChoices}
+                            options={RadioChoicesType}
                             control={control}
                             errors={errors}
-                            rules={{required: 'Title is required!'}}
+                            // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
             <FieldWrapper label="Boite de vitesse">
                 <RadioGroupInput
-                    name="engine.mode"
+                    name="vehicleEngine.mode"
                     options={RadioChoicesEngine}
                     control={control}
                     errors={errors}
-                    rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
             <FieldWrapper label="Carburant" required>
-                <RadioGroupInput name="engine.gas"
+                <RadioGroupInput name="vehicleEngine.gas"
                             options={RadioChoicesGas}
                             control={control}
                             errors={errors}
-                            rules={{required: 'Title is required!'}}
+                            // rules={{required: 'Field is required!'}}
+                />
+            </FieldWrapper>
+
+            <FieldWrapper label="Cylindrée">
+                <NumberInput name="vehicleEngine.cylinder"
+                             control={control}
+                             errors={errors}
+                             // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -68,7 +76,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                              placeholder="20000 km"
                              control={control}
                              errors={errors}
-                             rules={{required: 'Title is required!'}}
+                             // rules={{required: 'Field is required!'}}
 
                 />
             </FieldWrapper>
@@ -77,7 +85,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                 <NumberInput name="power.kw"
                              control={control}
                              errors={errors}
-                             rules={{required: 'Title is required!'}}
+                             // rules={{required: 'Field is required!'}}
 
                 />
             </FieldWrapper>
@@ -87,15 +95,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                              label="Puissance CH"
                              control={control}
                              errors={errors}
-                             rules={{required: 'Title is required!'}}
-                />
-            </FieldWrapper>
-
-            <FieldWrapper label="Cylindrée">
-                <NumberInput name="engine.cylinder"
-                             control={control}
-                             errors={errors}
-                             rules={{required: 'Title is required!'}}
+                             // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -105,7 +105,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     options={RadioChoicesEmission}
                     control={control}
                     errors={errors}
-                    // rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -116,7 +116,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     name="consumption.mixt"
                     control={control}
                     errors={errors}
-                    // rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -125,7 +125,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     name="consumption.city"
                     control={control}
                     errors={errors}
-                    // rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -134,7 +134,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     name="consumption.road"
                     control={control}
                     errors={errors}
-                    // rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -143,7 +143,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     name="consumption.gkm"
                     control={control}
                     errors={errors}
-                    // rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -156,7 +156,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     placeholder="Select number of doors"
                     control={control}
                     errors={errors}
-                    // rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -167,7 +167,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     placeholder="Select number of seats"
                     control={control}
                     errors={errors}
-                    // rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -178,7 +178,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     defaultChecked={["ABS", "ESP"]}
                     control={control}
                     errors={errors}
-                    // rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -188,7 +188,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     options={RadioChoicesMaterials}
                     control={control}
                     errors={errors}
-                    rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -198,7 +198,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     options={RadioChoicesPaints}
                     control={control}
                     errors={errors}
-                    // rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -208,7 +208,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     options={RadioChoicesExternalColor}
                     control={control}
                     errors={errors}
-                    // rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 
@@ -218,7 +218,7 @@ const Step1_CarDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep
                     options={RadioChoicesExternalColor}
                     control={control}
                     errors={errors}
-                    // rules={{required: 'Title is required!'}}
+                    // rules={{required: 'Field is required!'}}
                 />
             </FieldWrapper>
 

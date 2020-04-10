@@ -4,15 +4,30 @@ import querystring from 'querystring';
 
 const API_URL =  `${config.api}/places`;
 
-function fetchAddresses(params){
+function fetchGeoGouvStreets(params) {
     //available parameters
     const {q, limit, autocomplete, lat, lon, type, postcode, citycode} = params;
     const defaultParams = {
-        type : "housenumber", // housenumber, street, locality, municipality
-        autocomplete : 1,
-        limit : 10
+        type: "housenumber", // housenumber, street, locality, municipality
+        autocomplete: 1,
+        limit: 10
     };
-    const url = buildUrl(API_URL, '/adresses-gouv', {...defaultParams, ...params});
+    return internalFetchGeoGouv({...defaultParams, ...params});
+}
+
+function fetchGeoGouvCities(params) {
+    //available parameters
+    const {q, limit, autocomplete, lat, lon, type, postcode, citycode} = params;
+    const defaultParams = {
+        type: "municipality", // housenumber, street, locality, municipality
+        autocomplete: 1,
+        limit: 10
+    };
+    return internalFetchGeoGouv({...defaultParams, ...params});
+}
+
+const internalFetchGeoGouv = (params) => {
+    const url = buildUrl(API_URL, '/adresses-gouv', params);
     return fetch(url)
         .then(handleResponse)
         .then(json => {
@@ -26,7 +41,7 @@ function fetchAddresses(params){
                 throw err;
             }
         );
-}
+};
 
 function fetchVipocoCities(query){
     const url = `${API_URL}/vicopo/${query}`;
@@ -50,6 +65,7 @@ const buildUrl = (url, endpoint, params) => {
 };
 
 export default {
-    fetchAddresses,
+    fetchGeoGouvStreets,
+    fetchGeoGouvCities,
     fetchVipocoCities
 };

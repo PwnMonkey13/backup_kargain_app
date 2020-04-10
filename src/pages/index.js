@@ -15,7 +15,7 @@ const Index = (props) => {
     const isMounted = useIsMounted();
     const [state, setState] = useState({
         loading: true,
-        sorters: props.sorters,
+        sorter: props.sorter,
         filters: {},
         page: 1,
         announces: [],
@@ -23,11 +23,11 @@ const Index = (props) => {
     });
 
     const fetchAnnounces = () => {
-        const {sorters, filters, page} = state;
+        const {sorter, filters, page} = state;
         const {size} = props;
         setState(state => ({...state, loading: true}));
 
-        AnnounceService.getAnnounces({sorters, filters, page, size})
+        AnnounceService.getAnnounces({filters, sorter, page, size})
             .then(data => {
                 setState(state => ({
                     ...state,
@@ -43,7 +43,7 @@ const Index = (props) => {
 
     useEffect(() => {
         fetchAnnounces();
-    }, [state.sorters, state.filters, state.page]);
+    }, [state.sorter, state.filters, state.page]);
 
     useEffect(() => {
         if (isMounted) {
@@ -66,43 +66,11 @@ const Index = (props) => {
         }))
     };
 
-    const TopSortComponent = () => {
-        const [sortedValue, setSortedValue] = useState('');
-
-        const onChange = (value) => {
-            setSortedValue(value);
-        };
-
-        const Container = styled.div`
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-        `;
-
-        const Div = styled.div`
-            margin : 1rem;
-            width : 10rem
-        `;
-
-        return (
-            <Container>
-                <span>Trier par :</span>
-                <Div>
-                    <NiceSelect
-                        name="sortby"
-                        options={SelectOptionsUtils([
-                            "Date de mise en annonce",
-                            "Date d'achat",
-                            "Prix",
-                            "Kilométrage"
-                        ])}
-                        value={sortedValue}
-                        onChange={onChange}
-                        classNames='w-100'
-                    />
-                </Div>
-            </Container>
-        )
+    const updateSorter = (sorter) => {
+        setState(state => ({
+            ...state,
+            sorter
+        }))
     };
 
     const MainComponent = () => {
@@ -223,7 +191,7 @@ const Index = (props) => {
                 </Col>
                 <Col sm="12" md="8">
                     <section>
-                        <TopSortComponent/>
+                        <TopSortComponent updateSorter={updateSorter}/>
                     </section>
                     <section className="d-flex flex-column align-items-center">
                         <PaginateSituation/>
@@ -240,12 +208,66 @@ const Index = (props) => {
 Index.defaultProps = {
     paginate: 3,
     size: 5,
-    sorters: [
-        {
-            property: 'date',
-            direction: 1
-        },
-    ]
+};
+
+const TopSortComponent = ({updateSorter}) => {
+    const [sorter, setSorter] = useState('');
+
+    const onHandleChange = (sort) => {
+        setSorter(sort);
+        updateSorter(sort);
+    };
+
+    const Container = styled.div`
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        `;
+
+    const Div = styled.div`
+            margin : 1rem;
+            width : 10rem
+        `;
+
+    return (
+        <Container>
+            <span>Trier par :</span>
+            <Div>
+                <NiceSelect
+                    name="sort"
+                    options={[
+                        {
+                            label : "Les voitures les plus kilométrée",
+                            value : { key : 'mileage', desc : false }
+                        },
+                        {
+                            label : "Les voitures les moins kilométrée",
+                            value : { key : 'mileage', desc : true }
+                        },
+                        {
+                            label : "Les annonces les plus récentes",
+                            value : { key : 'createdAt', desc : true }
+                        },
+                        {
+                            label : "Les annonces les plus vieilles",
+                            value : { key : 'createdAt', desc : false }
+                        },
+                        {
+                            label : "Les voitures les plus chers",
+                            value : { key : 'price', desc : true }
+                        },
+                        {
+                            label : "Les voitures les moins chers",
+                            value : { key : 'price', desc : false }
+                        },
+                    ]}
+                    value={sorter}
+                    onChange={onHandleChange}
+                    classNames='w-100'
+                />
+            </Div>
+        </Container>
+    )
 };
 
 export default Index;

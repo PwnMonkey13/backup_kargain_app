@@ -1,4 +1,5 @@
 import React, {memo} from "react";
+import PropTypes from "prop-types";
 import classnames from 'classnames';
 
 const Divider = memo(({text, vertical}) => {
@@ -14,5 +15,13 @@ const Divider = memo(({text, vertical}) => {
         </div>
     )
 });
+
+Divider.propTypes = {
+    text: PropTypes.string,
+};
+
+Divider.defaultProps = {
+    text : 'or'
+};
 
 export default Divider;

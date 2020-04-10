@@ -65,7 +65,11 @@ const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
                                         onChange={() => triggerSubmit()}
                                 />
                                 <label htmlFor={`name_${index}`} style={{minHeight:'5rem'}}>
-                                    <img src={`/images/${tab.img}`} alt=""/>
+                                    <img
+                                        src={`/images/${tab.img}`}
+                                        alt={tab.label}
+                                        title={tab.label}
+                                    />
                                 </label>
                             </div>
                         </Col>
