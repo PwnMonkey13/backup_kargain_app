@@ -1,8 +1,8 @@
-import React from "react";
-import {Row} from "reactstrap";
-import PropTypes from "prop-types";
-import classNames from "classnames";
-import styled from "styled-components";
+import React from 'react'
+import { Row } from 'reactstrap'
+import PropTypes from 'prop-types'
+import classNames from 'classnames'
+import styled from 'styled-components'
 
 const Button = styled.button`
       padding: 2rem;
@@ -10,9 +10,9 @@ const Button = styled.button`
       margin-top: 40px;
       padding: 10px;
       border: 1px solid;
-`;
+`
 
-const StepNavigation = ({prev, prevLabel, next, nextLabel, submit, submitLabel, ...props}) => {
+const StepNavigation = ({ prev, prevLabel, next, nextLabel, submit, submitLabel, ...props }) => {
     return (
         <Row className={classNames('form_navigation', 'justify-content-around')}>
 
@@ -37,18 +37,18 @@ const StepNavigation = ({prev, prevLabel, next, nextLabel, submit, submitLabel, 
             )}
 
         </Row>
-    );
-};
+    )
+}
 
 StepNavigation.propTypes = {
     prev: PropTypes.func,
-    next: PropTypes.func,
-};
+    next: PropTypes.func
+}
 
 StepNavigation.defaultProps = {
-    prevLabel: "Précédent",
-    nextLabel: "Suivant",
-    submitLabel: "Suivant"
-};
+    prevLabel: 'Précédent',
+    nextLabel: 'Suivant',
+    submitLabel: 'Suivant'
+}
 
-export default StepNavigation;
+export default StepNavigation

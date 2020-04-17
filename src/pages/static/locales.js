@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import { Container } from 'reactstrap'
 
 const Locales = () => {
@@ -8,6 +8,6 @@ const Locales = () => {
             <h2>@TODO</h2>
         </Container>
     )
-};
+}
 
-export default Locales;
+export default Locales

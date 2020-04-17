@@ -1,33 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import window from 'global'
 
-function useLocalStorage(key, initialValue = {}, listen = false) {
-    const [storedValue, setStoredValue] = useState(get);
+function useLocalStorage (key, initialValue = {}, listen = false) {
+    const [storedValue, setStoredValue] = useState(get)
 
-    function get() {
+    function get () {
         try {
-            const item = window.localStorage.getItem(key);
-            return item ? JSON.parse(item) : initialValue;
+            const item = window.localStorage.getItem(key)
+            return item ? JSON.parse(item) : initialValue
         } catch (err) {
-            return initialValue;
+            return initialValue
         }
     }
 
     const set = value => {
         try {
-            const valueToStore = value instanceof Function ? value(storedValue) : value;
-            setStoredValue(valueToStore);
-            window.localStorage.setItem(key, JSON.stringify(value));
+            const valueToStore = value instanceof Function ? value(storedValue) : value
+            setStoredValue(valueToStore)
+            window.localStorage.setItem(key, JSON.stringify(value))
         } catch (err) {
-            throw err;
+            throw err
         }
-    };
+    }
 
-    const clear = () =>{
-        window.localStorage.removeItem(key);
-    };
+    const clear = () => {
+        window.localStorage.removeItem(key)
+    }
 
-    return [storedValue, set, clear];
+    return [storedValue, set, clear]
 }
 
-export default useLocalStorage;
+export default useLocalStorage

@@ -1,24 +1,24 @@
-import React, {useContext, useEffect, useState} from "react";
-import { Container } from 'reactstrap';
-import  { withRouter } from 'next/router'
-import Header from "../../components/Header";
-import {FormContext} from "../../components/Context/FormContext";
-import VehicleTypeSelectorStep from "../../components/Vehicles/VehicleTypeSelectorStep";
+import React, { useContext, useEffect, useState } from 'react'
+import { Container } from 'reactstrap'
+import { withRouter } from 'next/router'
+import Header from '../../components/Header'
+import { FormContext } from '../../components/Context/FormContext'
+import VehicleTypeSelectorStep from '../../components/Vehicles/VehicleTypeSelectorStep'
 
-const path = require('path');
+const path = require('path')
 
 const Page = (props) => {
-    const { router } = props;
-    const [ vehicleType, setVehicleType ] = useState(null);
-    const {dispatchFormClear} = useContext(FormContext);
+    const { router } = props
+    const [vehicleType, setVehicleType] = useState(null)
+    const { dispatchFormClear } = useContext(FormContext)
 
-    useEffect(()=> {
-        dispatchFormClear();
-    },[]);
+    useEffect(() => {
+        dispatchFormClear()
+    }, [])
 
-    const handleSelectType = (type) => { setVehicleType(type); };
+    const handleSelectType = (type) => { setVehicleType(type) }
 
-    if(vehicleType) router.push(path.resolve(router.route, vehicleType.toLowerCase()));
+    if (vehicleType) router.push(path.resolve(router.route, vehicleType.toLowerCase()))
 
     return (
         <Container fluid className="annonce1-wrapper-container">
@@ -26,6 +26,6 @@ const Page = (props) => {
             <VehicleTypeSelectorStep handleSelectType={handleSelectType}/>
         </Container>
     )
-};
+}
 
-export default withRouter(Page);
+export default withRouter(Page)

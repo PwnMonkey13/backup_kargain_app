@@ -1,19 +1,19 @@
-import React, {memo, useEffect} from 'react';
-import ClassNames from "classnames";
+import React, { memo, useEffect } from 'react'
+import ClassNames from 'classnames'
+import PropTypes from 'prop-types'
 import ValidationError from '../Validations/ValidationError'
 import ValidationsRules from '../Validations/ValidationRules'
-import PropTypes from "prop-types";
 
-const EmailInput = ({name, required, classname, rules, control, errors, ...props}) => {
-    const classnames = ClassNames("input-field", {'w-100': props.fullwidth});
-    const { validate } = rules;
+const EmailInput = ({ name, required, classname, rules, control, errors, ...props }) => {
+    const classnames = ClassNames('input-field', { 'w-100': props.fullwidth })
+    const { validate } = rules
 
-    let validations = {
+    const validations = {
         validate: {
-            isEmail: val => ValidationsRules.checkIsEmail(val) || "Invalid email",
+            isEmail: val => ValidationsRules.checkIsEmail(val) || 'Invalid email',
             ...validate
         }
-    };
+    }
 
     return (
         <>
@@ -31,14 +31,14 @@ const EmailInput = ({name, required, classname, rules, control, errors, ...props
             {errors && <ValidationError errors={errors} name={name}/>}
         </>
     )
-};
+}
 
 EmailInput.propTypes = {
-    name: PropTypes.string.isRequired,
-};
+    name: PropTypes.string.isRequired
+}
 
 EmailInput.defaultProps = {
     rules: {}
-};
+}
 
-export default EmailInput;
+export default EmailInput

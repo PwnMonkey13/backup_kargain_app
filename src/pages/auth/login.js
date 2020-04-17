@@ -1,40 +1,39 @@
-import React, {useContext} from 'react';
-import { useRouter } from "next/router";
-import {useForm} from "react-hook-form";
-import styled from "styled-components";
-import {EmailInput, PasswordInput} from "../../components/Form/Inputs";
-import FieldWrapper from "../../components/Form/FieldWrapper";
-import {Col, Row} from "reactstrap";
-import Link from "next/link";
-import Divider from "../../components/Divider";
-import AuthService from '../../services/AuthService';
-import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
-import {UserContext} from "../../components/Context/UserContext";
+import React, { useContext } from 'react'
+import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
+import { EmailInput, PasswordInput } from '../../components/Form/Inputs'
+import FieldWrapper from '../../components/Form/FieldWrapper'
+import { Col, Row } from 'reactstrap'
+import Link from 'next/link'
+import Divider from '../../components/Divider'
+import AuthService from '../../services/AuthService'
+import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
+import { UserContext } from '../../components/Context/UserContext'
 
 const formConfig = {
     mode: 'onChange',
-    validateCriteriaMode: "all",
-};
+    validateCriteriaMode: 'all'
+}
 
 const LoginPage = (props) => {
-    const router = useRouter();
-    const { redirect } = router.query;
-    const { dispatch } = useContext(UserContext);
-    const { dispatchModal,dispatchModalError} = useContext(ModalDialogContext);
-    const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
+    const router = useRouter()
+    const { redirect } = router.query
+    const { dispatch } = useContext(UserContext)
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext)
+    const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig)
 
     const onSubmit = (form) => {
         AuthService.login(form.email, form.password)
             .then(data => {
-                dispatch({type: 'loginSuccess', payload: data});
-                if (redirect) router.push({pathname: redirect});
-                else router.push(`/auth/callback?redirect=/profile/${data.user.username}`);
+                dispatch({ type: 'loginSuccess', payload: data })
+                if (redirect) router.push({ pathname: redirect })
+                else router.push(`/auth/callback?redirect=/profile/${data.user.username}`)
             }).catch(err => {
-                dispatchModalError({err});
-                if(redirect) router.push({ pathname : redirect});
+                dispatchModalError({ err })
+                if (redirect) router.push({ pathname: redirect })
             }
-        );
-    };
+            )
+    }
 
     return (
         <main>
@@ -85,8 +84,8 @@ const LoginPage = (props) => {
                                 errors={errors}
                                 control={control}
                                 rules={{
-                                    required : 'field required',
-                                    minLength: { value : 6, message : "Min 6 chars" },
+                                    required: 'field required',
+                                    minLength: { value: 6, message: 'Min 6 chars' }
                                     // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
                                 }}
                             />
@@ -105,7 +104,7 @@ const LoginPage = (props) => {
                 </Col>
             </Row>
         </main>
-    );
-};
+    )
+}
 
-export default LoginPage;
+export default LoginPage

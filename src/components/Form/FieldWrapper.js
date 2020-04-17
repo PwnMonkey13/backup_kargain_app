@@ -1,13 +1,10 @@
-import React, {memo} from "react";
-import classNames from "classnames";
-import {Col, Row} from "reactstrap";
-import ToolTipWrapper from "./ToolTipWrapper";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 
-const FieldWrapper = ({children, ...props}) => {
-    const {tooltip, label } = props;
-    const { name, rules } = children.props;
-    const { required } = rules || {};
+const FieldWrapper = ({ children, ...props }) => {
+    const { tooltip, label } = props
+    const { name, rules } = children.props
+    const { required } = rules || {}
     return (
         <div>
             {label && (
@@ -23,17 +20,17 @@ const FieldWrapper = ({children, ...props}) => {
                 {children}
             </div>
         </div>
-    );
-};
+    )
+}
 
 FieldWrapper.propTypes = {
     labelTop: PropTypes.bool,
-    as : PropTypes.string
-};
+    as: PropTypes.string
+}
 
 FieldWrapper.defaultProps = {
-    labelTop : false,
-    as : "label"
-};
+    labelTop: false,
+    as: 'label'
+}
 
-export default FieldWrapper;
+export default FieldWrapper

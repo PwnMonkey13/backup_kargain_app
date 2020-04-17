@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import { Container } from 'reactstrap'
 
 const Confidentiality = () => {
@@ -8,6 +8,6 @@ const Confidentiality = () => {
             <h2>@TODO</h2>
         </Container>
     )
-};
+}
 
-export default Confidentiality;
+export default Confidentiality

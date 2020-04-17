@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
-import PropTypes from "prop-types";
-import ValidationError from "../Validations/ValidationError";
+import React, { memo } from 'react'
+import PropTypes from 'prop-types'
+import ValidationError from '../Validations/ValidationError'
 
-const TextareaInput = memo(({name, control, rules, errors, ...props}) => {
+const TextareaInput = ({ name, control, rules, errors, ...props }) => {
     return (
         <>
             <textarea
@@ -16,15 +16,15 @@ const TextareaInput = memo(({name, control, rules, errors, ...props}) => {
             { errors && <ValidationError errors={errors} name={name} /> }
         </>
     )
-});
+}
 
 TextareaInput.propTypes = {
-    name : PropTypes.string.isRequired,
-};
+    name: PropTypes.string.isRequired
+}
 
 TextareaInput.defaultProps = {
     rows: 5,
-    rules : {}
-};
+    rules: {}
+}
 
-export default TextareaInput;
+export default memo(TextareaInput)

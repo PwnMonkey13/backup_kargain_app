@@ -1,40 +1,40 @@
-import React, {useState} from 'react';
-import { Container, Row, Col, Button } from 'reactstrap';
-import Header from "../components/Header";
-import Link from "next/link";
-import {CheckCircle, FileText, Shield} from "react-feather";
-import VehicleTypeSelectorStep from "../components/Vehicles/VehicleTypeSelectorStep";
+import React, { useState } from 'react'
+import { Container, Row, Col } from 'reactstrap'
+import Header from '../components/Header'
+import Link from 'next/link'
+import { CheckCircle, FileText, Shield } from 'react-feather'
+import VehicleTypeSelectorStep from '../components/Vehicles/VehicleTypeSelectorStep'
 
 const BgTop = () => {
-    const small = 'https://static.carizy.com/images/Main/Mobile/acheter-et-vendre-ma-voiture-occasion-320x630.jpg?v4.2.22';
-    const medium = 'https://static.carizy.com/images/Main/Mobile/acheter-et-vendre-ma-voiture-occasion-450x850.jpg?v4.2.22';
-    const laptop = 'https://static.carizy.com/images/Main/Tablette/acheter-et-vendre-ma-voiture-occasion-784x1180.jpg?v4.2.22';
-    const large = 'https://static.carizy.com/images/Main/Desktop/acheter-et-vendre-ma-voiture-occasion-1171x900.jpg?v4.2.22';
-    const xlarge = 'https://static.carizy.com/images/Main/Desktop/acheter-et-vendre-ma-voiture-occasion-1900x1028.jpg?v4.2.22';
+    const small = 'https://static.carizy.com/images/Main/Mobile/acheter-et-vendre-ma-voiture-occasion-320x630.jpg?v4.2.22'
+    const medium = 'https://static.carizy.com/images/Main/Mobile/acheter-et-vendre-ma-voiture-occasion-450x850.jpg?v4.2.22'
+    const laptop = 'https://static.carizy.com/images/Main/Tablette/acheter-et-vendre-ma-voiture-occasion-784x1180.jpg?v4.2.22'
+    const large = 'https://static.carizy.com/images/Main/Desktop/acheter-et-vendre-ma-voiture-occasion-1171x900.jpg?v4.2.22'
+    const xlarge = 'https://static.carizy.com/images/Main/Desktop/acheter-et-vendre-ma-voiture-occasion-1900x1028.jpg?v4.2.22'
 
-    const [ currentSrc, setCurrentSrc ] = useState('');
+    const [currentSrc, setCurrentSrc] = useState('')
     const onLoad = (e) => {
-        setCurrentSrc(e.target.currentSrc);
-    };
+        setCurrentSrc(e.target.currentSrc)
+    }
 
     return (
         <div className="position-relative">
             <div className="position-absolute img-container">
                 <img alt="kargain"
-                     src={small}
-                     srcSet={`${small} 300w, ${medium} 768w, ${laptop} 968w, ${large} 1280w, ${xlarge} 3200w`}
-                     onLoad={onLoad}
+                    src={small}
+                    srcSet={`${small} 300w, ${medium} 768w, ${laptop} 968w, ${large} 1280w, ${xlarge} 3200w`}
+                    onLoad={onLoad}
                 />
             </div>
         </div>
-    );
-};
+    )
+}
 
 const SwitchVehicles = () => {
-    const [ vehicleType, setVehicleType ] = useState(null);
-    const handleSelectType = (type) => { setVehicleType(type); };
+    const [vehicleType, setVehicleType] = useState(null)
+    const handleSelectType = (type) => { setVehicleType(type) }
     return <VehicleTypeSelectorStep handleSelectType={handleSelectType}/>
-};
+}
 
 const SectionEngagemnts = () => {
     return (
@@ -75,8 +75,8 @@ const SectionEngagemnts = () => {
                 </dd>
             </dl>
         </section>
-    );
-};
+    )
+}
 
 const Temp = () => {
     return (
@@ -115,6 +115,6 @@ const Temp = () => {
             </Container>
         </>
     )
-};
+}
 
-export default Temp;
+export default Temp

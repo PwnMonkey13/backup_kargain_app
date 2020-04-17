@@ -1,44 +1,39 @@
-import React, { useContext } from 'react';
-import { useRouter } from "next/router";
-import Link from "next/link";
-import {Col,Row} from 'reactstrap';
-import {useForm} from "react-hook-form";
-import { UserContext } from '../../components/Context/UserContext';
+import React, { useContext } from 'react'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { Col, Row } from 'reactstrap'
+import { useForm } from 'react-hook-form'
+import { UserContext } from '../../components/Context/UserContext'
 import AuthService from '../../services/AuthService'
-import Divider from "../../components/Divider";
-import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
-import {TextInput, SelectInput, EmailInput, PasswordInput, CheckBoxInput} from "../../components/Form/Inputs";
-import styled from "styled-components";
-import FieldWrapper from "../../components/Form/FieldWrapper";
+import Divider from '../../components/Divider'
+import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
+import { TextInput, SelectInput, EmailInput, PasswordInput, CheckBoxInput } from '../../components/Form/Inputs'
+import styled from 'styled-components'
+import FieldWrapper from '../../components/Form/FieldWrapper'
 
 const formConfig = {
     mode: 'onChange',
-    validateCriteriaMode: "all",
-};
-
-const Left = styled.div`
-    display:flex;
-    flex-direction:column
-`;
+    validateCriteriaMode: 'all'
+}
 
 const RegisterPro = () => {
-    const router = useRouter();
-    const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
-    const { dispatch } = useContext(UserContext);
-    const {dispatchModalError} = useContext(ModalDialogContext);
-    const { redirect } = router.query;
+    const router = useRouter()
+    const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig)
+    const { dispatch } = useContext(UserContext)
+    const { dispatchModalError } = useContext(ModalDialogContext)
+    const { redirect } = router.query
 
     const onSubmit = (form) => {
-        const { confirm, confirm_pwd, ...data} = form;
+        const { confirm, confirmPwd, ...data } = form
         AuthService.registerPro(data)
             .then(data => {
-                dispatch({ type : 'registerProSuccess', payload : data });
-                if (redirect) router.push({pathname: redirect});
-                else router.push(`/auth/callback?redirect=/profile/${data.user.username}`);
+                dispatch({ type: 'registerProSuccess', payload: data })
+                if (redirect) router.push({ pathname: redirect })
+                else router.push(`/auth/callback?redirect=/profile/${data.user.username}`)
             }).catch(err => {
-            dispatchModalError({err});
-        });
-    };
+                dispatchModalError({ err })
+            })
+    }
 
     return (
         <main>
@@ -80,7 +75,7 @@ const RegisterPro = () => {
                                 name="company.name"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
+                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
 
@@ -89,7 +84,7 @@ const RegisterPro = () => {
                                 name="company.siren"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
+                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
 
@@ -98,7 +93,7 @@ const RegisterPro = () => {
                                 name="company.owner"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
+                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
 
@@ -107,7 +102,7 @@ const RegisterPro = () => {
                                 name="country"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
+                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
 
@@ -116,7 +111,7 @@ const RegisterPro = () => {
                                 name="postalcode"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
+                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
 
@@ -125,7 +120,7 @@ const RegisterPro = () => {
                                 name="address"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
+                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
 
@@ -134,7 +129,7 @@ const RegisterPro = () => {
                                 name="lastname"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
+                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
 
@@ -143,7 +138,7 @@ const RegisterPro = () => {
                                 name="firstname"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
+                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
 
@@ -152,7 +147,7 @@ const RegisterPro = () => {
                                 name="email"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
+                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
 
@@ -162,8 +157,8 @@ const RegisterPro = () => {
                                 errors={errors}
                                 control={control}
                                 rules={{
-                                    required : 'field required',
-                                    minLength: { value : 6, message : "Min 6 chars" },
+                                    required: 'field required',
+                                    minLength: { value: 6, message: 'Min 6 chars' }
                                     // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
                                 }}
                             />
@@ -171,17 +166,17 @@ const RegisterPro = () => {
 
                         <FieldWrapper label="Confirmer mot de passe">
                             <PasswordInput
-                                name="confirm_pwd"
+                                name="confirmPwd"
                                 errors={errors}
                                 control={control}
                                 rules={{
-                                    required : 'Required',
-                                    minLength: { value : 6, message : "Min 6 chars" },
+                                    required: 'Required',
+                                    minLength: { value: 6, message: 'Min 6 chars' },
                                     validate: {
                                         matchesPreviousPassword: (value) => {
-                                            const { password } = getValues();
-                                            return password === value || 'Passwords should match!';
-                                        },
+                                            const { password } = getValues()
+                                            return password === value || 'Passwords should match!'
+                                        }
                                     }
                                 }}
                             />
@@ -193,14 +188,14 @@ const RegisterPro = () => {
                                 name="confirm"
                                 errors={errors}
                                 control={control}
-                                rules={{required : 'Required'}}
+                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
                     </form>
                 </Col>
             </Row>
         </main>
-    );
-};
+    )
+}
 
-export default RegisterPro;
+export default RegisterPro

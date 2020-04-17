@@ -1,15 +1,15 @@
-import React, {useRef} from 'react';
-import {Col, Row} from "reactstrap";
-import Header from "../../Header";
-import {NumberInput, SelectInput, TextareaInput, TextInput} from "../../Form/Inputs";
-import {RadioVehicleGeneralState } from "./form.data.js";
-import StepNavigation from "../../Form/StepNavigation";
-import {SelectOptionsUtils} from "../../../libs/formFieldsUtils";
-import FieldWrapper from "../../Form/FieldWrapper";
+import React, { useRef } from 'react'
+import { Col, Row } from 'reactstrap'
+import Header from '../../Header'
+import { NumberInput, SelectInput, TextareaInput, TextInput } from '../../Form/Inputs'
+import { RadioVehicleGeneralState } from './form.data.js'
+import StepNavigation from '../../Form/StepNavigation'
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
+import FieldWrapper from '../../Form/FieldWrapper'
 
-const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props}) => {
-    const formRef = useRef(null);
-    const {watch, control, errors, handleSubmit} = methods;
+const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
+    const formRef = useRef(null)
+    const { watch, control, errors, handleSubmit } = methods
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
@@ -31,7 +31,7 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                     options={SelectOptionsUtils([2, 3, 4, 5])}
                     placeholder="Select number of owners"
                     control={control}
-                    rules={{ required: "Field required" }}
+                    rules={{ required: 'Field required' }}
                     errors={errors}
                 />
             </FieldWrapper>
@@ -44,7 +44,7 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                             options={SelectOptionsUtils([2, 3, 4, 5])}
                             placeholder="Select number of damages"
                             control={control}
-                            rules={{ required: "Field required" }}
+                            rules={{ required: 'Field required' }}
                             errors={errors}
                         />
                     </FieldWrapper>
@@ -55,7 +55,7 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                             name="defective"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
                             control={control}
-                            rules={{ required: "Field required" }}
+                            rules={{ required: 'Field required' }}
                             errors={errors}
                         />
                     </FieldWrapper>
@@ -66,7 +66,7 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
                 <TextareaInput
                     name="description"
                     control={control}
-                    rules={{ required: "Field required" }}
+                    rules={{ required: 'Field required' }}
                     errors={errors}
                 />
             </FieldWrapper>
@@ -76,7 +76,7 @@ const Step = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props})
 
             <StepNavigation prev={prevStep} submit />
         </form>
-    );
-};
+    )
+}
 
-export default Step;
+export default Step

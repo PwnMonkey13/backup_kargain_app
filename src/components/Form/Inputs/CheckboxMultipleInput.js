@@ -1,23 +1,22 @@
-import React from 'react';
-import classNames from "classnames"
-import {Row, Col} from "reactstrap";
-import PropTypes from 'prop-types';
-import ValidationError from "../Validations/ValidationError";
+import React from 'react'
+import classNames from 'classnames'
+import { Row, Col } from 'reactstrap'
+import PropTypes from 'prop-types'
+import ValidationError from '../Validations/ValidationError'
 
-const CheckboxMultipleInput = ({name, register, errors, classname, options, defaultChecked, ...props}) => {
-
+const CheckboxMultipleInput = ({ name, register, errors, classname, options, defaultChecked, ...props }) => {
     const FieldRow = classNames(
         'd-flex',
-        { 'justify-content-center' : props.center},
-        { 'flex-column' : props.vertical}
-    );
+        { 'justify-content-center': props.center },
+        { 'flex-column': props.vertical }
+    )
 
     return (
         <>
             <Row className={FieldRow}>
                 {options && options.map((option, index) => {
-                    const isChecked = defaultChecked ?
-                        defaultChecked.find(value => value.toLowerCase() === option.value.toLowerCase()) : false;
+                    const isChecked = defaultChecked
+                        ? defaultChecked.find(value => value.toLowerCase() === option.value.toLowerCase()) : false
 
                     return (
                         <div key={index} className={classNames('form-check', 'm-2')}>
@@ -40,15 +39,15 @@ const CheckboxMultipleInput = ({name, register, errors, classname, options, defa
             }
         </>
     )
-};
+}
 
 CheckboxMultipleInput.propTypes = {
     name: PropTypes.string.isRequired,
-    center:  PropTypes.bool,
-};
+    center: PropTypes.bool
+}
 
 CheckboxMultipleInput.defaultProps = {
-    center : true
-};
+    center: true
+}
 
-export default CheckboxMultipleInput;
+export default CheckboxMultipleInput

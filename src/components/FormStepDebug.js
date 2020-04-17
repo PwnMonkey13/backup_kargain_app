@@ -1,27 +1,26 @@
-import React from "react";
-import {Container, Row, Col, FormGroup} from "reactstrap";
+import React from 'react'
+import { Container, Row, Col, FormGroup } from 'reactstrap'
 
-const FormStepDebug = ({getValues, formState, errors}) => {
-
+const FormStepDebug = ({ getValues, formState, errors }) => {
     const parseErrors = () => {
         return Object.entries(errors).reduce((carry, [key, entry]) => {
             if (Array.isArray(entry)) {
                 const sub = entry.map((subEntries) => {
                     return Object.entries(subEntries).reduce((carry2, [SubKey, subEntry]) => {
-                        const {ref, ...keepAttrs} = subEntry;
-                        return {...carry2, [SubKey]: keepAttrs};
-                    },{});
-                });
-                carry = {...carry, [key]: sub};
+                        const { ref, ...keepAttrs } = subEntry
+                        return { ...carry2, [SubKey]: keepAttrs }
+                    }, {})
+                })
+                carry = { ...carry, [key]: sub }
             } else {
-                const {ref, ...keepAttrs} = entry;
-                carry = {...carry, [key]: keepAttrs};
+                const { ref, ...keepAttrs } = entry
+                carry = { ...carry, [key]: keepAttrs }
             }
-            return carry;
-        }, {});
-    };
+            return carry
+        }, {})
+    }
 
-    const parsedErrors = parseErrors();
+    const parsedErrors = parseErrors()
 
     return (
         <Row className="form_navigation">
@@ -35,7 +34,7 @@ const FormStepDebug = ({getValues, formState, errors}) => {
             <Col>
                 <div>
                     <h2> errors </h2>
-                    {/*<pre>{JSON.stringify(parsedErrors, null, 2)}</pre>*/}
+                    {/* <pre>{JSON.stringify(parsedErrors, null, 2)}</pre> */}
                 </div>
             </Col>
 
@@ -46,7 +45,7 @@ const FormStepDebug = ({getValues, formState, errors}) => {
                 </div>
             </Col>
         </Row>
-    );
-};
+    )
+}
 
-export default FormStepDebug;
+export default FormStepDebug

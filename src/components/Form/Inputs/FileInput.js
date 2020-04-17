@@ -1,9 +1,8 @@
-import React from 'react';
+import React from 'react'
 
-/* list of supported file types */
-const FileAcceptTypes = (types = []) => types.map(function(x) { return '.' + x; }).join(',');
+const FileAcceptTypes = (types = []) => types.map(function (x) { return '.' + x }).join(',')
 
-function TextInput({ name, required, disabled, label, type, value, alert, setInputs, ...props }) {
+function TextInput ({ name, required, disabled, label, type, value, alert, setInputs, ...props }) {
     return (
         <React.Fragment>
             <div className="label">
@@ -17,17 +16,16 @@ function TextInput({ name, required, disabled, label, type, value, alert, setInp
                     name={name}
                     type={type}
                     accept={FileAcceptTypes(props.types)}
-                    value={value || ""}
+                    value={value || ''}
                     required={required || false}
                     disabled={disabled || false}
                     onChange={setInputs}
                     className={alert ? 'form-danger' : ''}
                 />
-                <ValidationAlert content={alert} />
             </div>
 
         </React.Fragment>
     )
 }
 
-export default TextInput;
+export default TextInput

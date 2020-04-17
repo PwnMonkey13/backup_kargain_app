@@ -1,58 +1,57 @@
-import React, {useRef, useEffect } from "react";
-import {Col, Row} from "reactstrap";
-import Header from "../Header";
-import {SelectInput} from "../Form/Inputs";
-import Divider from "../Divider";
-import styled from 'styled-components';
+import React, { useRef, useEffect } from 'react'
+import { Col, Row } from 'reactstrap'
+import Header from '../Header'
+import { SelectInput } from '../Form/Inputs'
+import Divider from '../Divider'
+import styled from 'styled-components'
 
 const tabsRadio = [
     {
-        value : 'car',
-        label : 'Voiture',
-        img : 'tab-car.png'
+        value: 'car',
+        label: 'Voiture',
+        img: 'tab-car.png'
     },
     {
-        value : 'moto',
-        label : 'Moto',
-        img : 'tab-moto.png'
+        value: 'moto',
+        label: 'Moto',
+        img: 'tab-moto.png'
     },
     {
-        value : 'scooter',
-        label : 'Scooter',
-        img : 'motor_scooter.png'
+        value: 'scooter',
+        label: 'Scooter',
+        img: 'motor_scooter.png'
     },
     {
-        value : 'utility',
-        label : 'Utilitaire',
-        img : 'tab-gruz.png'
+        value: 'utility',
+        label: 'Utilitaire',
+        img: 'tab-gruz.png'
     },
     {
-        value : 'camper',
-        label : 'Camping car',
-        img : 'tab-camper.png'
+        value: 'camper',
+        label: 'Camping car',
+        img: 'tab-camper.png'
     },
     {
-        value : 'truck',
-        label : 'Camion',
-        img : 'tab-gruz.png'
+        value: 'truck',
+        label: 'Camion',
+        img: 'tab-gruz.png'
     },
     {
-        value : 'bus',
-        label : 'Bus',
-        img : 'tab-bus.png'
+        value: 'bus',
+        label: 'Bus',
+        img: 'tab-bus.png'
     }
-];
+]
 
-const othersFormOptions = [];
+const othersFormOptions = []
 
 const Div = styled.div`
     border : 1px solid gainsboro;
     padding : .5rem 1rem
-`;
+`
 
-const VehicleTypeFilterSelector = ({name, control, rules, ...props}) => {
-
-    return(
+const VehicleTypeFilterSelector = ({ name, control, rules, ...props }) => {
+    return (
         <section>
             <Row className="justify-content-center">
                 { tabsRadio && tabsRadio.map((tab, index) => {
@@ -60,11 +59,11 @@ const VehicleTypeFilterSelector = ({name, control, rules, ...props}) => {
                         <Col key={index} xs={6} sm={4} lg={6}>
                             <div className="form-check no-input form-check-vehicle m-1">
                                 <input id={`name_${index}`}
-                                       ref={control.register(rules)}
-                                       type="radio"
-                                       name={name}
-                                       value={tab.value}
-                                       defaultChecked={tab.checked}
+                                    ref={control.register(rules)}
+                                    type="radio"
+                                    name={name}
+                                    value={tab.value}
+                                    defaultChecked={tab.checked}
                                 />
                                 <label className="p-2" htmlFor={`name_${index}`}>
                                     <img
@@ -91,14 +90,14 @@ const VehicleTypeFilterSelector = ({name, control, rules, ...props}) => {
                         control={control}
                         rules={rules}
                         onChange={([selected]) => {
-                            control.setValue(name, null);
-                            return selected;
+                            control.setValue(name, null)
+                            return selected
                         }}
                     />
                 </>
             )}
         </section>
     )
-};
+}
 
-export default VehicleTypeFilterSelector;
+export default VehicleTypeFilterSelector

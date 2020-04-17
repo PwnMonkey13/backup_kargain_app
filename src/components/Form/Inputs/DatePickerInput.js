@@ -1,18 +1,18 @@
-import React from 'react';
-import { DatePicker } from "react-nice-dates";
-import {Controller} from "react-hook-form";
-import PropTypes from "prop-types";
-import ValidationError from "../Validations/ValidationError";
+import React from 'react'
+import { DatePicker } from 'react-nice-dates'
+import { Controller } from 'react-hook-form'
+import PropTypes from 'prop-types'
+import ValidationError from '../Validations/ValidationError'
 
-const DatePickerInput = ({name, control, rules, errors, ...props}) => {
-    const { options, selected } = props;
+const DatePickerInput = ({ name, control, rules, errors, ...props }) => {
+    const { options, selected } = props
 
-    let defaultValues = [];
-    if(selected && Array.isArray(selected)){
+    let defaultValues = []
+    if (selected && Array.isArray(selected)) {
         defaultValues = selected.reduce((carry, selected) =>
             ([...carry, options.find(option =>
-                option.value.toLowerCase() === selected.toString().toLowerCase())]),[]
-        );
+                option.value.toLowerCase() === selected.toString().toLowerCase())]), []
+        )
     }
 
     return (
@@ -36,11 +36,11 @@ const DatePickerInput = ({name, control, rules, errors, ...props}) => {
             {errors && <ValidationError errors={errors} name={name} />}
         </>
     )
-};
+}
 
-export default DatePickerInput;
+export default DatePickerInput
 
 DatePickerInput.propTypes = {
     name: PropTypes.string.isRequired,
-    control: PropTypes.object.isRequired,
-};
+    control: PropTypes.object.isRequired
+}

@@ -1,23 +1,22 @@
-import React from "react";
-import {ErrorMessage} from "react-hook-form";
+import React from 'react'
+import { ErrorMessage } from 'react-hook-form'
 
-const ValidationError = ({errors, name}) => {
+const ValidationError = ({ errors, name }) => {
     return (
         <ErrorMessage errors={errors} name={name}>
-            {({message, messages}) => {
-                if(!message && !messages) return '';
-                else if(message != null){
+            {({ message, messages }) => {
+                if (!message && !messages) return ''
+                else if (message != null) {
                     return <p className="error">{ message }</p>
-                }
-                else if (Array.isArray(messages)){
+                } else if (Array.isArray(messages)) {
                     return Object.entries(messages).map(([type, message]) => (
-                            <p className="error" key={type}>{message}</p>
-                        )
-                    );
+                        <p className="error" key={type}>{message}</p>
+                    )
+                    )
                 }
             }}
         </ErrorMessage>
     )
-};
+}
 
-export default ValidationError;
+export default ValidationError

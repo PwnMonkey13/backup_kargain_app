@@ -1,5 +1,5 @@
-import React from 'react';
+import React from 'react'
 
-const varDump = (props) => <pre>{JSON.stringify(props.data, null, 2)}</pre>;
+const varDump = (props) => <pre>{JSON.stringify(props.data, null, 2)}</pre>
 
-export default varDump;
+export default varDump

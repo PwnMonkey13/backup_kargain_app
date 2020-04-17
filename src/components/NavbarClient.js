@@ -1,52 +1,52 @@
-import React, {useState, useEffect, useContext} from 'react';
-import styled from 'styled-components'
+import React, { useContext, useEffect, useState } from 'react'
 import {
     Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    FormGroup,
-    Input,
     Dropdown,
     DropdownItem,
-} from 'reactstrap';
-import {UserContext} from '../components/Context/UserContext';
-import {getLogo} from '../libs/utils';
+    FormGroup,
+    Input,
+    Nav,
+    Navbar,
+    NavbarBrand,
+    NavbarToggler,
+    NavItem,
+    NavLink
+} from 'reactstrap'
+import { UserContext } from '../components/Context/UserContext'
+import { getLogo } from '../libs/utils'
 
 const NavbarClient = () => {
-    const {session} = useContext(UserContext);
-    const [collapsed, setCollapsed] = useState(false);
-    const toggleNavbar = () => setCollapsed(!collapsed);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [avatar, setAvatar] = useState(null);
+    const { session } = useContext(UserContext)
+    const [collapsed, setCollapsed] = useState(false)
+    const toggleNavbar = () => setCollapsed(!collapsed)
+    const [dropdownOpen, setDropdownOpen] = useState(false)
+    const [avatar, setAvatar] = useState(null)
 
-    const toggle = () => setDropdownOpen(prevState => !prevState);
+    const toggle = () => setDropdownOpen(prevState => !prevState)
 
     useEffect(() => {
-        if (session.user) setAvatar(session.user.avatar);
-    }, [session]);
+        if (session.user) setAvatar(session.user.avatar)
+    }, [session])
 
     const NavBarRight = () => {
-        return(
+        return (
             <Nav navbar className="nav-right">
-                {session.isLoggedIn ?
-                    <>
+                {session.isLoggedIn
+                    ? <>
                         <NavItem className="p-2" onClick={(e) => setDropdownOpen(e)}>
                             {
-                                avatar && <img className="rounded-circle" width="40" height="40" src={avatar} alt="avatar"/>
+                                avatar &&
+                                <img className="rounded-circle" width="40" height="40" src={avatar} alt="avatar"/>
                             }
                             <DropdownUser/>
                         </NavItem>
 
                         <NavItem className="p-2 navbar_icon navbar-icon-notifications">
                             <img width="25" height="25" src="/images/svg/ring.svg" alt=""/>
-                            {/*<NotificationPins/>*/}
+                            {/* <NotificationPins/> */}
                         </NavItem>
-                    </> :
-                    <>
+                    </>
+                    : <>
                         <NavItem className="p-2">
                             <NavLink tag="a" href="/auth/login">Connexion</NavLink>
                         </NavItem>
@@ -57,7 +57,7 @@ const NavbarClient = () => {
                 }
             </Nav>
         )
-    };
+    }
 
     const DropdownUser = () => {
         return (
@@ -73,7 +73,7 @@ const NavbarClient = () => {
                 </DropdownItem>
             </Dropdown>
         )
-    };
+    }
 
     return (
         <header className="header bg-light">
@@ -99,12 +99,16 @@ const NavbarClient = () => {
                     <NavBarRight/>
                 </Collapse>
                 <div>
-                    <NavbarToggler style={{position:'absolute', top:0,right:0}} onClick={toggleNavbar} className="mr-2" />
+                    <NavbarToggler style={{
+                        position: 'absolute',
+                        top: 0,
+                        right: 0
+                    }} onClick={toggleNavbar}
+                                   className="mr-2"/>
                 </div>
             </Navbar>
         </header>
-    );
-};
+    )
+}
 
-export default NavbarClient;
-
+export default NavbarClient

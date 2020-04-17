@@ -1,10 +1,10 @@
-import React, {memo} from 'react';
-import PropTypes from 'prop-types';
-import ClassNames from "classnames";
-import ValidationError from "../Validations/ValidationError";
+import React, { memo } from 'react'
+import PropTypes from 'prop-types'
+import ClassNames from 'classnames'
+import ValidationError from '../Validations/ValidationError'
 
-const CheckBoxInput = memo(({name, required, rules, control, errors, ...props}) => {
-    const classnames = ClassNames('d-flex', {'w-100' : props.fullwidth});
+const CheckBoxInput = memo(({ name, required, rules, control, errors, ...props }) => {
+    const classnames = ClassNames('d-flex', { 'w-100': props.fullwidth })
     return (
         <>
             <div className={classnames}>
@@ -26,6 +26,6 @@ const CheckBoxInput = memo(({name, required, rules, control, errors, ...props}) 
             {errors && <ValidationError errors={errors} name={name}/>}
         </>
     )
-});
+})
 
-export default CheckBoxInput;
+export default CheckBoxInput

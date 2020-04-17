@@ -1,76 +1,76 @@
-import React, { useRef, useContext} from "react";
-import {Col, Row} from "reactstrap";
-import styled from 'styled-components';
-import {useForm} from "react-hook-form";
-import Header from "../Header";
-import Divider from "../Divider";
-import {FormContext} from "../Context/FormContext";
+import React, { useRef, useContext } from 'react'
+import { Col, Row } from 'reactstrap'
+import styled from 'styled-components'
+import { useForm } from 'react-hook-form'
+import Header from '../Header'
+import Divider from '../Divider'
+import { FormContext } from '../Context/FormContext'
 
-const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
-    const formRef = useRef(null);
-    const {register, handleSubmit} = useForm();
-    const {dispatchFormUpdate} = useContext(FormContext);
+const VehicleTypeSelectorStep = ({ handleSelectType, ...props }) => {
+    const formRef = useRef(null)
+    const { register, handleSubmit } = useForm()
+    const { dispatchFormUpdate } = useContext(FormContext)
 
     const tabsRadio = [
         {
-            value : 'car',
-            label : 'Voiture',
-            img : 'tab-car.png'
+            value: 'car',
+            label: 'Voiture',
+            img: 'tab-car.png'
         },
         {
-            value : 'moto',
-            label : 'Moto/Scooter',
-            img : 'tab-moto.png'
+            value: 'moto',
+            label: 'Moto/Scooter',
+            img: 'tab-moto.png'
         },
         {
-            value : 'camper',
-            label : 'Camping car',
-            img : 'tab-camper.png'
+            value: 'camper',
+            label: 'Camping car',
+            img: 'tab-camper.png'
         },
         {
-            value : 'bus',
-            label : 'Bus/Camion',
-            img : 'tab-bus.png'
+            value: 'bus',
+            label: 'Bus/Camion',
+            img: 'tab-bus.png'
         },
         {
-            value : 'utility',
-            label : 'Utilitaire',
-            img : 'tab-gruz.png'
+            value: 'utility',
+            label: 'Utilitaire',
+            img: 'tab-gruz.png'
         }
-    ];
+    ]
 
-    const othersForm = [];
+    const othersForm = []
 
     const triggerSubmit = () => {
         formRef.current.dispatchEvent(new Event('submit'))
-    };
+    }
 
     const onSubmit = (data) => {
-        const tab = tabsRadio.find(tab => tab.value === data.vehicleType);
-        dispatchFormUpdate( {"vehicleType" : { value : tab.value, label : tab.label} });
-        handleSelectType(data.vehicleType);
-    };
+        const tab = tabsRadio.find(tab => tab.value === data.vehicleType)
+        dispatchFormUpdate({ vehicleType: { value: tab.value, label: tab.label } })
+        handleSelectType(data.vehicleType)
+    }
 
     const Img = styled.img`
         max-width:80px;
         object-fit:contain;
-    `;
+    `
 
-    return(
+    return (
         <form className="form_wizard my-4" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
             <Row className="justify-content-center">
                 { tabsRadio && tabsRadio.map((tab, index) => {
                     return (
                         <Col key={index} xs={6} sm={3} md={3} lg={2}>
-                            <div className="form-check form-check-vehicle m-0" style={{minHeight : '5rem'}}>
+                            <div className="form-check form-check-vehicle m-0" style={{ minHeight: '5rem' }}>
                                 <input id={`name_${index}`}
-                                       type="radio"
-                                        name="vehicleType"
-                                        value={tab.value}
-                                        ref={register}
-                                        onChange={() => triggerSubmit()}
+                                    type="radio"
+                                    name="vehicleType"
+                                    value={tab.value}
+                                    ref={register}
+                                    onChange={() => triggerSubmit()}
                                 />
-                                <label htmlFor={`name_${index}`} style={{minHeight:'5rem'}}>
+                                <label htmlFor={`name_${index}`} style={{ minHeight: '5rem' }}>
                                     <Img src={`/images/${tab.img}`} alt={tab.label} title={tab.label} />
                                 </label>
                             </div>
@@ -89,11 +89,11 @@ const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
                                 return (
                                     <div className="form-check m-0">
                                         <input id={`name_second_${index}`}
-                                               type="radio"
-                                               name="vehicleType"
-                                               value={tab.value}
-                                               ref={register}
-                                               onChange={() => triggerSubmit()}
+                                            type="radio"
+                                            name="vehicleType"
+                                            value={tab.value}
+                                            ref={register}
+                                            onChange={() => triggerSubmit()}
                                         />
                                         <label htmlFor={`name_second_${index}`}>{tab.label}</label>
                                     </div>
@@ -105,6 +105,6 @@ const VehicleTypeSelectorStep = ({handleSelectType, ...props}) => {
             )}
         </form>
     )
-};
+}
 
-export default VehicleTypeSelectorStep;
+export default VehicleTypeSelectorStep

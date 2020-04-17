@@ -1,11 +1,12 @@
-import React, { useContext } from 'react';
-import { Link } from 'next/router';
-import {UserContext} from "../../components/Context/UserContext";
+import React, { useContext } from 'react'
+import { Link } from 'next/router'
+import { UserContext } from '../../components/Context/UserContext'
 
-export default () => {
-    const { session } = useContext(UserContext);
-    const text = (session.user && session.user.email) ? <span className="font-weight-bold">{session.user.email}</span> : <span>your inbox</span>;
-    return(
+const CheckEmail = () => {
+    const { session } = useContext(UserContext)
+    const email = session.user ? session.user.email : null
+    const text = email ? <span className="font-weight-bold">{session.user.email}</span> : <span>your inbox</span>
+    return (
         <main>
             <div className="text-center pt-5 pb-5">
                 <h1 className="display-4">Check your email</h1>
@@ -19,7 +20,7 @@ export default () => {
                 </ul>
 
                 <p>
-                    <Link href={`/auth/signup/resend-activation?username=${session.user.email}&redirect="/profile"`}>
+                    <Link href={`/auth/signup/resend-activation?username=${email}&redirect="/profile"`}>
                         <a> Re-enter your email and try again </a>
                     </Link>
                 </p>
@@ -29,3 +30,5 @@ export default () => {
         </main>
     )
 }
+
+export default CheckEmail

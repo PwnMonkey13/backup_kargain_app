@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import { Container } from 'reactstrap'
 
 const Conditions = () => {
@@ -8,6 +8,6 @@ const Conditions = () => {
             <h2>@TODO</h2>
         </Container>
     )
-};
+}
 
-export default Conditions;
+export default Conditions

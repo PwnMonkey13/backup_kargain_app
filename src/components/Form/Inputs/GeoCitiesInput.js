@@ -1,9 +1,9 @@
-import React, {memo, useState, useRef} from 'react';
-import NiceSelect, { components } from 'react-select';
-import {Controller} from "react-hook-form";
-import PlacesServices from "../../../services/PlacesService";
-import ValidationError from "../Validations/ValidationError";
-import SearchSVG from '../../SVG/SearchSVG';
+import React, { memo, useState, useRef } from 'react'
+import NiceSelect, { components } from 'react-select'
+import { Controller } from 'react-hook-form'
+import PlacesServices from '../../../services/PlacesService'
+import ValidationError from '../Validations/ValidationError'
+import SearchSVG from '../../SVG/SearchSVG'
 
 const DropdownIndicator = props => {
     return (
@@ -12,70 +12,70 @@ const DropdownIndicator = props => {
                 <SearchSVG/>
             </components.DropdownIndicator>
         )
-    );
-};
+    )
+}
 
-const Menu = props => props.options.length ? <components.Menu {...props}>{props.children}</components.Menu> : null;
+const Menu = props => props.options.length ? <components.Menu {...props}>{props.children}</components.Menu> : null
 
-const GeoCitiesInput = memo(({name, control, rules, errors, ...props}) => {
+const GeoCitiesInput = memo(({ name, control, rules, errors, ...props }) => {
     const [state, setState] = useState({
         suggestions: [],
-        selectOptions: [],
-    });
+        selectOptions: []
+    })
 
     const onSelectChange = ([selected]) => {
-        return selected;
-    };
+        return selected
+    }
 
     const onInputSelectChange = (query) => {
         if (query.length > 2) {
-            if(props.typeAPI === "geo"){
-                FetchGouvApi(query);
-            } else{
+            if (props.typeAPI === 'geo') {
+                FetchGouvApi(query)
+            } else {
                 FetchVipocoApi(query)
             }
         }
-    };
+    }
 
     const FetchGouvApi = async (query) => {
         const format = [
-            "housenumber",
-            "street",
-            "name",
-            "postcode",
-            "citycode",
-            "city",
-            "context"
-        ];
+            'housenumber',
+            'street',
+            'name',
+            'postcode',
+            'citycode',
+            'city',
+            'context'
+        ]
 
-        let params = {q: query};
-        if(props.enableGeoloc && props.lat && props.long){
-            params = {...params, lat : props.lat, lng : props.long}
+        let params = { q: query }
+        if (props.enableGeoloc && props.lat && props.long) {
+            params = { ...params, lat: props.lat, lng: props.long }
         }
 
-        const suggestions = await PlacesServices.fetchGeoGouvCities(params);
+        const suggestions = await PlacesServices.fetchGeoGouvCities(params)
         setState(state => ({
             ...state,
             selectOptions: suggestions.map(suggestion => {
-                const properties = suggestion.properties;
-                const { label } = properties;
+                const properties = suggestion.properties
+                const { label } = properties
                 const value = format.reduce((carry, key) => {
-                    if (properties[key]) return {...carry, [key]: properties[key]};
-                    else return carry;
-                },{label});
+                    if (properties[key]) return { ...carry, [key]: properties[key] }
+                    else return carry
+                }, { label })
 
                 return {
                     label,
                     value
                 }
             })
-        }));
-    };
+        }))
+    }
 
     const FetchVipocoApi = async (query) => {
-        const suggestions = await PlacesServices.fetchVipocoCities(query);
+        const suggestions = await PlacesServices.fetchVipocoCities(query)
 
-        //TODO Format parser
+        // TODO Format parser
         setState(state => ({
             ...state,
             selectOptions: suggestions.map(suggestion => {
@@ -84,8 +84,8 @@ const GeoCitiesInput = memo(({name, control, rules, errors, ...props}) => {
                     value: suggestion
                 }
             })
-        }));
-    };
+        }))
+    }
 
     return (
         <>
@@ -100,7 +100,7 @@ const GeoCitiesInput = memo(({name, control, rules, errors, ...props}) => {
                         name={name}
                         isClearable={true}
                         isSearchable={true}
-                        components={{DropdownIndicator, Menu}}
+                        components={{ DropdownIndicator, Menu }}
                         placeholder="Ville ou CP"
                         options={state.selectOptions}
                         onInputChange={onInputSelectChange}
@@ -112,6 +112,6 @@ const GeoCitiesInput = memo(({name, control, rules, errors, ...props}) => {
             }
         </>
     )
-});
+})
 
-export default GeoCitiesInput;
+export default GeoCitiesInput

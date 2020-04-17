@@ -1,8 +1,7 @@
-import React from "react";
+import React from 'react'
 import { Container } from 'reactstrap'
 
 const About = () => {
-
     return (
         <Container>
 
@@ -16,6 +15,6 @@ const About = () => {
             <p>La mission de Kargain : contribution à la modernisation marché de l’automobile, basée sur un contenu convivial et fiable.</p>
         </Container>
     )
-};
+}
 
-export default About;
+export default About

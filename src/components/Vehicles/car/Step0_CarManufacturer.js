@@ -1,30 +1,30 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
-import Divider from "../../Divider";
-import Header from "../../Header";
-import FieldWrapper from "../../Form/FieldWrapper";
-import StepNavigation from "../../Form/StepNavigation";
-import useIsMounted from "../../../hooks/useIsMounted";
-import {SelectInput, TextInput} from "../../Form/Inputs";
-import VinDecoderService from "../../../services/VinDecoderService";
-import {ModalDialogContext} from "../../Context/ModalDialogContext";
-import CarApiService from "../../../services/vehicles/CarApiService";
-import {Col, Row} from "reactstrap";
-import ToolTipWrapper from "../../Form/ToolTipWrapper";
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import Divider from '../../Divider'
+import Header from '../../Header'
+import FieldWrapper from '../../Form/FieldWrapper'
+import StepNavigation from '../../Form/StepNavigation'
+import useIsMounted from '../../../hooks/useIsMounted'
+import { SelectInput, TextInput } from '../../Form/Inputs'
+import VinDecoderService from '../../../services/VinDecoderService'
+import { ModalDialogContext } from '../../Context/ModalDialogContext'
+import CarApiService from '../../../services/vehicles/CarApiService'
+import { Col, Row } from 'reactstrap'
+import ToolTipWrapper from '../../Form/ToolTipWrapper'
 
-const ColCenter = ({children}) => <Col className="d-flex flex-column align-items-center">{children}</Col>;
+const ColCenter = ({ children }) => <Col className="d-flex flex-column align-items-center">{children}</Col>
 
-const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, triggerSkipStep, onSubmitStep, prevStep, nextStep, ...rest}) => {
-    const formRef = useRef(null);
-    const isMounted = useIsMounted();
-    const {dispatchModal} = useContext(ModalDialogContext);
-    const {watch, control, errors, setValue, getValues, register, formState, handleSubmit} = methods;
-    const [vinDecoded, storeVinDecoded] = useState(null);
+const Step0CarManufacturer = ({ methods, formConfig, collectStepChanges, triggerSkipStep, onSubmitStep, prevStep, nextStep, ...rest }) => {
+    const formRef = useRef(null)
+    const isMounted = useIsMounted()
+    const { dispatchModal } = useContext(ModalDialogContext)
+    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = methods
+    const [vinDecoded, storeVinDecoded] = useState(null)
     const [manufacturersData, setManufacturersData] = useState({
         makes: [],
         models: [],
         generations: [],
         years: []
-    });
+    })
 
     const popularMakesId = [
         3, // AlphaRomeo
@@ -40,135 +40,135 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
         47, // Fiat
         140, // Toyota
         133 // Susuki
-    ];
+    ]
 
     const triggerSubmit = () => {
-        formRef.current.dispatchEvent(new Event('submit'));
-    };
+        formRef.current.dispatchEvent(new Event('submit'))
+    }
 
     const isValidVIN = async (value) => {
         if (value) {
-            const match = /[a-zA-Z0-9]{9}[a-zA-Z0-9-]{2}[0-9]{6}/.test(value);
+            const match = /[a-zA-Z0-9]{9}[a-zA-Z0-9-]{2}[0-9]{6}/.test(value)
             if (match) {
                 try {
-                    const result = await VinDecoderService.decodeVINFree(value);
-                    storeVinDecoded(result);
+                    const result = await VinDecoderService.decodeVINFree(value)
+                    storeVinDecoded(result)
                 } catch (err) {
-                    dispatchModal({type: 'error', err});
+                    dispatchModal({ type: 'error', err })
                 }
-            } else return "INVALID VIN NUMBER";
+            } else return 'INVALID VIN NUMBER'
         }
-    };
+    }
 
-    useEffect(()=>{
-        if(isMounted && vinDecoded != null){
-            setValue('manufacturer', {'make': {label: vinDecoded['Make'], value: vinDecoded['Make']}});
-            setValue('manufacturer', {'model': {label: vinDecoded['Model'], value: vinDecoded['Model']}});
-            setValue('manufacturer', {'year': {label: vinDecoded['ModelYear'], value: vinDecoded['ModelYear']}});
+    useEffect(() => {
+        if (isMounted && vinDecoded != null) {
+            setValue('manufacturer', { make: { label: vinDecoded.Make, value: vinDecoded.Make } })
+            setValue('manufacturer', { model: { label: vinDecoded.Model, value: vinDecoded.Model } })
+            setValue('manufacturer', { year: { label: vinDecoded.ModelYear, value: vinDecoded.ModelYear } })
         }
-    },[vinDecoded]);
+    }, [vinDecoded])
 
     useEffect(() => {
         if (isMounted) {
-            const values = getValues();
-            const findDefault = Object.keys(values).find(key => values[key] && values[key].value === "other");
-            if (findDefault) nextStep();
+            const values = getValues()
+            const findDefault = Object.keys(values).find(key => values[key] && values[key].value === 'other')
+            if (findDefault) nextStep()
         }
-    }, [getValues()]);
+    }, [getValues()])
 
     useEffect(() => {
         if (isMounted &&
             watch('manufacturer.make') &&
             watch('manufacturer.model') &&
             watch('manufacturer.year')) {
-                triggerSubmit();
+            triggerSubmit()
         }
-    }, [watch('manufacturer.year')]);
+    }, [watch('manufacturer.year')])
 
     useEffect(() => {
-        console.log('fetch makes');
+        console.log('fetch makes')
         CarApiService.getMakes(popularMakesId)
             .then(cars => {
-                const makesOptions = cars.map(car => ({value: car.make_id, label: car.make}));
-                const defaultOption = {value: "other", label: "Je ne sais pas/Autre"};
+                const makesOptions = cars.map(car => ({ value: car.make_id, label: car.make }))
+                const defaultOption = { value: 'other', label: 'Je ne sais pas/Autre' }
                 setManufacturersData(manufacturersData => (
-                    {...manufacturersData, makes: [...makesOptions, defaultOption]})
-                );
+                    { ...manufacturersData, makes: [...makesOptions, defaultOption] })
+                )
             })
             .catch(err => {
-                dispatchModal({type: 'error', err});
-            });
-        return function cleanup() {
-            console.log('unmount');
+                dispatchModal({ type: 'error', err })
+            })
+        return function cleanup () {
+            console.log('unmount')
         }
-    }, []);
+    }, [])
 
     useEffect(() => {
         if (watch('manufacturer.make') && vinDecoded == null) {
-            const makeID = watch('manufacturer.make').value;
-            if (!isNaN(makeID)){
+            const makeID = watch('manufacturer.make').value
+            if (!isNaN(makeID)) {
                 CarApiService.getMakeModels(makeID)
                     .then(models => {
-                        const modelsOptions = models.map(model => ({value: model.model_id, label: model.model}));
-                        const defaultOption = {value: "other", label: "Je ne sais pas/Autre"};
+                        const modelsOptions = models.map(model => ({ value: model.model_id, label: model.model }))
+                        const defaultOption = { value: 'other', label: 'Je ne sais pas/Autre' }
                         setManufacturersData(manufacturersData => (
-                            {...manufacturersData, models: [...modelsOptions, defaultOption]})
-                        );
+                            { ...manufacturersData, models: [...modelsOptions, defaultOption] })
+                        )
                     })
                     .catch(err => {
-                        dispatchModal({type: 'error', err});
-                    });
+                        dispatchModal({ type: 'error', err })
+                    })
             }
         }
-    }, [watch('manufacturer.make')]);
+    }, [watch('manufacturer.make')])
 
     useEffect(() => {
         if (watch('manufacturer.model') && vinDecoded == null) {
-            const makeID = watch('manufacturer.make').value;
-            const modelID = watch('manufacturer.model').value;
+            const makeID = watch('manufacturer.make').value
+            const modelID = watch('manufacturer.model').value
             if (!isNaN(makeID) && !isNaN(modelID)) {
                 CarApiService.getCarGenerations(makeID, modelID)
                     .then(generations => {
                         const generationsOptions = generations.map(
-                            ({generation_id, generation}) => ({value: generation_id, label: generation})
-                        );
-                        const defaultOption = {value: "other", label: "Je ne sais pas/Autre"};
+                            // eslint-disable-next-line camelcase
+                            ({ generation_id, generation }) => ({ value: generation_id, label: generation })
+                        )
+                        const defaultOption = { value: 'other', label: 'Je ne sais pas/Autre' }
                         setManufacturersData(manufacturersData => (
-                            {...manufacturersData, generations: [...generationsOptions, defaultOption]})
-                        );
+                            { ...manufacturersData, generations: [...generationsOptions, defaultOption] })
+                        )
                     })
                     .catch(err => {
-                        dispatchModal({type: 'error', err});
-                    });
+                        dispatchModal({ type: 'error', err })
+                    })
             }
         }
-    }, [watch('manufacturer.model')]);
+    }, [watch('manufacturer.model')])
 
     useEffect(() => {
         if (watch('manufacturer.generation') && vinDecoded == null) {
-            const makeID = watch('manufacturer.make').value;
-            const modelID = watch('manufacturer.model').value;
-            const generationID = watch('manufacturer.generation').value;
+            const makeID = watch('manufacturer.make').value
+            const modelID = watch('manufacturer.model').value
+            const generationID = watch('manufacturer.generation').value
 
             if (!isNaN(makeID) && !isNaN(modelID) && !isNaN(generationID)) {
                 CarApiService.getCarYearsVersion(makeID, modelID, generationID)
                     .then(years => {
-                        const yearsOptions = years.map(year => ({value: year.year, label: year.year}));
+                        const yearsOptions = years.map(year => ({ value: year.year, label: year.year }))
                         setManufacturersData(manufacturersData => (
-                            {...manufacturersData, years: yearsOptions})
-                        );
+                            { ...manufacturersData, years: yearsOptions })
+                        )
                     })
                     .catch(err => {
-                        dispatchModal({type: 'error', err});
+                        dispatchModal({ type: 'error', err })
                     }
-                );
+                    )
             }
         }
-    }, [watch('manufacturer.generation')]);
+    }, [watch('manufacturer.generation')])
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
-
             <Row>
                 <ColCenter>
                     <FieldWrapper label="Saisissez le numéro VIN de votre moto" tooltip={
@@ -188,8 +188,8 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
                             errors={errors}
                             control={control}
                             rules={{
-                                validate : {
-                                    isValidVIN : value => isValidVIN(value)
+                                validate: {
+                                    isValidVIN: value => isValidVIN(value)
                                 }
                             }}
                         />
@@ -209,10 +209,10 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
                             placeholder="Select a car make"
                             control={control}
                             errors={errors}
-                            rules={{required: 'Title is required!'}}
-                            options={manufacturersData['makes']}
+                            rules={{ required: 'Title is required!' }}
+                            options={manufacturersData.makes}
                             onChange={([selected, option]) => {
-                                collectStepChanges({name : option.name, label : selected.label});
+                                collectStepChanges({ name: option.name, label: selected.label })
                                 return selected
                             }}
                         />
@@ -223,12 +223,12 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
                         <SelectInput
                             name="manufacturer.model"
                             placeholder="Select a car model"
-                            options={manufacturersData['models']}
+                            options={manufacturersData.models}
                             control={control}
                             errors={errors}
                             disabled={!watch('manufacturer.make')}
                             onChange={([selected, option]) => {
-                                collectStepChanges({name : option.name, label : selected.label});
+                                collectStepChanges({ name: option.name, label: selected.label })
                                 return selected
                             }}
                         />
@@ -239,12 +239,12 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
                         <SelectInput
                             name="manufacturer.generation"
                             placeholder="Select car version"
-                            options={manufacturersData['model']}
+                            options={manufacturersData.model}
                             control={control}
                             errors={errors}
                             disabled={!watch('manufacturer.generation')}
                             onChange={([selected, option]) => {
-                                collectStepChanges({name : option.name, label : selected.label});
+                                collectStepChanges({ name: option.name, label: selected.label })
                                 return selected
                             }}
                         />
@@ -255,12 +255,12 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
                         <SelectInput
                             name="manufacturer.year"
                             placeholder="Select car year"
-                            options={manufacturersData['years']}
+                            options={manufacturersData.years}
                             control={control}
                             errors={errors}
                             disabled={!watch('manufacturer.generation')}
                             onChange={([selected, option]) => {
-                                collectStepChanges({name : option.name, label : selected.label});
+                                collectStepChanges({ name: option.name, label: selected.label })
                                 return selected
                             }}
                         />
@@ -271,6 +271,6 @@ const Step0_CarManufacturer = ({methods, formConfig, collectStepChanges, trigger
             <StepNavigation prev={prevStep} submit />
         </form>
     )
-};
+}
 
-export default Step0_CarManufacturer;
+export default Step0CarManufacturer

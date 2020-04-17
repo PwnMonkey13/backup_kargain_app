@@ -1,6 +1,6 @@
-import React, {useRef} from 'react';
-import Header from "../../Header";
-import {CheckboxMultipleInput, NumberInput, RadioGroupInput, SelectInput, TextInput} from "../../Form/Inputs";
+import React, { useRef } from 'react'
+import Header from '../../Header'
+import { CheckboxMultipleInput, NumberInput, RadioGroupInput, SelectInput, TextInput } from '../../Form/Inputs'
 import {
     RadioTypeFunction,
     CheckboxOptionsEquipments,
@@ -9,17 +9,17 @@ import {
     RadioChoicesEmission,
     RadioChoicesExternalColor,
     RadioChoicesPaints,
-    RadioChoicesMaterials,
-} from "./form.data.js";
-import StepNavigation from "../../Form/StepNavigation";
-import FieldWrapper from "../../Form/FieldWrapper";
-import {SelectOptionsUtils} from "../../../libs/formFieldsUtils";
-import {Col, Row} from "reactstrap";
-import {RadioFunctionVehicle} from "../moto/form.data";
+    RadioChoicesMaterials
+} from './form.data.js'
+import StepNavigation from '../../Form/StepNavigation'
+import FieldWrapper from '../../Form/FieldWrapper'
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
+import { Col, Row } from 'reactstrap'
+import { RadioFunctionVehicle } from '../moto/form.data'
 
-const Step1_CamperDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props}) => {
-    const formRef = useRef(null);
-    const {watch, control, errors, getValues, register, formState, handleSubmit} = methods;
+const Step1CamperDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
+    const formRef = useRef(null)
+    const { watch, control, errors, getValues, register, formState, handleSubmit } = methods
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
@@ -28,9 +28,9 @@ const Step1_CamperDetails = ({methods, formConfig, onSubmitStep, prevStep, nextS
                 <Col>
                     <FieldWrapper label="Type" required>
                         <SelectInput name="vehicleFunction"
-                                     options={RadioTypeFunction}
-                                     control={control}
-                                     errors={errors}
+                            options={RadioTypeFunction}
+                            control={control}
+                            errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -51,9 +51,9 @@ const Step1_CamperDetails = ({methods, formConfig, onSubmitStep, prevStep, nextS
                 <Col>
                     <FieldWrapper label="Kilométrage" required>
                         <NumberInput name="mileage"
-                                     placeholder="20000 km"
-                                     control={control}
-                                     errors={errors}
+                            placeholder="20000 km"
+                            control={control}
+                            errors={errors}
 
                         />
                     </FieldWrapper>
@@ -61,8 +61,8 @@ const Step1_CamperDetails = ({methods, formConfig, onSubmitStep, prevStep, nextS
                 <Col>
                     <FieldWrapper label="Cylindrée">
                         <NumberInput name="cylinder"
-                                     control={control}
-                                     errors={errors}
+                            control={control}
+                            errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -72,9 +72,9 @@ const Step1_CamperDetails = ({methods, formConfig, onSubmitStep, prevStep, nextS
                 <Col>
                     <FieldWrapper label="Carburant" required>
                         <SelectInput name="vehicleEngine.gas"
-                                     options={RadioChoicesGas}
-                                     control={control}
-                                     errors={errors}
+                            options={RadioChoicesGas}
+                            control={control}
+                            errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -85,7 +85,7 @@ const Step1_CamperDetails = ({methods, formConfig, onSubmitStep, prevStep, nextS
                             options={RadioChoicesEngine}
                             control={control}
                             errors={errors}
-                            rules={{required: 'Title is required!'}}
+                            rules={{ required: 'Title is required!' }}
                         />
                     </FieldWrapper>
                 </Col>
@@ -95,8 +95,8 @@ const Step1_CamperDetails = ({methods, formConfig, onSubmitStep, prevStep, nextS
                 <Col>
                     <FieldWrapper label="Puissance kW">
                         <NumberInput name="power.kw"
-                                     control={control}
-                                     errors={errors}
+                            control={control}
+                            errors={errors}
 
                         />
                     </FieldWrapper>
@@ -104,8 +104,8 @@ const Step1_CamperDetails = ({methods, formConfig, onSubmitStep, prevStep, nextS
                 <Col>
                     <FieldWrapper label="Puissance CH">
                         <NumberInput name="power.ch"
-                                     control={control}
-                                     errors={errors}
+                            control={control}
+                            errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -158,7 +158,7 @@ const Step1_CamperDetails = ({methods, formConfig, onSubmitStep, prevStep, nextS
                     name="equipments"
                     options={CheckboxOptionsEquipments}
                     isMulti
-                    defaultChecked={["ABS", "ESP"]}
+                    defaultChecked={['ABS', 'ESP']}
                     control={control}
                     errors={errors}
                 />
@@ -256,7 +256,7 @@ const Step1_CamperDetails = ({methods, formConfig, onSubmitStep, prevStep, nextS
 
             <StepNavigation prev={prevStep} submit />
         </form>
-    );
-};
+    )
+}
 
-export default Step1_CamperDetails;
+export default Step1CamperDetails

@@ -1,70 +1,69 @@
-import React, {useContext, useEffect, useCallback, useState} from 'react'
-import PropTypes from "prop-types";
-import {Col, Row} from 'reactstrap';
-import {ProgressBar} from "react-step-progress-bar";
-import FormResume from "./FormResume";
-import ControlledStep from './ControlledStep';
-import BreadcrumbSteps from "./BreadcrumbSteps";
-import useIsMounted from "../../hooks/useIsMounted";
-import DebugLocalStorage from "../DebugLocalStorage";
-import {FormContext} from '../../components/Context/FormContext';
+import React, { useContext, useEffect, useCallback, useState } from 'react'
+import PropTypes from 'prop-types'
+import { Col, Row } from 'reactstrap'
+import { ProgressBar } from 'react-step-progress-bar'
+import FormResume from './FormResume'
+import ControlledStep from './ControlledStep'
+import BreadcrumbSteps from './BreadcrumbSteps'
+import useIsMounted from '../../hooks/useIsMounted'
+import DebugLocalStorage from '../DebugLocalStorage'
+import { FormContext } from '../../components/Context/FormContext'
 
 const calculatePourcent = (current, length) => {
     return ((current + 1) / (length + 1)) * 100
-};
+}
 
-const FormWizard = ({debug, formKey, resumeModel, onFinalSubmit, children, prevRoute, ...props}) => {
-    const isMounted = useIsMounted();
-    const steps = Array.isArray(children) ? children.filter(child => child.props.hidden !== true) : children ? [children] : [];
-    const {formDataContext, dispatchFormUpdate} = useContext(FormContext);
-    const [activeStep, setActiveStep] = useState(formDataContext.currentStep || 0);
-    const [maxActiveStep, setMaxActiveStep ]= useState(steps.length);
-    const [pourcent, setPourcent] = useState(() => calculatePourcent(activeStep, steps.length));
-    const [stepChanges, setStepChanges] = useState([]);
+const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prevRoute, ...props }) => {
+    const isMounted = useIsMounted()
+    const steps = Array.isArray(children) ? children.filter(child => child.props.hidden !== true) : children ? [children] : []
+    const { formDataContext, dispatchFormUpdate } = useContext(FormContext)
+    const [activeStep, setActiveStep] = useState(formDataContext.currentStep || 0)
+    const [maxActiveStep, setMaxActiveStep] = useState(steps.length)
+    const [pourcent, setPourcent] = useState(() => calculatePourcent(activeStep, steps.length))
+    const [stepChanges, setStepChanges] = useState([])
 
     const formConfig = {
         mode: 'onChange',
-        validateCriteriaMode: "all",
+        validateCriteriaMode: 'all',
         defaultValues: formDataContext
-    };
+    }
 
     useEffect(() => {
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0)
         if (isMounted) {
-            setMaxActiveStep(maxStep => Math.max(maxStep, Number(activeStep)));
-            dispatchFormUpdate({currentStep: activeStep});
-            setPourcent(calculatePourcent(activeStep, steps.length));
+            setMaxActiveStep(maxStep => Math.max(maxStep, Number(activeStep)))
+            dispatchFormUpdate({ currentStep: activeStep })
+            setPourcent(calculatePourcent(activeStep, steps.length))
         }
-    }, [activeStep]);
+    }, [activeStep])
 
     const collectStepChanges = useCallback(item => {
-        setStepChanges(stepChanges => ({...stepChanges, [item.name] : item.label }))
-    },[]);
-
+        setStepChanges(stepChanges => ({ ...stepChanges, [item.name]: item.label }))
+    }, [])
 
     const setStep = useCallback((index) => {
-        setActiveStep(index);
-    },[]);
+        setActiveStep(index)
+    }, [])
 
     const prevStep = useCallback(() => {
-        setActiveStep(activeStep => activeStep - 1);
-    },[]);
+        setActiveStep(activeStep => activeStep - 1)
+    }, [])
 
     const nextStep = useCallback(() => {
-        setActiveStep(activeStep => activeStep + 1);
-    },[]);
+        setActiveStep(activeStep => activeStep + 1)
+    }, [])
 
     const onSubmitStep = useCallback((data, triggerEnd = false) => {
-        dispatchFormUpdate(data);
-        if(triggerEnd) handleSubmitForm();
+        dispatchFormUpdate(data)
+        if (triggerEnd) handleSubmitForm()
         else nextStep()
-    },[]);
+    }, [])
 
     const handleSubmitForm = () => {
-        const {currentStep, ...formData} = formDataContext;
-        console.log("end form reached");
-        onFinalSubmit(formData);
-    };
+        const { currentStep, ...formData } = formDataContext
+        console.log('end form reached')
+        onFinalSubmit(formData)
+    }
 
     return (
         <main id={props.id} className={props.className}>
@@ -84,7 +83,7 @@ const FormWizard = ({debug, formKey, resumeModel, onFinalSubmit, children, prevR
                         />
                     </Col>
                     <Col md={4} lg={3}>
-                        <FormResume resumeModel={resumeModel} formValues={{...formDataContext, ...stepChanges}}/>
+                        <FormResume resumeModel={resumeModel} formValues={{ ...formDataContext, ...stepChanges }}/>
                     </Col>
                 </Row>
             ) : (
@@ -97,7 +96,7 @@ const FormWizard = ({debug, formKey, resumeModel, onFinalSubmit, children, prevR
                     formConfig={formConfig}
                     handleSubmitForm={handleSubmitForm}
                 />
-                )
+            )
             }
 
             { debug && (
@@ -116,18 +115,18 @@ const FormWizard = ({debug, formKey, resumeModel, onFinalSubmit, children, prevR
 
         </main>
     )
-};
+}
 
 FormWizard.propTypes = {
     formKey: PropTypes.string.isRequired,
     debug: PropTypes.bool,
-    enableResume : PropTypes.bool
-};
+    enableResume: PropTypes.bool
+}
 
 FormWizard.defaultProps = {
-    formKey : '',
-    debug : false,
-    enableResume : false
-};
+    formKey: '',
+    debug: false,
+    enableResume: false
+}
 
-export default FormWizard;
+export default FormWizard

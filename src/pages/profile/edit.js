@@ -1,39 +1,37 @@
-import React, {useState, useContext} from 'react'
-import classNames from 'classnames';
-import {TabContent, TabPane, Nav, NavItem, NavLink, Row, Col} from "reactstrap";
-import UsersService from "../../services/UsersService";
-import model from '../../components/Form/Models/profile.edit.model';
-import {UserContext} from "../../components/Context/UserContext";
-import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
+import React, { useState, useContext } from 'react'
+import classNames from 'classnames'
+import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap'
+import UsersService from '../../services/UsersService'
+import { UserContext } from '../../components/Context/UserContext'
+import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
 
 const Edit = (props) => {
-    const {session, dispatchUser} = useContext(UserContext);
-    const {dispatchModal} = useContext(ModalDialogContext);
-    const [user, setUser] = useState(session.user);
+    const { session, dispatchUser } = useContext(UserContext)
+    const { dispatchModal } = useContext(ModalDialogContext)
+    const [user, setUser] = useState(session.user)
     const [state, setState] = useState({
         alertText: null,
         alertStyle: null,
-        activeTab: 1,
-    });
+        activeTab: 1
+    })
 
     const toggle = (tab) => {
         if (state.activeTab !== tab) {
-            setState({...state, activeTab: tab});
+            setState({ ...state, activeTab: tab })
         }
-    };
+    }
 
     const handleSubmit = async (e, data) => {
         UsersService.updateUser(user.username, data, props.token)
             .then(document => {
-                console.log(document);
-                setUser(document);
-                dispatchUser(document);
-                dispatchModal({type : 'success', msg : 'User successufully updated' });
+                console.log(document)
+                setUser(document)
+                dispatchUser(document)
+                dispatchModal({ type: 'success', msg: 'User successufully updated' })
             }).catch(err => {
-                dispatchModal({type: 'error', err});
-            }
-        )
-    };
+                dispatchModal({ type: 'error', err })
+            })
+    }
 
     return (
         <Row className="mt-4">
@@ -41,28 +39,28 @@ const Edit = (props) => {
                 <Nav tabs vertical>
                     <NavItem>
                         <NavLink
-                            className={classNames({active: state.activeTab === 1})}
+                            className={classNames({ active: state.activeTab === 1 })}
                             onClick={() => toggle(1)}>
                             Compte
                         </NavLink>
                     </NavItem>
                     <NavItem>
                         <NavLink
-                            className={classNames({active: state.activeTab === 2})}
+                            className={classNames({ active: state.activeTab === 2 })}
                             onClick={() => toggle(2)}>
                             Abonnements
                         </NavLink>
                     </NavItem>
                     <NavItem>
                         <NavLink
-                            className={classNames({active: state.activeTab === 3})}
+                            className={classNames({ active: state.activeTab === 3 })}
                             onClick={() => toggle(3)}>
                             Paiements & factures
                         </NavLink>
                     </NavItem>
                     <NavItem>
                         <NavLink
-                            className={classNames({active: state.activeTab === 4})}
+                            className={classNames({ active: state.activeTab === 4 })}
                             onClick={() => toggle(4)}>
                             Aide & contact
                         </NavLink>
@@ -87,6 +85,6 @@ const Edit = (props) => {
             </Col>
         </Row>
     )
-};
+}
 
-export default Edit;
+export default Edit

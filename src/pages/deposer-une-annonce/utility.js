@@ -1,38 +1,38 @@
-import React, {useContext} from "react";
-import {useRouter} from "next/router";
-import FormWizard from "../../components/Form/FormWizard";
-import AnnounceService from '../../services/AnnounceService';
-import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
-import Step1_CamperDetails from "../../components/Vehicles/utility/Step1_UtiilityDetails";
+import React, { useContext } from 'react'
+import { useRouter } from 'next/router'
+import FormWizard from '../../components/Form/FormWizard'
+import AnnounceService from '../../services/AnnounceService'
+import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
+import Step1CamperDetails from '../../components/Vehicles/utility/Step1_UtiilityDetails'
 
 const UtilityForm = (props) => {
-    const {dispatchModal} = useContext(ModalDialogContext);
-    const router = useRouter();
+    const { dispatchModal } = useContext(ModalDialogContext)
+    const router = useRouter()
 
     const onFinalSubmit = data => {
         AnnounceService.createAnnounce(data, props.token)
             .then(doc => {
-                const link = `/announces/${doc.slug}`;
-                dispatchModal({type: 'success', msg: 'Announce created successufully', link});
-                router.push(link);
+                const link = `/announces/${doc.slug}`
+                dispatchModal({ type: 'success', msg: 'Announce created successufully', link })
+                router.push(link)
             }).catch(err => {
-                dispatchModal({type: 'error', err});
+                dispatchModal({ type: 'error', err })
             }
-        );
-    };
+            )
+    }
 
     const resumeModel = [
         {
-            "vehicleType": 'Type de véhicule'
+            vehicleType: 'Type de véhicule'
         },
         {
-            "vin": "Immat. VIN",
-            "manufacturer.make": "Marque",
-            "manufacturer.model": "Modele",
-            "manufacturer.generation": "Version",
-            "manufacturer.year": "Année",
+            vin: 'Immat. VIN',
+            'manufacturer.make': 'Marque',
+            'manufacturer.model': 'Modele',
+            'manufacturer.generation': 'Version',
+            'manufacturer.year': 'Année'
         }
-    ];
+    ]
 
     return (
         <FormWizard
@@ -41,15 +41,15 @@ const UtilityForm = (props) => {
             resumeModel={resumeModel}
             onFinalSubmit={onFinalSubmit}
         >
-            <Step1_CamperDetails title="Description du véhicule"/>
+            <Step1CamperDetails title="Description du véhicule"/>
         </FormWizard>
-    );
-};
+    )
+}
 
 UtilityForm.getInitialProps = () => {
     return {
-        formKey : "utility"
+        formKey: 'utility'
     }
-};
+}
 
-export default UtilityForm;
+export default UtilityForm

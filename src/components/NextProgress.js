@@ -2,7 +2,6 @@ import React from 'react';
 import NProgress from 'nprogress';
 import Router from "next/router";
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
 class NextProgress extends React.Component {
     static defaultProps = {

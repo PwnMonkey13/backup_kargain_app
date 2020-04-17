@@ -1,20 +1,34 @@
-    const next = require('next');
-const server = require('./server');
-const csrf = require('csurf');
-const csrfProtection = csrf({ session: true });
-const config = require('./src/config/config');
-const app = next({ dev : config.isDev });
-const handle = app.getRequestHandler();
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for t`he specific language governing permissions and
+ * limitations under the License.
+ */
 
-app.prepare().then(() => {
+'use strict'
+const functions = require('firebase-functions')
+const next = require('next')
+const config = require('./src/config/config')
+const app = next({
+    dev: config.isDev,
+    conf: { distDir: 'next' }
+})
 
-    server.get('*', (req, res) => {
-        return handle(req, res)
-    });
+const handle = app.getRequestHandler()
 
-    server.listen(config.port, err => {
-        if (err) throw err;
-        console.log(`There will be dragons: http://localhost:${config.port}`);
-        console.log(`db host : ${config.api}`);
-    })
-});
+exports.next = functions.https.onRequest(async (req, res) => {
+    console.log('File: ' + req.originalUrl) // log the page.js file that is being requested
+    console.log(`There will be dragons: http://localhost:${config.port}`)
+    console.log(`db host : ${config.api}`)
+    await app.prepare()
+    await handle(req, res)
+})

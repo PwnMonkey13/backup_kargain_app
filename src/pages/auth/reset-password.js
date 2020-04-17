@@ -1,40 +1,34 @@
-import React, {useContext} from 'react';
-import { useRouter } from "next/router";
-import {useForm} from "react-hook-form";
-import styled from "styled-components";
-import {EmailInput, PasswordInput} from "../../components/Form/Inputs";
-import FieldWrapper from "../../components/Form/FieldWrapper";
-import {Col, Row} from "reactstrap";
-import Link from "next/link";
-import Divider from "../../components/Divider";
-import AuthService from '../../services/AuthService';
-import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
-import {UserContext} from "../../components/Context/UserContext";
-import ConfirmAccount from "./confirm-account";
+import React, { useContext } from 'react'
+import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
+import { PasswordInput } from '../../components/Form/Inputs'
+import FieldWrapper from '../../components/Form/FieldWrapper'
+import AuthService from '../../services/AuthService'
+import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
 
 const formConfig = {
     mode: 'onChange',
-    validateCriteriaMode: "all",
-};
+    validateCriteriaMode: 'all'
+}
 
 const ResetPassword = (props) => {
-    const router = useRouter();
-    const { redirect, token } = router.query;
-    const {dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const {control, errors, setValue, getValues, formState, watch, register, handleSubmit} = useForm(formConfig);
+    const router = useRouter()
+    const { redirect, token } = router.query
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext)
+    const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig)
 
     const onSubmit = (form) => {
-        if(!token) return dispatchModal({type: 'error', err : "Invalid"});
+        if (!token) return dispatchModal({ type: 'error', err: 'Invalid' })
         AuthService.resetPassword(token, form.password)
             .then(() => {
-                dispatchModal({msg: 'password reinitialized', persist : true});
-                if (redirect) router.push({pathname: redirect});
+                dispatchModal({ msg: 'password reinitialized', persist: true })
+                if (redirect) router.push({ pathname: redirect })
             }).catch(err => {
-            dispatchModalError({err});
-                if(redirect) router.push({ pathname : redirect});
+                dispatchModalError({ err })
+                if (redirect) router.push({ pathname: redirect })
             }
-        );
-    };
+            )
+    }
 
     return (
         <main>
@@ -46,7 +40,7 @@ const ResetPassword = (props) => {
                         name="password"
                         errors={errors}
                         control={control}
-                        rules={{required : 'Required'}}
+                        rules={{ required: 'Required' }}
                     />
                 </FieldWrapper>
 
@@ -56,12 +50,12 @@ const ResetPassword = (props) => {
                         errors={errors}
                         control={control}
                         rules={{
-                            required : 'Required',
+                            required: 'Required',
                             validate: {
                                 matchesPreviousPassword: (value) => {
-                                    const { password } = getValues();
-                                    return password === value || 'Passwords should match!';
-                                },
+                                    const { password } = getValues()
+                                    return password === value || 'Passwords should match!'
+                                }
                             }
                         }}
                     />
@@ -72,7 +66,7 @@ const ResetPassword = (props) => {
                 </div>
             </form>
         </main>
-    );
-};
+    )
+}
 
-export default ResetPassword;
+export default ResetPassword

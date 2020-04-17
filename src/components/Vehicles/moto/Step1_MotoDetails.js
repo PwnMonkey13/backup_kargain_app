@@ -1,14 +1,14 @@
-import React, {useRef} from 'react';
-import { Row, Col } from 'reactstrap';
-import FieldWrapper from "../../Form/FieldWrapper";
-import {CheckboxMultipleInput, SelectInput, NumberInput, RadioGroupInput, TextInput} from "../../Form/Inputs";
-import {RadioFunctionVehicle, RadioChoicesEngine, CheckboxOptionsEquipments, RadioTypeFunction, RadioChoicesMaterials, RadioChoicesExternalColor, RadioChoicesPaints} from "./form.data.js";
-import Header from "../../Header";
-import {RadioChoicesGas} from "../car/form.data";
+import React, { useRef } from 'react'
+import { Row, Col } from 'reactstrap'
+import FieldWrapper from '../../Form/FieldWrapper'
+import { CheckboxMultipleInput, SelectInput, NumberInput, RadioGroupInput, TextInput } from '../../Form/Inputs'
+import { RadioFunctionVehicle, RadioChoicesEngine, CheckboxOptionsEquipments, RadioTypeFunction, RadioChoicesMaterials, RadioChoicesExternalColor, RadioChoicesPaints } from './form.data.js'
+import Header from '../../Header'
+import { RadioChoicesGas } from '../car/form.data'
 
-const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextStep, ...props}) => {
-    const formRef = useRef(null);
-    const {watch, control, errors, getValues, register, formState, handleSubmit} = methods;
+const Step1MotoDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
+    const formRef = useRef(null)
+    const { watch, control, errors, getValues, register, formState, handleSubmit } = methods
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
@@ -16,9 +16,9 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                 <Col>
                     <FieldWrapper label="Type">
                         <SelectInput name="vehicleFunction"
-                                     control={control}
-                                     errors={errors}
-                                     options={RadioTypeFunction}
+                            control={control}
+                            errors={errors}
+                            options={RadioTypeFunction}
                         />
                     </FieldWrapper>
                 </Col>
@@ -39,9 +39,9 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                 <Col>
                     <FieldWrapper label="Kilométrage" required>
                         <NumberInput name="mileage"
-                                     placeholder="20000 km"
-                                     control={control}
-                                     errors={errors}
+                            placeholder="20000 km"
+                            control={control}
+                            errors={errors}
 
                         />
                     </FieldWrapper>
@@ -49,8 +49,8 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                 <Col>
                     <FieldWrapper label="Cylindrée">
                         <NumberInput name="vehicleEngine.cylinder"
-                                     control={control}
-                                     errors={errors}
+                            control={control}
+                            errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -60,9 +60,9 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                 <Col>
                     <FieldWrapper label="Carburant" required>
                         <SelectInput name="vehicleEngine.gas"
-                                     options={RadioChoicesGas}
-                                     control={control}
-                                     errors={errors}
+                            options={RadioChoicesGas}
+                            control={control}
+                            errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -73,7 +73,7 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                             options={RadioChoicesEngine}
                             control={control}
                             errors={errors}
-                            rules={{required: 'Title is required!'}}
+                            rules={{ required: 'Title is required!' }}
                         />
                     </FieldWrapper>
                 </Col>
@@ -83,8 +83,8 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                 <Col>
                     <FieldWrapper label="Puissance kW">
                         <NumberInput name="power.kw"
-                                     control={control}
-                                     errors={errors}
+                            control={control}
+                            errors={errors}
 
                         />
                     </FieldWrapper>
@@ -92,8 +92,8 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                 <Col>
                     <FieldWrapper label="Puissance CH">
                         <NumberInput name="power.ch"
-                                     control={control}
-                                     errors={errors}
+                            control={control}
+                            errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -146,7 +146,7 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                             name="equipments"
                             isMulti
                             options={CheckboxOptionsEquipments}
-                            defaultChecked={["Topcase", "Kickstarter"]}
+                            defaultChecked={['Topcase', 'Kickstarter']}
                             control={control}
                             errors={errors}
                         />
@@ -187,7 +187,7 @@ const Step1_MotoDetails = ({methods, formConfig, onSubmitStep, prevStep, nextSte
                 </Col>
             </Row>
         </form>
-    );
-};
+    )
+}
 
-export default Step1_MotoDetails;
+export default Step1MotoDetails
