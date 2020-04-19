@@ -1,65 +1,65 @@
-import React, {memo, useContext, useEffect, useState} from "react";
-import PropTypes from "prop-types";
-import {MapPin} from "react-feather";
-import { CheckboxOptionsEquipments, RadioChoicesExternalColor, RadioChoicesPaints, RadioTypeFunction } from "../../Vehicles/moto/form.data";
-import {GeoCitiesInput, NumberInput, SelectInput, SliderInput,} from "../../Form/Inputs";
-import MotorsBikesApiService from "../../../services/vehicles/MotorsBikesApiService";
-import {ModalDialogContext} from "../../Context/ModalDialogContext";
-import ReactFlagsSelect from "../../SelectCountriesFlags";
-import useAddress from "../../../hooks/useAddress";
-import Header from "../../Header";
+import React, { memo, useContext, useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import { MapPin } from 'react-feather'
+import { CheckboxOptionsEquipments, RadioChoicesExternalColor, RadioChoicesPaints, RadioTypeFunction } from '../../Vehicles/moto/form.data'
+import { GeoCitiesInput, NumberInput, SelectInput, SliderInput } from '../../Form/Inputs'
+import MotorsBikesApiService from '../../../services/vehicles/MotorsBikesApiService'
+import { ModalDialogContext } from '../../Context/ModalDialogContext'
+import ReactFlagsSelect from '../../SelectCountriesFlags'
+import useAddress from '../../../hooks/useAddress'
+import Header from '../../Header'
 
-const MotoFilters = memo(({control, watch, errors, ...props}) => {
-    const [addressObj, address, geolocation] = useAddress();
-    const [makes, setMakes] = useState([]);
-    const {dispatchModalError} = useContext(ModalDialogContext);
+const MotoFilters = memo(({ control, watch, errors, ...props }) => {
+    const [addressObj, address, geolocation] = useAddress()
+    const [makes, setMakes] = useState([])
+    const { dispatchModalError } = useContext(ModalDialogContext)
     const [manufacturersData, setManufacturersData] = useState({
         makes: [],
-        models: [],
-    });
+        models: []
+    })
 
     const popularMakes = [
-        "Aprilia",
-        "BMW",
-        "Ducati",
-        "Honda",
-        "Harley-Davidson",
-        "Husqvarna",
-        "Kawasaki",
-        "KTM",
-        "Suzuki",
-        "Triumph",
-        "Yamaha",
-        "Royal Enfield",
-    ];
-
-    useEffect(()=>{
-        control.register({name : "geoloc"});
-    },[]);
+        'Aprilia',
+        'BMW',
+        'Ducati',
+        'Honda',
+        'Harley-Davidson',
+        'Husqvarna',
+        'Kawasaki',
+        'KTM',
+        'Suzuki',
+        'Triumph',
+        'Yamaha',
+        'Royal Enfield'
+    ]
 
     useEffect(() => {
-        control.setValue("geoloc", geolocation);
-    },[geolocation]);
+        control.register({ name: 'geoloc' })
+    }, [])
 
     useEffect(() => {
-        console.log('fetch makes');
+        control.setValue('geoloc', geolocation)
+    }, [geolocation])
+
+    useEffect(() => {
+        console.log('fetch makes')
         MotorsBikesApiService.getMakes(popularMakes)
             .then(motos => {
-                const makesOptions = motos.map(car => ({value: car.make, label: car.make}));
-                const defaultOption = {value: "other", label: "Je ne sais pas/Autre"};
+                const makesOptions = motos.map(car => ({ value: car.make, label: car.make }))
+                const defaultOption = { value: 'other', label: 'Je ne sais pas/Autre' }
                 setManufacturersData(manufacturersData => (
-                    {...manufacturersData, makes: [...makesOptions, defaultOption]})
-                );
+                    { ...manufacturersData, makes: [...makesOptions, defaultOption] })
+                )
             })
             .catch(err => {
-                dispatchModalError({err});
-            });
-        return function cleanup() {
-            console.log('unmount');
+                dispatchModalError({ err })
+            })
+        return function cleanup () {
+            console.log('unmount')
         }
-    }, []);
+    }, [])
 
-    const countrySelect = watch('country');
+    const countrySelect = watch('country')
 
     return (
         <>
@@ -152,7 +152,7 @@ const MotoFilters = memo(({control, watch, errors, ...props}) => {
                 control={control}
             />
 
-            { (countrySelect && countrySelect.value === "FR") && (
+            { (countrySelect && countrySelect.value === 'FR') && (
                 <>
                     <Header p strong className="my-2">
                         <MapPin/> Adresse approximative : {address}
@@ -163,7 +163,7 @@ const MotoFilters = memo(({control, watch, errors, ...props}) => {
                         enableGeoloc
                         lat={geolocation.latitude}
                         long={geolocation.longitude}
-                        typeAPI="geo" //vicopo
+                        typeAPI="geo" // vicopo
                         control={control}
                         errors={errors}
                     />
@@ -188,7 +188,7 @@ const MotoFilters = memo(({control, watch, errors, ...props}) => {
                 name="equipments"
                 options={CheckboxOptionsEquipments}
                 isMulti
-                defaultChecked={["Topcase", "Kickstarter"]}
+                defaultChecked={['Topcase', 'Kickstarter']}
                 control={control}
                 errors={errors}
             />
@@ -210,12 +210,12 @@ const MotoFilters = memo(({control, watch, errors, ...props}) => {
             />
         </>
     )
-});
+})
 
 MotoFilters.propTypes = {
     control: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
     watch: PropTypes.func
-};
+}
 
-export default MotoFilters;
+export default MotoFilters

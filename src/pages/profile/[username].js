@@ -1,61 +1,58 @@
 import React, { useContext } from 'react'
 import Link from 'next/link'
-import nextCookie from 'next-cookies'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
 import { Row, Col } from 'reactstrap'
 import UsersService from '../../services/UsersService'
-import { UserContext } from '../../components/Context/UserContext';
-import {ModalDialogContext} from "../../components/Context/ModalDialogContext";
-import Tabs from "../../components/Tabs/Tabs";
-import {SelectOptionsUtils} from "../../libs/formFieldsUtils";
-import NiceSelect from 'react-select'
-import {useForm} from "react-hook-form";
-import SelectInput from "../../components/Form/Inputs/SelectInput";
+import { UserContext } from '../../components/Context/UserContext'
+import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
+import Tabs from '../../components/Tabs/Tabs'
+import { SelectOptionsUtils } from '../../libs/formFieldsUtils'
+import { useForm } from 'react-hook-form'
+import SelectInput from '../../components/Form/Inputs/SelectInput'
 
 const formConfig = {
     mode: 'onChange',
-    validateCriteriaMode: "all",
-};
+    validateCriteriaMode: 'all'
+}
 
 const Profile = (props) => {
-    const { profile } = props;
-    const router = useRouter();
-    const { session, dispatch } = useContext(UserContext);
-    const { dispatchModal } = useContext(ModalDialogContext);
-    const {watch, control, errors, setValue, getValues, register, formState, handleSubmit} = useForm(formConfig);
+    const { profile } = props
+    const { session, dispatch } = useContext(UserContext)
+    const { dispatchModal } = useContext(ModalDialogContext)
+    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm(formConfig)
 
     const getProfileAvatar = () => {
-       return profile.avatar || 'images/profile.png';
-    };
+        return profile.avatar || 'images/profile.png'
+    }
 
     const getProfileName = () => {
-        return profile.fullname;
-    };
+        return profile.fullname
+    }
 
     const getUserLocationAdress = () => {
-        return profile.fullAddress;
-    };
+        return profile.fullAddress
+    }
 
     const getProfileUserName = () => {
-        return `@${profile.username}`;
-    };
+        return `@${profile.username}`
+    }
 
     const getProfileCountFollowers = () => {
-       const count = profile.followersCount || 100;
-       return `${count} abonnés`;
-    };
+        const count = profile.followersCount || 100
+        return `${count} abonnés`
+    }
 
     const getProfileCountFollowing = () => {
-        const count = profile.followingCount || 100;
-        return `${count} abonnements`;
-    };
+        const count = profile.followingCount || 100
+        return `${count} abonnements`
+    }
 
     const getUserDescription = () => {
-        return profile.about;
-    };
+        return profile.about
+    }
 
-    return ( profile ?
-        <main>
+    return (profile
+        ? <main>
             <Row>
                 <div className="top-profile-wrapper">
                     <img src={getProfileAvatar()} alt="" className="img-profile-wrapper"/>
@@ -66,12 +63,12 @@ const Profile = (props) => {
                                 <img src="images/star.png" alt=""/>
                             </p>
                             {
-                                session
-                                && session.isLoggedIn === true
-                                && session.user !== null
-                                && session.user.username === profile.username &&
+                                session &&
+                                session.isLoggedIn === true &&
+                                session.user !== null &&
+                                session.user.username === profile.username &&
                                 <div>
-                                    <Link href={`/profile/edit`}>
+                                    <Link href={'/profile/edit'}>
                                         <a className="btn btn-outline-dark">Editer profil</a>
                                     </Link>
                                 </div>
@@ -80,7 +77,7 @@ const Profile = (props) => {
                         </div>
                         <p className="top-profile-login"> { getProfileUserName() } </p>
                         <div className="top-profile-data-wrapper">
-                            { getUserLocationAdress() !== "" &&
+                            { getUserLocationAdress() !== '' &&
                                 <p className="top-profile-location">
                                     <img src="images/location.png" alt=""/>
                                     { getUserLocationAdress() }
@@ -109,42 +106,42 @@ const Profile = (props) => {
                         <div className="profile-marque-wrapper">
                             <div className="dropdown-wrapper ml-0">
                                 <span>Catégorie :</span>
-                                <div style={{width:'220px'}}>
+                                <div style={{ width: '220px' }}>
                                     <SelectInput
                                         name="car"
                                         control={control}
-                                        options={SelectOptionsUtils(['A5','A6','A7'])}
+                                        options={SelectOptionsUtils(['A5', 'A6', 'A7'])}
                                     />
                                 </div>
 
                             </div>
                             <div className="dropdown-wrapper ml-0">
                                 <span>Marque :</span>
-                                <div style={{width:'220px'}}>
+                                <div style={{ width: '220px' }}>
                                     <SelectInput
                                         name="car"
                                         control={control}
-                                        options={SelectOptionsUtils(['A5','A6','A7'])}
+                                        options={SelectOptionsUtils(['A5', 'A6', 'A7'])}
                                     />
                                 </div>                          </div>
                             <div className="d-flex align-items-end flex-column">
                                 <div className="dropdown-wrapper ml-0 drop-mb">
                                     <span>Modèle :</span>
-                                    <div style={{width:'220px'}}>
+                                    <div style={{ width: '220px' }}>
                                         <SelectInput
                                             name="car"
                                             control={control}
-                                            options={SelectOptionsUtils(['A5','A6','A7'])}
+                                            options={SelectOptionsUtils(['A5', 'A6', 'A7'])}
                                         />
                                     </div>
                                 </div>
                                 <div className="dropdown-wrapper dropdown-wrapper-alone">
                                     <span>Trier par :</span>
-                                    <div style={{width:'220px'}}>
+                                    <div style={{ width: '220px' }}>
                                         <SelectInput
                                             name="car"
                                             control={control}
-                                            options={SelectOptionsUtils(['A5','A6','A7'])}
+                                            options={SelectOptionsUtils(['A5', 'A6', 'A7'])}
                                         />
                                     </div>
                                 </div>
@@ -190,17 +187,17 @@ const Profile = (props) => {
                 </Tabs.Item>
             </Tabs>
         </main> : <p> TODO, unknown user</p>
-    );
-};
+    )
+}
 
-Profile.getInitialProps = async function(ctx) {
-    const { username } = ctx.query;
-    try{
-        const profile = await UsersService.getUsers(username);
-        return { username, profile };
+Profile.getInitialProps = async function (ctx) {
+    const { username } = ctx.query
+    try {
+        const profile = await UsersService.getUsers(username)
+        return { username, profile }
     } catch (err) {
-        return { err };
+        return { err }
     }
-};
+}
 
-export default Profile;
+export default Profile

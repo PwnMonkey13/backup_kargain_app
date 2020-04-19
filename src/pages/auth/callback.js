@@ -1,17 +1,17 @@
-import React, {useEffect} from 'react'
-import {withRouter, useRouter} from 'next/router'
+import React, { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 import Loader from '../../components/Loader'
-import Link from "next/link";
 
-const Callback = (props) => {
-    const router = useRouter();
-    const { redirect } = props.router.query;
+const Callback = () => {
+    const router = useRouter()
+    const { redirect } = router.query
 
     useEffect(() => {
         setTimeout(() => {
-            router.push(redirect || '/');
-        }, 3000);
-    }, []);
+            router.push(redirect || '/')
+        }, 3000)
+    }, [])
 
     return (
         <>
@@ -20,7 +20,7 @@ const Callback = (props) => {
                 <a>Redirection...</a>
             </Link>
         </>
-    );
-};
+    )
+}
 
-export default withRouter(Callback);
+export default Callback

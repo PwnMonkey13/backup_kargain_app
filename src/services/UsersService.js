@@ -1,29 +1,28 @@
 import fetch from 'isomorphic-unfetch'
-import handleResponse from '../libs/handleResponse';
-import config from '../config/config';
-import setHeaders from "../libs/authHeaders";
+import handleResponse from '../libs/handleResponse'
+import config from '../config/config'
+import setHeaders from '../libs/authHeaders'
 
-function getUsers(username = null, token = null) {
+function getUsers (username = null, token = null) {
     const requestOptions = {
-        method : 'GET',
+        method: 'GET',
         headers: setHeaders(token)
-    };
+    }
 
-    let url = `${config.api}/users`;
-    if (username) url += '/' + username;
+    let url = `${config.api}/users`
+    if (username) url += '/' + username
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => {
-            return json.data;
+            return json.data
         })
         .catch(err => {
-            throw err;
-        });
+            throw err
+        })
 }
 
-function updateUser(username, updates, token) {
-
+function updateUser (username, updates, token) {
     // const formData = {
     //     // _csrf: await NextAuth.csrfToken(),
     //     user
@@ -43,22 +42,22 @@ function updateUser(username, updates, token) {
         //     'Content-Type': 'application/x-www-form-urlencoded'
         // }),
         body: JSON.stringify(updates)
-    };
+    }
 
-    let url = `${config.api}/users/${username}`;
+    const url = `${config.api}/users/${username}`
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => {
-            return json.data;
+            return json.data
         })
         .catch(err => {
-            throw err;
+            throw err
         }
-    );
+        )
 }
 
 export default {
     getUsers,
     updateUser
-};
+}

@@ -1,139 +1,138 @@
-import fetch from 'isomorphic-unfetch';
-import handleResponse from '../libs/handleResponse';
-import setHeaders from '../libs/authHeaders';
-import config from '../config/config';
+import fetch from 'isomorphic-unfetch'
+import handleResponse from '../libs/handleResponse'
+import setHeaders from '../libs/authHeaders'
+import config from '../config/config'
 
-function login(email, password) {
+function login (email, password) {
     const requestOptions = {
         method: 'POST',
         // withCredentials: true,
         // credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
-    };
+    }
 
     return fetch(`${config.api}/auth/login`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            return json.data;
+            return json.data
         })
         .catch(err => {
-            throw err;
+            throw err
         }
-    );
+        )
 }
 
-function register(user) {
+function register (user) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
-    };
+    }
 
     return fetch(`${config.api}/auth/register`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            return json;
+            return json
         })
         .catch(err => {
-            throw err;
+            throw err
         }
-    );
+        )
 }
 
-function registerPro(form) {
+function registerPro (form) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ form })
-    };
+    }
 
     return fetch(`${config.api}/auth/register-pro`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            return json.data;
+            return json.data
         })
         .catch(err => {
-            throw err;
+            throw err
         }
-    );
+        )
 }
 
-function authorize(token) {
+function authorize (token) {
     const requestOptions = {
         method: 'GET',
-        headers: setHeaders('GET', token),
-    };
+        headers: setHeaders('GET', token)
+    }
 
     return fetch(`${config.api}/auth/authorize`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            return json.isLoggedIn;
+            return json.isLoggedIn
         })
         .catch(err => {
-            throw err;
+            throw err
         }
-    );
+        )
 }
 
-function confirmAccount(token){
+function confirmAccount (token) {
     const requestOptions = {
-        method: 'GET',
-    };
+        method: 'GET'
+    }
 
     return fetch(`${config.api}/auth/confirm-account?token=${token}`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            return json;
+            return json
         })
         .catch(err => {
-            throw err;
+            throw err
         }
-    );
+        )
 }
 
-function forgotPassword(email){
+function forgotPassword (email) {
     const requestOptions = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email })
-    };
+    }
 
     return fetch(`${config.api}/auth/forgot-password`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            return json.data;
+            return json.data
         })
         .catch(err => {
-            throw err;
+            throw err
         }
-    );
+        )
 }
 
-function resetPassword(token, password) {
+function resetPassword (token, password) {
     const requestOptions = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ token, password })
-    };
+    }
 
     return fetch(`${config.api}/auth/reset-password`, requestOptions)
         .then(handleResponse)
         .then(json => {
-            return json.data;
+            return json.data
         })
         .catch(err => {
-            throw err;
+            throw err
         }
-    );
+        )
 }
 
-function signout() {}
-
+function signout () {}
 
 export default {
     login,
@@ -144,4 +143,4 @@ export default {
     forgotPassword,
     resetPassword,
     signout
-};
+}

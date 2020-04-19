@@ -24,4 +24,4 @@ Divider.defaultProps = {
     text: 'or'
 }
 
-export default memo(Divider);
+export default memo(Divider)

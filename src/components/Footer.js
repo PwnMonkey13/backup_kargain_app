@@ -2,14 +2,13 @@ import React from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 
-const Footer = ({t, ...props}) => {
+const FixedFooter = styled.footer`
+    // position:fixed;
+    // bottom:0
+`
 
-    const FixedFooter = styled.footer`
-        // position:fixed;
-        // bottom:0
-    `;
-
-    return(
+const Footer = ({ t, ...props }) => {
+    return (
         <FixedFooter className="menu-footer">
             <ul>
                 <li>
@@ -34,9 +33,8 @@ const Footer = ({t, ...props}) => {
                 </li>
             </ul>
         </FixedFooter>
-    );
-};
+    )
+}
 
 // export default withTranslation('common')(Footer);
-export default Footer;
-
+export default Footer

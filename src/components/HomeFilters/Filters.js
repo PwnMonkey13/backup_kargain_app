@@ -10,6 +10,16 @@ import Header from '../Header'
 import useIsMounted from '../../hooks/useIsMounted'
 import Spacer from '../Spacer'
 
+const Form = styled.form`
+     display: flex;
+     flex-direction: column;
+     border: 1px solid #dce0e0;
+     background-color: #f7f8f9;
+     border-radius: .1875rem;
+     background-color: #fff;
+     padding: 10px;
+  `
+
 const Filters = ({ defaultFilters, updateFilters: fireFilters }) => {
     const isMounted = useIsMounted()
     const formRef = useRef(null)
@@ -120,16 +130,6 @@ const Filters = ({ defaultFilters, updateFilters: fireFilters }) => {
             fireFilters(filtersFlat)
         }
     }, [filters])
-
-    const Form = styled.form`
-         display: flex;
-         flex-direction: column;
-         border: 1px solid #dce0e0;
-         background-color: #f7f8f9;
-         border-radius: .1875rem;
-         background-color: #fff;
-         padding: 10px;
-      `
 
     const ControlButtons = () => (
         <div className="d-flex flex-column my-3">

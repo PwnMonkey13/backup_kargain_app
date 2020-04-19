@@ -1,13 +1,13 @@
-import React, {memo, useEffect, useState} from 'react';
-import {Col, Row} from 'reactstrap';
-import Pagination from "react-paginating";
-import AnnounceService from '../services/AnnounceService';
-import Filters from "../components/HomeFilters/Filters";
-import Sorters from "../components/HomeFilters/Sorters";
-import AnnounceCard from '../components/AnnounceCard';
-import Header from "../components/Header";
-import useIsMounted from "../hooks/useIsMounted";
-import Loader from "../components/Loader";
+import React, { memo, useEffect, useRef, useState } from 'react'
+import { Col, Row } from 'reactstrap'
+import Pagination from 'react-paginating'
+import AnnounceService from '../services/AnnounceService'
+import Filters from '../components/HomeFilters/Filters'
+import Sorters from '../components/HomeFilters/Sorters'
+import AnnounceCard from '../components/AnnounceCard'
+import Header from '../components/Header'
+import useIsMounted from '../hooks/useIsMounted'
+import Loader from '../components/Loader'
 
 const Index = (props) => {
     const isMounted = useIsMounted();
@@ -17,27 +17,35 @@ const Index = (props) => {
         filters: {},
         page: 1,
         announces: [],
-        total: 0,
-    });
+        total: 0
+    })
 
     const fetchAnnounces = () => {
-        const {sorter, filters, page} = state;
-        const {size} = props;
-        setState(state => ({...state, loading: true}));
+        const { sorter, filters, page } = state
+        const { size } = props
+        setState(state => ({
+            ...state,
+            loading: true
+        }))
 
-        AnnounceService.getAnnounces({filters, sorter, page, size})
+        AnnounceService.getAnnounces({
+            filters,
+            sorter,
+            page,
+            size
+        })
             .then(data => {
                 setState(state => ({
                     ...state,
                     announces: data.announces,
                     total: data.total,
-                    loading: false,
-                }));
+                    loading: false
+                }))
             }).catch(err => {
-                throw err;
+                throw err
             }
-        );
-    };
+            )
+    }
 
     useEffect(() => {
         fetchAnnounces();
@@ -54,36 +62,39 @@ const Index = (props) => {
         setState(state => ({
             ...state,
             page
-        }));
-    };
+        }))
+    }
 
     const updateFilters = (filters) => {
         setState(state => ({
             ...state,
             filters
         }))
-    };
+    }
 
     const updateSorter = (sorter) => {
         setState(state => ({
             ...state,
             sorter
         }))
-    };
+    }
 
     const MainComponent = () => {
-        const {loading, announces} = state;
-        if (loading) return <Loader/>;
-        else if (announces && announces.length > 0) {
+        const { loading, announces } = state
+        if (loading) {
+            return <Loader/>
+        } else if (announces && announces.length > 0) {
             return (
                 <div>
                     {announces.map((announce, index) => (
                         <AnnounceCard key={index} announce={announce}/>
                     ))}
                 </div>
-            );
-        } else return <div>No items found</div>;
-    };
+            )
+        } else {
+            return <div>No items found</div>
+        }
+    }
 
     const Paginate = memo(() => {
         return (
@@ -95,15 +106,15 @@ const Index = (props) => {
                     currentPage={state.page}
                 >
                     {({
-                          pages,
-                          currentPage,
-                          hasNextPage,
-                          hasPreviousPage,
-                          previousPage,
-                          nextPage,
-                          totalPages,
-                          getPageItemProps
-                      }) => (
+                        pages,
+                        currentPage,
+                        hasNextPage,
+                        hasPreviousPage,
+                        previousPage,
+                        nextPage,
+                        totalPages,
+                        getPageItemProps
+                    }) => (
                         <div>
                             <button
                                 {...getPageItemProps({
@@ -121,14 +132,14 @@ const Index = (props) => {
                                         onPageChange: handlePageChange
                                     })}
                                 >
-                                    {"<"}
+                                    {'<'}
                                 </button>
                             )}
 
                             {pages.map(page => {
-                                let activePage = null;
+                                let activePage = null
                                 if (currentPage === page) {
-                                    activePage = {backgroundColor: "#fdce09"};
+                                    activePage = { backgroundColor: '#fdce09' }
                                 }
                                 return (
                                     <button
@@ -141,7 +152,7 @@ const Index = (props) => {
                                     >
                                         {page}
                                     </button>
-                                );
+                                )
                             })}
 
                             {hasNextPage && (
@@ -151,7 +162,7 @@ const Index = (props) => {
                                         onPageChange: handlePageChange
                                     })}
                                 >
-                                    {">"}
+                                    {'>'}
                                 </button>
                             )}
 
@@ -168,16 +179,26 @@ const Index = (props) => {
                 </Pagination>
             </div>
         )
-    });
+    })
 
     const PaginateSituation = memo(() => {
-        const {announces, page} = state;
-        let tot = announces.length;
-        if (page > 1) tot += page * props.size;
+        const { announces, page } = state
+        let tot = announces.length
+        if (page > 1) tot += page * props.size
         return (
             tot ? <p className="py-2 text-center">{tot} announces sur {state.total} </p> : null
         )
-    });
+    })
+
+    // const scrollListener = () => {
+    //     const height = window.innerHeight
+    //     const pageYOffset = window.pageYOffset
+    //     // @TODO
+    //     const docHeight = pageRef.current.offsetHeight;
+    //     if ((docHeight - height - pageYOffset < 50) && !this.state.fetching) {
+    //         this.setState({ fetching: true }, this.getArticles);
+    //     }
+    // }
 
     return (
         <main className="content">
@@ -201,11 +222,11 @@ const Index = (props) => {
             </Row>
         </main>
     )
-};
+}
 
 Index.defaultProps = {
     paginate: 3,
-    size: 5,
-};
+    size: 5
+}
 
-export default Index;
+export default Index

@@ -1,12 +1,12 @@
-import React, {memo, useContext, useEffect, useState} from 'react'
-import styled from "styled-components";
+import React, { memo, useContext, useEffect, useState } from 'react'
+import styled from 'styled-components'
 
 const Aside = styled.aside`
         border: 1px solid #dce0e0;
         background-color: #f7f8f9;
         border-radius: .1875rem;
         background-color: #fff;
-  `;
+  `
 
 const Title = styled.div`
         margin-top: -1px;
@@ -19,14 +19,13 @@ const Title = styled.div`
         font-size: 1.125rem;
         font-weight: bold;
         text-transform: uppercase;
-  `;
+  `
 
 const Content = styled.div`
         padding: .25rem;
-    `;
+    `
 
-const FormResume = memo(({resumeModel, formValues, props}) => {
-
+const FormResume = memo(({ resumeModel, formValues, props }) => {
     return (
         <Aside className="cell small-12 medium-4 large-3">
             <div className="box-bordered --alt-color --alt-padding price-details">
@@ -36,11 +35,11 @@ const FormResume = memo(({resumeModel, formValues, props}) => {
 
                 <Content className="price-content">
                     { resumeModel.map((stepLabels, index) => {
-                        return(
+                        return (
                             <section key={index} className="resumeStep">
                                 { Object.keys(stepLabels).map((key, index2) => {
-                                    if(formValues[key]){
-                                        return(
+                                    if (formValues[key]) {
+                                        return (
                                             <div key={index2} className="row">
                                                 <div className="col">
                                                     <span className="col">{stepLabels[key]} : </span>
@@ -53,7 +52,6 @@ const FormResume = memo(({resumeModel, formValues, props}) => {
                                             </div>
                                         )
                                     }
-
                                 })}
                             </section>
                         )
@@ -62,6 +60,6 @@ const FormResume = memo(({resumeModel, formValues, props}) => {
             </div>
         </Aside>
     )
-});
+})
 
-export default FormResume;
+export default FormResume

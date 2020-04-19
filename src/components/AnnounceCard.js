@@ -35,11 +35,11 @@ class Announce {
     }
 
     getPrice () {
-        return this.announce.price ? this.announce.price : '20000'
+        return this.announce.price
     }
 
     getPriceHT () {
-        return this.announce.priceHT ? this.announce.priceHT : '20000'
+        return this.announce.priceHT
     }
 
     get slug () {

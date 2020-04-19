@@ -1,7 +1,7 @@
-import React, {useContext, useEffect, useState} from "react";
-import PropTypes from "prop-types";
-import {MapPin} from "react-feather";
-import Header from "../../Header";
+import React, { useContext, useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import { MapPin } from 'react-feather'
+import Header from '../../Header'
 import {
     RadioTypeFunction,
     CheckboxOptionsEquipments,
@@ -11,17 +11,17 @@ import {
     RadioChoicesGas,
     RadioChoicesPaints,
     RadioVehicleGeneralState
-} from "../../Vehicles/car/form.data";
-import { SliderInput, NumberInput, SelectInput, GeoCitiesInput } from "../../Form/Inputs";
-import CarApiService from "../../../services/vehicles/CarApiService";
-import {ModalDialogContext} from "../../Context/ModalDialogContext";
-import ReactFlagsSelect from "../../SelectCountriesFlags";
-import useAddress from "../../../hooks/useAddress";
+} from '../../Vehicles/car/form.data'
+import { SliderInput, NumberInput, SelectInput, GeoCitiesInput } from '../../Form/Inputs'
+import CarApiService from '../../../services/vehicles/CarApiService'
+import { ModalDialogContext } from '../../Context/ModalDialogContext'
+import ReactFlagsSelect from '../../SelectCountriesFlags'
+import useAddress from '../../../hooks/useAddress'
 
-const CarFilters = ({control, watch, errors, ...props}) => {
-    const [addressObj, address, geolocation] = useAddress();
-    const [makes, setMakes] = useState([]);
-    const {dispatchModalError} = useContext(ModalDialogContext);
+const CarFilters = ({ control, watch, errors, ...props }) => {
+    const [addressObj, address, geolocation] = useAddress()
+    const [makes, setMakes] = useState([])
+    const { dispatchModalError } = useContext(ModalDialogContext)
     const popularMakesId = [
         3, // AlphaRomeo
         9, // Audi
@@ -36,31 +36,31 @@ const CarFilters = ({control, watch, errors, ...props}) => {
         47, // Fiat
         140, // Toyota
         133 // Susuki
-    ];
-
-    useEffect(()=>{
-        control.register({name : "geoloc"});
-    },[]);
+    ]
 
     useEffect(() => {
-        control.setValue("geoloc", geolocation);
-    },[geolocation]);
+        control.register({ name: 'geoloc' })
+    }, [])
+
+    useEffect(() => {
+        control.setValue('geoloc', geolocation)
+    }, [geolocation])
 
     useEffect(() => {
         CarApiService.getMakes(popularMakesId)
             .then(cars => {
-                const makesOptions = cars.map(car => ({value: car.make, label: car.make}));
-                const defaultOption = {value: "other", label: "Je ne sais pas/Autre"};
-                setMakes([...makesOptions, defaultOption]);
+                const makesOptions = cars.map(car => ({ value: car.make, label: car.make }))
+                const defaultOption = { value: 'other', label: 'Je ne sais pas/Autre' }
+                setMakes([...makesOptions, defaultOption])
             })
             .catch(err => {
-                dispatchModalError({err});
-            });
-    }, []);
+                dispatchModalError({ err })
+            })
+    }, [])
 
-    const countrySelect = watch('country');
+    const countrySelect = watch('country')
 
-    return(
+    return (
         <>
             <Header p strong className="my-2" text="Marque"/>
             <SelectInput
@@ -133,7 +133,7 @@ const CarFilters = ({control, watch, errors, ...props}) => {
                 control={control}
             />
 
-            { (countrySelect && countrySelect.value === "FR") && (
+            { (countrySelect && countrySelect.value === 'FR') && (
                 <>
                     <Header p strong className="my-2">
                         <MapPin/> Adresse approximative : {address}
@@ -144,10 +144,10 @@ const CarFilters = ({control, watch, errors, ...props}) => {
                         enableGeoloc
                         lat={geolocation.latitude}
                         long={geolocation.longitude}
-                        typeAPI="geo" //vicopo
+                        typeAPI="geo" // vicopo
                         control={control}
                         errors={errors}
-                        />
+                    />
 
                     <Header p strong className="my-2" text="Rayon"/>
                     <SliderInput
@@ -263,7 +263,7 @@ const CarFilters = ({control, watch, errors, ...props}) => {
                 name="equipments"
                 options={CheckboxOptionsEquipments}
                 isMulti
-                defaultChecked={["ABS", "ESP"]}
+                defaultChecked={['ABS', 'ESP']}
                 control={control}
                 errors={errors}
             />
@@ -293,12 +293,12 @@ const CarFilters = ({control, watch, errors, ...props}) => {
             />
         </>
     )
-};
+}
 
 CarFilters.propTypes = {
     control: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
     watch: PropTypes.func
-};
+}
 
-export default CarFilters;
+export default CarFilters
