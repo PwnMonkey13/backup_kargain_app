@@ -9,8 +9,8 @@
     "dev": "next",
     "clean": "rimraf dist",
     "build:next": "yarn install && next build",
-    "build:functions": "yarn copy:functions && cd dist/functions && npm install",
-    "copy:functions": "cpx \"functions/**/*.*\" dist/functions && yarn copy:deps",
+    "build:functions": "yarn copy:functions && cd dist && npm install",
+    "copy:functions": "cpx \"functions/**/*.*\" dist && yarn copy:deps",
     "copy:deps": "node functions/copy-deps.js",
     "deploy": "firebase deploy --only hosting,functions"
   },

@@ -5,7 +5,7 @@
       "yarn build:next",
       "yarn build:functions"
     ],
-    "source": "functions"
+    "source": "dist"
   },
   "hosting": {
     "public": "public",

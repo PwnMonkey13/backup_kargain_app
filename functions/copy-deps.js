@@ -3,7 +3,7 @@ const path = require('path');
 
 const rootPackage = require(path.resolve(__dirname, '../', 'package.json'));
 let functionsPackage = require(path.resolve(__dirname, 'package.json'));
-const distPackagePath = path.resolve(__dirname, '../dist/functions', 'package.json');
+const distPackagePath = path.resolve(__dirname, '../dist', 'package.json');
 
 if(!functionsPackage) functionsPackage = {}
 if(!functionsPackage.dependencies) functionsPackage.dependencies = {};
