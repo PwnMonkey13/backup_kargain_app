@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "kargain"
+    "default": "kargain",
+    "kargain-app": "kargain"
   }
 }

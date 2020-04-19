@@ -1,0 +1,13 @@
+{
+  "presets": [
+    "@babel/preset-react",
+    ["next/babel", { "styled-jsx": { "plugins": ["styled-jsx-plugin-sass"]}}],
+    ["@babel/preset-env", {"targets": {"node": "10.15.3"}}]
+  ],
+  "plugins": [
+    "inline-react-svg",
+    "@babel/plugin-transform-react-jsx",
+    "@babel/plugin-syntax-dynamic-import",
+    ["styled-components", { "ssr": true, "displayName": true, "preprocess": false }]
+  ]
+}
