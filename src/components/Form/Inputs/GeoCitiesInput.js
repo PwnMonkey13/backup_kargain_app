@@ -3,13 +3,12 @@ import NiceSelect, { components } from 'react-select'
 import { Controller } from 'react-hook-form'
 import PlacesServices from '../../../services/PlacesService'
 import ValidationError from '../Validations/ValidationError'
-import SearchSVG from '../../SVG/SearchSVG'
-
+import { Search } from 'react-feather'
 const DropdownIndicator = props => {
     return (
         components.DropdownIndicator && (
             <components.DropdownIndicator {...props}>
-                <SearchSVG/>
+                <Search/>
             </components.DropdownIndicator>
         )
     )

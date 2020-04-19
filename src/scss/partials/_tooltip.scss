@@ -3,8 +3,8 @@
 .fg-tooltip-wrapper{
   position: absolute;
   height: 100%;
-  top: 0px;
-  right: 0px;
+  top: 0;
+  right: 0;
   background: $primary;
   border-radius: 0;
   color: white;
@@ -143,7 +143,7 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    //background: white url("../../images/light-bulb-blue.svg") no-repeat 14px 50%;
+    background: white url("/images/svg/light-bulb-blue.svg") no-repeat 14px 50%;
     background-size: 27px;
     span{
       display: block;
@@ -165,8 +165,7 @@
   }
 
   &.fg-tooltip-iframe{
-    background-color: transparent;
-    background: none;
+    background: transparent none;
     margin-top: 5px;
     position: relative;
     width: 100%;
@@ -189,8 +188,8 @@
   .fg-tooltip{
     &.fg-tooltip-message{
       &[data-toggle="modal"]{
-        background-color: transparent;
-        background: none;
+        background: transparent none;
+
         span{
           color: $primary;
         }
@@ -312,10 +311,10 @@
         opacity: 1;
         z-index: 99;
         border-radius: 100%;
-        //background: url("../../images/cancel-orange.svg") no-repeat center center;
+        background: url("/images2/cancel-orange.svg") no-repeat center center;
         background-size: cover;
         &:hover{
-          //background: url("../../images/cancel.svg") no-repeat center center;
+          background: url("/images2/cancel.svg") no-repeat center center;
           background-size: cover;
         }
       }
@@ -340,7 +339,7 @@
                 &:hover {
                   color: white;
                   span {
-                    //background: url("../../images/cancel.svg") no-repeat center center;
+                    background: url("/images2/cancel.svg") no-repeat center center;
                     background-size: cover;
                   }
                 }
@@ -431,7 +430,7 @@ $arrow_position : 12px;
     left: 15px;
     height: 20px;
     width: 20px;
-    //background: url("../../images/light-bulb-orange.svg") no-repeat center center;
+    background: url("/images2/light-bulb-orange.svg") no-repeat center center;
     background-size: cover;
   }
 
@@ -449,7 +448,7 @@ $arrow_position : 12px;
     font-weight: normal;
     color: $secondary;
     cursor: pointer;
-    //background: url("../../images/cancel-orange.svg") no-repeat center center;
+    background: url("/images2/cancel-orange.svg") no-repeat center center;
     background-size: cover;
   }
 

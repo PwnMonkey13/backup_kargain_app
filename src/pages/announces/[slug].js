@@ -1,8 +1,10 @@
 import React from 'react'
+import { useRouter } from 'next/router'
 import AnnounceService from '../../services/AnnounceService'
 import AnnounceCard from '../../components/AnnounceCard'
 
 const Announce = ({ announce }) => {
+    const router = useRouter()
     return (
         <AnnounceCard announce={announce}/>
     )

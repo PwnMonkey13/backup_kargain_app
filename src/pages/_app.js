@@ -15,6 +15,7 @@ import 'react-step-progress-bar/styles.css'
 import 'react-phone-input-2/lib/style.css'
 import 'react-input-range/lib/css/index.css'
 import '../components/SelectCountriesFlags/scss/react-flags-select.scss'
+import '../scss/theme.scss'
 
 const MyApp = ({ Component, pageProps }) => {
     Router.events.on('routeChangeStart', () => {

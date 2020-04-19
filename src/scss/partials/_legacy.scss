@@ -1,3 +1,5 @@
+@import "variables";
+
 .navbar-brand img{
   max-width: 150px;
   width: 100%;
@@ -357,15 +359,17 @@ h2{
 .cars-profile-wrapper-no-stock .eye-img{
   width: 32px;
   height: 18px;
-  background: url($imagesDir + "/eye.svg") no-repeat center;
+²  background: url("/images/svg/eye.svg") no-repeat center;
   background-size: cover;
 }
+
 .cars-profile-wrapper-stock .eye-img{
   width: 32px;
   height: 22px;
-  background: url($imagesDir + "/cross-eye.svg") no-repeat center;
+  background: url("/images/svg/cross-eye.svg") no-repeat center;
   background-size: cover;
 }
+
 .car-profile-wrapper-fav .comment-count-wrapper2{
   margin: 0 15px;
 }

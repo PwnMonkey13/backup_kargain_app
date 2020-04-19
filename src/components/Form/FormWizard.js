@@ -7,7 +7,7 @@ import ControlledStep from './ControlledStep'
 import BreadcrumbSteps from './BreadcrumbSteps'
 import useIsMounted from '../../hooks/useIsMounted'
 import DebugLocalStorage from '../DebugLocalStorage'
-import { FormContext } from '../../components/Context/FormContext'
+import { FormContext } from '../Context/FormContext'
 
 const calculatePourcent = (current, length) => {
     return ((current + 1) / (length + 1)) * 100

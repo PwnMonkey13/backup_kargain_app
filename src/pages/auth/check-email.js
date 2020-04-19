@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Link } from 'next/router'
+import Link from 'next/link'
 import { UserContext } from '../../components/Context/UserContext'
 
 const CheckEmail = () => {

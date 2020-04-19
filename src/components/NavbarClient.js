@@ -12,7 +12,7 @@ import {
     NavItem,
     NavLink
 } from 'reactstrap'
-import { UserContext } from '../components/Context/UserContext'
+import { UserContext } from './Context/UserContext'
 import { getLogo } from '../libs/utils'
 
 const NavbarClient = () => {
@@ -92,7 +92,7 @@ const NavbarClient = () => {
                         <NavItem className="p-2">
                             <FormGroup className='form-inline search-header-wrapper m-auto'>
                                 <Input className="form-control" type="search" name="search" id="search"
-                                       placeholder="Rechercher"/>
+                                    placeholder="Rechercher"/>
                             </FormGroup>
                         </NavItem>
                     </Nav>
@@ -104,7 +104,7 @@ const NavbarClient = () => {
                         top: 0,
                         right: 0
                     }} onClick={toggleNavbar}
-                                   className="mr-2"/>
+                        className="mr-2"/>
                 </div>
             </Navbar>
         </header>

@@ -1,3 +1,5 @@
+@import 'variables';
+
 header{
   .navbar-collapse.collapse.show{
     background-color: white;
@@ -48,7 +50,7 @@ header{
   .form-control[type=search]{
     border: none;
     border-radius: 25px;
-    background: #eae9e9 url($imagesDir + "search.png") no-repeat right 15px center;
+    background: #eae9e9 no-repeat right 15px center;
     box-shadow : none;
     margin: 0 auto;
   }
