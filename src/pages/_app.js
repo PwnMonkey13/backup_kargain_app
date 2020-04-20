@@ -1,6 +1,7 @@
 import React from 'react'
 import Router from 'next/router'
 import { DefaultSeo } from 'next-seo'
+import ThemeProvider from "@material-ui/styles/ThemeProvider"
 import NextProgress from '../components/NextProgress'
 import { UserContextProvider } from '../components/Context/UserContext'
 import { ModalDialogContextProvider } from '../components/Context/ModalDialogContext'
@@ -11,13 +12,16 @@ import Layout from '../layouts/Layout'
 import AuthService from '../services/AuthService'
 import PopupAlert from '../components/PopupAlert'
 import PopupLogin from '../components/PopupLogin'
+
+import theme from '../theme';
 import 'react-step-progress-bar/styles.css'
 import 'react-phone-input-2/lib/style.css'
 import 'react-input-range/lib/css/index.css'
 import '../components/SelectCountriesFlags/scss/react-flags-select.scss'
 import '../scss/theme.scss'
+import AdminLayout from '../components/Admin/Layout/AdminLayout'
 
-const MyApp = ({ Component, pageProps }) => {
+const MyApp = ({ Component, pageProps, ...props }) => {
     Router.events.on('routeChangeStart', () => {
         console.log('route start changed')
     })
@@ -28,6 +32,9 @@ const MyApp = ({ Component, pageProps }) => {
         console.log('route error changed')
     })
 
+    const { route } = pageProps.router;
+    const adminRoute = route.split('/').includes("admin")
+
     return (
         <ModalDialogContextProvider>
             <UserContextProvider isLoggedIn={pageProps.isLoggedIn}>
@@ -36,9 +43,19 @@ const MyApp = ({ Component, pageProps }) => {
                     <DefaultSeo {...SEO} />
                     <PopupAlert/>
                     { pageProps.requiredAuth === true && <PopupLogin pageProps={pageProps}/> }
-                    <Layout {...pageProps}>
-                        <Component/>
-                    </Layout>
+
+                    { adminRoute ? (
+                        <ThemeProvider theme={theme}>
+                            <AdminLayout {...pageProps}>
+                                <Component {...pageProps}/>
+                            </AdminLayout>
+                        </ThemeProvider>
+                    ) : (
+                        <Layout {...pageProps}>
+                            <Component {...pageProps}/>
+                        </Layout>
+                    )}
+
                 </FormContextProvider>
             </UserContextProvider>
         </ModalDialogContextProvider>
@@ -46,6 +63,7 @@ const MyApp = ({ Component, pageProps }) => {
 }
 
 MyApp.getInitialProps = async (app) => {
+
     const { token } = nextCookie(app.ctx)
     let props = (app.Component.getInitialProps ? await app.Component.getInitialProps(app.ctx) : null) || {}
 
@@ -62,7 +80,7 @@ MyApp.getInitialProps = async (app) => {
         }
     } else props = { ...props, loggedIn: false }
 
-    return { pageProps: props }
+    return { pageProps: {...props, router : app.router }}
 }
 
 export default MyApp

@@ -51,6 +51,8 @@ const Profile = (props) => {
         return profile.about
     }
 
+    console.log(profile)
+
     if(!profile){
         return <p> TODO, unknown user</p>
     }
@@ -196,8 +198,10 @@ const Profile = (props) => {
 
 Profile.getInitialProps = async function (ctx) {
     const { username } = ctx.query
+
     try {
         const profile = await UsersService.getUser(username)
+        console.log(profile)
         return { username, profile }
     } catch (err) {
         return { err }

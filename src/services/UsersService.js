@@ -1,25 +1,44 @@
 import fetch from 'isomorphic-unfetch'
+import queryString from 'querystring'
 import handleResponse from '../libs/handleResponse'
 import config from '../config/config'
 import setHeaders from '../libs/authHeaders'
 
-function getUsers (username = null, token = null) {
+function getUsers (params = {}) {
     const requestOptions = {
         method: 'GET',
-        headers: setHeaders(token)
     }
 
     let url = `${config.api}/users`
-    if (username) url += '/' + username
+
+    if(Object.keys(params).length !== 0){
+        url += `?${queryString.stringify(params)}`
+    }
 
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data
-        })
+        .then(json => json.data)
         .catch(err => {
             throw err
-        })
+        }
+    )
+}
+
+function getUser (username) {
+    const requestOptions = {
+        method: 'GET',
+    }
+
+    if(!username) throw 'missing username during fetch user'
+    let url = `${config.api}/users/${username}`
+
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+            throw err
+        }
+    )
 }
 
 function updateUser (username, updates, token) {
@@ -59,5 +78,6 @@ function updateUser (username, updates, token) {
 
 export default {
     getUsers,
+    getUser,
     updateUser
 }

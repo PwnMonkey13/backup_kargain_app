@@ -10,7 +10,8 @@ import useIsMounted from '../hooks/useIsMounted'
 import Loader from '../components/Loader'
 
 const Index = (props) => {
-    const isMounted = useIsMounted();
+    const pageRef = useRef(null)
+    const isMounted = useIsMounted()
     const [state, setState] = useState({
         loading: true,
         sorter: props.sorter,

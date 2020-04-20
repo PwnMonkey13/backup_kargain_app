@@ -53,6 +53,9 @@ const NavbarClient = () => {
                         <NavItem className="p-2">
                             <NavLink tag="a" href="/auth/register">S'enregistrer</NavLink>
                         </NavItem>
+                        <NavItem className="p-2">
+                            <NavLink tag="a" href="/admin">Admin</NavLink>
+                        </NavItem>
                     </>
                 }
             </Nav>

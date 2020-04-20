@@ -21,7 +21,7 @@ const Layout = ({ navmenu, fluid = true, children, ...rest }) => {
         <>
             <NavbarClient/>
             <MainBody>
-                {React.cloneElement(children, rest)}
+                {children}
             </MainBody>
             <Footer/>
             <ScrollUpButton
