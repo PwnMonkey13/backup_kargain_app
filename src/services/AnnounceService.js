@@ -20,10 +20,25 @@ const objToBase64 = (obj) => {
     return buff.toString('base64')
 }
 
-function getAnnounces (args = {}) {
-    // const { filters, sorter, ...params } = args;
-    // const obfuscatedFilters = objToBase64({filters, sorter})
-    const url = buildUrl(config.api, '/ads', {})
+function getAnnouncesLegacy (args = {}) {
+    const { filters, sorter, ...params } = args;
+    const obfuscatedFilters = objToBase64({filters, sorter})
+    const url = buildUrl(config.api, `/ads/legacy/${obfuscatedFilters}`, params)
+    const requestOptions = {
+        method: 'GET'
+    }
+
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+                throw err
+            }
+        )
+}
+
+function getAnnounces () {
+    const url = `${config.api}/ads`;
     const requestOptions = {
         method: 'GET'
     }
@@ -73,6 +88,7 @@ function createAnnounce (data, token) {
 }
 
 export default {
+    getAnnouncesLegacy,
     getAnnounces,
     getAnnounceBySlug,
     createAnnounce

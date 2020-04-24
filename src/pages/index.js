@@ -29,7 +29,7 @@ const Index = (props) => {
             loading: true
         }))
 
-        AnnounceService.getAnnounces({
+        AnnounceService.getAnnouncesLegacy({
             filters,
             sorter,
             page,
@@ -45,19 +45,19 @@ const Index = (props) => {
             }).catch(err => {
                 throw err
             }
-            )
+        )
     }
 
     useEffect(() => {
-        fetchAnnounces();
-    }, [state.sorter, state.filters, state.page]);
+        fetchAnnounces()
+    }, [state.sorter, state.filters, state.page])
 
     useEffect(() => {
         if (isMounted) {
-            fetchAnnounces();
-            window.scrollTo(0, 0);
+            fetchAnnounces()
+            window.scrollTo(0, 0)
         }
-    }, [state.page]);
+    }, [state.page])
 
     const handlePageChange = (page, e) => {
         setState(state => ({
