@@ -6,6 +6,7 @@ import StepNavigation from '../../Form/StepNavigation'
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
 import FieldWrapper from '../../Form/FieldWrapper'
 import { RadioVehicleGeneralState } from '../moto/form.data'
+import DamageSelector from '../DamageSelector'
 
 const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
     const formRef = useRef(null)
@@ -70,7 +71,23 @@ const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props 
             </FieldWrapper>
 
             <p> TODO TAGS </p>
-            <p> TODO Damage selector </p>
+
+            <DamageSelector
+                maxDamages={5}
+                tabs={[
+                {
+                    title: 'Extérieur',
+                    key : 'exterior',
+                    alt: 'Vue extérieure du véhicule',
+                    img: '/images/annotations-views/outside.png'
+                },
+                {
+                    title: 'Intérieur',
+                    key : 'interior',
+                    alt: 'Vue intérieure du véhicule',
+                    img: '/images/annotations-views/inside.png'
+                }
+            ]}/>
 
             <StepNavigation prev={prevStep} submit />
         </form>
