@@ -1,9 +1,12 @@
-import React from "react";
+import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import Link from 'next/link'
 import {makeStyles} from "@material-ui/styles";
 import {Button, colors, List, ListItem} from "@material-ui/core";
+import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon'
+import { Database } from 'react-feather'
+import ListItemText from '@material-ui/core/ListItemText/ListItemText'
 
 const useStyles = makeStyles(theme => ({
     root: {},
@@ -38,16 +41,6 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ButtonLink = ({ className, href, hrefAs, children, prefetch }) => (
-    <div style={{flexGrow: 1}}>
-        <Link href={href} as={hrefAs}>
-            <a className={className}>
-                {children}
-            </a>
-        </Link>
-    </div>
-)
-
 const SidebarNav = props => {
     const {pages, className, ...rest} = props;
     const classes = useStyles();
@@ -55,20 +48,15 @@ const SidebarNav = props => {
     return (
         <List{...rest} className={clsx(classes.root, className)}>
             {pages.map(page => (
-                <ListItem
-                    className={classes.item}
-                    disableGutters
-                    key={page.title}
-                >
-                    <Button
-                        activeClassName={classes.active}
-                        className={classes.button}
-                        component={ButtonLink}
-                        href={page.href}
-                    >
-                        <div className={classes.icon}>{page.icon}</div>
-                        {page.title}
-                    </Button>
+                <ListItem button key={page.title}>
+                    <Link href={page.href}>
+                        <a className="d-flex" title={page.title}>
+                            <ListItemIcon>{page.icon}</ListItemIcon>
+                            <ListItemText>
+                                <strong>{page.title}</strong>
+                            </ListItemText>
+                        </a>
+                    </Link>
                 </ListItem>
             ))}
         </List>

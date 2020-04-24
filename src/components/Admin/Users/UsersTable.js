@@ -1,43 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import UsersService from '../../../services/UsersService'
-import ReactTablePaginate from './ReactTablePaginate'
+import ReactTablePaginate from '../ReactTablePaginate'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 
-const Styles = styled.div`
-  padding: 1rem;
-
-  table {
-    border-spacing: 0;
-    border: 1px solid black;
-
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-
-    th,
-    td {
-      margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-
-  .pagination {
-    padding: 0.5rem;
-  }
-`
-
-const UsersTable = () => {
+const AdsTable = () => {
     const router = useRouter();
     const [resultFetch, setResultsFetch] = React.useState({ rows : [] })
     const [loading, setLoading] = useState(false)
@@ -75,7 +42,6 @@ const UsersTable = () => {
 
     const fetchData = React.useCallback((fetchProps) => {
         const { pageSize, pageIndex } = fetchProps;
-        console.log(fetchProps)
         setLoading(true)
         setPageSize(pageSize)
         setPageIndex(pageIndex);
@@ -100,21 +66,19 @@ const UsersTable = () => {
     };
 
     return (
-        <Styles>
-            <ReactTablePaginate
-                enableDebug
-                columns={columns}
-                data={resultFetch.rows}
-                fetchData={fetchData}
-                loading={loading}
-                pageCount={pageCount}
-                //custom
-                totalIndicator={resultFetch.total}
-                paginationDefaultConfig={{ pageIndex, pageSize}}
-                handleItemClickEdit={handleItemClickEdit}
-                handleItemClickDelete={handleItemClickDelete}
-            />
-        </Styles>
+        <ReactTablePaginate
+            enableDebug
+            columns={columns}
+            data={resultFetch.rows}
+            fetchData={fetchData}
+            loading={loading}
+            pageCount={pageCount}
+            //custom
+            totalIndicator={resultFetch.total}
+            paginationDefaultConfig={{ pageIndex, pageSize}}
+            handleItemClickEdit={handleItemClickEdit}
+            handleItemClickDelete={handleItemClickDelete}
+        />
     )
 }
 

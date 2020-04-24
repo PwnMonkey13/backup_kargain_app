@@ -1,10 +1,10 @@
 import React from 'react'
-import UsersTable from '../../../components/Admin/Users/UsersTableMUI'
+import AdsTable from '../../../components/Admin/Ads/AdsTableMUI'
 
 const Index = () => {
     return(
         <div>
-            <UsersTable/>
+            <AdsTable/>
         </div>
     )
 }

@@ -10,16 +10,13 @@ import TopBar from "./TopBar";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        paddingTop: 56,
         height: '100%',
-        [theme.breakpoints.up('sm')]: {
-            paddingTop: 64
-        }
     },
     shiftContent: {
         // paddingLeft: 240
     },
     content: {
+        width: '95%',
         height: '100%'
     }
 }));
@@ -27,41 +24,34 @@ const useStyles = makeStyles(theme => ({
 const AdminLayout = ({children}) => {
     const classes = useStyles();
     const theme = useTheme();
-
+    const [open, setOpen] = React.useState(false);
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
         defaultMatches: true
     });
 
-    const [openSidebar, setOpenSidebar] = useState(false);
+    const handleDrawerToggle = () => {
+        setOpen(!open);
+    };
 
-    const handleSidebarToggle = () => {
-        setOpenSidebar(!openSidebar);
+    const handleDrawerClose = () => {
+        setOpen(false);
     };
 
     return (
-        <div className={clsx({
-            [classes.root]: true,
-            [classes.shiftContent]: isDesktop
-        })}>
-            <TopBar onClickTogglerNav={handleSidebarToggle}/>
-            <Sidebar
-                onClose={handleSidebarToggle}
-                open={openSidebar}
-                variant={isDesktop ? 'persistent' : 'temporary'}
-            />
-            <Main className={classes.content}>
-                {children}
-            </Main>
+        <div className={classes.root}>
+            <TopBar handleDrawerOpen={handleDrawerToggle}/>
+            <main className="d-flex">
+                <Sidebar
+                    onClose={handleDrawerClose}
+                    open={open}
+                    variant={isDesktop ? 'persistent' : 'temporary'}
+                />
+                <section className={classes.content}>
+                    {children}
+                </section>
+            </main>
         </div>
     );
-};
-
-const Main = ({children, ...props}) => {
-    return(
-        <main>
-            {children}
-        </main>
-    )
 };
 
 const BreadCrumb = () => {

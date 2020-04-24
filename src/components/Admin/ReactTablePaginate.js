@@ -8,10 +8,10 @@ import { useTable, usePagination, useSortBy, useFilters, useGlobalFilter } from 
 import NiceSelect from 'react-select'
 import { Col, Row } from 'reactstrap'
 import matchSorter from 'match-sorter'
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
+import { SelectOptionsUtils } from '../../libs/formFieldsUtils'
 import clsx from 'clsx'
 import { Edit, Delete} from 'react-feather'
-import Loader from '../../Loader'
+import Loader from '../Loader'
 
 // Define a default UI for filtering
 function GlobalFilter({
@@ -154,7 +154,7 @@ const ReactTablePaginate = ({
                                             <Edit/>
                                         </button>
                                         <button className="mx-1" onClick={() => handleItemClickDelete(i)}>
-                                            <Delete/>f
+                                            <Delete/>
                                         </button>
                                     </TableCell>
                                 </TableRow>
@@ -168,8 +168,9 @@ const ReactTablePaginate = ({
                  .table_bottom {
                  
                     button, input {
-                        padding : 3px;
-                        margin : 1px
+                        padding : 3px 6px;
+                        margin : 1px;
+                        font-size:initial;
                         
                         &:disabled{
                             background-color : #a8a4a4
@@ -203,7 +204,7 @@ const ReactTablePaginate = ({
                         <span className="mx-2">Go to page:</span>
                         <input
                             type="number"
-                            defaultValue={pageIndex + 1}
+                            value={pageIndex}
                             style={{ backgroundColor : "gainsboro", border : 'none', height : "30px", width: '50px' }}
                             onChange={e => {
                                 const page = e.target.value ? Number(e.target.value) - 1 : 0

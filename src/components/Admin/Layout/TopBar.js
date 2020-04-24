@@ -6,13 +6,34 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import {AppBar, Badge, Hidden, IconButton, Toolbar} from "@material-ui/core"
 import Typography from '@material-ui/core/Typography'
 import theme from '../../../theme'
+import clsx from 'clsx'
+
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-    grow: {
-        flexGrow: 1,
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
     },
     menuButton: {
-        marginRight: theme.spacing(2),
+        marginRight: 36,
+    },
+    hide: {
+        display: 'none',
+    },
+    grow: {
+        flexGrow: 1,
     },
     title: {
         display: 'none',
@@ -71,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const TopBar = props => {
+const TopBar = ({handleDrawerOpen, open, ...props}) => {
     const classes = useStyles();
     const {className, onClickTogglerNav, ...rest} = props;
     const [notifications] = useState([...Array(10)]);
@@ -90,13 +111,22 @@ const TopBar = props => {
     };
 
     return (
-        <AppBar className={className} style={{boxShadow: 'none'}} {...rest} >
+        <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+                [classes.appBarShift]: open,
+            })}
+            {...rest}>
             <Toolbar>
                 <IconButton
-                    edge="start"
                     color="inherit"
                     aria-label="open drawer"
-                    onClick={onClickTogglerNav}>
+                    onClick={handleDrawerOpen}
+                    edge="start"
+                    className={clsx(
+                        classes.menuButton, {
+                        [classes.hide]: open,
+                    })}>
                     <Menu/>
                 </IconButton>
                 <Link href="/admin">
