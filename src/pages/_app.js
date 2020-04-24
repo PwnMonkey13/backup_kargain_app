@@ -1,25 +1,24 @@
 import React from 'react'
 import Router from 'next/router'
 import { DefaultSeo } from 'next-seo'
+import nextCookie from 'next-cookies'
 import ThemeProvider from "@material-ui/styles/ThemeProvider"
 import NextProgress from '../components/NextProgress'
-import { UserContextProvider } from '../components/Context/UserContext'
-import { ModalDialogContextProvider } from '../components/Context/ModalDialogContext'
-import { FormContextProvider } from '../components/Context/FormContext'
-import SEO from '../next-seo.config'
-import nextCookie from 'next-cookies'
-import Layout from '../layouts/Layout'
-import AuthService from '../services/AuthService'
 import PopupAlert from '../components/PopupAlert'
 import PopupLogin from '../components/PopupLogin'
-
-import theme from '../theme';
+import { ModalDialogContextProvider } from '../components/Context/ModalDialogContext'
+import { FormContextProvider } from '../components/Context/FormContext'
+import { UserContextProvider } from '../components/Context/UserContext'
+import AdminLayout from '../components/Admin/Layout/AdminLayout'
+import AuthService from '../services/AuthService'
+import Layout from '../layouts/Layout'
+import SEO from '../next-seo.config'
 import 'react-step-progress-bar/styles.css'
 import 'react-phone-input-2/lib/style.css'
 import 'react-input-range/lib/css/index.css'
 import '../components/SelectCountriesFlags/scss/react-flags-select.scss'
 import '../scss/theme.scss'
-import AdminLayout from '../components/Admin/Layout/AdminLayout'
+import theme from '../theme'
 
 const MyApp = ({ Component, pageProps, ...props }) => {
     Router.events.on('routeChangeStart', () => {
@@ -36,29 +35,29 @@ const MyApp = ({ Component, pageProps, ...props }) => {
     const adminRoute = route.split('/').includes("admin")
 
     return (
-        <ModalDialogContextProvider>
-            <UserContextProvider isLoggedIn={pageProps.isLoggedIn}>
-                <FormContextProvider formKey={pageProps.formKey}>
-                    <NextProgress/>
-                    <DefaultSeo {...SEO} />
-                    <PopupAlert/>
-                    { pageProps.requiredAuth === true && <PopupLogin pageProps={pageProps}/> }
+        <ThemeProvider theme={theme}>
+            <ModalDialogContextProvider>
+                <UserContextProvider isLoggedIn={pageProps.isLoggedIn}>
+                    <FormContextProvider formKey={pageProps.formKey}>
+                        <NextProgress/>
+                        <DefaultSeo {...SEO} />
+                        <PopupAlert/>
+                        { pageProps.requiredAuth === true && <PopupLogin pageProps={pageProps}/> }
 
-                    { adminRoute ? (
-                        <ThemeProvider theme={theme}>
+                        { adminRoute ? (
                             <AdminLayout {...pageProps}>
                                 <Component {...pageProps}/>
                             </AdminLayout>
-                        </ThemeProvider>
-                    ) : (
-                        <Layout {...pageProps}>
-                            <Component {...pageProps}/>
-                        </Layout>
-                    )}
+                        ) : (
+                            <Layout {...pageProps}>
+                                <Component {...pageProps}/>
+                            </Layout>
+                        )}
 
-                </FormContextProvider>
-            </UserContextProvider>
-        </ModalDialogContextProvider>
+                    </FormContextProvider>
+                </UserContextProvider>
+            </ModalDialogContextProvider>
+        </ThemeProvider>
     )
 }
 

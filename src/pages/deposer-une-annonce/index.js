@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Container } from 'reactstrap'
-import { withRouter } from 'next/router'
+import { useRouter, withRouter } from 'next/router'
 import Header from '../../components/Header'
 import { FormContext } from '../../components/Context/FormContext'
 import VehicleTypeSelectorStep from '../../components/Vehicles/VehicleTypeSelectorStep'
 
 const path = require('path')
 
-const Page = (props) => {
-    const { router } = props
+const Page = () => {
+    const router = useRouter();
     const [vehicleType, setVehicleType] = useState(null)
     const { dispatchFormClear } = useContext(FormContext)
 

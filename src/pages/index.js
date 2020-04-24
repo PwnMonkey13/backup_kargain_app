@@ -38,7 +38,7 @@ const Index = (props) => {
             .then(data => {
                 setState(state => ({
                     ...state,
-                    announces: data.announces,
+                    announces: data.rows,
                     total: data.total,
                     loading: false
                 }))

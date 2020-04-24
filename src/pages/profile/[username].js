@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Row, Col } from 'reactstrap'
 import { useForm } from 'react-hook-form'
-import UsersService from '../../../services/UsersService'
-import { UserContext } from '../../../components/Context/UserContext'
-import { ModalDialogContext } from '../../../components/Context/ModalDialogContext'
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
-import SelectInput from '../../../components/Form/Inputs/SelectInput'
-import Tabs from '../../../components/Tabs/Tabs'
+import UsersService from '../../services/UsersService'
+import { UserContext } from '../../components/Context/UserContext'
+import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
+import { SelectOptionsUtils } from '../../libs/formFieldsUtils'
+import SelectInput from '../../components/Form/Inputs/SelectInput'
+import Tabs from '../../components/Tabs/Tabs'
 
 const formConfig = {
     mode: 'onChange',

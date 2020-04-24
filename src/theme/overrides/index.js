@@ -5,8 +5,10 @@ import MuiPaper from "./MuiPaper";
 import MuiButton from "./MuiButton";
 import MuiIconButton from "./MuiIconButton";
 import MuiTableHead from "./MuiTableHead";
+import MuiDrawer from "./MuiDrawer"
 
 export default {
+  MuiDrawer,
   MuiTableCell,
   MuiTableRow,
   MuiTypography,

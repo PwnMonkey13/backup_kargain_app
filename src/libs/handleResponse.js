@@ -6,11 +6,11 @@ const handleResponse = response => {
                 return json
             })
             .catch(err => {
-                const error = new Error(err.message)
-                error.code = err.code
-                error.name = err.name
-                throw error
-            }
+                    const error = new Error(err.message)
+                    error.code = err.code
+                    error.name = err.name
+                    throw error
+                }
             )
     } else {
         let msg = null
