@@ -2,24 +2,31 @@ import React, { memo, useEffect, useRef, useState } from 'react'
 import { Col, Row } from 'reactstrap'
 import Pagination from 'react-paginating'
 import AnnounceService from '../services/AnnounceService'
+import useIsMounted from '../hooks/useIsMounted'
 import Filters from '../components/HomeFilters/Filters'
 import Sorters from '../components/HomeFilters/Sorters'
 import AnnounceCard from '../components/AnnounceCard'
 import Header from '../components/Header'
-import useIsMounted from '../hooks/useIsMounted'
 import Loader from '../components/Loader'
+import { Button } from '@material-ui/core'
+import clsx from 'clsx'
 
 const Index = (props) => {
-    const pageRef = useRef(null)
     const isMounted = useIsMounted()
     const [state, setState] = useState({
-        loading: true,
+        loading: false,
         sorter: props.sorter,
         filters: {},
         page: 1,
         announces: [],
         total: 0
     })
+
+    const [ filtersOpened, toggleFilters ] = useState(false)
+
+    const toggleOpenFilters = () => {
+        toggleFilters(open => !open)
+    }
 
     const fetchAnnounces = () => {
         const { sorter, filters, page } = state
@@ -82,15 +89,18 @@ const Index = (props) => {
 
     const MainComponent = () => {
         const { loading, announces } = state
+
         if (loading) {
             return <Loader/>
         } else if (announces && announces.length > 0) {
             return (
-                <div>
+                <Row>
                     {announces.map((announce, index) => (
-                        <AnnounceCard key={index} announce={announce}/>
+                        <Col key={index} sm={12} md={12} lg={12} xl={6}>
+                            <AnnounceCard  announce={announce}/>
+                        </Col>
                     ))}
-                </div>
+                </Row>
             )
         } else {
             return <div>No items found</div>
@@ -202,25 +212,29 @@ const Index = (props) => {
     // }
 
     return (
-        <main className="content">
-            {state.announces &&
-            <Header text={`${state.announces.length} ${state.announces.length > 1 ? 'résultats' : 'résultat'}`}/>}
-            <Row>
-                <Col sm="12" md="4">
-                    <Filters updateFilters={updateFilters}/>
-                </Col>
-                <Col sm="12" md="8">
-                    <section>
-                        <Sorters updateSorter={updateSorter}/>
-                    </section>
-                    <section className="d-flex flex-column align-items-center">
-                        <PaginateSituation/>
-                        <MainComponent/>
-                        <PaginateSituation/>
-                        <Paginate/>
-                    </section>
-                </Col>
-            </Row>
+        <main className="content cd-main-content">
+
+            <section className="cd-tab-filter-wrapper">
+                <div className={clsx("cd-tab-filter", filtersOpened && "filter-is-visible" )}>
+                    <Sorters updateSorter={updateSorter}/>
+                </div>
+            </section>
+
+            <div className={clsx("cd-filter-trigger", filtersOpened && "filter-is-visible" )}
+                  onClick={()=>toggleOpenFilters()}>
+                  <img src="/images/svg/icon_filter_white.svg" alt=""/>
+            </div>
+
+            <div className={clsx("cd-filter", filtersOpened && "filter-is-visible" )}>
+                <Filters updateFilters={updateFilters}/>
+                <span className="cd-close-trigger" onClick={()=>toggleOpenFilters()}/>
+            </div>
+
+            <section className={clsx("cd-gallery", filtersOpened && "filter-is-visible" )}>
+                <MainComponent/>
+                <PaginateSituation/>
+                <Paginate/>
+            </section>
         </main>
     )
 }

@@ -52,7 +52,6 @@ section {
 }
 
 header {
-  height: 5rem;
   border-bottom: 1px solid #eaecec;
   background-color: #fff;
   box-shadow: 0 2px 13px rgba(61,63,65,0.08);
@@ -75,7 +74,6 @@ header {
 @media (min-width: 50em){
   header {
     position: fixed;
-    height: 5rem;
     z-index: 800;
     top: 0;
     right: 0;
@@ -108,7 +106,6 @@ h1 {
 h3{
   color: #3d4248;
   font: 700 23px Quicksand;
-  margin: 1rem 0;
 }
 
 h4{
@@ -179,7 +176,7 @@ hr {
   span {
     padding: 1rem;
     margin: 0 auto;
-    background-color: $bg_grey;
+    background-color: $grey;
   }
 }
 
@@ -241,10 +238,4 @@ hr {
 
 .dropdown-item.active, .dropdown-item:active{
   background: unset;
-}
-
-.announce{
-  margin: 1rem;
-  padding: 1rem;
-  border: 1px solid black;
 }

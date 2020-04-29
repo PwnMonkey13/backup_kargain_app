@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { EmailInput, PasswordInput } from '../../components/Form/Inputs'
@@ -26,17 +26,26 @@ const LoginPage = (props) => {
         AuthService.login(form.email, form.password)
             .then(data => {
                 dispatch({ type: 'loginSuccess', payload: data })
-                if (redirect) router.push({ pathname: redirect })
-                else router.push(`/auth/callback?redirect=/profile/${data.user.username}`)
+                // if (redirect) router.push({ pathname: redirect })
+                // else router.push(`/auth/callback?redirect=/profile/${data.user.username}`)
             }).catch(err => {
                 dispatchModalError({ err })
                 if (redirect) router.push({ pathname: redirect })
             }
-            )
+        )
+    }
+
+    const test = () => {
+        AuthService.authorize().then(result => {
+            console.log(result)
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     return (
         <main>
+            <button type="button" onClick={()=>test()}>test</button>
             <h1>Se connecter</h1>
             <Row>
                 <Col className="m-auto" sm="12" md="5">
@@ -67,7 +76,17 @@ const LoginPage = (props) => {
                     </div>
                 </Col>
                 <Col className="m-auto" sm="12" md="7">
-                    <form className="mt-3 mx-auto" onSubmit={handleSubmit(onSubmit)}>
+
+                    <style jsx>{`
+                        form{
+                            border-radius : 5px; 
+                            border : 1px solid gainsboro;
+                            max-width : 500px
+                        }
+                    `}
+                    </style>
+                    <form className="p-3 mt-3 mx-auto"
+                          onSubmit={handleSubmit(onSubmit)}>
 
                         <FieldWrapper label="Email" required>
                             <EmailInput

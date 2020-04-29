@@ -4,7 +4,7 @@ import ClassNames from 'classnames'
 import ValidationError from '../Validations/ValidationError'
 
 const CheckBoxInput = memo(({ name, required, rules, control, errors, ...props }) => {
-    const classnames = ClassNames('d-flex', { 'w-100': props.fullwidth })
+    const classnames = ClassNames('d-flex', 'align-items-center', { 'w-100': props.fullwidth })
     return (
         <>
             <div className={classnames}>
@@ -16,7 +16,7 @@ const CheckBoxInput = memo(({ name, required, rules, control, errors, ...props }
                 />
 
                 {props.label &&
-                    <label>
+                    <label className="mt-0">
                         {props.label}
                         {props.required && <span className="required_label">*</span>}
                         :

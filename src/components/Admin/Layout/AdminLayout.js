@@ -37,14 +37,17 @@ const AdminLayout = ({children}) => {
         setOpen(false);
     };
 
+    console.log(open)
+
     return (
         <div className={classes.root}>
-            <TopBar handleDrawerOpen={handleDrawerToggle}/>
+            <TopBar handleDrawerToggle={handleDrawerToggle}/>
             <main className="d-flex">
                 <Sidebar
                     onClose={handleDrawerClose}
                     open={open}
-                    variant={isDesktop ? 'persistent' : 'temporary'}
+                    variant={'temporary'}
+                    // variant={'isDesktop ? 'persistent' : 'temporary''}
                 />
                 <section className={classes.content}>
                     {children}

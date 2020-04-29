@@ -24,6 +24,7 @@ function getAnnouncesLegacy (args = {}) {
     const { filters, sorter, ...params } = args;
     const obfuscatedFilters = objToBase64({filters, sorter})
     const url = buildUrl(config.api, `/ads/legacy/${obfuscatedFilters}`, params)
+    console.log(url)
     const requestOptions = {
         method: 'GET'
     }
@@ -39,6 +40,21 @@ function getAnnouncesLegacy (args = {}) {
 
 function getAnnounces () {
     const url = `${config.api}/ads`;
+    const requestOptions = {
+        method: 'GET'
+    }
+
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+                throw err
+            }
+        )
+}
+
+function getAnnouncesByUser (uid) {
+    const url = `${config.api}/ads/user/${uid}`;
     const requestOptions = {
         method: 'GET'
     }
@@ -90,6 +106,7 @@ function createAnnounce (data, token) {
 export default {
     getAnnouncesLegacy,
     getAnnounces,
+    getAnnouncesByUser,
     getAnnounceBySlug,
     createAnnounce
 }

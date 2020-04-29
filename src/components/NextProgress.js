@@ -47,14 +47,14 @@ class NextProgress extends React.Component {
                 #nprogress .peg {
                   display: block;
                   position: absolute;
-                  right: 0px;
+                  right: 0;
                   width: 100px;
                   height: 100%;
                   box-shadow: 0 0 10px ${color}, 0 0 5px ${color};
                   opacity: 1;
-                  -webkit-transform: rotate(3deg) translate(0px, -4px);
-                  -ms-transform: rotate(3deg) translate(0px, -4px);
-                  transform: rotate(3deg) translate(0px, -4px);
+                  -webkit-transform: rotate(3deg) translate(0, -4px);
+                  -ms-transform: rotate(3deg) translate(0, -4px);
+                  transform: rotate(3deg) translate(0, -4px);
                 }
                 #nprogress .spinner {
                   display: "block";

@@ -1,6 +1,5 @@
 import React, { useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
-import Layout from '../../layouts/Layout'
 import { UserContext } from '../../components/Context/UserContext'
 
 export default () => {

@@ -12,22 +12,22 @@ const Footer = ({ t, ...props }) => {
         <FixedFooter className="menu-footer">
             <ul>
                 <li>
-                    <Link href="/about">
+                    <Link href="/about" prefetch={false}>
                         <a>A propos de nous</a>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/confidentiality">
+                    <Link href="/confidentiality" prefetch={false}>
                         <a>Confidentialité</a>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/conditions">
+                    <Link href="/conditions" prefetch={false}>
                         <a>Conditions</a>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/locales">
+                    <Link href="/locales" prefetch={false}>
                         <a>Langues</a>
                     </Link>
                 </li>

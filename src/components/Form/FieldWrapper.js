@@ -6,7 +6,7 @@ const FieldWrapper = ({ children, ...props }) => {
     const { name, rules } = children.props
     const { required } = rules || {}
     return (
-        <div>
+        <div className="my-2">
             {label && (
                 <label htmlFor={name}>
                     <span>

@@ -8,7 +8,6 @@ import TotalProfit from '../../components/Admin/components/TotalProfit'
 import LatestSales from '../../components/Admin/components/LatestSales'
 import UsersByDevice from '../../components/Admin/components/UsersByDevice'
 import LatestProducts from '../../components/Admin/components/LatestProducts'
-import LatestOrders from '../../components/Admin/components/LatestOrders'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -90,7 +89,6 @@ const DashboardAdmin = () => {
                     xl={9}
                     xs={12}
                 >
-                    <LatestOrders/>
                 </Grid>
             </Grid>
         </div>

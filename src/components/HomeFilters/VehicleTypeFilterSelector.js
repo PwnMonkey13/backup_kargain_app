@@ -1,9 +1,8 @@
-import React, { useRef, useEffect } from 'react'
+import React from 'react'
 import { Col, Row } from 'reactstrap'
 import Header from '../Header'
 import { SelectInput } from '../Form/Inputs'
 import Divider from '../Divider'
-import styled from 'styled-components'
 
 const tabsRadio = [
     {
@@ -45,12 +44,7 @@ const tabsRadio = [
 
 const othersFormOptions = []
 
-const Div = styled.div`
-    border : 1px solid gainsboro;
-    padding : .5rem 1rem
-`
-
-const VehicleTypeFilterSelector = ({ name, control, rules, ...props }) => {
+const VehicleTypeFilterSelector = ({ name, control, rules }) => {
     return (
         <section>
             <Row className="justify-content-center">

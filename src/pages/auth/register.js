@@ -68,7 +68,16 @@ const LoginPage = (props) => {
                     </div>
                 </Col>
                 <Col className="m-auto" sm="12" md="6" lg="7">
-                    <form className="mt-3 mx-auto" onSubmit={handleSubmit(onSubmit)}>
+                    <style jsx>{`
+                        form{
+                            border-radius : 5px; 
+                            border : 1px solid gainsboro;
+                            max-width : 500px
+                        }
+                    `}
+                    </style>
+                    <form className="p-3 mt-3 mx-auto"
+                          onSubmit={handleSubmit(onSubmit)}>
                         <FieldWrapper label="Prénom" required>
                             <TextInput
                                 name="firstname"

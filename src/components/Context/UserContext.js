@@ -1,6 +1,6 @@
-import React, { createContext, useReducer, useEffect } from 'react'
+import React, { createContext, useEffect, useReducer } from 'react'
 import Cookies from 'js-cookie'
-import useLocalStorage from '../../hooks/useLocalStorage'
+import AuthService from '../../services/AuthService'
 
 const UserContext = createContext({})
 
@@ -24,53 +24,65 @@ const reducer = (state, action) => {
     }
 }
 
-const UserContextProvider = ({ isLoggedIn, children }) => {
-    const [loggedInUser, setLoggedInUser, clearLoggedInUser] = useLocalStorage('loggedin_user', {})
+const UserContextProvider = ({ isLoggedIn, loggedInUser, children }) => {
     const [session, dispatch] = useReducer(reducer, {
         isLoggedIn: isLoggedIn,
-        user: isLoggedIn ? loggedInUser : null
+        user: loggedInUser
     })
 
     const dispatchUser = (user) => {
-        setLoggedInUser(user)
-        dispatch({ type: 'set', payload: { user: user } })
+        dispatch({
+            type: 'set',
+            payload: { user: user }
+        })
     }
 
     const dispatchProxy = (action) => {
         if (action.type === 'logout') {
             console.log('dispatch logout')
-            clearLoggedInUser()
             Cookies.remove('token', { path: '/' }) // removed!
             dispatch({ type: 'logout' })
         }
-        // if (action.type === 'checkToken') {
-        //     AuthService.authorize()
-        //         .then(data => {
-        //             const {user} = data;
-        //             dispatch({type: 'set', payload: {user, isLoggedIn: true}});
-        //         })
-        //         .catch(err => {
-        //             clearLoggedInUser();
-        //             Cookies.remove('name', { path: '' }) // removed!
-        //             dispatch({type: 'logout', err});
-        //         });
-        //
-        // }
+
+        if (action.type === 'checkToken') {
+            AuthService.authorize()
+                .then(isLoggedIn => {
+                    dispatch({type: 'set', payload: {...session, isLoggedIn: isLoggedIn}});
+                })
+                .catch(err => {
+                    Cookies.remove('token', { path: '' }) // removed!
+                    dispatch({type: 'logout', err});
+                });
+
+        }
         else if (action.type === 'loginSuccess') {
-            Cookies.set('token', action.payload.token)
-            setLoggedInUser(action.payload.user)
-            dispatch({ type: 'set', payload: { user: action.payload.user, isLoggedIn: true } })
+            dispatch({
+                type: 'set',
+                payload: {
+                    user: action.payload.user,
+                    isLoggedIn: true
+                }
+            })
         } else {
             dispatch(action)
         }
     }
 
     useEffect(() => {
-        if (!session.isLoggedIn) dispatchProxy({ type: 'logout', err: 'Unauthorized' })
+        if (!session.isLoggedIn) {
+            dispatchProxy({
+                type: 'logout',
+                err: 'Unauthorized'
+            })
+        }
     }, [])
 
     return (
-        <UserContext.Provider value={{ session, dispatch: dispatchProxy, dispatchUser }}>
+        <UserContext.Provider value={{
+            session,
+            dispatch: dispatchProxy,
+            dispatchUser
+        }}>
             {children}
         </UserContext.Provider>
     )

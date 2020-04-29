@@ -16,9 +16,10 @@ import SEO from '../next-seo.config'
 import 'react-step-progress-bar/styles.css'
 import 'react-phone-input-2/lib/style.css'
 import 'react-input-range/lib/css/index.css'
-import '../components/SelectCountriesFlags/scss/react-flags-select.scss'
+import '../components/SelectCountriesFlags/react-flags-select.scss'
 import '../scss/theme.scss'
 import theme from '../theme'
+import 'react-dropzone-uploader/dist/styles.css'
 
 const MyApp = ({ Component, pageProps, ...props }) => {
     Router.events.on('routeChangeStart', () => {
@@ -37,7 +38,7 @@ const MyApp = ({ Component, pageProps, ...props }) => {
     return (
         <ThemeProvider theme={theme}>
             <ModalDialogContextProvider>
-                <UserContextProvider isLoggedIn={pageProps.isLoggedIn}>
+                <UserContextProvider isLoggedIn={pageProps.isLoggedIn} loggedInUser={pageProps.loggedInUser}>
                     <FormContextProvider formKey={pageProps.formKey}>
                         <NextProgress/>
                         <DefaultSeo {...SEO} />
@@ -72,8 +73,9 @@ MyApp.getInitialProps = async (app) => {
 
     if (token) {
         try {
-            const isLoggedIn = await AuthService.authorize(token)
-            props = { ...props, token, isLoggedIn }
+            const result = await AuthService.authorizeSSR(token);
+            const { isLoggedIn, user } = result;
+            props = { ...props, isLoggedIn, loggedInUser : user }
         } catch (err) {
             props = { ...props, err: err, loggedIn: false }
         }

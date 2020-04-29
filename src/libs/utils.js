@@ -1,4 +1,10 @@
 import React from 'react'
+import parseISO from 'date-fns/parseISO'
+import differenceInHours from "date-fns/differenceInHours"
+import differenceInMinutes from 'date-fns/differenceInMinutes'
+import differenceInDays from 'date-fns/differenceInDays'
+import differenceInMonths from 'date-fns/differenceInMonths'
+import differenceInYears from 'date-fns/differenceInYears'
 
 export function getApiUrl () {
     if (process.env.NODE_ENV === 'production') return 'https://kargainapi.pwnmonkey13.now.sh/'
@@ -66,4 +72,15 @@ export const createSorter = (...args) => {
 
         return ret
     }
+}
+
+export const getTimeAgo = (isoTime, labels = { m : "minutes", h : "heures", d : "jours", M : 'mois', y : "années"}) => {
+    const date = parseISO(isoTime)
+    const hoursAgo = differenceInHours(new Date(), date);
+    if(hoursAgo < 1) return [differenceInMinutes(new Date(), date), labels.m].join(' ')
+    if(hoursAgo < 24) return [hoursAgo, labels.h].join(' ');
+    const daysAgo = differenceInDays(new Date(), date);
+    if(daysAgo < 31) return [daysAgo, labels.d].join(' ')
+    if(daysAgo < 365) return [differenceInMonths(new Date(), date), labels.M ].join(' ')
+    else return [differenceInYears(new Date(), date), labels.y ].join(' ')
 }

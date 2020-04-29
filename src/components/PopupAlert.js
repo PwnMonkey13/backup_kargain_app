@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Modal, ModalHeader, ModalBody } from 'reactstrap'
-import { ModalDialogContext } from './Context/ModalDialogContext'
-import classnames from 'classnames'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import classnames from 'classnames'
+import { Modal, ModalHeader, ModalBody } from 'reactstrap'
+import { ModalDialogContext } from './Context/ModalDialogContext'
 
 const PopupAlert = () => {
     const { modalState } = useContext(ModalDialogContext)

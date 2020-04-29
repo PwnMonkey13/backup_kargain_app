@@ -75,7 +75,7 @@
   transition: border-bottom 0.8s ease-in-out;
 
   &:before {
-    transform: rotate(-405deg) translateY(0px) translateX(-1px);
+    transform: rotate(-405deg) translateY(0) translateX(-1px);
     transition: transform 0.5s ease-in-out;
   }
 

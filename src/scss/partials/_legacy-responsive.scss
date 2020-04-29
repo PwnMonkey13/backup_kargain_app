@@ -163,13 +163,17 @@
   .top-profile-name-btn > div,.top-profile-name{
     margin-top: 10px;
   }
-  .top-profile-login,.top-profile-desc{
-    text-align: center;
-  }
   .top-profile-wrapper{
     margin-bottom: 30px;
     margin-top: 90px;
   }
+
+  .top-profile-data-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .nav-tabs-profile{
     flex-wrap: wrap;
   }
@@ -193,17 +197,12 @@
     margin-left: auto;
     margin-right: auto;
   }
-  .top-profile-data-wrapper{
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+
   .top-profile-location {
     flex-basis: 100%;
     justify-content: center;
   }
-  .top-profile-data-wrapper .top-profile-abones:last-child{
-    margin-left: 20px;
-  }
+
   .comments-views-wrapper > img{
     width: auto;
   }
@@ -217,9 +216,6 @@
   }
   .profile-marque-wrapper .d-flex .dropdown-wrapper:last-child{
     margin-top: 10px;
-  }
-  .top-profile-abones{
-    margin-top: 15px;
   }
   .vente-wrapper .radio-wrapper {
     margin-right: 20px;
@@ -378,15 +374,18 @@
   .after-slider,h1.annonce,.share-price-wrapper{
     padding: 0;
   }
-  .annonce2 .img-profile-wrapper{
+
+  .img-profile-wrapper{
     width: 80px;
     height: 80px;
     margin-right: 10px;
   }
-  .annonce2 .top-profile-wrapper{
+
+  .top-profile-wrapper{
     flex-direction: row;
     justify-content: flex-start;
   }
+
   .top-profile-name-btn{
     align-items: center;
   }

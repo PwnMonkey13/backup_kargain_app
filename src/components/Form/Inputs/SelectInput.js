@@ -16,7 +16,7 @@ const ClearIndicator = props => {
 
     return (
         <div ref={ref} style={getStyles('clearIndicator', props)} {...restInnerProps}>
-            <div style={{ padding: '0px 5px' }}>{children}</div>
+            <div style={{ padding: '0 5px' }}>{children}</div>
         </div>
     )
 }

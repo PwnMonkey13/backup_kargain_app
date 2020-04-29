@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 import { initGA, logPageView } from '../libs/analytics'
-import NavbarClient from '../components/NavbarClient'
 import Footer from '../components/Footer'
-// import ScrollToTop from "../components/ScrollToTop";
 import ScrollUpButton from 'react-scroll-up-button'
+import NavbarClient from '../components/NavbarClient'
 
 // import LogRocket from 'logrocket';
 // LogRocket.init('p6ipds/kargain');

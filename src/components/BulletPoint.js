@@ -1,16 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-const black = "#111111";
-const grey = "#AAAAAA";
-const green = "#2ECC40";
-const blue = "#0074D9";
-const yellow = "#FFDC00";
-const orange = "#FF851B";
-const red = "#FF4136";
+import { themeColors } from '../theme/palette'
+const { black, white, grey, green, blue, yellow, orange, red } = themeColors;
 
 const switchColor = color => {
     switch (color) {
+    case 'white' :
+        return white;
     case 'grey':
         return grey;
     case 'black':

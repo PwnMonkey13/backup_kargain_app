@@ -1,16 +1,22 @@
 import {colors} from '@material-ui/core';
 
 const white = '#FFFFFF';
-const black = '#000000';
+const black = "#111111";
+const grey = "#AAAAAA";
+const green = "#2ECC40";
+const blue = "#2C6BFC";
+const yellow = "#FFDC00";
+const orange = "#FF851B";
+const red = "#FF4136";
 
 export default {
   black,
   white,
   primary: {
     contrastText: white,
-    dark: colors.indigo[900],
-    main: colors.indigo[500],
-    light: colors.indigo[100]
+    light: "#4685FC",
+    main: "#2C6BFC",
+    dark: "#2650D9",
   },
   secondary: {
     contrastText: white,
@@ -54,3 +60,14 @@ export default {
   icon: colors.blueGrey[600],
   divider: colors.grey[200]
 };
+
+export const themeColors = {
+  black,
+  white,
+  grey,
+  green,
+  blue,
+  yellow,
+  orange,
+  red,
+}

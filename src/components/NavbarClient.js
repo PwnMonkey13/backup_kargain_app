@@ -1,113 +1,189 @@
 import React, { useContext, useEffect, useState } from 'react'
-import {
-    Collapse,
-    Dropdown,
-    DropdownItem,
-    FormGroup,
-    Input,
-    Nav,
-    Navbar,
-    NavbarBrand,
-    NavbarToggler,
-    NavItem,
-    NavLink
-} from 'reactstrap'
+import NextLink from "next/Link"
+import { Collapse, Dropdown, DropdownItem, FormGroup, Input, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap'
 import { UserContext } from './Context/UserContext'
 import { getLogo } from '../libs/utils'
+import FaceIcon from '@material-ui/icons/Face'
+import Badge from '@material-ui/core/Badge'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import IconButton from '@material-ui/core/IconButton'
+import SettingsIcon from '@material-ui/icons/Settings'
+import NotificationsIcon from '@material-ui/icons/Notifications'
+import clsx from 'clsx'
+import { PhotoCamera } from '@material-ui/icons'
 
 const NavbarClient = () => {
     const { session } = useContext(UserContext)
     const [collapsed, setCollapsed] = useState(false)
     const toggleNavbar = () => setCollapsed(!collapsed)
-    const [dropdownOpen, setDropdownOpen] = useState(false)
     const [avatar, setAvatar] = useState(null)
-
-    const toggle = () => setDropdownOpen(prevState => !prevState)
 
     useEffect(() => {
         if (session.user) setAvatar(session.user.avatar)
     }, [session])
 
-    const NavBarRight = () => {
-        return (
-            <Nav navbar className="nav-right">
-                {session.isLoggedIn
-                    ? <>
-                        <NavItem className="p-2" onClick={(e) => setDropdownOpen(e)}>
-                            {
-                                avatar &&
-                                <img className="rounded-circle" width="40" height="40" src={avatar} alt="avatar"/>
-                            }
-                            <DropdownUser/>
-                        </NavItem>
+    const LoggedInUserNav = () => {
+        const [state, setState] = useState({
+            isOpen1 : false,
+            isOpen2 : false
+        });
 
-                        <NavItem className="p-2 navbar_icon navbar-icon-notifications">
-                            <img width="25" height="25" src="/images/svg/ring.svg" alt=""/>
-                            {/* <NotificationPins/> */}
-                        </NavItem>
-                    </>
-                    : <>
-                        <NavItem className="p-2">
-                            <NavLink tag="a" href="/auth/login">Connexion</NavLink>
-                        </NavItem>
-                        <NavItem className="p-2">
-                            <NavLink tag="a" href="/auth/register">S'enregistrer</NavLink>
-                        </NavItem>
-                        <NavItem className="p-2">
-                            <NavLink tag="a" href="/admin">Admin</NavLink>
-                        </NavItem>
-                    </>
-                }
+        const toggle = (toggled) =>{
+            setState(state => ({
+                ... Object.keys(state)
+                    .filter(key => key !== toggled)
+                    .reduce((carry, key) => ({ ...carry, [key] : false}),state),
+                [toggled] : !state[toggled]
+            }));
+        }
+
+        const DropdownNotifs = ({isOpen, keyName, toggle}) => {
+            return(
+                <li className="nav-item p-2 navbar_icon navbar-icon-notifications">
+                    <div className="dropdown show">
+                        <IconButton color="inherit"
+                                    data-toggle="dropdown-notifications"
+                                    aria-haspopup="true"
+                                    aria-expanded="true"
+                                    id="dropdownMenu2"
+                                    onClick={() => toggle(keyName)}>
+                            <Badge badgeContent={17} color="secondary">
+                                <NotificationsIcon/>
+                            </Badge>
+                        </IconButton>
+                        <div id="dropdown-notifications" className={clsx("dropdown-menu",isOpen && "show")}
+                             aria-labelledby="dropdownMenu2">
+                            <div className="notf-wrapper">
+                                <div>
+                                    <img
+                                        src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
+                                        alt=""/>
+                                    <div className="text-podpiska"><span>kaleriya_volk</span> подписался(-ась) на вас.
+                                    </div>
+                                </div>
+                                <a className="btn btn-primary subscribe-btn" href="#">Subscribe</a>
+                            </div>
+                            <div className="notf-wrapper">
+                                <div>
+                                    <img
+                                        src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
+                                        alt=""/>
+                                    <div className="text-podpiska"><span>kaleriya_volk</span> поставил лайк Вашему
+                                        объявлению
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="notf-wrapper">
+                                <div>
+                                    <img
+                                        src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
+                                        alt=""/>
+                                    <div className="text-podpiska"><span>kaleriya_volk</span> оставил комментарий Вашему
+                                        объявлению с каким-то названием
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            )
+        }
+        const DropdownUser = ({isOpen, keyName, toggle}) => {
+            return(
+                <li className="nav-item navbar-dropdown p-2" data-dropdown="dropdownUser">
+                    {avatar &&
+                    <img className="dropdown-toggler rounded-circle"
+                         width="40"
+                         height="40"
+                         src={avatar}
+                         alt="avatar"
+                         onClick={() => toggle(keyName)}
+                    />}
+                    <ul className={clsx("dropdown", isOpen && "show")} id="dropdownUser" >
+                        <li className="px-0 dropdown-item">
+                            <NextLink href={`/profile/${session.user.username}`} prefetch={false}>
+                                <a className="nav-link text-left"><FaceIcon/><span className="m-1">Mon profil</span></a>
+                            </NextLink>
+                        </li>
+                        <li className="px-0 dropdown-item">
+                            <NextLink href="/profile/edit" prefetch={false}>
+                                <a className="nav-link text-left"><SettingsIcon/> <span className="m-1">Préférences</span></a>
+                            </NextLink>
+                        </li>
+                        <li className="px-0 dropdown-item">
+                            <NextLink href="/auth/logout" prefetch={false}>
+                                <a className="nav-link text-left"><ExitToAppIcon/><span className="m-1">Déconnection</span></a>
+                            </NextLink>
+                        </li>
+                    </ul>
+                </li>
+            )
+        }
+
+        return (
+            <Nav navbar>
+               <DropdownNotifs isOpen={state.isOpen1} keyName="isOpen1" toggle={toggle}/>
+               <DropdownUser isOpen={state.isOpen2} keyName="isOpen2" toggle={toggle}/>
             </Nav>
         )
     }
 
-    const DropdownUser = () => {
-        return (
-            <Dropdown className="dropdown-menu-right" isOpen={dropdownOpen} toggle={toggle} tag="div">
-                <DropdownItem>
-                    <NavLink tag="a" href={`/profile/${session.user.username}`}>Dashboard</NavLink>
-                </DropdownItem>
-                <DropdownItem>
-                    <NavLink tag="a" href="/profile/edit">Edit Profile</NavLink>
-                </DropdownItem>
-                <DropdownItem>
-                    <NavLink tag="a" href="/auth/logout">Log Out</NavLink>
-                </DropdownItem>
-            </Dropdown>
-        )
-    }
+    const VisitorNav = () => (
+        <Nav navbar>
+            <NavItem className="p-2">
+                <NextLink href="/auth/login" prefetch={false}>
+                    <a className="nav-link">Connexion</a>
+                </NextLink>
+            </NavItem>
+            <NavItem className="p-2">
+                <NextLink href="/auth/register" prefetch={false}>
+                    <a className="nav-link">S'enregistrer</a>
+                </NextLink>
+            </NavItem>
+            <NavItem className="p-2">
+                <NextLink href="/admin" prefetch={false}>
+                    <a className="nav-link">Admin</a>
+                </NextLink>
+            </NavItem>
+        </Nav>
+    )
 
     return (
         <header className="header bg-light">
-            <Navbar light expand="md" className="my-2 px-0 position-relative">
-                <NavbarBrand className="nav" href="/">
-                    <img src={getLogo()} alt="logo"/>
+            <Navbar light expand="md" className="navbar p-2 position-relative">
+                <NavbarBrand href="/">
+                    <img src={getLogo()} width="150" alt="logo"/>
                 </NavbarBrand>
 
-                <Collapse isOpen={collapsed} navbar>
-                    <Nav navbar>
-                        <NavItem className="p-2">
-                            <NavLink className="btn btn-outline-primary cta_nav_link" href="/deposer-une-annonce">
-                                Ajouter une annonce
-                            </NavLink>
-                        </NavItem>
-                        <NavItem className="p-2">
-                            <FormGroup className='form-inline search-header-wrapper m-auto'>
-                                <Input className="form-control" type="search" name="search" id="search"
-                                    placeholder="Rechercher"/>
-                            </FormGroup>
-                        </NavItem>
-                    </Nav>
-                    <NavBarRight/>
-                </Collapse>
-                <div>
-                    <NavbarToggler style={{
-                        position: 'absolute',
-                        top: 0,
-                        right: 0
-                    }} onClick={toggleNavbar}
-                        className="mr-2"/>
+                <div className="d-flex navbar-menu" id="open-navbar1">
+                    <Collapse isOpen={collapsed} navbar>
+                        <Nav navbar style={{ flex : 1 }}>
+                            <NavItem className="p-2">
+                                <NextLink href="/deposer-une-annonce" prefetch={false}>
+                                    <a className="btn btn-outline-primary cta_nav_link">
+                                        Ajouter une annonce
+                                    </a>
+                                </NextLink>
+                            </NavItem>
+                            <NavItem className="p-2">
+                                <FormGroup className='form-inline search-header-wrapper m-auto'>
+                                    <Input className="form-control" type="search" name="search" id="search"
+                                           placeholder="Rechercher"/>
+                                </FormGroup>
+                            </NavItem>
+                        </Nav>
+
+                        <Nav navbar>
+                            {session.isLoggedIn ? <LoggedInUserNav/> : <VisitorNav/>}
+                        </Nav>
+
+                    </Collapse>
+
+                    <NavbarToggler
+                        className="mr-2"
+                        style={{ position: 'absolute', top: "10px", right: 0 }}
+                        onClick={toggleNavbar}
+                    />
                 </div>
             </Navbar>
         </header>

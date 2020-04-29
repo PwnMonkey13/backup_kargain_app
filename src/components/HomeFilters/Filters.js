@@ -1,24 +1,15 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
 import { useForm } from 'react-hook-form'
 import { flatten } from 'flattenjs'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import Button from '@material-ui/core/Button'
+import FilterListIcon from '@material-ui/icons/FilterList';
+import useIsMounted from '../../hooks/useIsMounted'
 import VehicleTypeFilterSelector from './VehicleTypeFilterSelector'
-import { RadioGroupInput, SelectInput } from '../Form/Inputs'
+import { RadioGroupInput } from '../Form/Inputs'
 import getFiltersVehicleComponent from './Vehicles'
 import Header from '../Header'
-import useIsMounted from '../../hooks/useIsMounted'
 import Spacer from '../Spacer'
-
-const Form = styled.form`
-     display: flex;
-     flex-direction: column;
-     border: 1px solid #dce0e0;
-     background-color: #f7f8f9;
-     border-radius: .1875rem;
-     background-color: #fff;
-     padding: 10px;
-  `
 
 const Filters = ({ defaultFilters, updateFilters: fireFilters }) => {
     const isMounted = useIsMounted()
@@ -133,18 +124,30 @@ const Filters = ({ defaultFilters, updateFilters: fireFilters }) => {
 
     const ControlButtons = () => (
         <div className="d-flex flex-column my-3">
-            <button className="btn btn-primary"type="submit"><strong>Appliquer filtres</strong></button>
-            <button className="mt-2" type="button" onClick={() => window.location.reload()}>Reinitialiser</button>
-            {/* <button className="mt-2" type="button" onClick={()=>console.log(filters)}>CLICK</button> */}
-            {/* <button className="mt-2" type="button" onClick={()=>console.log(getValues())}>CLICK</button> */}
+            <Button
+                className="my-1"
+                variant="contained"
+                color="primary"
+                startIcon={<FilterListIcon />}
+                type="submit"
+            >
+                Appliquer filtres
+            </Button>
+
+            <Button
+                className="my-1"
+                variant="contained"
+                onClick={(e) => {e.preventDefault(); window.location.reload()}}>
+                Reinitialiser
+            </Button>
         </div>
     )
 
     return (
         <form className="d-flex flex-column form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
             <ControlButtons/>
-            <Header as="h2" text="Filtrer par :"/>
-            <Header p strong className="m-0" text="Type de d'annonce :"/>
+            <Header as="h3" text="Filtrer par :"/>
+            <Header p strong className="m-0" text="Type d'annonce :"/>
             <RadioGroupInput
                 name="adType"
                 noInputClass

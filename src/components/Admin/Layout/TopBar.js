@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const TopBar = ({handleDrawerOpen, open, ...props}) => {
+const TopBar = ({handleDrawerToggle, open, ...props}) => {
     const classes = useStyles();
     const {className, onClickTogglerNav, ...rest} = props;
     const [notifications] = useState([...Array(10)]);
@@ -121,7 +121,7 @@ const TopBar = ({handleDrawerOpen, open, ...props}) => {
                 <IconButton
                     color="inherit"
                     aria-label="open drawer"
-                    onClick={handleDrawerOpen}
+                    onClick={handleDrawerToggle}
                     edge="start"
                     className={clsx(
                         classes.menuButton, {

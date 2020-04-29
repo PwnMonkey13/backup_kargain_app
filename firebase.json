@@ -1,10 +1,5 @@
 {
   "functions": {
-    "predeploy": [
-      "yarn clean",
-      "yarn build:next",
-      "yarn build:functions"
-    ],
     "source": "dist"
   },
   "hosting": {

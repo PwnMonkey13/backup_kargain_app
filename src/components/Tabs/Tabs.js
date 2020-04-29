@@ -1,47 +1,41 @@
 import React, { useState } from 'react'
 import classNames from 'classnames'
+import { makeStyles } from '@material-ui/styles'
+import clsx from 'clsx'
+
+const useStyles = makeStyles(theme => ({
+
+}));
 
 const TabsItem = ({ activeTab, index, ...props }) => {
-    const classes = classNames(
-        'tab-pane',
-        'fade',
-        { show: index === activeTab },
-        { active: index === activeTab },
-        props.className
-    )
+    const classes = useStyles()
 
     return (
-        <div className={classes} id={props.id}>
+        <div id={props.id} className={clsx('tab-pane', 'fade',
+            { show: index === activeTab },
+            { active: index === activeTab },
+            props.className)} >
             {props.children}
         </div>
     )
 }
 
-const Tabs = ({ defaultActive, children, classname, id, ...props }) => {
+const Tabs = ({ defaultActive, children, id }) => {
     const [activeTab, setActiveTab] = useState(defaultActive || 0)
 
     const onClickTabItem = (index) => {
         setActiveTab(index)
     }
 
-    const Classnames = classNames(
-        'nav nav-tabs',
-        classname
-    )
-
     return (
         <section className="tabs">
-            <ul className={Classnames} id={id}>
+            <ul className="nav nav-tabs m-2 justify-content-center" id={id}>
                 {children.map((item, index) => {
                     const { title, img } = item.props
-                    const classes = classNames(
-                        'nav-item',
-                        { active: index === activeTab }
-                    )
 
                     return (
                         <li key={index}
-                            className={classes}
+                            className={clsx('nav-link', { active: index === activeTab })}
                             data-toggle="tab"
                             role="tab"
                             aria-selected={activeTab === index}
@@ -53,7 +47,7 @@ const Tabs = ({ defaultActive, children, classname, id, ...props }) => {
                 })}
             </ul>
 
-            <div className="tab-content tab-content-profile" id="myTabContent">
+            <div className="tab-content tab-content-profile">
                 { children.map((item, index) => {
                     return <TabsItem key={index} index={index} activeTab={activeTab} {...item.props}/>
                 })}

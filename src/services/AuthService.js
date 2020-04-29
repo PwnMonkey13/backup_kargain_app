@@ -1,13 +1,12 @@
 import fetch from 'isomorphic-unfetch'
 import handleResponse from '../libs/handleResponse'
-import setHeaders from '../libs/authHeaders'
 import config from '../config/config'
+import setHeaders from '../libs/authHeaders'
 
 function login (email, password) {
     const requestOptions = {
         method: 'POST',
-        // withCredentials: true,
-        // credentials: 'include',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
     }
@@ -18,9 +17,10 @@ function login (email, password) {
             return json.data
         })
         .catch(err => {
+            console.log(err)
             throw err
         }
-        )
+    )
 }
 
 function register (user) {
@@ -59,21 +59,39 @@ function registerPro (form) {
         )
 }
 
-function authorize (token) {
+function authorize () {
     const requestOptions = {
         method: 'GET',
-        headers: setHeaders('GET', token)
+        credentials: 'include',
     }
 
-    return fetch(`${config.api}/auth/authorize`, requestOptions)
+    const url = `${config.api}/auth/authorize`;
+    return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => {
-            return json.isLoggedIn
+            console.log(json)
+            return json.data
         })
         .catch(err => {
             throw err
         }
-        )
+    )
+}
+
+function authorizeSSR (token) {
+    const requestOptions = {
+        method: 'GET',
+        headers: setHeaders('GET', token),
+    }
+
+    const url = `${config.api}/auth/authorizeSSR`;
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+            throw err
+        }
+    )
 }
 
 function confirmAccount (token) {
@@ -139,6 +157,7 @@ export default {
     register,
     registerPro,
     authorize,
+    authorizeSSR,
     confirmAccount,
     forgotPassword,
     resetPassword,
