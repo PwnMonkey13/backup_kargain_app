@@ -4,8 +4,8 @@ import { useRouter } from 'next/router'
 import { Row, Col } from 'reactstrap'
 import { useForm } from 'react-hook-form'
 import UsersService from '../../../services/UsersService'
-import { UserContext } from '../../../components/Context/UserContext'
-import { ModalDialogContext } from '../../../components/Context/ModalDialogContext'
+import { UserContext } from '../../../context/UserContext'
+import { ModalDialogContext } from '../../../context/ModalDialogContext'
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
 import SelectInput from '../../../components/Form/Inputs/SelectInput'
 import Tabs from '../../../components/Tabs/Tabs'
@@ -50,8 +50,6 @@ const Profile = (props) => {
     const getUserDescription = () => {
         return profile.about
     }
-
-    console.log(profile)
 
     if(!profile){
         return <p> TODO, unknown user</p>
@@ -201,7 +199,6 @@ Profile.getInitialProps = async function (ctx) {
 
     try {
         const profile = await UsersService.getUser(username)
-        console.log(profile)
         return { username, profile }
     } catch (err) {
         return { err }

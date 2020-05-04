@@ -23,7 +23,6 @@ const displayEl = (value) => {
             return (
                 <ul>
                     {value.map((sub, index) => {
-                        console.log(sub)
                         return (
                             <li key={index}>
                                 <p>{sub}</p>

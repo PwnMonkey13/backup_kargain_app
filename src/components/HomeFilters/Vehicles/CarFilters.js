@@ -14,7 +14,7 @@ import {
 } from '../../Vehicles/car/form.data'
 import { SliderInput, NumberInput, SelectInput, GeoCitiesInput } from '../../Form/Inputs'
 import CarApiService from '../../../services/vehicles/CarApiService'
-import { ModalDialogContext } from '../../Context/ModalDialogContext'
+import { ModalDialogContext } from '../../../context/ModalDialogContext'
 import ReactFlagsSelect from '../../SelectCountriesFlags'
 import useAddress from '../../../hooks/useAddress'
 

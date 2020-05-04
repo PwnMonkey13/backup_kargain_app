@@ -112,7 +112,6 @@ const SelectInput = memo(({ name, control, rules, errors, ...props }) => {
                     name={name}
                     control={control}
                     rules={rules}
-                    onChange={props.onChange}
                     as={ <NiceSelect
                         options={options}
                         width={props.width}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { geoCodeFromLatLng } from '../libs/geocoding'
 import { useGeolocation } from 'react-use'
+import { geoCodeFromLatLng } from '../libs/geocoding'
 
 const useAddress = () => {
     const [addressRaw, setRawAddress] = useState({})
@@ -13,7 +13,6 @@ const useAddress = () => {
     const getAddressParts = () => {
         if (!addressRaw) return null
         if (!addressRaw.address_components) return null
-        // eslint-disable-next-line camelcase
         const { address_components } = addressRaw
 
         const format = [
@@ -62,8 +61,8 @@ const useAddress = () => {
         addressParts,
         addressString,
         {
+            latitude: geolocation.latitude,
             longitude: geolocation.longitude,
-            latitude: geolocation.latitude
         }
     ]
 }

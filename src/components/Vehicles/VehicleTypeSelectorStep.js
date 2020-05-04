@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
 import Header from '../Header'
 import Divider from '../Divider'
-import { FormContext } from '../Context/FormContext'
+import { FormContext } from '../../context/FormContext'
 
 const VehicleTypeSelectorStep = ({ handleSelectType, ...props }) => {
     const formRef = useRef(null)

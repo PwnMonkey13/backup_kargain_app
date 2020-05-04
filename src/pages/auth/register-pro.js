@@ -1,39 +1,34 @@
-import React, { useContext } from 'react'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import { Col, Row } from 'reactstrap'
-import { useForm } from 'react-hook-form'
-import { UserContext } from '../../components/Context/UserContext'
-import AuthService from '../../services/AuthService'
-import Divider from '../../components/Divider'
-import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
-import { TextInput, SelectInput, EmailInput, PasswordInput, CheckBoxInput } from '../../components/Form/Inputs'
-import styled from 'styled-components'
-import FieldWrapper from '../../components/Form/FieldWrapper'
+import React, { useContext } from 'react';
+import Link from 'next/link';
+import { Col, Row } from 'reactstrap';
+import { useForm } from 'react-hook-form';
+import AuthService from '../../services/AuthService';
+import Divider from '../../components/Divider';
+import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { CheckBoxInput, EmailInput, PasswordInput, SelectInput, TextInput } from '../../components/Form/Inputs';
+import FieldWrapper from '../../components/Form/FieldWrapper';
 
 const formConfig = {
     mode: 'onChange',
-    validateCriteriaMode: 'all'
-}
+    validateCriteriaMode: 'all',
+};
 
 const RegisterPro = () => {
-    const router = useRouter()
-    const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig)
-    const { dispatch } = useContext(UserContext)
-    const { dispatchModalError } = useContext(ModalDialogContext)
-    const { redirect } = router.query
+    const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig);
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
 
     const onSubmit = (form) => {
-        const { confirm, confirmPwd, ...data } = form
+        const { confirm, confirmPwd, ...data } = form;
         AuthService.registerPro(data)
-            .then(data => {
-                dispatch({ type: 'registerProSuccess', payload: data })
-                if (redirect) router.push({ pathname: redirect })
-                else router.push(`/auth/callback?redirect=/profile/${data.user.username}`)
+            .then(() => {
+                dispatchModal({
+                    persist: true,
+                    msg: 'Account created. Please check your email to validate your account',
+                });
             }).catch(err => {
-                dispatchModalError({ err })
-            })
-    }
+            dispatchModalError({ err });
+        });
+    };
 
     return (
         <main>
@@ -167,7 +162,10 @@ const RegisterPro = () => {
                                 control={control}
                                 rules={{
                                     required: 'field required',
-                                    minLength: { value: 6, message: 'Min 6 chars' }
+                                    minLength: {
+                                        value: 6,
+                                        message: 'Min 6 chars',
+                                    },
                                     // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
                                 }}
                             />
@@ -180,13 +178,16 @@ const RegisterPro = () => {
                                 control={control}
                                 rules={{
                                     required: 'Required',
-                                    minLength: { value: 6, message: 'Min 6 chars' },
+                                    minLength: {
+                                        value: 6,
+                                        message: 'Min 6 chars',
+                                    },
                                     validate: {
                                         matchesPreviousPassword: (value) => {
-                                            const { password } = getValues()
-                                            return password === value || 'Passwords should match!'
-                                        }
-                                    }
+                                            const { password } = getValues();
+                                            return password === value || 'Passwords should match!';
+                                        },
+                                    },
                                 }}
                             />
                         </FieldWrapper>
@@ -204,7 +205,7 @@ const RegisterPro = () => {
                 </Col>
             </Row>
         </main>
-    )
-}
+    );
+};
 
-export default RegisterPro
+export default RegisterPro;

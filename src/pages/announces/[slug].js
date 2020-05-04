@@ -1,9 +1,29 @@
-import React from 'react'
-import { useRouter } from 'next/router'
-import AnnounceService from '../../services/AnnounceService'
-import AnnounceClass from '../../class/announce.class'
+import React, { useContext, useRef } from 'react';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import { Container } from 'reactstrap';
+import { LazyImage } from 'react-lazy-images';
+import { useMediaQuery } from '@material-ui/core';
+import useTheme from '@material-ui/core/styles/useTheme';
+import Typography from '@material-ui/core/Typography';
+import AnnounceClass from '../../class/announce.class';
+import TitleMUI from '../../components/TitleMUI';
+import UploadDropZone from '../../components/UploadDropZone';
+import { ModalDialogContext } from '../../context/ModalDialogContext';
+import AnnounceService from '../../services/AnnounceService';
+import GalleryImgsLazy from '../../components/Gallery/GalleryImgsLazy';
+import GalleryViewer from '../../components/Gallery/GalleryViewer';
+import Spacer from '../../components/Spacer';
+import Error from '../_error';
 
-import TitleMUI from '../../components/TitleMUI'
+const Announce = ({ announceRaw, err }) => {
+    const router = useRouter();
+    const theme = useTheme();
+    const announce = new AnnounceClass(announceRaw);
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
+        defaultMatches: true,
+    });
 
     if (!announceRaw) return <Error statusCode={err.statusCode}/>;
 
@@ -129,14 +149,18 @@ import TitleMUI from '../../components/TitleMUI'
             <GalleryImgsLazy images={announce.getUploadedImages} handleCLickImg={handleCLickImg}/>
             <UploadDropZone fireFiles={startUploadImages}/>
 
-Announce.getInitialProps = async function ({ query }) {
-    const { slug } = query
-    try {
-        const announce = await AnnounceService.getAnnounceBySlug(slug)
-        return { announce }
-    } catch (err) {
-        return { err }
-    }
-}
+        </Container>
+    );
+};
 
-export default Announce
+Announce.getInitialProps = async function({ query, res }) {
+    const { slug } = query;
+    try {
+        const announceRaw = await AnnounceService.getAnnounceBySlug(slug);
+        return { announceRaw };
+    } catch (err) {
+        return { err };
+    }
+};
+
+export default Announce;

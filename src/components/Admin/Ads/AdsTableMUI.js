@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit';
-import Button from '@material-ui/core/Button'
 import TableMUI from '../TableMUI'
 import BulletPoint from '../../BulletPoint'
 import AnnounceService from '../../../services/AnnounceService'
+import { ModalDialogContext } from '../../../context/ModalDialogContext';
 
 const StatusBullet = (row) => {
     const status = row.status;
@@ -21,6 +21,7 @@ const StatusBullet = (row) => {
 
 const AdsTable = () => {
     const router = useRouter();
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [resultFetch, setResultsFetch] = React.useState({ rows : [] })
     const [loading, setLoading] = useState(false)
     const [pageIndex, setPageIndex] = useState(0)
@@ -74,10 +75,9 @@ const AdsTable = () => {
         {
             title: 'Type de véhicule',
             field: 'vehicleType',
-            // filtering: true,
             grouping: true,
             searchable: true,
-            sorting: true
+            sorting: true,
         },
         {
             title: "Titre de l'annonce",
@@ -117,7 +117,7 @@ const AdsTable = () => {
             title: "Prix de l'annonce",
             field: 'price',
             type: 'currency',
-            currencySetting : '€',
+            currencySetting : { locale : 'fr', currencyCode : 'eur' },
             filtering: false,
             grouping: false,
             searchable: true,
@@ -166,16 +166,16 @@ const AdsTable = () => {
 
         AnnounceService.getAnnounces()
             .then(data => {
-                console.log(data)
                 setResultsFetch(data)
                 // setPageCount(data.pages)
                 setLoading(false)
-            }).catch(err => console.log(err))
+            }).catch(err => {
+            dispatchModalError({err});
+        })
     }, [])
 
-    const handleItemClick = (e, user) => {
-        if(user) router.push(`/admin/users/${user.username}`)
-        else console.log("not found");
+    const handleItemClick = (e, ad) => {
+        if(ad) router.push(`/announces/${ad.slug}`)
     };
 
     useEffect(() => {

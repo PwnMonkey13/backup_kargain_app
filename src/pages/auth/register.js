@@ -1,39 +1,35 @@
-import React, { useContext } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { Col, Row } from 'reactstrap'
-import { UserContext } from '../../components/Context/UserContext'
-import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
-import Divider from '../../components/Divider'
-import AuthService from '../../services/AuthService'
-import { useForm } from 'react-hook-form'
-import { TextInput, EmailInput, PasswordInput, CheckBoxInput } from '../../components/Form/Inputs'
-import FieldWrapper from '../../components/Form/FieldWrapper'
+import React, { useContext } from 'react';
+import Link from 'next/link';
+import { Col, Row } from 'reactstrap';
+import { ModalDialogContext } from '../../context/ModalDialogContext';
+import Divider from '../../components/Divider';
+import AuthService from '../../services/AuthService';
+import { useForm } from 'react-hook-form';
+import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../components/Form/Inputs';
+import FieldWrapper from '../../components/Form/FieldWrapper';
 
 const formConfig = {
     mode: 'onChange',
-    validateCriteriaMode: 'all'
-}
+    validateCriteriaMode: 'all',
+};
 
-const LoginPage = (props) => {
-    const router = useRouter()
-    const { dispatch } = useContext(UserContext)
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext)
-    const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig)
-    const { redirect } = router.query
+const RegisterPage = () => {
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig);
 
     const onSubmit = (form) => {
-        const { confirm, confirmPwd, ...data } = form
+        const { confirm, confirmPwd, ...data } = form;
         AuthService.register(data)
-            .then(data => {
-                dispatch({ type: 'set', payload: { user: { email: data.document.email } } })
-                if (redirect) router.push({ pathname: redirect })
-                else router.push('/auth/callback?redirect=/auth/check-email')
+            .then(() => {
+                dispatchModal({
+                    persist: true,
+                    msg: 'Account created. Please check your email to validate your account',
+                });
             }).catch(err => {
-                dispatchModalError({ err })
-            }
-            )
-    }
+                dispatchModalError({ err });
+            },
+        );
+    };
 
     return (
         <main>
@@ -112,7 +108,10 @@ const LoginPage = (props) => {
                                 control={control}
                                 rules={{
                                     required: 'field required',
-                                    minLength: { value: 6, message: 'Min 6 chars' }
+                                    minLength: {
+                                        value: 6,
+                                        message: 'Min 6 chars',
+                                    },
                                     // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
                                 }}
                             />
@@ -125,13 +124,16 @@ const LoginPage = (props) => {
                                 control={control}
                                 rules={{
                                     required: 'Required',
-                                    minLength: { value: 6, message: 'Min 6 chars' },
+                                    minLength: {
+                                        value: 6,
+                                        message: 'Min 6 chars',
+                                    },
                                     validate: {
                                         matchesPreviousPassword: (value) => {
-                                            const { password } = getValues()
-                                            return password === value || 'Passwords should match!'
-                                        }
-                                    }
+                                            const { password } = getValues();
+                                            return password === value || 'Passwords should match!';
+                                        },
+                                    },
                                 }}
                             />
                         </FieldWrapper>
@@ -153,7 +155,7 @@ const LoginPage = (props) => {
                 </Col>
             </Row>
         </main>
-    )
-}
+    );
+};
 
-export default LoginPage
+export default RegisterPage;

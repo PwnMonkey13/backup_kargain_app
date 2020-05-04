@@ -48,7 +48,6 @@ const AdsTable = () => {
 
         UsersService.getUsers({size : pageSize, page : pageIndex })
             .then(data => {
-                console.log(data)
                 setResultsFetch(data)
                 setPageCount(data.pages)
                 setLoading(false)
@@ -58,7 +57,6 @@ const AdsTable = () => {
     const handleItemClickEdit = (index) => {
         const user = resultFetch.rows[index];
         if(user) router.push(`/admin/users/${user.username}`)
-        else console.log("not found");
     };
 
     const handleItemClickDelete = (index) => {

@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 
 const FieldWrapper = ({ children, ...props }) => {
     const { tooltip, label } = props
+    if(!children) return null;
     const { name, rules } = children.props
     const { required } = rules || {}
+
     return (
         <div className="my-2">
             {label && (

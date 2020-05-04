@@ -32,7 +32,11 @@ const ModalDialogContextProvider = ({ children }) => {
     const dispatchModalError = (action) => dispatchModal({ ...action, type: 'error' })
 
     return (
-        <ModalDialogContext.Provider value={{ modalState, dispatchModal, dispatchModalError }}>
+        <ModalDialogContext.Provider value={{
+            modalState,
+            dispatchModal,
+            dispatchModalError
+        }}>
             {children}
         </ModalDialogContext.Provider>
     )

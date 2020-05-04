@@ -1,27 +1,24 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
-import classnames from 'classnames'
+import clsx from 'clsx';
 
-const Divider = ({ text, vertical }) => {
-    const Classnames = classnames(
-        'divider_stick',
-        vertical ? 'vertical' : ''
-    )
-
+const Divider = ({ text, vertical, className }) => {
     return (
-        <div className={Classnames}>
-            <hr/>
-            { text && <span><strong>{text}</strong></span> }
+        <div className={clsx("divider_stick", className, vertical && 'vertical')}>
+            { text ? (
+                <>
+                    <hr style={{ position: 'absolute',  top: '50%' }}/>
+                    <span><strong>{text}</strong></span>
+                </>
+            ) : (
+                <hr/>
+            )}
         </div>
     )
 }
 
 Divider.propTypes = {
     text: PropTypes.string
-}
-
-Divider.defaultProps = {
-    text: 'or'
 }
 
 export default memo(Divider)

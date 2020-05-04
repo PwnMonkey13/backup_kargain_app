@@ -14,7 +14,6 @@ const AnnounceCard = ({ announce }) => {
         defaultMatches: true
     });
     const ad = new AnnounceClass(announce)
-    console.log(ad)
 
     const CarInfos = () => {
         return(
@@ -65,7 +64,7 @@ const AnnounceCard = ({ announce }) => {
     }
 
     return (
-        <Link href={ad.getAuthor.getProfileLink} prefetch={false}>
+        <Link href={`/announces/${ad.getSlug}`} prefetch={false}>
             <div className="objava-wrapper cardAd">
                 <div className="cardAd_Content">
                     <div className="cardAd_Header">

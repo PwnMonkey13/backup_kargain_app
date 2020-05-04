@@ -1,16 +1,24 @@
-import React, { memo } from 'react'
-import PropTypes from 'prop-types'
-import classnames from 'classnames'
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
-const Spacer = ({ className }) => {
-    const Classnames = classnames(
-        'my-2',
-        className
-    )
+const Spacer = ({ top, bottom, className }) => (
+    <div
+        className={clsx(className)}
+        style={{
+            marginTop: `${top}px`,
+            marginBottom: `${bottom}px`,
+        }}/>
+);
 
-    return (
-        <div className={Classnames}/>
-    )
-}
+Spacer.PropTypes = {
+    top: PropTypes.number,
+    bottom: PropTypes.number,
+};
 
-export default memo(Spacer)
+Spacer.defaultProps = {
+    top: 20,
+    bottom: 20,
+};
+
+export default memo(Spacer);

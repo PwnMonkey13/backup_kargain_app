@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Container } from 'reactstrap'
 import { useRouter, withRouter } from 'next/router'
 import Header from '../../components/Header'
-import { FormContext } from '../../components/Context/FormContext'
+import { FormContext } from '../../context/FormContext'
 import VehicleTypeSelectorStep from '../../components/Vehicles/VehicleTypeSelectorStep'
 
 const path = require('path')

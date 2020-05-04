@@ -1,12 +1,12 @@
-import React, { useRef } from 'react'
-import { Col, Row } from 'reactstrap'
-import Header from '../../Header'
-import { RadioGroupInput, SelectInput, TextareaInput } from '../../Form/Inputs'
-import StepNavigation from '../../Form/StepNavigation'
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
-import FieldWrapper from '../../Form/FieldWrapper'
-import { RadioVehicleGeneralState } from '../moto/form.data'
-import DamageSelector from '../DamageSelector'
+import React, { useEffect, useRef } from 'react';
+import Header from '../../Header';
+import { SelectInput, TextareaInput } from '../../Form/Inputs';
+import StepNavigation from '../../Form/StepNavigation';
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import FieldWrapper from '../../Form/FieldWrapper';
+import { RadioVehicleGeneralState } from '../moto/form.data';
+import DamageSelectorTabs from '../DamageSelectorTabs';
+import damages from '../../../pages/dev/damages';
 
 const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
     const formRef = useRef(null)
@@ -28,39 +28,13 @@ const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props 
 
             <FieldWrapper label="Nombre de propriétaires">
                 <SelectInput
-                    name="owners"
+                    name="ownersCount"
                     options={SelectOptionsUtils([2, 3, 4, 5])}
                     placeholder="Select number of owners"
                     control={control}
                     errors={errors}
                 />
             </FieldWrapper>
-
-            <Row>
-                <Col>
-                    <FieldWrapper label="Véhicule accidenté">
-                        <SelectInput
-                            name="damages"
-                            options={SelectOptionsUtils([2, 3, 4, 5])}
-                            placeholder="Select number of damages"
-                            control={control}
-                            rules={{ required: 'Field required' }}
-                            errors={errors}
-                        />
-                    </FieldWrapper>
-                </Col>
-                <Col>
-                    <FieldWrapper label="Véhicule deffectueux">
-                        <SelectInput
-                            name="defective"
-                            options={SelectOptionsUtils([2, 3, 4, 5])}
-                            control={control}
-                            rules={{ required: 'Field required' }}
-                            errors={errors}
-                        />
-                    </FieldWrapper>
-                </Col>
-            </Row>
 
             <FieldWrapper label="Description">
                 <TextareaInput
@@ -89,9 +63,9 @@ const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props 
                 }
             ]}/>
 
-            <StepNavigation prev={prevStep} submit />
+            <StepNavigation prev={prevStep} submit/>
         </form>
-    )
-}
+    );
+};
 
-export default Step
+export default Step;

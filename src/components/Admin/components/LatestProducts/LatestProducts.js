@@ -39,9 +39,7 @@ const useStyles = makeStyles(() => ({
 
 const LatestProducts = props => {
     const { className, ...rest } = props
-
     const classes = useStyles()
-
     const [products] = useState(mockData)
 
     return (

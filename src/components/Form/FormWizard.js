@@ -7,7 +7,7 @@ import ControlledStep from './ControlledStep'
 import BreadcrumbSteps from './BreadcrumbSteps'
 import useIsMounted from '../../hooks/useIsMounted'
 import DebugLocalStorage from '../DebugLocalStorage'
-import { FormContext } from '../Context/FormContext'
+import { FormContext } from '../../context/FormContext'
 
 const calculatePourcent = (current, length) => {
     return ((current + 1) / (length + 1)) * 100
@@ -21,6 +21,7 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
     const [maxActiveStep, setMaxActiveStep] = useState(steps.length)
     const [pourcent, setPourcent] = useState(() => calculatePourcent(activeStep, steps.length))
     const [stepChanges, setStepChanges] = useState([])
+    const [endForm, triggerEndForm] = useState(false)
 
     const formConfig = {
         mode: 'onChange',
@@ -53,17 +54,26 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
         setActiveStep(activeStep => activeStep + 1)
     }, [])
 
-    const onSubmitStep = useCallback((data, triggerEnd = false) => {
+    const onSubmitStep = useCallback((data, event) => {
         dispatchFormUpdate(data)
-        if (triggerEnd) handleSubmitForm()
-        else nextStep()
+        nextStep()
     }, [])
 
-    const handleSubmitForm = () => {
-        const { currentStep, ...formData } = formDataContext
-        console.log('end form reached')
-        onFinalSubmit(formData)
+    const handleSubmitForm = (data, event) => {
+        dispatchFormUpdate(data)
+        triggerEndForm(true);
     }
+
+    useEffect(()=>{
+        if(isMounted && endForm === true){
+            const { currentStep, ...formData } = formDataContext
+            console.log('end form reached')
+            onFinalSubmit(formData)
+            triggerEndForm(false)
+        }
+    },[endForm])
+
+    console.log("render");
 
     return (
         <main id={props.id} className={props.className}>

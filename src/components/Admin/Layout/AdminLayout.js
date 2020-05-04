@@ -37,8 +37,6 @@ const AdminLayout = ({children}) => {
         setOpen(false);
     };
 
-    console.log(open)
-
     return (
         <div className={classes.root}>
             <TopBar handleDrawerToggle={handleDrawerToggle}/>

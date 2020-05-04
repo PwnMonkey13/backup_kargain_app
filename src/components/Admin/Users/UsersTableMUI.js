@@ -118,7 +118,6 @@ const UsersTable = () => {
 
     const fetchData = React.useCallback(() => {
         setLoading(true);
-        console.log(rowsLength, pageIndex);
 
         UsersService.getUsers({size : rowsLength, page : pageIndex })
             .then(data => {

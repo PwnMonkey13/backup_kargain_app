@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
 import FormWizard from '../../components/Form/FormWizard'
 import AnnounceService from '../../services/AnnounceService'
-import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
+import { ModalDialogContext } from '../../context/ModalDialogContext'
 import Step1CamperDetails from '../../components/Vehicles/utility/Step1_UtiilityDetails'
 
 const UtilityForm = (props) => {

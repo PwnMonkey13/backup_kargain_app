@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import Link from 'next/link'
-import { UserContext } from '../../components/Context/UserContext'
+import { UserContext } from '../../context/UserContext'
 
 const CheckEmail = () => {
     const { session } = useContext(UserContext)

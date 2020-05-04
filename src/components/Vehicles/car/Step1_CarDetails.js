@@ -1,35 +1,35 @@
-import React, { useRef } from 'react'
-import { Row, Col } from 'reactstrap'
-import Header from '../../Header'
-import { CheckboxMultipleInput, NumberInput, RadioGroupInput, SelectInput, TextInput } from '../../Form/Inputs'
+import React, { useRef } from 'react';
+import { Col, Row } from 'reactstrap';
+import Header from '../../Header';
+import { NumberInput, SelectInput } from '../../Form/Inputs';
 import {
-    RadioTypeFunction,
     CheckboxOptionsEquipments,
-    RadioChoicesGas,
-    RadioChoicesEngine,
     RadioChoicesEmission,
+    RadioChoicesEngine,
     RadioChoicesExternalColor,
+    RadioChoicesGas,
+    RadioChoicesMaterials,
     RadioChoicesPaints,
-    RadioChoicesMaterials
-} from './form.data.js'
-import StepNavigation from '../../Form/StepNavigation'
-import FieldWrapper from '../../Form/FieldWrapper'
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
-import { RadioFunctionVehicle } from '../moto/form.data'
+    RadioTypeFunction,
+} from './form.data.js';
+import StepNavigation from '../../Form/StepNavigation';
+import FieldWrapper from '../../Form/FieldWrapper';
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import { RadioFunctionVehicle } from '../moto/form.data';
 
 const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
-    const formRef = useRef(null)
-    const { watch, control, errors, getValues, register, formState, handleSubmit } = methods
+    const formRef = useRef(null);
+    const { watch, control, errors, getValues, register, formState, handleSubmit } = methods;
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
             <Row>
                 <Col>
-                    <FieldWrapper label="Type" required>
-                        <SelectInput name="vehicleFunction"
-                            options={RadioTypeFunction}
-                            control={control}
-                            errors={errors}
+                    <FieldWrapper label="Type">
+                        <SelectInput name="vehicleType"
+                                     options={RadioTypeFunction}
+                                     control={control}
+                                     errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -39,7 +39,6 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                             name="vehicleFunction"
                             options={RadioFunctionVehicle}
                             control={control}
-                            rules={{ required: 'Title is required' }}
                             errors={errors}
                         />
                     </FieldWrapper>
@@ -50,18 +49,20 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                 <Col>
                     <FieldWrapper label="Kilométrage" required>
                         <NumberInput name="mileage"
-                            placeholder="20000 km"
-                            control={control}
-                            errors={errors}
+                                     placeholder="20000 km"
+                                     control={control}
+                                     errors={errors}
 
                         />
                     </FieldWrapper>
                 </Col>
                 <Col>
                     <FieldWrapper label="Cylindrée">
-                        <NumberInput name="cylinder"
-                            control={control}
-                            errors={errors}
+                        <NumberInput name="vehicleEngine.cylinder"
+                                     control={control}
+                                     errors={errors}
+                                     placeholder={0}
+
                         />
                     </FieldWrapper>
                 </Col>
@@ -71,20 +72,19 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                 <Col>
                     <FieldWrapper label="Carburant" required>
                         <SelectInput name="vehicleEngine.gas"
-                            options={RadioChoicesGas}
-                            control={control}
-                            errors={errors}
+                                     options={RadioChoicesGas}
+                                     control={control}
+                                     errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
                 <Col>
                     <FieldWrapper label="Boite de vitesse">
                         <SelectInput
-                            name="engine"
+                            name="vehicleEngine.engine"
                             options={RadioChoicesEngine}
                             control={control}
                             errors={errors}
-                            rules={{ required: 'Title is required!' }}
                         />
                     </FieldWrapper>
                 </Col>
@@ -94,8 +94,10 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                 <Col>
                     <FieldWrapper label="Puissance kW">
                         <NumberInput name="power.kw"
-                            control={control}
-                            errors={errors}
+                                     control={control}
+                                     errors={errors}
+                                     placeholder={0}
+
 
                         />
                     </FieldWrapper>
@@ -103,8 +105,9 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                 <Col>
                     <FieldWrapper label="Puissance CH">
                         <NumberInput name="power.ch"
-                            control={control}
-                            errors={errors}
+                                     control={control}
+                                     errors={errors}
+                                     placeholder={0}
                         />
                     </FieldWrapper>
                 </Col>
@@ -113,38 +116,46 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
             <Header strong text="Consommation"/>
             <Row>
                 <Col>
-                    <FieldWrapper label="Mixte">
+                    <FieldWrapper label="Mixte (g/km)">
                         <NumberInput
                             name="consumption.mixt"
                             control={control}
                             errors={errors}
+                            placeholder={0}
+
                         />
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Ville">
+                    <FieldWrapper label="Ville (g/km)">
                         <NumberInput
                             name="consumption.city"
                             control={control}
                             errors={errors}
+                            placeholder={0}
+
                         />
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Route">
+                    <FieldWrapper label="Route (g/km)">
                         <NumberInput
                             name="consumption.road"
                             control={control}
                             errors={errors}
+                            placeholder={0}
+
                         />
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="CO2">
+                    <FieldWrapper label="CO2 (g/km)">
                         <NumberInput
                             name="consumption.gkm"
                             control={control}
                             errors={errors}
+                            placeholder={0}
+
                         />
                     </FieldWrapper>
                 </Col>
@@ -239,9 +250,9 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                     </FieldWrapper>
                 </Col>
             </Row>
-            <StepNavigation prev={prevStep} submit />
+            <StepNavigation prev={prevStep} submit/>
         </form>
-    )
-}
+    );
+};
 
-export default Step1CarDetails
+export default Step1CarDetails;

@@ -1,21 +1,16 @@
-import React, { useContext, useState } from 'react'
-import { Col, Container, Row } from 'reactstrap'
-import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import dynamic from "next/dynamic";
-import clsx from 'clsx'
-import parseISO from "date-fns/parseISO"
-import differenceInDays from "date-fns/differenceInDays"
-import UsersService from '../../services/UsersService'
-import { UserContext } from '../../components/Context/UserContext'
-import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
-import Tabs from '../../components/Tabs/Tabs'
-import ProfileAvatar from '../../components/ProfileAvatar'
-import { makeStyles } from '@material-ui/styles'
-import Filters from '../../components/Profile/Filters'
-import CarCard from '../../components/CarCard'
-import Button from '@material-ui/core/Button'
+import React, { useContext, useState } from 'react';
+import { Row } from 'reactstrap';
+import { useForm } from 'react-hook-form';
+import Link from 'next/link';
+import clsx from 'clsx';
+import UsersService from '../../services/UsersService';
+import { UserContext } from '../../context/UserContext';
+import Tabs from '../../components/Tabs/Tabs';
+import ProfileAvatar from '../../components/ProfileAvatar';
+import { makeStyles } from '@material-ui/styles';
+import Filters from '../../components/Profile/Filters';
+import CarCard from '../../components/CarCard';
+import Button from '@material-ui/core/Button';
 import ChatIcon from '@material-ui/icons/Chat';
 import AnnounceService from '../../services/AnnounceService';
 import UserClass from '../../class/user.class';
@@ -24,8 +19,8 @@ import Error from '../_error';
 
 const formConfig = {
     mode: 'onChange',
-    validateCriteriaMode: 'all'
-}
+    validateCriteriaMode: 'all',
+};
 
 const useStyles = makeStyles(theme => ({
 
@@ -37,20 +32,14 @@ const useStyles = makeStyles(theme => ({
     },
     content: {
         width: '95%',
-        height: '100%'
-    }
-}))
+        height: '100%',
+    },
+}));
 
-const Profile = (props) => {
-    const router = useRouter()
-    const { action } = router.query;
-    const classes = useStyles()
-    const { profile } = props
-    const { session, dispatch } = useContext(UserContext)
-    const { dispatchModal } = useContext(ModalDialogContext)
-    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm(formConfig)
+const Profile = ({ profile, err, ...props }) => {
+    const { session, dispatch } = useContext(UserContext);
+    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm(formConfig);
 
-    const ModalContact = dynamic(import("../../components/ModalContact"));
     const [isModalOpen, toggleModalOpen] = useState(false);
 
     const [state, setState] = useState({
@@ -58,30 +47,28 @@ const Profile = (props) => {
         sorter: props.sorter,
         filters: {},
         announces: [],
-        total: 0
-    })
+        total: 0,
+    });
 
-    console.log(session)
+    const User = new UserClass(profile);
 
-    const User = new UserClass(profile)
-
-    const [ filtersOpened, toggleFilters ] = useState(false)
+    const [filtersOpened, toggleFilters] = useState(false);
 
     const toggleOpenFilters = () => {
-        toggleFilters(open => !open)
-    }
+        toggleFilters(open => !open);
+    };
 
     const isLoggedInUser = session &&
         session.isLoggedIn === true &&
         session.user != null &&
-        session.user.username === profile.username
+        session.user.username === profile.username;
 
     const updateFilters = (filters) => {
         setState(state => ({
             ...state,
-            filters
-        }))
-    }
+            filters,
+        }));
+    };
 
     const TabsContainer = () => {
         return (
@@ -89,13 +76,12 @@ const Profile = (props) => {
                 <Tabs.Item id="home-tab" title="Vitrine">
                     <Row className="my-2 d-flex justify-content-center">
                         {props.announces.map((announce, i) => {
-                            console.log(announce)
                             const ad = new AnnounceClass(announce);
                             return (
                                 <div key={i} className="m-2 mx-auto">
                                     <CarCard
                                         location={`/announces/${ad.getSlug}`}
-                                        topText={ad.getExpirationDaysLeft &&  `${ad.getExpirationDaysLeft} jours`}
+                                        topText={ad.getExpirationDaysLeft && `${ad.getExpirationDaysLeft} jours`}
                                         imgSrc="/images/car4.png"
                                         title={ad.getTitle}
                                         subTitle={`${ad.getPrice} €`}
@@ -104,7 +90,7 @@ const Profile = (props) => {
                                         commentsCount={ad.getCountComments}
                                     />
                                 </div>
-                            )
+                            );
                         })}
                     </Row>
                 </Tabs.Item>
@@ -118,12 +104,10 @@ const Profile = (props) => {
                     <p>Content 4</p>
                 </Tabs.Item>
             </Tabs>
-        )
-    }
+        );
+    };
 
-    if (!profile) {
-        return <p> TODO, unknown user</p>
-    }
+    if (!profile) return <Error statusCode={err.statusCode}/>;
 
     return (
         <>
@@ -155,8 +139,10 @@ const Profile = (props) => {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        startIcon={<ChatIcon />}
-                                        onClick={() => {toggleModalOpen(true) }}
+                                        startIcon={<ChatIcon/>}
+                                        onClick={() => {
+                                            toggleModalOpen(true);
+                                        }}
                                     >
                                         Contacter
                                     </Button>
@@ -204,37 +190,37 @@ const Profile = (props) => {
 
             <section className="content_tabs">
 
-                <div className={clsx("cd-filter-trigger", filtersOpened && "filter-is-visible" )}
-                     onClick={()=>toggleOpenFilters()}>
+                <div className={clsx('cd-filter-trigger', filtersOpened && 'filter-is-visible')}
+                     onClick={() => toggleOpenFilters()}>
                     <img src="/images/svg/icon_filter_white.svg" alt=""/>
                 </div>
 
-                <div className={clsx("cd-filter", filtersOpened && "filter-is-visible" )}>
+                <div className={clsx('cd-filter', filtersOpened && 'filter-is-visible')}>
                     <Filters updateFilters={updateFilters}/>
-                    <span className="cd-close-trigger" onClick={()=>toggleOpenFilters()}/>
+                    <span className="cd-close-trigger" onClick={() => toggleOpenFilters()}/>
                 </div>
 
-                <div className={clsx("cd-gallery", filtersOpened && "filter-is-visible" )}>
+                <div className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
                     <TabsContainer/>
                 </div>
             </section>
         </>
-    )
-}
+    );
+};
 
-Profile.getInitialProps = async function (ctx) {
-    const { username } = ctx.query
+Profile.getInitialProps = async function({ query, res }) {
+    const { username } = query;
     try {
-        const profile = await UsersService.getUser(username)
-        const announces = await AnnounceService.getAnnouncesByUser(profile._id)
+        const profile = await UsersService.getUser(username);
+        const announces = await AnnounceService.getAnnouncesByUser(profile._id);
         return {
             username,
             profile,
-            announces
-        }
+            announces,
+        };
     } catch (err) {
-        return { err }
+        return { err };
     }
-}
+};
 
-export default Profile
+export default Profile;

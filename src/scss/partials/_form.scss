@@ -53,7 +53,8 @@ input.long-input-text {
 
 p.error {
   color: #bf1650;
-  margin: 1rem;
+  margin: .3rem;
+
   &:before{
     display: inline;
     content: "⚠ ";
@@ -105,7 +106,7 @@ p.error {
 
 .input-field{
   display: flex;
-  align-items: baseline;
+  align-items: center;
   vertical-align: middle;
   justify-content: flex-start;
   width: 100%;
@@ -118,6 +119,7 @@ p.error {
   }
 }
 
+
 .invalid {
   border-color: red;
   white-space: nowrap;
@@ -129,6 +131,34 @@ p.error {
 
 .validation-error {
   border: 1px solid red;
+}
+
+.checkbox{
+  position: relative;
+  display: block;
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.checkbox input[type=checkbox],
+.checkbox select[type=checkbox],
+.radio-inline input[type=radio],
+.radio-inline select[type=radio],
+.radio input[type=radio],
+.radio select[type=radio] {
+  position: absolute;
+  margin-top: 4px\9;
+  margin-left: -20px;
+}
+
+input[type=checkbox],
+input[type=radio],
+select[type=checkbox],
+select[type=radio] {
+  margin: 4px 0 0;
+  margin-top: 1px\9;
+  line-height: normal;
 }
 
 .form-check{

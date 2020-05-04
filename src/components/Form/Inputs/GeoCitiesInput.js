@@ -100,7 +100,7 @@ const GeoCitiesInput = memo(({ name, control, rules, errors, ...props }) => {
                         isClearable={true}
                         isSearchable={true}
                         components={{ DropdownIndicator, Menu }}
-                        placeholder="Ville ou CP"
+                        placeholder={props.placeholder}
                         options={state.selectOptions}
                         onInputChange={onInputSelectChange}
                     /> }
@@ -112,5 +112,10 @@ const GeoCitiesInput = memo(({ name, control, rules, errors, ...props }) => {
         </>
     )
 })
+
+GeoCitiesInput.defaultProps = {
+    typeAPI : "geo",
+    enableGeoloc : true
+}
 
 export default GeoCitiesInput

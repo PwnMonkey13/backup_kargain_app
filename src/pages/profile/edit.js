@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react'
 import classNames from 'classnames'
 import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap'
 import UsersService from '../../services/UsersService'
-import { UserContext } from '../../components/Context/UserContext'
-import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
+import { UserContext } from '../../context/UserContext'
+import { ModalDialogContext } from '../../context/ModalDialogContext'
 
 const Edit = (props) => {
     const { session, dispatchUser } = useContext(UserContext)
@@ -24,7 +24,6 @@ const Edit = (props) => {
     const handleSubmit = async (e, data) => {
         UsersService.updateUser(user.username, data, props.token)
             .then(document => {
-                console.log(document)
                 setUser(document)
                 dispatchUser(document)
                 dispatchModal({ type: 'success', msg: 'User successufully updated' })

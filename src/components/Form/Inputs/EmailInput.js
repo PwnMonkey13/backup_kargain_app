@@ -15,6 +15,8 @@ const EmailInput = ({ name, required, classname, rules, control, errors, ...prop
         }
     }
 
+    if(!control) return null;
+
     return (
         <>
             <div className={classnames}>
@@ -34,6 +36,7 @@ const EmailInput = ({ name, required, classname, rules, control, errors, ...prop
 }
 
 EmailInput.propTypes = {
+    control : PropTypes.any.isRequired,
     name: PropTypes.string.isRequired
 }
 

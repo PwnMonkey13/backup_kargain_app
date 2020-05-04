@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { UserContext } from '../../components/Context/UserContext'
+import { UserContext } from '../../context/UserContext'
 import { useRouter } from 'next/router'
 
 const Index = () => {

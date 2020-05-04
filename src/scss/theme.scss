@@ -2,7 +2,13 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
 @import url('https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700');
 
-@import '../../node_modules/bootstrap/scss/bootstrap';
+@import '~bootstrap/scss/bootstrap';
+@import '~react-step-progress-bar/styles.css';
+@import '~react-phone-input-2/lib/style.css';
+@import '~react-input-range/lib/css/index.css';
+@import "~react-image-gallery/styles/scss/image-gallery.scss";
+@import '~react-dropzone-uploader/dist/styles.css';
+
 @import 'partials/variables';
 @import 'partials/base';
 @import 'partials/navbar';
@@ -13,6 +19,7 @@
 @import 'partials/auth';
 @import 'partials/form';
 @import 'partials/announce';
+@import 'partials/flags-select';
 @import 'partials/profile';
 @import 'partials/avatar';
 @import 'partials/tabs';

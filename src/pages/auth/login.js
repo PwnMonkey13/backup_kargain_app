@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { memo, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { EmailInput, PasswordInput } from '../../components/Form/Inputs'
@@ -7,27 +7,28 @@ import { Col, Row } from 'reactstrap'
 import Link from 'next/link'
 import Divider from '../../components/Divider'
 import AuthService from '../../services/AuthService'
-import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
-import { UserContext } from '../../components/Context/UserContext'
+import { ModalDialogContext } from '../../context/ModalDialogContext'
+import { UserContext } from '../../context/UserContext'
 
 const formConfig = {
     mode: 'onChange',
     validateCriteriaMode: 'all'
 }
 
-const LoginPage = (props) => {
+const LoginPage = () => {
     const router = useRouter()
     const { redirect } = router.query
-    const { dispatch } = useContext(UserContext)
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext)
+    const { dispatchLoginSuccess } = useContext(UserContext)
+    const { dispatchModalError } = useContext(ModalDialogContext)
     const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig)
 
     const onSubmit = (form) => {
-        AuthService.login(form.email, form.password)
+        const { email, password } = form;
+        AuthService.login({ email, password })
             .then(data => {
-                dispatch({ type: 'loginSuccess', payload: data })
-                // if (redirect) router.push({ pathname: redirect })
-                // else router.push(`/auth/callback?redirect=/profile/${data.user.username}`)
+                dispatchLoginSuccess({payload: data})
+                if (redirect) router.push({ pathname: redirect })
+                else router.push(`/auth/callback?redirect=/profile/${data.user.username}`)
             }).catch(err => {
                 dispatchModalError({ err })
                 if (redirect) router.push({ pathname: redirect })
@@ -35,45 +36,42 @@ const LoginPage = (props) => {
         )
     }
 
-    const test = () => {
-        AuthService.authorize().then(result => {
-            console.log(result)
-        }).catch(err => {
-            console.log(err)
-        })
-    }
+    const Providers = memo(() => {
+        return(
+            <div className="d-flex flex-column">
+                <Link href="#">
+                    <a className="register-fb">
+                        <img src="/images/fb.png" alt=""/>
+                        Se connecter avec Facebook
+                    </a>
+                </Link>
+                <Link href="#">
+                    <a className="register-g">
+                        <img src="/images/g+.png" alt=""/>
+                        Se connecter avec Google+
+                    </a>
+                </Link>
+                <Divider text="ou"/>
+                <Link href='/auth/register'>
+                    <a className="btn btn-outline-primary submit">
+                        Créer un compte
+                    </a>
+                </Link>
+                <Link href="/auth/register-pro">
+                    <a className="btn btn-outline-primary submit">
+                        S'enregistrer en tant que Pro
+                    </a>
+                </Link>
+            </div>
+        )
+    })
 
     return (
         <main>
-            <button type="button" onClick={()=>test()}>test</button>
             <h1>Se connecter</h1>
             <Row>
                 <Col className="m-auto" sm="12" md="5">
-                    <div className="flex-column">
-                        <Link href="#">
-                            <a className="register-fb">
-                                <img src="/images/fb.png" alt=""/>
-                                Se connecter avec Facebook
-                            </a>
-                        </Link>
-                        <Link href="#">
-                            <a className="register-g">
-                                <img src="/images/g+.png" alt=""/>
-                                Se connecter avec Google+
-                            </a>
-                        </Link>
-                        <Divider text="ou"/>
-                        <Link href='/auth/register'>
-                            <a className="btn btn-outline-primary submit">
-                                Créer un compte
-                            </a>
-                        </Link>
-                        <Link href="/auth/register-pro">
-                            <a className="btn btn-outline-primary submit">
-                                S'enregistrer en tant que Pro
-                            </a>
-                        </Link>
-                    </div>
+                   <Providers/>
                 </Col>
                 <Col className="m-auto" sm="12" md="7">
 

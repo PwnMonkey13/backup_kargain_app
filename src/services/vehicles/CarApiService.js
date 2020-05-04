@@ -17,8 +17,11 @@ function getMakes (makes) {
         if (Array.isArray(makes)) {
             makes = makes.map(make => Number(make)).filter(make => !isNaN(make)).join(',')
         } else {
-            if (typeof makes === 'string') makes = Number(filter)
-            if (isNaN(makes)) return console.log('make param is not a number')
+            if (typeof makes === 'string') makes = Number(makes)
+            if (isNaN(makes)){
+                console.log('make param is not a number')
+                return params
+            }
         }
         params = { ...params, make_id: makes }
     }

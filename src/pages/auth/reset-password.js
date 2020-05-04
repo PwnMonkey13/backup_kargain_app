@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { PasswordInput } from '../../components/Form/Inputs'
 import FieldWrapper from '../../components/Form/FieldWrapper'
 import AuthService from '../../services/AuthService'
-import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
+import { ModalDialogContext } from '../../context/ModalDialogContext'
 
 const formConfig = {
     mode: 'onChange',

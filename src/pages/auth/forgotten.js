@@ -8,8 +8,8 @@ import { Col, Row } from 'reactstrap'
 import Link from 'next/link'
 import Divider from '../../components/Divider'
 import AuthService from '../../services/AuthService'
-import { ModalDialogContext } from '../../components/Context/ModalDialogContext'
-import { UserContext } from '../../components/Context/UserContext'
+import { ModalDialogContext } from '../../context/ModalDialogContext'
+import { UserContext } from '../../context/UserContext'
 
 const formConfig = {
     mode: 'onChange',

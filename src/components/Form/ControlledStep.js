@@ -15,7 +15,6 @@ const Step = ({ step, ...props }) => {
     const { nextStep } = props
 
     const triggerSkipStep = () => {
-        console.log('triggerSkipStep')
         nextStep()
     }
 
