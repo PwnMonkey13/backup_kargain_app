@@ -6,18 +6,28 @@ export default () => {
         <div>
             <ul>
                 <li>
-                    <Link href="/damages" prefetch={false}>
-                        <a>A damages de nous</a>
+                    <Link href="/dev/damages" prefetch={false}>
+                        <a>damages</a>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/uploads" prefetch={false}>
+                    <Link href="/dev/damagesViewer" prefetch={false}>
+                        <a>damages Viewer</a>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/dev/uploads" prefetch={false}>
                         <a>uploads</a>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/tags" prefetch={false}>
+                    <Link href="/dev/tags" prefetch={false}>
                         <a>tags</a>
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/dev/uploads" prefetch={false}>
+                        <a>uploads</a>
                     </Link>
                 </li>
             </ul>

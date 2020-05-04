@@ -6,7 +6,7 @@ const TextareaInput = ({ name, control, rules, errors, ...props }) => {
     return (
         <>
             <textarea
-                name={props.name}
+                name={name}
                 ref={control.register(rules)}
                 placeholder={props.placeholder}
                 disabled={props.disabled}

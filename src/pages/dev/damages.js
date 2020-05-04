@@ -1,5 +1,5 @@
 import React from 'react'
-import DamageSelectorTabs from '../../components/Vehicles/DamageSelectorTabs'
+import DamageSelectorTabs from '../../components/Damages/DamageSelectorTabs';
 
 export default () => {
     return (

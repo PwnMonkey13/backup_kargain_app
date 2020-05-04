@@ -237,7 +237,11 @@ const DamageSelectorTabs = ({tabs , maxDamages, onChange : fireChanges, ...props
                                             return (
                                                 <div key={indexStage} className={classes.annoInput}>
                                                     <div style={{ flex: 1 }}>
-                                                        <IconButton aria-label="delete" className={classes.margin} onClick={() => rmStage(indexTab, indexStage)}>
+                                                        <IconButton
+                                                            aria-label="delete"
+                                                            className={classes.margin}
+                                                            tabIndex="-1"
+                                                            onClick={() => rmStage(indexTab, indexStage)}>
                                                             <DeleteIcon fontSize="small"/>
                                                         </IconButton>
                                                         <span className={clsx(classes.annoNumber)}>{indexStage + 1}</span>

@@ -1,7 +1,8 @@
 let env
 let config
 const global = {
-    port: process.env.PORT || 3000
+    STRIPE_API_KEY : process.env.STRIPE_API_KEY,
+    GOOGLE_STATIC_API_KEY : process.env.GOOGLE_STATIC_API_KEY
 }
 
 const dev = {

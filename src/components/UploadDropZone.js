@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     previewContainer: {
         width: '100%',
         padding : '1rem',
+        zIndex : 'unset',
         '& > * + *': {
             marginTop: theme.spacing(2),
         },
@@ -223,7 +224,8 @@ UploadDropZone.defaultProps = {
     remainingLabel : "images left allowed",
     multiple : true,
     canCancel : true,
-    submitLabel : "Uploader"
+    submitLabel : "Uploader",
+    getFiles : () => {}
 }
 
 export default UploadDropZone

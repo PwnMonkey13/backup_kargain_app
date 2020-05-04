@@ -31,7 +31,7 @@ const GalleryImgsLazy = ({ images, handleCLickImg }) => {
     const classes = useStyles();
     return(
         <div className="m-2 m-auto p-2">
-            <div class="row">
+            <div className="row">
                 {images.map((item, index) => {
                     const image = new UploadedImage(item);
                     return(

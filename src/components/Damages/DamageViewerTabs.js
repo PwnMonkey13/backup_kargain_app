@@ -1,14 +1,11 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
-import classnames from 'classnames';
-import DeleteIcon from '@material-ui/icons/Delete';
 import clsx from 'clsx';
+import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import IconButton from '@material-ui/core/IconButton';
 import Header from '../Header';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     annoInputs: {
         backgroundColor: '#e9ecef',
         border: '1px solid gainsboro',
@@ -133,7 +130,7 @@ const DamageViewerTabs = ({ tabs, ...props }) => {
                     return (
                         <NavItem key={index}>
                             <NavLink
-                                className={classnames({ active: activeTab === index })}
+                                className={clsx(activeTab === index && 'active' )}
                                 onClick={() => {
                                     toggle(index);
                                 }}

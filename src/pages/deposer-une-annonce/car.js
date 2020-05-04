@@ -13,20 +13,23 @@ const CarForm = (props) => {
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
 
     const onFinalSubmit = form => {
-        const { featuredImg, images, ...body } = form;
+        const { featured_image : featuredImage, images, ...body } = form;
         if (body.location && body.location.value) body.location = body.location.value;
 
         let formData = new FormData();
 
-        if (form['featured_image']) {
-            formData.append('featured_image', form['featured_image']);
+        if (featuredImage) {
+            formData.append('featured_image', featuredImage);
         }
 
-        for (let i = 0; i < form['images'].length; i++) {
-            formData.append('images', form['images'][i]);
+        if(images && Array.isArray(images)){
+            for (let i = 0; i < images.length; i++) {
+                formData.append('images', images[i]);
+            }
         }
 
         startPost(body, formData);
+
     };
 
     const startPost = async (body, formData) => {
@@ -65,7 +68,7 @@ const CarForm = (props) => {
             resumeModel={resumeModel}
             // enableResume={true}
             onFinalSubmit={onFinalSubmit}>
-            <Step0CarManufacturer title="Sélection du véhicule"/>
+            {/*<Step0CarManufacturer title="Sélection du véhicule"/>*/}
             <Step1CarDetails title="Description du véhicule"/>
             <Step2CarStatus title="Etat du véhicule"/>
             <Step3CarOwner title="Votre annonce"/>

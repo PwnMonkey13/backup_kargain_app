@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Marker, Path, StaticGoogleMap } from 'react-static-google-map';
 import { makeStyles } from '@material-ui/styles';
+import config from '../config/config';
 
 const useStyles = makeStyles(theme => ({
     test : {
@@ -31,11 +32,11 @@ const GoogleMapStatic = ({ zoom, width, height, markers, drawPath }) => {
 
     return (
         <div className={classes.root}>
-            <StaticGoogleMap apiKey={process.env.GOOGLE_STATIC_API_KEY}
+            <StaticGoogleMap apiKey={config.GOOGLE_STATIC_API_KEY}
                              zoom={zoom}
                              size={`${width}x${height}`}>
                 <Marker.Group label="T" color="blue">
-                    {markers && markers.map(marker => <Marker location={marker} /> )}
+                    {markers && markers.map((marker, index) => <Marker key={index} location={marker} /> )}
                 </Marker.Group>
                 {drawPath && <Path points={markers}/> }
             </StaticGoogleMap>

@@ -5,8 +5,10 @@ import StepNavigation from '../../Form/StepNavigation';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import FieldWrapper from '../../Form/FieldWrapper';
 import { RadioVehicleGeneralState } from '../moto/form.data';
-import DamageSelectorTabs from '../DamageSelectorTabs';
+import DamageSelectorTabs from '../../Damages/DamageSelectorTabs';
 import damages from '../../../pages/dev/damages';
+import TagsInput from '../../Tags/TagsInput';
+import TagsControlled from '../../Tags/TagsControlled';
 
 const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
     const formRef = useRef(null);
@@ -18,7 +20,7 @@ const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props 
 
     return (
         <form className="form_wizard" onSubmit={handleSubmit(onSubmitStep)}>
-
+            <button type="button" onClick={()=>console.log(getValues())}>CLICK</button>
             <Header text="Etat du véhicule"/>
 
             <FieldWrapper label="Etat général">
@@ -48,7 +50,11 @@ const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props 
                 />
             </FieldWrapper>
 
-            <p> TODO TAGS </p>
+            <TagsControlled
+                name="tags"
+                control={control}
+                errors={errors}
+            />
 
             <DamageSelectorTabs
                 maxDamages={5}

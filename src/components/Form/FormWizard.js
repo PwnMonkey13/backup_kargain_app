@@ -1,83 +1,91 @@
-import React, { useContext, useEffect, useCallback, useState } from 'react'
-import PropTypes from 'prop-types'
-import { Col, Row } from 'reactstrap'
-import { ProgressBar } from 'react-step-progress-bar'
-import FormResume from './FormResume'
-import ControlledStep from './ControlledStep'
-import BreadcrumbSteps from './BreadcrumbSteps'
-import useIsMounted from '../../hooks/useIsMounted'
-import DebugLocalStorage from '../DebugLocalStorage'
-import { FormContext } from '../../context/FormContext'
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { Col, Row } from 'reactstrap';
+import { ProgressBar } from 'react-step-progress-bar';
+import FormResume from './FormResume';
+import ControlledStep from './ControlledStep';
+import BreadcrumbSteps from './BreadcrumbSteps';
+import useIsMounted from '../../hooks/useIsMounted';
+import DebugLocalStorage from '../DebugLocalStorage';
+import { FormContext } from '../../context/FormContext';
 
 const calculatePourcent = (current, length) => {
-    return ((current + 1) / (length + 1)) * 100
-}
+    return ((current + 1) / (length + 1)) * 100;
+};
 
 const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prevRoute, ...props }) => {
-    const isMounted = useIsMounted()
-    const steps = Array.isArray(children) ? children.filter(child => child.props.hidden !== true) : children ? [children] : []
-    const { formDataContext, dispatchFormUpdate } = useContext(FormContext)
-    const [activeStep, setActiveStep] = useState(formDataContext.currentStep || 0)
-    const [maxActiveStep, setMaxActiveStep] = useState(steps.length)
-    const [pourcent, setPourcent] = useState(() => calculatePourcent(activeStep, steps.length))
-    const [stepChanges, setStepChanges] = useState([])
-    const [endForm, triggerEndForm] = useState(false)
+    const isMounted = useIsMounted();
+    const steps = Array.isArray(children) ? children.filter(child => child.props.hidden !== true) : children ? [children] : [];
+    const { formDataContext, dispatchFormUpdate } = useContext(FormContext);
+    const [activeStep, setActiveStep] = useState(formDataContext.currentStep || 0);
+    const [maxActiveStep, setMaxActiveStep] = useState(steps.length);
+    const [pourcent, setPourcent] = useState(() => calculatePourcent(activeStep, steps.length));
+    const [stepChanges, setStepChanges] = useState([]);
+    const [endForm, triggerEndForm] = useState(false);
 
     const formConfig = {
         mode: 'onChange',
         validateCriteriaMode: 'all',
-        defaultValues: formDataContext
-    }
+        defaultValues: formDataContext,
+    };
 
     useEffect(() => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
         if (isMounted) {
-            setMaxActiveStep(maxStep => Math.max(maxStep, Number(activeStep)))
-            dispatchFormUpdate({ currentStep: activeStep })
-            setPourcent(calculatePourcent(activeStep, steps.length))
+            setMaxActiveStep(maxStep => Math.max(maxStep, Number(activeStep)));
+            dispatchFormUpdate({ currentStep: activeStep });
+            setPourcent(calculatePourcent(activeStep, steps.length));
         }
-    }, [activeStep])
+    }, [activeStep]);
 
     const collectStepChanges = useCallback(item => {
-        setStepChanges(stepChanges => ({ ...stepChanges, [item.name]: item.label }))
-    }, [])
+        setStepChanges(stepChanges => ({
+            ...stepChanges,
+            [item.name]: item.label,
+        }));
+    }, []);
 
     const setStep = useCallback((index) => {
-        setActiveStep(index)
-    }, [])
+        setActiveStep(index);
+    }, []);
 
     const prevStep = useCallback(() => {
-        setActiveStep(activeStep => activeStep - 1)
-    }, [])
+        setActiveStep(activeStep => activeStep - 1);
+    }, []);
 
     const nextStep = useCallback(() => {
-        setActiveStep(activeStep => activeStep + 1)
-    }, [])
+        setActiveStep(activeStep => activeStep + 1);
+    }, []);
+
+    const triggerDispatchFormData = (data) => {
+        dispatchFormUpdate(data);
+    };
 
     const onSubmitStep = useCallback((data, event) => {
-        dispatchFormUpdate(data)
-        nextStep()
-    }, [])
+        triggerDispatchFormData(data);
+        nextStep();
+    }, []);
 
     const handleSubmitForm = (data, event) => {
-        dispatchFormUpdate(data)
+        triggerDispatchFormData(data);
         triggerEndForm(true);
-    }
+    };
 
-    useEffect(()=>{
-        if(isMounted && endForm === true){
-            const { currentStep, ...formData } = formDataContext
-            console.log('end form reached')
-            onFinalSubmit(formData)
-            triggerEndForm(false)
+    useEffect(() => {
+        if (isMounted && endForm === true) {
+            const { currentStep, ...formData } = formDataContext;
+            console.log('end form reached');
+            onFinalSubmit(formData);
+            triggerEndForm(false);
         }
-    },[endForm])
+    }, [endForm]);
 
-    console.log("render");
+    console.log('render');
 
     return (
         <main id={props.id} className={props.className}>
-            <BreadcrumbSteps activeStepIndex={activeStep} steps={steps} setStep={setStep} maxActiveStep={maxActiveStep}/>
+            <BreadcrumbSteps activeStepIndex={activeStep} steps={steps} setStep={setStep}
+                             maxActiveStep={maxActiveStep}/>
             <ProgressBar percent={pourcent} filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"/>
             {props.enableResume ? (
                 <Row className="mx-auto px-2 my-4">
@@ -109,7 +117,7 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
             )
             }
 
-            { debug && (
+            {debug && (
                 <Row>
                     <Col>
                         <div>
@@ -124,19 +132,19 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
             )}
 
         </main>
-    )
-}
+    );
+};
 
 FormWizard.propTypes = {
     formKey: PropTypes.string.isRequired,
     debug: PropTypes.bool,
-    enableResume: PropTypes.bool
-}
+    enableResume: PropTypes.bool,
+};
 
 FormWizard.defaultProps = {
     formKey: '',
     debug: false,
-    enableResume: false
-}
+    enableResume: false,
+};
 
-export default FormWizard
+export default FormWizard;

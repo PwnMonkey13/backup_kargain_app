@@ -1,29 +1,37 @@
 import React, { useContext, useRef } from 'react';
-import clsx from 'clsx';
 import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
 import { Container } from 'reactstrap';
+import clsx from 'clsx';
 import { LazyImage } from 'react-lazy-images';
 import { useMediaQuery } from '@material-ui/core';
 import useTheme from '@material-ui/core/styles/useTheme';
 import Typography from '@material-ui/core/Typography';
+import AnnounceService from '../../services/AnnounceService';
 import AnnounceClass from '../../class/announce.class';
+import Spacer from '../../components/Spacer';
 import TitleMUI from '../../components/TitleMUI';
 import UploadDropZone from '../../components/UploadDropZone';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
-import AnnounceService from '../../services/AnnounceService';
-import GalleryImgsLazy from '../../components/Gallery/GalleryImgsLazy';
+import GoogleMapStatic from '../../components/GoogleMapStatic';
 import GalleryViewer from '../../components/Gallery/GalleryViewer';
-import Spacer from '../../components/Spacer';
+import { ModalDialogContext } from '../../context/ModalDialogContext';
+import GalleryImgsLazy from '../../components/Gallery/GalleryImgsLazy';
+import DamageViewerTabs from '../../components/Damages/DamageViewerTabs';
 import Error from '../_error';
+import useAddress from '../../hooks/useAddress';
 
 const Announce = ({ announceRaw, err }) => {
     const router = useRouter();
     const theme = useTheme();
+    const [, , geolocation] = useAddress();
+    const { latitude, longitude } = geolocation;
     const announce = new AnnounceClass(announceRaw);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
         defaultMatches: true,
     });
+
+    console.log(announce);
 
     if (!announceRaw) return <Error statusCode={err.statusCode}/>;
 
@@ -96,8 +104,15 @@ const Announce = ({ announceRaw, err }) => {
         }
     };
 
+    console.log(announce.getTheExcerpt);
+    console.log(announce.getTheExcerpt());
+
     return (
         <Container>
+            <NextSeo
+                title={`${announce.getTitle} - Kargain`}
+                description={announce.getTheExcerpt}
+            />
             <TitleMUI as="h1" variant="h1"><strong>{announce.getTitle}</strong></TitleMUI>
 
             <div className={clsx(isDesktop && 'd-flex')}>
@@ -139,11 +154,40 @@ const Announce = ({ announceRaw, err }) => {
 
             <AnnounceAttributes/>
 
+            <div className="input-tag">
+                <ul className="input-tag__tags">
+                    {announce.getTags && announce.getTags.map((tag, i) => {
+                        return (
+                            <li key={tag}>
+                                {tag}
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
+
+            <Spacer top={50} bottom={50}/>
+
             <div className="wysiwyg">
                 {announce.getTheContent}
             </div>
 
-            <Spacer top={100}/>
+            <Spacer top={50} bottom={50}/>
+
+            <DamageViewerTabs tabs={announce.getDamagesTabs}/>
+
+            <Spacer top={50}/>
+
+            {announce.getLocation.latitude && announce.getLocation.longitude && (
+                <GoogleMapStatic
+                    width={600}
+                    height={300}
+                    markers={[
+                        [[announce.getLocation.latitude, announce.getLocation.longitude].join(' '),
+                        ]]}
+                />
+            )}
+
             <TitleMUI>Images</TitleMUI>
             <GalleryViewer images={announce.getFormatedImagesViewer} ref={refImg}/>
             <GalleryImgsLazy images={announce.getUploadedImages} handleCLickImg={handleCLickImg}/>

@@ -1,33 +1,33 @@
-import React from 'react'
-import styled from 'styled-components'
-import { useForm } from 'react-hook-form'
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 
-const StepSection = styled.section`
-     border: 1px solid #dce0e0;
-     background-color: #f7f8f9;
-     border-radius: .1875rem;
-     background-color: #fff;
-     padding: 1rem;
-  `
+const useStyles = makeStyles(() => ({
+    root: {
+        border: '1px solid #dce0e0',
+        borderRadius: '.1875rem',
+        backgroundColor: '#fff', //f7f8f9
+        padding: '1rem',
+    },
+}));
 
 const Step = ({ step, ...props }) => {
-    const methods = useForm(props.formConfig)
-    const { nextStep } = props
+    const methods = useForm(props.formConfig);
+    const classes = useStyles();
+    const { nextStep } = props;
 
     const triggerSkipStep = () => {
-        nextStep()
-    }
+        nextStep();
+    };
 
     return (
-        <StepSection>
-            {step ? React.cloneElement(step, { methods, triggerSkipStep, ...props }) : 'step not found'}
-        </StepSection>
-    )
-}
+        <section className={classes.root}>
+            {step ? React.cloneElement(step, {
+                methods,
+                triggerSkipStep, ...props,
+            }) : 'step not found'}
+        </section>
+    );
+};
 
-// const propsAreEqual = (prevProps, nextProps) => {
-//     return _.isEqual(prevProps, nextProps);
-// };
-
-export default Step
-// export default memo(Step, propsAreEqual);
+export default Step;

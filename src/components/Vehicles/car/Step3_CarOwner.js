@@ -86,7 +86,7 @@ const Step = ({ methods, formConfig, handleSubmitForm, prevStep, nextStep, ...pr
             />
 
             <UploadDropZone
-                maxFiles={3}
+                maxFiles={10}
                 getFiles={getFiles}
                 hideSubmit
                 dragLabel="Uploader max 3 autres photos"

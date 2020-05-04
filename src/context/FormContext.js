@@ -17,7 +17,7 @@ const reducer = (state, action) => {
 }
 
 const FormContextProvider = ({ formKey, children }) => {
-    const [getFormData, setFormData, clearFormData] = useLocalStorage(`formData_${formKey.toLowerCase()}`, { currentStep: 0 })
+    const [getFormData, storeFormData, clearFormData] = useLocalStorage(`formData_${formKey.toLowerCase()}`, { currentStep: 0 })
     const [formDataContext, dispatch] = useReducer(reducer, getFormData)
 
     const dispatchFormUpdate = (updates) => {
@@ -30,7 +30,10 @@ const FormContextProvider = ({ formKey, children }) => {
     }
 
     useEffect(() => {
-        setFormData(formDataContext)
+        //TODO
+        // const excludeBeforeLocalStorage = ['images', 'featured_image'];
+        const {images, featured_image, ...dataToStore } = formDataContext
+        storeFormData(dataToStore)
     }, [formDataContext])
 
     return (

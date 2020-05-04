@@ -77,22 +77,29 @@ export default class Announce {
     }
 
     get getLocation () {
-        const city = this.raw.location.city;
-        const cityCode = this.raw.location.citycode;
-        const postCode = this.raw.location.postcode;
-        const address = this.raw.location.name
-        const fullAddress = this.raw.location.label
+        const city = this.raw.location && this.raw.location.city;
+        const cityCode = this.raw.location && this.raw.location.citycode;
+        const postCode = this.raw.location && this.raw.location.postcode;
+        const address = this.raw.location && this.raw.location.name
+        const fullAddress = this.raw.location && this.raw.location.label
+        const latitude = this.raw.location && this.raw.location.lat
+        const longitude = this.raw.location && this.raw.location.lng
 
         return{
             city,
             cityCode,
             postCode,
             address,
+            latitude,
+            longitude,
             fullAddress
         }
     }
 
-    get getDamages () {
+    get getTags () {
+        return this.raw.tags
+    }
+    get getDamagesTabs () {
         return this.raw.damages
     }
 

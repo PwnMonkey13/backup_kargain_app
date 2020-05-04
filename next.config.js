@@ -1,7 +1,7 @@
 const withPlugins = require('next-compose-plugins');
-const Dotenv = require("dotenv-webpack");
 const withImages = require('next-images');
 const path = require('path');
+require('dotenv').config()
 
 const nextBundleAnalyzer = ({ enabled = true }) => (nextConfig = {}) => ({
     ...nextConfig,
@@ -33,16 +33,13 @@ const nextBundleAnalyzer = ({ enabled = true }) => (nextConfig = {}) => ({
 
 const nextConfig = {
     distDir: 'dist/build',
-    // Have to list all the environment variables used here to make it available
-    // to the client side code
+    // Have to list all the environment variables used here to make it available to the client side code
     env: {
         GOOGLE_STATIC_API_KEY: process.env.GOOGLE_STATIC_API_KEY,
     },
     webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
         config.resolve.mainFields = ['main', 'browser', 'module'];
-        // Add the new plugin to the existing webpack plugins
-        config.plugins.push(new Dotenv({ silent: true }));
-        config.resolve.alias['@'] = path.join(__dirname, 'src');
+
         config.module.rules.push({
             test: /\.svg$/,
             use: [
