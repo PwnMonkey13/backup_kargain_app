@@ -1,9 +1,9 @@
 import React from 'react'
-import DamageSelector from '../../components/Vehicles/DamageSelector'
+import DamageSelectorTabs from '../../components/Vehicles/DamageSelectorTabs'
 
 export default () => {
     return (
-        <DamageSelector
+        <DamageSelectorTabs
             maxDamages={10}
             enableDebug
             tabs={[
