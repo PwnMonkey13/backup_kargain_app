@@ -141,11 +141,11 @@ const Announce = ({ announce }) => {
                     </div>
                 </div>
 
-                <h6 className="nav-filters-title m-b-20 m-t-0">En ce moment sur Benzin</h6>
-            </div>
-        </article>
-    )
-}
+            <Spacer top={100}/>
+            <TitleMUI>Images</TitleMUI>
+            <GalleryViewer images={announce.getFormatedImagesViewer} ref={refImg}/>
+            <GalleryImgsLazy images={announce.getUploadedImages} handleCLickImg={handleCLickImg}/>
+            <UploadDropZone fireFiles={startUploadImages}/>
 
 Announce.getInitialProps = async function ({ query }) {
     const { slug } = query

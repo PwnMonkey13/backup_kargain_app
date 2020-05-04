@@ -1,34 +1,45 @@
-import React from 'react'
-import { useGeolocation } from 'react-use'
-import { Col, Row } from 'reactstrap'
-import ReactFlagsSelect from '../../SelectCountriesFlags'
-import { EmailInput, NumberInput, TelInput, TextInput, GeoCitiesInput } from '../../Form/Inputs'
-import StepNavigation from '../../Form/StepNavigation'
-import FieldWrapper from '../../Form/FieldWrapper'
-import Header from '../../Header'
+import React, { useContext } from 'react';
+import { Col, Row } from 'reactstrap';
+import { NumberInput, TextInput } from '../../Form/Inputs';
+import StepNavigation from '../../Form/StepNavigation';
+import FieldWrapper from '../../Form/FieldWrapper';
+import useAddress from '../../../hooks/useAddress';
+import GeoStreetsInput from '../../Form/Inputs/GeoStreetsInput';
+import UploadDropZone from '../../UploadDropZone';
+import TitleMUI from '../../TitleMUI';
 
-const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
-    const { watch, control, errors, getValues, register, formState, handleSubmit } = methods
+const Step = ({ methods, formConfig, handleSubmitForm, prevStep, nextStep, ...props }) => {
+    const { watch, control, errors, getValues, register, formState, handleSubmit } = methods;
+    const [addressParts, addressString, geolocalisation] = useAddress();
 
-    const geolocation = useGeolocation({
-        enableHighAccuracy: true,
-        timeout: 10000
-    })
+    control.register({ name : 'featured_image'})
+    control.register({ name : 'images'})
+
+    const getFeatured = (files) => {
+        control.setValue("featured_image", files[0])
+    }
+
+    const getFiles = (files) => {
+        control.setValue("images", files)
+    };
 
     return (
-        <form className="form_wizard" onSubmit={handleSubmit(data => onSubmitStep(data, true))}>
-
+        <form className="form_wizard" onSubmit={handleSubmit(handleSubmitForm)}>
             <Row>
                 <Col>
                     <FieldWrapper label="Titre de l'annonce">
                         <TextInput
                             name="title"
+                            placeholder="BMW 633csi e24 - 1976"
                             fullwidth
                             control={control}
                             errors={errors}
                             rules={{
                                 required: 'Title is required',
-                                minLength: { value: 5, message: 'Min length : 5 ' }
+                                minLength: {
+                                    value: 5,
+                                    message: 'Min length : 5 ',
+                                },
                             }}
                         />
                     </FieldWrapper>
@@ -37,59 +48,57 @@ const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props 
                     <FieldWrapper label="Prix de l'annonce">
                         <NumberInput
                             name="price"
+                            placeholder="15000€"
                             errors={errors}
                             control={control}
+                            rules={{
+                                required: 'Price is required',
+                                validate : val => {
+                                    const value = Number(val)
+                                    if(value < 100) return "Min 100€"
+                                    if(value > 1000000) return "Max 1 000 000€"
+                                }
+                            }}
                         />
                     </FieldWrapper>
                 </Col>
             </Row>
 
-            <FieldWrapper label="Adresse complete">
-                <GeoCitiesInput
-                    enableGeoloc
-                    lat={geolocation.latitude}
-                    long={geolocation.longitude}
-                    typeAPI="geo" // vicopo
-                    name="seller.address"
-                    control={control}
-                    errors={errors}
-                />
-            </FieldWrapper>
+            <Row>
+                <Col>
+                    <FieldWrapper label="Adresse">
+                        <GeoStreetsInput
+                            lat={geolocalisation.latitude}
+                            long={geolocalisation.longitude}
+                            name="location"
+                            control={control}
+                            errors={errors}
+                        />
+                    </FieldWrapper>
+                </Col>
+            </Row>
 
-            <FieldWrapper label="CP/Ville">
-                <GeoCitiesInput
-                    // typeAPI="geo" // vicopo
-                    typeAPI="vicopo"
-                    name="seller.address"
-                    control={control}
-                    errors={errors}
-                />
-            </FieldWrapper>
+            <UploadDropZone
+                multiple={false}
+                hideSubmit
+                getFiles={getFeatured}
+                dragLabel="Uploader une photo de couverture"
+            />
 
-            <p> TODO uploads </p>
+            <UploadDropZone
+                maxFiles={3}
+                getFiles={getFiles}
+                hideSubmit
+                dragLabel="Uploader max 3 autres photos"
+            />
 
-            {/* <FieldWrapper label="Ville ou code postal"> */}
-            {/*    <NumberInput */}
-            {/*        name="seller.postalcode" */}
-            {/*        errors={errors} */}
-            {/*        register={register({ required: 'Title is required' })} */}
-            {/*    /> */}
-            {/* </FieldWrapper> */}
+            <TitleMUI component="p" variant="body1" color="primary">
+                Vous pourrez ajouter d'autres photos juste aprés
+            </TitleMUI>
 
-            {/* <FieldWrapper label="Nationalité"> */}
-            {/*    <ReactFlagsSelect */}
-            {/*        name="seller.nationality" */}
-            {/*        errors={errors} */}
-            {/*        control={control} */}
-            {/*        rules={{ */}
-            {/*            required : "Field required" */}
-            {/*        }} */}
-            {/*    /> */}
-            {/* </FieldWrapper> */}
-
-            <StepNavigation prev={prevStep} submitLabel="Créer mon annonce" submit />
+            <StepNavigation prev={prevStep} submitLabel="Créer mon annonce" submit/>
         </form>
-    )
-}
+    );
+};
 
-export default Step
+export default Step;

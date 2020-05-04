@@ -103,10 +103,28 @@ function createAnnounce (data, token) {
         })
 }
 
+function uploadImages (slug, formData) {
+    const requestOptions = {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+    };
+
+    const url = `${config.api}/ads/upload/${slug}`;
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+                throw err;
+            },
+        );
+}
+
 export default {
     getAnnouncesLegacy,
     getAnnounces,
     getAnnouncesByUser,
     getAnnounceBySlug,
-    createAnnounce
-}
+    createAnnounce,
+    uploadImages,
+};
