@@ -16,6 +16,10 @@ export default class Announce {
         return new User(this.raw.user)
     }
 
+    get isPro () {
+        return (this.raw.pro)
+    }
+
     get getSlug () {
         return this.raw.slug
     }
@@ -68,6 +72,30 @@ export default class Announce {
         }
     }
 
+    get getNationality (){
+        return "FR"
+    }
+
+    get getLocation () {
+        const city = this.raw.location.city;
+        const cityCode = this.raw.location.citycode;
+        const postCode = this.raw.location.postcode;
+        const address = this.raw.location.name
+        const fullAddress = this.raw.location.label
+
+        return{
+            city,
+            cityCode,
+            postCode,
+            address,
+            fullAddress
+        }
+    }
+
+    get getDamages () {
+        return this.raw.damages
+    }
+
     get getMileage () {
         return this.raw.mileage
     }
@@ -89,7 +117,9 @@ export default class Announce {
     }
 
     get getFeaturedImg () {
-        return this.raw.featured_img || '/images/slider1.png'
+        if(this.raw.featuredImg) return this.raw.featuredImg.location
+        if(this.raw.images && this.raw.images[0]) return this.raw.images[0].location
+        else return '/images/car-placeholder.jpg'
     }
 
     get getExpirationDaysLeft () {
@@ -98,8 +128,23 @@ export default class Announce {
         return differenceInDays(date, new Date())
     }
 
+    get getTopContent () {
+        return this.raw.topContent
+    };
+
     get getTheContent () {
         return this.raw.content
+    }
+
+    get getUploadedImages () {
+        return this.raw.images
+    }
+
+    get getFormatedImagesViewer () {
+        return this.raw.images.map((image => ({
+            original : image.location,
+            thumbnail : image.location
+        })))
     }
 
     //methods

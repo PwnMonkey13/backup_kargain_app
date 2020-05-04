@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useReducer } from 'react'
-import useLocalStorage from '../../hooks/useLocalStorage'
+import useLocalStorage from '../hooks/useLocalStorage'
 
 const FormContext = createContext({})
 const reducer = (state, action) => {
@@ -16,7 +16,7 @@ const reducer = (state, action) => {
     }
 }
 
-const FormContextProvider = ({ formKey = '', children }) => {
+const FormContextProvider = ({ formKey, children }) => {
     const [getFormData, setFormData, clearFormData] = useLocalStorage(`formData_${formKey.toLowerCase()}`, { currentStep: 0 })
     const [formDataContext, dispatch] = useReducer(reducer, getFormData)
 

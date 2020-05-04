@@ -17,9 +17,10 @@ import Filters from '../../components/Profile/Filters'
 import CarCard from '../../components/CarCard'
 import Button from '@material-ui/core/Button'
 import ChatIcon from '@material-ui/icons/Chat';
-import AnnounceService from '../../services/AnnounceService'
-import UserClass from '../../class/User.class'
-import AnnounceClass from '../../class/announce.class'
+import AnnounceService from '../../services/AnnounceService';
+import UserClass from '../../class/user.class';
+import AnnounceClass from '../../class/announce.class';
+import Error from '../_error';
 
 const formConfig = {
     mode: 'onChange',

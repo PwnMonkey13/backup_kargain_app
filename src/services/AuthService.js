@@ -65,7 +65,7 @@ function authorize () {
         credentials: 'include',
     }
 
-    const url = `${config.api}/auth/authorize`;
+    const url = `${config.api}/auth/authorizeSSR`;
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => {
@@ -78,11 +78,14 @@ function authorize () {
     )
 }
 
-function authorizeSSR (token) {
+function authorizeSSR (cookies) {
     const requestOptions = {
         method: 'GET',
-        headers: setHeaders('GET', token),
-    }
+        credentials: 'include',
+        headers: {
+            Cookie: Object.entries(cookies).map(([key, value]) => `${key}=${value}`).join('; '),
+        },
+    };
 
     const url = `${config.api}/auth/authorizeSSR`;
     return fetch(url, requestOptions)
@@ -156,7 +159,6 @@ export default {
     login,
     register,
     registerPro,
-    authorize,
     authorizeSSR,
     confirmAccount,
     forgotPassword,
