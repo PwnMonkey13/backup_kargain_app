@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
@@ -7,6 +7,7 @@ import UsersService from '../../../services/UsersService'
 import TableMUI from '../TableMUI'
 import BulletPoint from '../../BulletPoint'
 import TablePaginationActions from '../../TablePaginationActions'
+import { ModalDialogContext } from '../../../context/ModalDialogContext';
 
 const BooleanBullet = (value) => {
     if(value) return <BulletPoint tooltipHelper="Payé" color="green"/>;
@@ -15,6 +16,7 @@ const BooleanBullet = (value) => {
 
 const UsersTable = () => {
     const router = useRouter();
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [loading, setLoading] = useState(false)
     const [pageIndex, setPageIndex] = useState(0)
     const [rowsLength, setRowsLength] = useState(60)
@@ -123,7 +125,9 @@ const UsersTable = () => {
             .then(data => {
                 setResultsFetch(data)
                 setLoading(false)
-            })
+            }).catch(err => {
+            dispatchModalError({err, persist : true})
+        })
     }, [rowsLength, pageIndex])
 
     useEffect(() => {

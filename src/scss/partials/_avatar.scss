@@ -14,7 +14,9 @@
             display: none;
 
             + label {
-                display: inline-block;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 width: 34px;
                 height: 34px;
                 margin-bottom: 0;
@@ -29,19 +31,6 @@
                 &:hover {
                     background: #f1f1f1;
                     border-color: #d6d6d6;
-                }
-
-                &:after {
-                    content: "\f040";
-                    font-family: 'FontAwesome', serif;
-                    color: $black;
-                    position: absolute;
-                    top: 2px;
-                    font-size: 20px;
-                    left: 0;
-                    right: 0;
-                    text-align: center;
-                    margin: auto;
                 }
             }
         }
@@ -61,6 +50,11 @@
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
+        }
+
+        &:hover {
+            background: #f1f1f1;
+            border-color: #d6d6d6;
         }
     }
 }

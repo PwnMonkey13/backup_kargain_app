@@ -1,12 +1,17 @@
 import React, {useState} from "react"
 import Link from 'next/link'
 import PropTypes from 'prop-types'
-import { Plus, User, Mail, Bell, Menu } from 'react-feather'
+import clsx from 'clsx'
+import MenuIcon from '@material-ui/icons/Menu'
+import EmailIcon from '@material-ui/icons/Email';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import AddIcon from '@material-ui/icons/Add';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import {AppBar, Badge, Hidden, IconButton, Toolbar} from "@material-ui/core"
+import {AppBar, Badge, MenuItem, Menu, IconButton, Toolbar} from "@material-ui/core"
 import Typography from '@material-ui/core/Typography'
 import theme from '../../../theme'
-import clsx from 'clsx'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const drawerWidth = 240;
 
@@ -102,76 +107,150 @@ const TopBar = ({handleDrawerToggle, open, ...props}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
+    const isMenuOpen = Boolean(anchorEl);
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
+    };
+
+    const handleMobileMenuClose = () => {
+        setMobileMoreAnchorEl(null);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+        handleMobileMenuClose();
     };
 
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
 
-    return (
-        <AppBar
-            position="fixed"
-            className={clsx(classes.appBar, {
-                [classes.appBarShift]: open,
-            })}
-            {...rest}>
-            <Toolbar>
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerToggle}
-                    edge="start"
-                    className={clsx(
-                        classes.menuButton, {
-                        [classes.hide]: open,
-                    })}>
-                    <Menu/>
-                </IconButton>
-                <Link href="/admin">
-                    <a>
-                        <Typography className={classes.title} variant="h6" noWrap style={{color : theme.palette.white}}>
-                            Kargain Admin
-                        </Typography>
-                    </a>
+    const renderMenu = (
+        <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            id={menuId}
+            keepMounted
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+        >
+            <MenuItem>
+                <Link href="/auth/logout" prefetch={false}>
+                    <a className="nav-link text-left"><ExitToAppIcon/><span className="m-1">Déconnection</span></a>
                 </Link>
-                <div style={{flexGrow: 1}}/>
-                <div className={classes.sectionDesktop}>
-                    <IconButton aria-label="show 4 new mails" color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <Mail/>
-                        </Badge>
-                    </IconButton>
-                    <IconButton aria-label="show notifications" color="inherit">
-                        <Badge badgeContent={notifications.length} color="secondary">
-                            <Bell/>
-                        </Badge>
-                    </IconButton>
+            </MenuItem>
+        </Menu>
+    );
+
+    const renderMobileMenu = (
+        <Menu
+            anchorEl={mobileMoreAnchorEl}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            id={mobileMenuId}
+            keepMounted
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            open={isMobileMenuOpen}
+            onClose={handleMobileMenuClose}
+        >
+            <MenuItem>
+                <IconButton aria-label="show 4 new mails" color="inherit">
+                    <Badge badgeContent={4} color="secondary">
+                        <EmailIcon />
+                    </Badge>
+                </IconButton>
+                <p>Messages</p>
+            </MenuItem>
+            <MenuItem>
+                <IconButton aria-label="show 11 new notifications" color="inherit">
+                    <Badge badgeContent={11} color="secondary">
+                        <NotificationsIcon />
+                    </Badge>
+                </IconButton>
+                <p>Notifications</p>
+            </MenuItem>
+            <MenuItem onClick={handleProfileMenuOpen}>
+                <IconButton
+                    aria-label="account of current user"
+                    aria-controls="primary-search-account-menu"
+                    aria-haspopup="true"
+                    color="inherit"
+                >
+                    <AccountCircleIcon />
+                </IconButton>
+                <p>Profile</p>
+            </MenuItem>
+        </Menu>
+    );
+
+    return (
+        <>
+            <AppBar
+                position="fixed"
+                className={clsx(classes.appBar, {
+                    [classes.appBarShift]: open,
+                })}
+                {...rest}>
+                <Toolbar>
                     <IconButton
-                        edge="end"
-                        aria-label="account of current user"
-                        aria-controls={menuId}
-                        aria-haspopup="true"
-                        onClick={handleProfileMenuOpen}
                         color="inherit"
-                    >
-                        <User/>
+                        aria-label="open drawer"
+                        onClick={handleDrawerToggle}
+                        edge="start"
+                        className={clsx(
+                            classes.menuButton, {
+                            [classes.hide]: open,
+                        })}>
+                        <MenuIcon/>
                     </IconButton>
-                </div>
-                <div className={classes.sectionMobile}>
-                    <IconButton
-                        aria-label="show more"
-                        aria-controls={mobileMenuId}
-                        aria-haspopup="true"
-                        onClick={handleMobileMenuOpen}
-                        color="inherit"
-                    >
-                        <Plus/>
-                    </IconButton>
-                </div>
-            </Toolbar>
-        </AppBar>
+                    <Link href="/admin">
+                        <a>
+                            <Typography className={classes.title} variant="h6" noWrap style={{color : theme.palette.white}}>
+                                Kargain Admin
+                            </Typography>
+                        </a>
+                    </Link>
+                    <div style={{flexGrow: 1}}/>
+                    <div className={classes.sectionDesktop}>
+                        <IconButton aria-label="show 4 new mails" color="inherit">
+                            <Badge badgeContent={4} color="secondary">
+                                <EmailIcon/>
+                            </Badge>
+                        </IconButton>
+                        <IconButton aria-label="show notifications" color="inherit">
+                            <Badge badgeContent={notifications.length} color="secondary">
+                                <NotificationsIcon/>
+                            </Badge>
+                        </IconButton>
+                        <IconButton
+                            edge="end"
+                            aria-label="account of current user"
+                            aria-controls={menuId}
+                            aria-haspopup="true"
+                            onClick={handleProfileMenuOpen}
+                            color="inherit"
+                        >
+                            <AccountCircleIcon/>
+                        </IconButton>
+                    </div>
+                    <div className={classes.sectionMobile}>
+                        <IconButton
+                            aria-label="show more"
+                            aria-controls={mobileMenuId}
+                            aria-haspopup="true"
+                            onClick={handleMobileMenuOpen}
+                            color="inherit"
+                        >
+                            <AddIcon/>
+                        </IconButton>
+                    </div>
+                </Toolbar>
+            </AppBar>
+        {renderMobileMenu}
+        {renderMenu}
+        </>
     );
 };
 

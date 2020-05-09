@@ -11,7 +11,7 @@ const Spacer = ({ top, bottom, className }) => (
         }}/>
 );
 
-Spacer.PropTypes = {
+Spacer.propTypes = {
     top: PropTypes.number,
     bottom: PropTypes.number,
 };

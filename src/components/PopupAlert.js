@@ -52,15 +52,14 @@ const PopupAlert = () => {
     const getMessage = () => {
         if (state.msg) return state.msg;
         if (state.type === 'error') {
-            if (typeof state.err === 'object') return typeof state.err === 'object' ? state.err.message : state.err;
+            return (typeof state.err === 'object') ? state.err.message : state.err;
         } else {
             return null;
         }
     };
 
     return (
-        <Modal
-            className={classes.rootClass}
+        <Modal className={classes.rootClass} zIndex={1300}
             wrapClassName={classes.wrapClass}
             modalClassName={classes.modalClass}
             contentClassName={state.err ? classes.modalWarning : classes.modalSuccess}

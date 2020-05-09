@@ -7,6 +7,10 @@ export default class User {
         return this.raw
     }
 
+    get isAdmin () {
+        return this.raw && this.raw.isAdmin
+    }
+
     get getFullName () {
         return this.raw ? `${this.raw.firstname} ${this.raw.lastname}` : ''
     }
@@ -16,15 +20,15 @@ export default class User {
     }
 
     get getProfileLink () {
-        return `/profile/${this.getUserName}`
+        return `/profile/${this.getUsername}`
     }
 
     get getAddress () {
         return this.raw ? this.raw.fullAddress : 'Paris 75005, France'
     }
 
-    get getUserName () {
-        return this.raw && this.raw.rawname
+    get getUsername () {
+        return this.raw && this.raw.username
     }
 
     get getCountFollowers () {
