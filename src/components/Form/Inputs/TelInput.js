@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
+import clsx from 'clsx'
 import ReactPhoneInput from 'react-phone-input-2'
 import ValidationError from '../Validations/ValidationError'
-import ClassNames from 'classnames'
+
 import PropTypes from 'prop-types'
 
 function TelInput ({ name, rules, control, errors, ...props }) {
-    const classnames = ClassNames('input-field', { 'w-100': props.fullwidth })
+    const classnames = clsx('input-field',  props.fullwidth && 'w-100' )
     const [phone, setPhone] = useState('')
 
     const handleOnChange = value => {

@@ -116,12 +116,8 @@ function uploadImages (slug, formData) {
     const url = `${config.api}/ads/upload/${slug}`;
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            console.log(json);
-            return json.data;
-        })
+        .then(json => json.data)
         .catch(err => {
-                console.log(err);
                 throw err;
             },
         );

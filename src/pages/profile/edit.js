@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap'
 import UsersService from '../../services/UsersService'
 import { UserContext } from '../../context/UserContext'
@@ -38,14 +38,14 @@ const Edit = (props) => {
                 <Nav tabs vertical>
                     <NavItem>
                         <NavLink
-                            className={classNames({ active: state.activeTab === 1 })}
+                            className={clsx( state.activeTab === 1 && 'active')}
                             onClick={() => toggle(1)}>
                             Compte
                         </NavLink>
                     </NavItem>
                     <NavItem>
                         <NavLink
-                            className={classNames({ active: state.activeTab === 2 })}
+                            className={clsx( state.activeTab === 2 && 'active')}
                             onClick={() => toggle(2)}>
                             Abonnements
                         </NavLink>

@@ -1,8 +1,8 @@
 import React, { memo } from 'react'
-import NiceSelect, { components } from 'react-select'
 import PropTypes from 'prop-types'
+import clsx from 'clsx'
 import { Controller } from 'react-hook-form'
-import classNames from 'classnames'
+import NiceSelect, { components } from 'react-select'
 import ValidationError from '../Validations/ValidationError'
 
 const CustomClearText = () => 'clear all'
@@ -98,7 +98,7 @@ const SelectInput = memo(({ name, control, rules, errors, ...props }) => {
             ([...carry, options.find(option => option.value.toLowerCase() === selected.toString().toLowerCase())]), [])
     }
 
-    const InputClasses = classNames(
+    const InputClasses = clsx(
         'select-field',
         'my-2',
         props.className

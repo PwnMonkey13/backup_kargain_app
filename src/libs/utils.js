@@ -6,20 +6,8 @@ import differenceInDays from 'date-fns/differenceInDays'
 import differenceInMonths from 'date-fns/differenceInMonths'
 import differenceInYears from 'date-fns/differenceInYears'
 
-export function getApiUrl () {
-    if (process.env.NODE_ENV === 'production') return 'https://kargainapi.pwnmonkey13.now.sh/'
-    else return 'http://localhost:8080/api'
-}
-
 export function getLogo () {
     return '/images/Kargain_logo.png'
-}
-
-export const setCookie = (cname, cvalue, minutes = 1000) => {
-    const d = new Date()
-    d.setTime(d.getTime() + (minutes * 60 * 1000))
-    const expires = 'expires=' + d.toUTCString()
-    document.cookie = cname + '=' + cvalue + '; ' + expires
 }
 
 const dirMap = {

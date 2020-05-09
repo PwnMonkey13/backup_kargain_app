@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
-import classNames from 'classnames'
-import { Container, Breadcrumb, BreadcrumbItem } from 'reactstrap'
+import clsx from 'clsx';
+import { Breadcrumb, BreadcrumbItem } from 'reactstrap'
 
 const BreadcrumbSteps = ({ steps, activeStepIndex, maxActiveStep, setStep }) => {
     return (
@@ -11,12 +11,12 @@ const BreadcrumbSteps = ({ steps, activeStepIndex, maxActiveStep, setStep }) => 
                         <BreadcrumbItem
                             key={index}
                             active={index === activeStepIndex}
-                            className={classNames(index <= activeStepIndex ? 'valid' : '')}
+                            className={clsx(index <= activeStepIndex && 'valid')}
                             onClick={(e) => {
                                 if (index === activeStepIndex) e.preventDefault()
                                 if (index <= maxActiveStep) setStep(index)
                             }}>
-                            <a href="#" className={classNames('bread-link text', index <= activeStepIndex ? 'active' : '')}>
+                            <a href="#" className={clsx('bread-link text', index <= activeStepIndex && 'active')}>
                                 {step.props.title}
                             </a>
                         </BreadcrumbItem>

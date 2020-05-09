@@ -2,38 +2,41 @@ import React from 'react'
 import { Row } from 'reactstrap'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import styled from 'styled-components'
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import clsx from 'clsx';
 
-const Button = styled.button`
-      padding: 2rem;
-      margin: 10px;
-      margin-top: 40px;
-      padding: 10px;
-      border: 1px solid;
-`
+const useStyles = makeStyles(() => ({
+    button: {
+        padding: '1rem',
+        margin: '10px',
+        marginTop: '40px',
+        border: '1px solid'
+    }
+}))
 
-const StepNavigation = ({ prev, prevLabel, next, nextLabel, submit, submitLabel, ...props }) => {
+const StepNavigation = ({ prev, prevLabel, next, nextLabel, submit, submitLabel }) => {
+    const classes = useStyles()
     return (
         <Row className={classNames('form_navigation', 'justify-content-around')}>
 
             {prev && (
-                <Button
+                <button classname={classes.button}
                     className="btn" type="button" onClick={() => prev()}>
                     {prevLabel}
-                </Button>
+                </button>
             )}
 
             {next && !submit && (
-                <Button
+                <button classname={classes.button}
                     className="btn" type="button" onClick={e => next(e)}>
                     {nextLabel}
-                </Button>
+                </button>
             )}
 
             {!next && submit && (
-                <Button className="btn btn-primary" type="submit">
+                <button classname={clsx(classes.button, "btn btn-primary")} type="submit">
                     {submitLabel}
-                </Button>
+                </button>
             )}
 
         </Row>

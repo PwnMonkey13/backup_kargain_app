@@ -18,22 +18,17 @@ import { ModalDialogContext } from '../../context/ModalDialogContext';
 import GalleryImgsLazy from '../../components/Gallery/GalleryImgsLazy';
 import DamageViewerTabs from '../../components/Damages/DamageViewerTabs';
 import Error from '../_error';
-import useAddress from '../../hooks/useAddress';
 
 const Announce = ({ announceRaw, err }) => {
+    const refImg = useRef();
     const router = useRouter();
     const theme = useTheme();
-    const [, , geolocation] = useAddress();
-    const { latitude, longitude } = geolocation;
     const announce = new AnnounceClass(announceRaw);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
         defaultMatches: true,
     });
-
-    console.log(announce);
-
-    if (!announceRaw) return <Error statusCode={err.statusCode}/>;
 
     const AnnounceAttributes = () => {
         return (
@@ -95,8 +90,6 @@ const Announce = ({ announceRaw, err }) => {
             );
     };
 
-    const refImg = useRef();
-
     const handleCLickImg = (index) => {
         if (refImg.current) {
             refImg.current.slideToIndex(index);
@@ -104,8 +97,7 @@ const Announce = ({ announceRaw, err }) => {
         }
     };
 
-    console.log(announce.getTheExcerpt);
-    console.log(announce.getTheExcerpt());
+    if (!announceRaw && err) return <Error statusCode={err.statusCode}/>;
 
     return (
         <Container>

@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 const Header = ({ as, text, className, children, ...props }) => {
-    const classnames = classNames(className, 'text-center')
+    const classnames = clsx(className, 'text-center')
     const styles = {}
     let el = as
     if (props.p) el = 'p'
