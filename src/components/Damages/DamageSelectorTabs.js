@@ -283,6 +283,6 @@ DamageSelectorTabs.propTypes = {
 
 DamageSelectorTabs.defaultProps = {
     maxDamages : 10,
-    enableDebug : false
+    enableDebug : false,
 }
 export default DamageSelectorTabs

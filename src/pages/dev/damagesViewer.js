@@ -1,5 +1,5 @@
 import React from 'react'
-import DamageViewerTabs from '../../components/Vehicles/DamageViewerTabs';
+import DamageViewerTabs from '../../components/Damages/DamageViewerTabs';
 
 export default () => {
     const data = {

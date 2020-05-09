@@ -2,9 +2,15 @@ import React from 'react'
 import DamageSelectorTabs from '../../components/Damages/DamageSelectorTabs';
 
 export default () => {
+
+    const getDamages = (damages) => {
+        console.log(damages);
+    }
+
     return (
         <DamageSelectorTabs
             maxDamages={10}
+            onChange={getDamages}
             enableDebug
             tabs={[
                 {
