@@ -24,7 +24,9 @@ const handleResponse = response => {
             msg = response.statusText;
             break;
         }
-        throw new Error(msg);
+        const err = new Error(msg)
+        err.statusCode = response.status
+        throw err;
     }
 };
 

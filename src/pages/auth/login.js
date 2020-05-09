@@ -1,43 +1,52 @@
-import React, { memo, useContext, useEffect } from 'react';
-import { useRouter } from 'next/router'
-import { useForm } from 'react-hook-form'
-import { EmailInput, PasswordInput } from '../../components/Form/Inputs'
-import FieldWrapper from '../../components/Form/FieldWrapper'
-import { Col, Row } from 'reactstrap'
-import Link from 'next/link'
-import Divider from '../../components/Divider'
-import AuthService from '../../services/AuthService'
-import { ModalDialogContext } from '../../context/ModalDialogContext'
-import { UserContext } from '../../context/UserContext'
+import React, { memo, useContext } from 'react';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { EmailInput, PasswordInput } from '../../components/Form/Inputs';
+import FieldWrapper from '../../components/Form/FieldWrapper';
+import { Col, Row } from 'reactstrap';
+import Link from 'next/link';
+import Divider from '../../components/Divider';
+import AuthService from '../../services/AuthService';
+import { ModalDialogContext } from '../../context/ModalDialogContext';
+import withoutAuth from '../../hoc/withoutAuth';
 
 const formConfig = {
     mode: 'onChange',
-    validateCriteriaMode: 'all'
-}
+    validateCriteriaMode: 'all',
+};
 
-const LoginPage = () => {
-    const router = useRouter()
-    const { redirect } = router.query
-    const { dispatchLoginSuccess } = useContext(UserContext)
-    const { dispatchModalError } = useContext(ModalDialogContext)
-    const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig)
+export default withoutAuth(() => {
+    const router = useRouter();
+    const { redirect } = router.query;
+    const { dispatchModalError } = useContext(ModalDialogContext);
+    const { control, errors, handleSubmit } = useForm(formConfig);
 
     const onSubmit = (form) => {
         const { email, password } = form;
-        AuthService.login({ email, password })
+        AuthService.login({
+            email,
+            password,
+        })
             .then(data => {
-                dispatchLoginSuccess({payload: data})
-                if (redirect) router.push({ pathname: redirect })
-                else router.push(`/auth/callback?redirect=/profile/${data.user.username}`)
+                if (redirect) {
+                    router.push({ pathname: redirect });
+                } else {
+                    const isAdmin = data.user.isAdmin;
+                    if (isAdmin) {
+                        router.push(`/admin?test=true`);
+                    } else {
+                        router.push(`/auth/callback?redirect=/profile/${data.user.username}`);
+                    }
+                }
             }).catch(err => {
-                dispatchModalError({ err })
-                if (redirect) router.push({ pathname: redirect })
-            }
-        )
-    }
+                dispatchModalError({ err });
+                if (redirect) router.push({ pathname: redirect });
+            },
+        );
+    };
 
     const Providers = memo(() => {
-        return(
+        return (
             <div className="d-flex flex-column">
                 <Link href="#">
                     <a className="register-fb">
@@ -63,15 +72,15 @@ const LoginPage = () => {
                     </a>
                 </Link>
             </div>
-        )
-    })
+        );
+    });
 
     return (
         <main>
             <h1>Se connecter</h1>
             <Row>
                 <Col className="m-auto" sm="12" md="5">
-                   <Providers/>
+                    <Providers/>
                 </Col>
                 <Col className="m-auto" sm="12" md="7">
 
@@ -102,7 +111,10 @@ const LoginPage = () => {
                                 control={control}
                                 rules={{
                                     required: 'field required',
-                                    minLength: { value: 6, message: 'Min 6 chars' }
+                                    minLength: {
+                                        value: 6,
+                                        message: 'Min 6 chars',
+                                    },
                                     // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
                                 }}
                             />
@@ -121,7 +133,5 @@ const LoginPage = () => {
                 </Col>
             </Row>
         </main>
-    )
-}
-
-export default LoginPage
+    );
+});

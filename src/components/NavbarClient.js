@@ -1,40 +1,44 @@
-import React, { useContext, useEffect, useState } from 'react'
-import Link from 'next/link'
-import clsx from 'clsx'
-import { Collapse, Dropdown, DropdownItem, FormGroup, Input, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap'
-import FaceIcon from '@material-ui/icons/Face'
-import Badge from '@material-ui/core/Badge'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-import IconButton from '@material-ui/core/IconButton'
-import SettingsIcon from '@material-ui/icons/Settings'
-import NotificationsIcon from '@material-ui/icons/Notifications'
-import { UserContext } from '../context/UserContext'
-import { getLogo } from '../libs/utils'
+import React, { memo, useState } from 'react';
+import Link from 'next/link';
+import clsx from 'clsx';
+import { Collapse, FormGroup, Input, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import FaceIcon from '@material-ui/icons/Face';
+import Badge from '@material-ui/core/Badge';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import IconButton from '@material-ui/core/IconButton';
+import SettingsIcon from '@material-ui/icons/Settings';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import { getLogo } from '../libs/utils';
 import User from '../class/user.class';
+import { useAuth } from '../context/AuthProvider';
 
 const NavbarClient = () => {
-    const { session } = useContext(UserContext)
-    const user = new User(session.user)
-    const [collapsed, setCollapsed] = useState(false)
-    const toggleNavbar = () => setCollapsed(!collapsed)
+    const { isAuthenticated, authenticatedUser } = useAuth();
+    const user = new User(authenticatedUser);
+    const [collapsed, setCollapsed] = useState(false);
+    const toggleNavbar = () => setCollapsed(!collapsed);
 
     const LoggedInUserNav = () => {
         const [state, setState] = useState({
-            isOpen1 : false,
-            isOpen2 : false
+            isOpen1: false,
+            isOpen2: false,
         });
 
-        const toggle = (toggled) =>{
+        const toggle = (toggled) => {
             setState(state => ({
-                ... Object.keys(state)
+                ...Object.keys(state)
                     .filter(key => key !== toggled)
-                    .reduce((carry, key) => ({ ...carry, [key] : false}),state),
-                [toggled] : !state[toggled]
+                    .reduce((carry, key) => ({
+                        ...carry,
+                        [key]: false,
+                    }), state),
+                [toggled]: !state[toggled],
             }));
-        }
+        };
 
-        const DropdownNotifs = ({isOpen, keyName, toggle}) => {
-            return(
+        const DropdownNotifs = ({ isOpen, keyName, toggle }) => {
+            return (
                 <li className="nav-item p-2 navbar_icon navbar-icon-notifications">
                     <div className="dropdown show">
                         <IconButton color="inherit"
@@ -47,7 +51,7 @@ const NavbarClient = () => {
                                 <NotificationsIcon/>
                             </Badge>
                         </IconButton>
-                        <div id="dropdown-notifications" className={clsx("dropdown-menu",isOpen && "show")}
+                        <div id="dropdown-notifications" className={clsx('dropdown-menu', isOpen && 'show')}
                              aria-labelledby="dropdownMenu2">
                             <div className="notf-wrapper">
                                 <div>
@@ -82,11 +86,12 @@ const NavbarClient = () => {
                         </div>
                     </div>
                 </li>
-            )
-        }
+            );
+        };
 
-        const DropdownUser = ({isOpen, keyName, toggle}) => {
-            return(
+        const DropdownUser = ({ isOpen, keyName, toggle }) => {
+
+            return (
                 <li className="nav-item navbar-dropdown p-2" data-dropdown="dropdownUser">
                     {user.getAvatar &&
                     <img className="dropdown-toggler rounded-circle"
@@ -96,54 +101,61 @@ const NavbarClient = () => {
                          alt="avatar"
                          onClick={() => toggle(keyName)}
                     />}
-                    <ul className={clsx("dropdown", isOpen && "show")} id="dropdownUser" >
+
+                    <ul className={clsx('dropdown', isOpen && 'show')} id="dropdownUser">
+                        {user.isAdmin && (
+                            <li className="px-0 dropdown-item">
+                                <Link href={`/admin`} prefetch={false}>
+                                    <a className="nav-link text-left"><DashboardIcon/><span className="m-1">Admin</span></a>
+                                </Link>
+                            </li>
+                        )}
                         <li className="px-0 dropdown-item">
-                            <Link href={`/profile/${session.user.username}`} prefetch={false}>
+                            <Link href={`/profile/${user.getFullName}`} prefetch={false}>
                                 <a className="nav-link text-left"><FaceIcon/><span className="m-1">Mon profil</span></a>
                             </Link>
                         </li>
                         <li className="px-0 dropdown-item">
                             <Link href="/profile/edit" prefetch={false}>
-                                <a className="nav-link text-left"><SettingsIcon/> <span className="m-1">Préférences</span></a>
+                                <a className="nav-link text-left"><SettingsIcon/> <span
+                                    className="m-1">Préférences</span></a>
                             </Link>
                         </li>
                         <li className="px-0 dropdown-item">
                             <Link href="/auth/logout" prefetch={false}>
-                                <a className="nav-link text-left"><ExitToAppIcon/><span className="m-1">Déconnection</span></a>
+                                <a className="nav-link text-left"><ExitToAppIcon/><span
+                                    className="m-1">Déconnection</span></a>
                             </Link>
                         </li>
                     </ul>
                 </li>
-            )
-        }
+            );
+        };
 
         return (
             <Nav navbar>
-               <DropdownNotifs isOpen={state.isOpen1} keyName="isOpen1" toggle={toggle}/>
-               <DropdownUser isOpen={state.isOpen2} keyName="isOpen2" toggle={toggle}/>
+                <DropdownNotifs isOpen={state.isOpen1} keyName="isOpen1" toggle={toggle}/>
+                <DropdownUser isOpen={state.isOpen2} keyName="isOpen2" toggle={toggle}/>
             </Nav>
-        )
-    }
+        );
+    };
 
-    const VisitorNav = () => (
-        <Nav navbar>
-            <NavItem className="p-2">
-                <Link href="/auth/login" prefetch={false}>
-                    <a className="nav-link">Connexion</a>
-                </Link>
-            </NavItem>
-            <NavItem className="p-2">
-                <Link href="/auth/register" prefetch={false}>
-                    <a className="nav-link">S'enregistrer</a>
-                </Link>
-            </NavItem>
-            <NavItem className="p-2">
-                <Link href="/admin" prefetch={false}>
-                    <a className="nav-link">Admin</a>
-                </Link>
-            </NavItem>
-        </Nav>
-    )
+    const VisitorNav = memo(() => {
+        return (
+            <Nav navbar>
+                <NavItem className="p-2">
+                    <Link href="/auth/login" prefetch={false}>
+                        <a className="nav-link">Connexion</a>
+                    </Link>
+                </NavItem>
+                <NavItem className="p-2">
+                    <Link href="/auth/register" prefetch={false}>
+                        <a className="nav-link">S'enregistrer</a>
+                    </Link>
+                </NavItem>
+            </Nav>
+        );
+    });
 
     return (
         <header className="header bg-light">
@@ -154,7 +166,7 @@ const NavbarClient = () => {
 
                 <div className="d-flex navbar-menu" id="open-navbar1">
                     <Collapse isOpen={collapsed} navbar>
-                        <Nav navbar style={{ flex : 1 }}>
+                        <Nav navbar style={{ flex: 1 }}>
                             <NavItem className="p-2">
                                 <Link href="/deposer-une-annonce" prefetch={false}>
                                     <a className="btn btn-outline-primary cta_nav_link">
@@ -171,20 +183,24 @@ const NavbarClient = () => {
                         </Nav>
 
                         <Nav navbar>
-                            {session.isLoggedIn ? <LoggedInUserNav/> : <VisitorNav/>}
+                            {isAuthenticated ? <LoggedInUserNav/> : <VisitorNav/>}
                         </Nav>
 
                     </Collapse>
 
                     <NavbarToggler
                         className="mr-2"
-                        style={{ position: 'absolute', top: "10px", right: 0 }}
+                        style={{
+                            position: 'absolute',
+                            top: '10px',
+                            right: 0,
+                        }}
                         onClick={toggleNavbar}
                     />
                 </div>
             </Navbar>
         </header>
-    )
-}
+    );
+};
 
-export default NavbarClient
+export default NavbarClient;

@@ -7,7 +7,8 @@ import NavbarClient from '../components/NavbarClient'
 // import LogRocket from 'logrocket';
 // LogRocket.init('p6ipds/kargain');
 
-const Layout = ({ navmenu, fluid = true, children, ...rest }) => {
+const Layout = ({ children }) => {
+
     useEffect(() => {
         if (!window.GA_INITIALIZED) {
             initGA()

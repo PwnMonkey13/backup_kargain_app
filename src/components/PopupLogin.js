@@ -7,7 +7,7 @@ import TrackChangesIcon from '@material-ui/icons/TrackChanges';
 import ExploreIcon from '@material-ui/icons/Explore';
 import ForumIcon from '@material-ui/icons/Forum';
 import AuthService from '../services/AuthService';
-import { UserContext } from '../context/UserContext';
+import { useAuth } from '../context/AuthProvider';
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import { CheckBoxInput, EmailInput, PasswordInput } from './Form/Inputs';
 import { themeColors } from '../theme/palette';
@@ -79,11 +79,10 @@ const useStyles = makeStyles(() => ({
 
 export default () => {
     const classes = useStyles();
-    const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig);
-
-    const { session, dispatchLoginSuccess } = useContext(UserContext);
+    const { isAuthenticated } = useAuth();
+    const { control, errors, handleSubmit } = useForm(formConfig);
     const { dispatchModal } = useContext(ModalDialogContext);
-    const [openLoginModal, toggleLoginModal] = useState(!session.isLoggedIn);
+    const [openLoginModal, toggleLoginModal] = useState(!isAuthenticated);
 
     const onSubmit = (form) => {
         const { email, password } = form;
@@ -91,7 +90,6 @@ export default () => {
             .then(data => {
                 const { user } = data;
                 toggleLoginModal(false);
-                dispatchLoginSuccess({payload: data})
                 dispatchModal({ type: 'success', msg: `Welcome back ${user.firstname}`,
                 });
             }).catch(err => {

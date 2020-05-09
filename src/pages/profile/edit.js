@@ -2,13 +2,13 @@ import React, { useState, useContext } from 'react'
 import clsx from 'clsx'
 import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap'
 import UsersService from '../../services/UsersService'
-import { UserContext } from '../../context/UserContext'
+import { useAuth } from '../../context/AuthProvider';
 import { ModalDialogContext } from '../../context/ModalDialogContext'
 
 const Edit = (props) => {
-    const { session, dispatchUser } = useContext(UserContext)
+    const { authenticatedUser, setAuthenticatedUser } = useAuth()
     const { dispatchModal } = useContext(ModalDialogContext)
-    const [user, setUser] = useState(session.user)
+    const [user, setUser] = useState(authenticatedUser)
     const [state, setState] = useState({
         alertText: null,
         alertStyle: null,
@@ -21,11 +21,12 @@ const Edit = (props) => {
         }
     }
 
+    //TODO
     const handleSubmit = async (e, data) => {
         UsersService.updateUser(user.username, data, props.token)
-            .then(document => {
-                setUser(document)
-                dispatchUser(document)
+            .then(updatedUser => {
+                setUser(updatedUser)
+                setAuthenticatedUser(updatedUser)
                 dispatchModal({ type: 'success', msg: 'User successufully updated' })
             }).catch(err => {
                 dispatchModal({ type: 'error', err })

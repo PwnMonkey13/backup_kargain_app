@@ -21,6 +21,23 @@ function login (form) {
         );
 }
 
+function logout () {
+    const requestOptions = {
+        method: 'POST',
+        credentials: 'include',
+    };
+
+    return fetch(`${config.api}/auth/logout`, requestOptions)
+        .then(handleResponse)
+        .then(json => {
+            return json.data;
+        })
+        .catch(err => {
+                throw err;
+            },
+        );
+}
+
 function register (form) {
     const requestOptions = {
         method: 'POST',
@@ -75,13 +92,10 @@ function authorize () {
         );
 }
 
-function authorizeSSR (cookies) {
+function authorizeSSR () {
     const requestOptions = {
         method: 'GET',
         credentials: 'include',
-        headers: {
-            Cookie: Object.entries(cookies).map(([key, value]) => `${key}=${value}`).join('; '),
-        },
     };
 
     const url = `${config.api}/auth/authorizeSSR`;
@@ -157,6 +171,7 @@ function resetPassword (token, password) {
 
 export default {
     login,
+    logout,
     register,
     registerPro,
     authorizeSSR,

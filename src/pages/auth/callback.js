@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import Loader from '../../components/Loader'
 
 const Callback = () => {
@@ -16,9 +15,7 @@ const Callback = () => {
     return (
         <>
             <Loader fullscreen={false}/>
-            <Link href={redirect}>
-                <a>Redirection...</a>
-            </Link>
+            <a>Redirection...</a>
         </>
     )
 }

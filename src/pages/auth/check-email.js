@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
 import Link from 'next/link'
-import { UserContext } from '../../context/UserContext'
+import { useAuth } from '../../context/AuthProvider'
 
 const CheckEmail = () => {
-    const { session } = useContext(UserContext)
-    const email = session.user ? session.user.email : null
-    const text = email ? <span className="font-weight-bold">{session.user.email}</span> : <span>your inbox</span>
+    const { authenticatedUser } = useAuth()
+    const email = authenticatedUser ? authenticatedUser.email : null
+    const text = email ? <span className="font-weight-bold">{authenticatedUser.email}</span> : <span>your inbox</span>
+
     return (
         <main>
             <div className="text-center pt-5 pb-5">

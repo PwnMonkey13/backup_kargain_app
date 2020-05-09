@@ -1,19 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import clsx from 'clsx';
+import { useAuth } from '../../context/AuthProvider';
 import UsersService from '../../services/UsersService';
-import { UserContext } from '../../context/UserContext';
 import Tabs from '../../components/Tabs/Tabs';
 import ProfileAvatar from '../../components/ProfileAvatar';
-import { makeStyles } from '@material-ui/styles';
 import Filters from '../../components/Profile/Filters';
 import CarCard from '../../components/CarCard';
 import Button from '@material-ui/core/Button';
 import ChatIcon from '@material-ui/icons/Chat';
 import AnnounceService from '../../services/AnnounceService';
-import UserClass from '../../class/user.class';
+import User from '../../class/user.class';
 import AnnounceClass from '../../class/announce.class';
 import Error from '../_error';
 
@@ -22,22 +21,8 @@ const formConfig = {
     validateCriteriaMode: 'all',
 };
 
-const useStyles = makeStyles(theme => ({
-
-    root: {
-        height: '100%',
-    },
-    shiftContent: {
-        // paddingLeft: 240
-    },
-    content: {
-        width: '95%',
-        height: '100%',
-    },
-}));
-
 const Profile = ({ profile, err, ...props }) => {
-    const { session, dispatch } = useContext(UserContext);
+    const { authenticatedUser, isAuthenticated } = useAuth();
     const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm(formConfig);
 
     const [isModalOpen, toggleModalOpen] = useState(false);
@@ -50,18 +35,14 @@ const Profile = ({ profile, err, ...props }) => {
         total: 0,
     });
 
-    const User = new UserClass(profile);
+    const user = new User(authenticatedUser);
+    const isCurrentLoggedInUser = isAuthenticated && user.getUsername === profile.username;
 
     const [filtersOpened, toggleFilters] = useState(false);
 
     const toggleOpenFilters = () => {
         toggleFilters(open => !open);
     };
-
-    const isLoggedInUser = session &&
-        session.isLoggedIn === true &&
-        session.user != null &&
-        session.user.username === profile.username;
 
     const updateFilters = (filters) => {
         setState(state => ({
@@ -115,20 +96,20 @@ const Profile = ({ profile, err, ...props }) => {
                 <Row className="d-flex mx-auto">
 
                     <div style={{ flex: 1 }}>
-                        <ProfileAvatar src={User.getAvatar}/>
+                        <ProfileAvatar src={user.getAvatar}/>
                     </div>
 
                     <div className="d-flex flex-column" style={{ flex: 3 }}>
                         <div className="d-flex justify-content-between">
                             <div className="d-flex">
-                                <h2>{User.getFullName}</h2>
+                                <h2>{user.getFullName}</h2>
                                 <div className="mx-2 float-left">
                                     <img src="/images/star.png" alt=""/>
                                 </div>
 
                             </div>
 
-                            {isLoggedInUser ? (
+                            {isCurrentLoggedInUser ? (
                                 <div className="mx-2">
                                     <Link href={'/profile/edit'}>
                                         <a className="btn btn-outline-dark">Editer mon profil</a>
@@ -147,19 +128,18 @@ const Profile = ({ profile, err, ...props }) => {
                                         Contacter
                                     </Button>
                                 </div>
-                            )
-                            }
+                            )}
                         </div>
 
-                        <h3>{User.getUserName}</h3>
+                        <h3>{user.getUsername}</h3>
 
                         <div className="d-flex">
 
-                            {User.getAddress !== '' &&
+                            {user.getAddress !== '' &&
                             <div style={{ flex: 1 }}>
                                     <span className="top-profile-location">
                                         <img src="images/location.png" alt=""/>
-                                        {User.getAddress}
+                                        {user.getAddress}
                                     </span>
                             </div>
 
@@ -167,20 +147,20 @@ const Profile = ({ profile, err, ...props }) => {
 
                             <div style={{ flex: 1 }}>
                                  <span className="top-profile-abones">
-                                    {User.getCountFollowers}
+                                    {user.getCountFollowers}
                                 </span>
                             </div>
 
                             <div style={{ flex: 1 }}>
                                 <span className="top-profile-abones">
-                                    {User.getCountFollowing}
+                                    {user.getCountFollowing}
                                 </span>
                             </div>
 
                         </div>
 
                         <p className="top-profile-desc">
-                            {User.getDescription}
+                            {user.getDescription}
                         </p>
 
                     </div>

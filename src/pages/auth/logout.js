@@ -1,17 +1,29 @@
-import React, { useEffect, useContext } from 'react'
-import { useRouter } from 'next/router'
-import { UserContext } from '../../context/UserContext'
+import React, { useContext, useEffect } from 'react';
+import { useAuth } from '../../context/AuthProvider';
+import AuthService from '../../services/AuthService';
+import withAuth from '../../hoc/withAuth';
+import { ModalDialogContext } from '../../context/ModalDialogContext';
 
-export default () => {
-    const { dispatchLogout } = useContext(UserContext)
-    const router = useRouter()
+export default withAuth(() => {
+    const { dispatchModalError } = useContext(ModalDialogContext)
+    const { setAuthenticatedUser, setIsAuthenticated } = useAuth();
 
     useEffect(() => {
+        const logout = async () => {
+
+            try {
+                await AuthService.logout();
+                setAuthenticatedUser(null);
+                setIsAuthenticated(false);
+            } catch (err) {
+                dispatchModalError({ err })
+            }
+        };
+
         setTimeout(() => {
-            dispatchLogout()
-            router.push({ pathname: '/auth/login' })
-        }, 1000)
-    }, [])
+            logout();
+        }, 1000);
+    }, []);
 
     return (
         <div className="text-center pt-5 pb-5">
@@ -19,5 +31,5 @@ export default () => {
                 Login out...
             </p>
         </div>
-    )
-}
+    );
+});
