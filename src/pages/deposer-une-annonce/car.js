@@ -68,7 +68,7 @@ const CarForm = (props) => {
             resumeModel={resumeModel}
             // enableResume={true}
             onFinalSubmit={onFinalSubmit}>
-            {/*<Step0CarManufacturer title="Sélection du véhicule"/>*/}
+            <Step0CarManufacturer title="Sélection du véhicule"/>
             <Step1CarDetails title="Description du véhicule"/>
             <Step2CarStatus title="Etat du véhicule"/>
             <Step3CarOwner title="Votre annonce"/>
