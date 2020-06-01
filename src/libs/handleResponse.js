@@ -6,13 +6,12 @@ const handleResponse = response => {
                 return json;
             })
             .catch(err => {
-                    const error = new Error();
-                    error.statusCode = err.code || response.status;
-                    error.name = err.name || 'UnknownError';
-                    error.message = err.message || 'Unknown Error';
-                    throw error;
-                },
-            );
+                const error = new Error();
+                error.statusCode = err.code || response.status;
+                error.name = err.name || 'UnknownError';
+                error.message = err.message || 'Unknown Error';
+                throw error;
+            });
     } else {
         let msg = null;
         switch (response.status) {
@@ -24,8 +23,8 @@ const handleResponse = response => {
             msg = response.statusText;
             break;
         }
-        const err = new Error(msg)
-        err.statusCode = response.status
+        const err = new Error(msg);
+        err.statusCode = response.status;
         throw err;
     }
 };
