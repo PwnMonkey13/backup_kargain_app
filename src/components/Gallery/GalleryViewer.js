@@ -5,21 +5,23 @@ import ImageGallery from 'react-image-gallery';
 const GalleryViewer = forwardRef(({ images }, ref) => {
     if(!images || images.length === 0) return null;
 
+    const filteredImages = images.filter(image => !!image.location && !!image.thumbnail)
+
     return <ImageGallery
         ref={ref}
         lazyLoad
         autoPlay
         showIndex
         showBullets
-        items={images}
+        items={filteredImages}
     />;
 });
 
-GalleryViewer.PropTypes = {
+GalleryViewer.propTypes = {
     images: PropTypes.arrayOf(
         PropTypes.shape({
-            original: PropTypes.string.isRequired,
-            thumbnail: PropTypes.string.isRequired,
+            original: PropTypes.string,
+            thumbnail: PropTypes.string,
         })),
 };
 
