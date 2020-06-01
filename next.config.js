@@ -40,25 +40,20 @@ const nextConfig = {
     webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
         config.resolve.mainFields = ['main', 'browser', 'module'];
 
-        config.module.rules.push({
-            test: /\.svg$/,
-            use: [
-                'svg-loader',
-            ],
-        });
         config.module.rules.push(
             {
                 test: /\.tsx?$/,
                 loader: 'ts-loader',
             },
             {
-                test: /\.(ico|png|jpe?g|gif|eot|ttf|woff|woff2)$/,
+                test: /\.(ico|svg|png|jpe?g|gif|eot|ttf|woff|woff2)$/,
                 use: [
                     'file-loader',
                     'image-webpack-loader',
                     {
                         loader: 'url-loader',
                         options: {
+                            name: 'images/[hash]-[name].[ext]',
                             limit: 100000,
                         },
                     },
