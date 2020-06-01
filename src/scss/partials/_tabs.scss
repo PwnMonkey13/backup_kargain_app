@@ -33,25 +33,3 @@
 .nav-pills .nav-link:focus{
     border-bottom: 4px solid #569ffc;
 }
-
-.nav-item {
-    border: none;
-    border-radius: 0;
-    color: $black2;
-    text-align: center;
-    text-decoration: none;
-    transition: all .2s ease-in-out;
-    cursor: pointer;
-
-    &.active {
-        border: none;
-        border-bottom: 4px solid $blue;
-        color: $blue;
-        text-align: center;
-        background: none;
-    }
-
-    .nav-link{
-        color : unset
-    }
-}

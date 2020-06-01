@@ -1,44 +1,13 @@
 @import 'variables';
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 
-$font-family: 'Roboto', sans-serif;
 $font-size-base: 0.925rem;
 $base-color: #66f;
 $text-dark: #3c4250;
 $border-color: #ececec;
-
 $navbar-body-color: #fff;
 $navbar-link-hover: $base-color;
 $navbar-dropdown-separator-color: #eee;
 $navbar-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.035);
-
-* {
-    font-family: $font-family;
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-}
-
-body {
-    font-size: $font-size-base;
-}
-
-a {
-    text-decoration: none;
-}
-
-.container {
-    width: 1170px;
-    position: relative;
-    margin: {
-        left: auto;
-        right: auto;
-    }
-    padding: {
-        left: 15px;
-        right: 15px;
-    }
-}
 
 // Start navbar
 

@@ -1,10 +1,20 @@
 @import '../../../node_modules/bootstrap/scss/variables';
 
+@mixin google-font($family) {
+    @import url("http://fonts.googleapis.com/css?family=#{$family}");
+}
+
+@include google-font("Droid Sans");
+@include google-font("Raleway");
+
 $ionicons-font-path: "/fonts/ionicons" !default;
 $ionicons-font-family: "Ionicons" !default;
 $ionicons-version: "3.0.0-alpha.3" !default;
-$default-font: 'Quicksand';
 
+$default-font-family: "Raleway", "Droid Sans", sans-serif;
+$default-font-color: #263238;
+
+//colors
 $black: #111111;
 $black2 : #111;
 $grey : #AAAAAA;

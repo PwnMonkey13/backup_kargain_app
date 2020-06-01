@@ -357,11 +357,11 @@ h1.annonce{
 .annonce2{
   margin-top: 150px;
 }
-.price-annonce{
+.price-announce{
   color: #3d4248;
   font: 700 23px Quicksand;
 }
-.price-annonce span{
+.price-announce span{
   font: 400 19px Quicksand;
   margin-left: 30px;
 }
@@ -439,16 +439,7 @@ h1.annonce{
 .annonce2 .top-profile-wrapper{
   margin: 0;
 }
-.hashes-wrapper{
-  color: #010101;
-  font: 500 14px Quicksand;
-  margin-top: 15px;
-}
-.hashes-wrapper a{
-  margin-right: 15px;
-  color: #010101;
-  font: 500 14px Quicksand;
-}
+
 .icons-star-prof{
   display: flex;
   align-items: center;
@@ -468,7 +459,7 @@ h1.annonce{
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-bottom: 20px;
+  padding: .5rem 0;
   border-bottom: 1px solid #a5a0a0;
 }
 .qusetion-wrapper{
@@ -626,33 +617,6 @@ p.des-a:hover{
   white-space: nowrap;
 }
 
-.price-stars-wrapper .icons-profile-wrapper{
-  padding: 0;
-  border: none;
-}
-.price-stars-wrapper{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 15px 0;
-}
-.price-stars-wrapper .price-annonce{
-  margin: 0;
-}
-.objava-wrapper .annonce{
-  padding: 0;
-}
-.objava-wrapper .hashes-wrapper{
-  padding-bottom: 20px;
-  border-bottom: 1px solid #a5a0a0;
-}
-.objava-wrapper .btn-publier{
-  display: block;
-  margin: 0 auto;
-}
-.objava-wrapper{
-  margin-top: 40px;
-}
 .page-link{
   border: none;
   font: 400 18px Quicksand;
