@@ -37,45 +37,49 @@ const useStyles = makeStyles(() => ({
 }));
 
 const PopupAlert = () => {
-    const classes = useStyles();
-    const { modalState } = useContext(ModalDialogContext);
-    const [state, setState] = useState(modalState);
+        const classes = useStyles();
+        const { modalState } = useContext(ModalDialogContext);
+        const [state, setState] = useState(modalState);
 
-    useEffect(() => {
-        setState({ ...modalState });
-    }, [modalState]);
+        useEffect(() => {
+            setState({ ...modalState });
+        }, [modalState]);
 
-    const toggleModal = () => {
-        setState(!state.active);
-    };
+        const toggleModal = () => {
+            setState(!state.active);
+        };
 
-    const getMessage = () => {
-        if (state.msg) return state.msg;
-        if (state.type === 'error') {
-            return (typeof state.err === 'object') ? state.err.message : state.err;
-        } else {
+        const getMessage = () => {
+            if (state.msg) return state.msg;
+            if (state.type === 'error') {
+                if (typeof state.err === 'object') {
+                    return `[${state.err?.statusCode}] ${state.err?.name} : ${state.err?.message}`;
+                }
+                return state.err;
+            }
             return null;
-        }
-    };
+        };
 
-    return (
-        <Modal className={classes.rootClass} zIndex={1300}
-            wrapClassName={classes.wrapClass}
-            modalClassName={classes.modalClass}
-            contentClassName={state.err ? classes.modalWarning : classes.modalSuccess}
-            isOpen={state.active}
-            toggle={toggleModal}>
-            <button type="button" onClick={toggleModal} className={clsx("svgHoverScale", classes.modalClose)} aria-label="close-modal">
-                <CloseIcon/>
-            </button>
-            <div className="modal-body">
-                <p> {getMessage()} </p>
-                {state.link && (
-                    <p><Link href={state.link}>See page</Link></p>
-                )}
-            </div>
-        </Modal>
-    );
-};
+        return (
+            <Modal className={classes.rootClass} zIndex={1601}
+                   wrapClassName={classes.wrapClass}
+                   modalClassName={classes.modalClass}
+                   contentClassName={state.err ? classes.modalWarning : classes.modalSuccess}
+                   isOpen={state.active}
+                   toggle={toggleModal}>
+                <button type="button" onClick={toggleModal} className={clsx('svgHoverScale', classes.modalClose)}
+                        aria-label="close-modal">
+                    <CloseIcon/>
+                </button>
+                <div className="modal-body">
+                    <p> {getMessage()} </p>
+                    {state.link && (
+                        <p><Link href={state.link}>See page</Link></p>
+                    )}
+                </div>
+            </Modal>
+        );
+    }
+;
 
-export default PopupAlert
+export default PopupAlert;
