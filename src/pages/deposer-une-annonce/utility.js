@@ -48,7 +48,8 @@ const UtilityForm = (props) => {
 
 UtilityForm.getInitialProps = () => {
     return {
-        formKey: 'utility'
+        formKey: 'utility',
+        requiredAuth: true,
     }
 }
 

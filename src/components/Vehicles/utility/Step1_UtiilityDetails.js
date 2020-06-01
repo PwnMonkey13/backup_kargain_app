@@ -1,28 +1,41 @@
-import React, { useRef } from 'react'
-import { Row, Col } from 'reactstrap'
-import FieldWrapper from '../../Form/FieldWrapper'
-import { CheckboxMultipleInput, NumberInput, RadioGroupInput, SelectInput, TextInput } from '../../Form/Inputs'
-import { CheckboxOptionsEquipments, RadioTypeFunction, RadioChoicesMaterials, RadioChoicesExternalColor, RadioChoicesPaints, RadioChoicesEmission, RadioChoicesEngine, RadioChoicesGas, RadioVehicleGeneralState } from './form.data.js'
+import React, { useContext, useRef } from 'react';
+import { Col, Row } from 'reactstrap';
+import { useForm } from 'react-hook-form';
+import FieldWrapper from '../../Form/FieldWrapper';
+import StepNavigation from '../../Form/StepNavigation';
+import { NumberInput, SelectInput } from '../../Form/Inputs';
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import { RadioFunctionVehicle } from '../moto/form.data';
+import { FormContext } from '../../../context/FormContext';
+import Header from '../../Header';
+import {
+    CheckboxOptionsEquipments,
+    RadioChoicesEngine,
+    RadioChoicesExternalColor,
+    RadioChoicesGas,
+    RadioChoicesMaterials,
+    RadioChoicesPaints,
+    RadioTypeFunction,
+} from './form.data.js';
 
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
-import Header from '../../Header'
-import { RadioFunctionVehicle } from '../moto/form.data'
-import StepNavigation from '../../Form/StepNavigation'
-
-const Step1UtilityDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
-    const formRef = useRef(null)
-    const { watch, control, errors, getValues, register, formState, handleSubmit } = methods
-
+const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
+    const formRef = useRef(null);
+    const { formDataContext } = useContext(FormContext);
+    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all',
+        defaultValues: formDataContext,
+    });
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
             <Row>
                 <Col>
                     <FieldWrapper label="Type" required>
                         <SelectInput name="vehicleFunction"
-                            options={RadioTypeFunction}
-                            control={control}
-                            errors={errors}
-                            rules={{ required: 'Title is required!' }}
+                                     options={RadioTypeFunction}
+                                     control={control}
+                                     errors={errors}
+                                     rules={{ required: 'Title is required!' }}
                         />
                     </FieldWrapper>
                 </Col>
@@ -43,9 +56,9 @@ const Step1UtilityDetails = ({ methods, formConfig, onSubmitStep, prevStep, next
                 <Col>
                     <FieldWrapper label="Kilométrage" required>
                         <NumberInput name="mileage"
-                            placeholder="20000 km"
-                            control={control}
-                            errors={errors}
+                                     placeholder="20000 km"
+                                     control={control}
+                                     errors={errors}
 
                         />
                     </FieldWrapper>
@@ -53,8 +66,8 @@ const Step1UtilityDetails = ({ methods, formConfig, onSubmitStep, prevStep, next
                 <Col>
                     <FieldWrapper label="Cylindrée">
                         <NumberInput name="cylinder"
-                            control={control}
-                            errors={errors}
+                                     control={control}
+                                     errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -64,9 +77,9 @@ const Step1UtilityDetails = ({ methods, formConfig, onSubmitStep, prevStep, next
                 <Col>
                     <FieldWrapper label="Carburant" required>
                         <SelectInput name="vehicleEngine.gas"
-                            options={RadioChoicesGas}
-                            control={control}
-                            errors={errors}
+                                     options={RadioChoicesGas}
+                                     control={control}
+                                     errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -87,8 +100,8 @@ const Step1UtilityDetails = ({ methods, formConfig, onSubmitStep, prevStep, next
                 <Col>
                     <FieldWrapper label="Puissance kW">
                         <NumberInput name="power.kw"
-                            control={control}
-                            errors={errors}
+                                     control={control}
+                                     errors={errors}
 
                         />
                     </FieldWrapper>
@@ -96,8 +109,8 @@ const Step1UtilityDetails = ({ methods, formConfig, onSubmitStep, prevStep, next
                 <Col>
                     <FieldWrapper label="Puissance CH">
                         <NumberInput name="power.ch"
-                            control={control}
-                            errors={errors}
+                                     control={control}
+                                     errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -246,9 +259,9 @@ const Step1UtilityDetails = ({ methods, formConfig, onSubmitStep, prevStep, next
                     </FieldWrapper>
                 </Col>
             </Row>
-            <StepNavigation prev={prevStep} submit />
+            <StepNavigation prev={prevStep} submit/>
         </form>
-    )
-}
+    );
+};
 
-export default Step1UtilityDetails
+export default Step1UtilityDetails;

@@ -1,26 +1,26 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext } from 'react';
+import { useForm } from 'react-hook-form';
 import Header from '../../Header';
-import { SelectInput, TextareaInput } from '../../Form/Inputs';
-import StepNavigation from '../../Form/StepNavigation';
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import FieldWrapper from '../../Form/FieldWrapper';
+import StepNavigation from '../../Form/StepNavigation';
+import { SelectInput, TextareaInput } from '../../Form/Inputs';
 import { RadioVehicleGeneralState } from '../moto/form.data';
-import DamageSelectorTabs from '../../Damages/DamageSelectorTabs';
-import damages from '../../../pages/dev/damages';
-import TagsInput from '../../Tags/TagsInput';
 import TagsControlled from '../../Tags/TagsControlled';
+import { FormContext } from '../../../context/FormContext';
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import DamageSelectorControlledCar from '../../Damages/DamageSelectorControlledCar';
 
-const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
-    const formRef = useRef(null);
-    const { watch, register, setValue, getValues, control, errors, handleSubmit } = methods;
-
-    useEffect(() => {
-        register({ name: 'damages' });
-    }, []);
+const Step = ({ onSubmitStep, prevStep, nextStep }) => {
+    const { formDataContext } = useContext(FormContext);
+    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all',
+        defaultValues: formDataContext,
+    });
 
     return (
         <form className="form_wizard" onSubmit={handleSubmit(onSubmitStep)}>
-            <button type="button" onClick={()=>console.log(getValues())}>CLICK</button>
+            <button type="button" onClick={() => console.log(getValues())}>CLICK</button>
             <Header text="Etat du véhicule"/>
 
             <FieldWrapper label="Etat général">
@@ -50,33 +50,19 @@ const Step = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props 
                 />
             </FieldWrapper>
 
-            <TagsControlled
-                name="tags"
-                control={control}
-                errors={errors}
-            />
+            <FieldWrapper label="Tags">
+                <TagsControlled
+                    name="tags"
+                    control={control}
+                    errors={errors}
+                />
+            </FieldWrapper>
 
-            <DamageSelectorTabs
-                maxDamages={5}
-                onChange={damages => {
-                    setValue('damages', damages);
-                }}
-                tabs={[
-                    {
-                        title: 'Extérieur',
-                        key: 'exterior',
-                        alt: 'Vue extérieure du véhicule',
-                        img: '/images/annotations-views/outside.png',
-                        stages : getValues().damages && getValues().damages[0] && getValues().damages[0].stages
-                    },
-                    {
-                        title: 'Intérieur',
-                        key: 'interior',
-                        alt: 'Vue intérieure du véhicule',
-                        img: '/images/annotations-views/inside.png',
-                        stages : getValues().damages && getValues().damages[1] && getValues().damages[1].stages
-                    },
-                ]}/>
+            <DamageSelectorControlledCar
+                name="damages"
+                control={control}
+                defaultValues={getValues().damages}
+            />
 
             <StepNavigation prev={prevStep} submit/>
         </form>

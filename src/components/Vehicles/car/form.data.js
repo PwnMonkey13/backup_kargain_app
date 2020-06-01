@@ -268,3 +268,34 @@ export const RadioChoicesPaints = [
         label: 'Autre'
     }
 ]
+
+export const RadioFunctionVehicle = [
+    {
+        value: 'personal-car',
+        label: 'Véhicule personel'
+    },
+    {
+        value: 'driving-school-car',
+        label: 'Véhicule auto-école'
+    },
+    {
+        value: 'post-rental',
+        label: 'Après location'
+    },
+    {
+        value: 'cab',
+        label: 'Taxi'
+    },
+    {
+        value: 'company-vehicle',
+        label: 'Véhicule de société'
+    },
+    {
+        value: 'demo-vehicle',
+        label: 'Véhicule de démonstration'
+    },
+    {
+        value: 'Pre-save-vehicle',
+        label: 'Pré-enregistré'
+    }
+]

@@ -3,8 +3,9 @@ import { useRouter } from 'next/router'
 import FormWizard from '../../components/Form/FormWizard'
 import AnnounceService from '../../services/AnnounceService'
 import { ModalDialogContext } from '../../context/ModalDialogContext'
+import Step0_CamperManufacturer from '../../components/Vehicles/camper/Step0_CamperManufacturer'
 import Step1CamperDetails from '../../components/Vehicles/camper/Step1_CamperDetails'
-import Step2CarStatus from '../../components/Vehicles/car/Step2_CarStatus'
+import Step2CamperStatus from '../../components/Vehicles/camper/Step2_CamperStatus'
 import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner'
 
 const CarForm = (props) => {
@@ -42,8 +43,9 @@ const CarForm = (props) => {
             prevRoute="/deposer-une-annonce"
             resumeModel={resumeModel}
             onFinalSubmit={onFinalSubmit}>
+            <Step0_CamperManufacturer title="Selection du véhicule"/>
             <Step1CamperDetails title="Description du véhicule"/>
-            <Step2CarStatus title="Etat du véhicule"/>
+            <Step2CamperStatus title="Etat du véhicule"/>
             <Step3CarOwner title="Votre annonce"/>
         </FormWizard>
     )
@@ -51,7 +53,8 @@ const CarForm = (props) => {
 
 CarForm.getInitialProps = () => {
     return {
-        formKey: 'camper'
+        formKey: 'camper',
+        requiredAuth: true,
     }
 }
 

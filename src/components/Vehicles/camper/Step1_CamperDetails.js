@@ -1,25 +1,31 @@
-import React, { useRef } from 'react'
-import Header from '../../Header'
-import { CheckboxMultipleInput, NumberInput, RadioGroupInput, SelectInput, TextInput } from '../../Form/Inputs'
+import React, { useRef, useContext } from 'react';
+import { Col, Row } from 'reactstrap';
+import { useForm } from 'react-hook-form';
+import Header from '../../Header';
+import FieldWrapper from '../../Form/FieldWrapper';
+import StepNavigation from '../../Form/StepNavigation';
+import { NumberInput, SelectInput } from '../../Form/Inputs';
+import { FormContext } from '../../../context/FormContext';
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import { RadioFunctionVehicle } from '../moto/form.data';
 import {
-    RadioTypeFunction,
     CheckboxOptionsEquipments,
-    RadioChoicesGas,
     RadioChoicesEngine,
-    RadioChoicesEmission,
     RadioChoicesExternalColor,
+    RadioChoicesGas,
+    RadioChoicesMaterials,
     RadioChoicesPaints,
-    RadioChoicesMaterials
-} from './form.data.js'
-import StepNavigation from '../../Form/StepNavigation'
-import FieldWrapper from '../../Form/FieldWrapper'
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
-import { Col, Row } from 'reactstrap'
-import { RadioFunctionVehicle } from '../moto/form.data'
+    RadioTypeFunction,
+} from './form.data.js';
 
-const Step1CamperDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
-    const formRef = useRef(null)
-    const { watch, control, errors, getValues, register, formState, handleSubmit } = methods
+const Step1CamperDetails = ({ onSubmitStep, prevStep, nextStep }) => {
+    const formRef = useRef(null);
+    const { formDataContext } = useContext(FormContext);
+    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all',
+        defaultValues: formDataContext
+    });
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
@@ -27,10 +33,10 @@ const Step1CamperDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextS
             <Row>
                 <Col>
                     <FieldWrapper label="Type" required>
-                        <SelectInput name="vehicleFunction"
-                            options={RadioTypeFunction}
-                            control={control}
-                            errors={errors}
+                        <SelectInput name="vehicleFunctionType"
+                                     options={RadioTypeFunction}
+                                     control={control}
+                                     errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -51,18 +57,18 @@ const Step1CamperDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextS
                 <Col>
                     <FieldWrapper label="Kilométrage" required>
                         <NumberInput name="mileage"
-                            placeholder="20000 km"
-                            control={control}
-                            errors={errors}
+                                     placeholder="20000 km"
+                                     control={control}
+                                     errors={errors}
 
                         />
                     </FieldWrapper>
                 </Col>
                 <Col>
                     <FieldWrapper label="Cylindrée">
-                        <NumberInput name="cylinder"
-                            control={control}
-                            errors={errors}
+                        <NumberInput name="vehicleEngine.cylinder"
+                                     control={control}
+                                     errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -72,16 +78,16 @@ const Step1CamperDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextS
                 <Col>
                     <FieldWrapper label="Carburant" required>
                         <SelectInput name="vehicleEngine.gas"
-                            options={RadioChoicesGas}
-                            control={control}
-                            errors={errors}
+                                     options={RadioChoicesGas}
+                                     control={control}
+                                     errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
                 <Col>
                     <FieldWrapper label="Boite de vitesse">
                         <SelectInput
-                            name="engine"
+                            name="vehicleEngine.type"
                             options={RadioChoicesEngine}
                             control={control}
                             errors={errors}
@@ -95,8 +101,8 @@ const Step1CamperDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextS
                 <Col>
                     <FieldWrapper label="Puissance kW">
                         <NumberInput name="power.kw"
-                            control={control}
-                            errors={errors}
+                                     control={control}
+                                     errors={errors}
 
                         />
                     </FieldWrapper>
@@ -104,8 +110,8 @@ const Step1CamperDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextS
                 <Col>
                     <FieldWrapper label="Puissance CH">
                         <NumberInput name="power.ch"
-                            control={control}
-                            errors={errors}
+                                     control={control}
+                                     errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -192,7 +198,7 @@ const Step1CamperDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextS
                 <Col>
                     <FieldWrapper label="Nombre de couchettes">
                         <NumberInput
-                            name="bunks.from"
+                            name="bunks"
                             control={control}
                             errors={errors}
                         />
@@ -254,9 +260,9 @@ const Step1CamperDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextS
                 </Col>
             </Row>
 
-            <StepNavigation prev={prevStep} submit />
+            <StepNavigation prev={prevStep} submit/>
         </form>
-    )
-}
+    );
+};
 
-export default Step1CamperDetails
+export default Step1CamperDetails;

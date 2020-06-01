@@ -14,13 +14,8 @@ const CarForm = (props) => {
 
     const onFinalSubmit = form => {
         const { featured_image : featuredImage, images, ...body } = form;
-        if (body.location && body.location.value) body.location = body.location.value;
 
         let formData = new FormData();
-
-        if (featuredImage) {
-            formData.append('featured_image', featuredImage);
-        }
 
         if(images && Array.isArray(images)){
             for (let i = 0; i < images.length; i++) {
@@ -60,6 +55,8 @@ const CarForm = (props) => {
             'manufacturer.year': 'Année',
         },
     ];
+
+    console.log('render car form');
 
     return (
         <FormWizard

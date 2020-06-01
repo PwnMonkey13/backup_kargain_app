@@ -1,26 +1,26 @@
-import React, { useRef, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import Header from '../../Header';
-import { RadioVehicleGeneralState } from './form.data.js';
-import { SelectInput, TextareaInput } from '../../Form/Inputs';
 import StepNavigation from '../../Form/StepNavigation';
 import FieldWrapper from '../../Form/FieldWrapper';
-import TagsControlled from '../../Tags/TagsControlled';
+import { SelectInput, TextareaInput } from '../../Form/Inputs';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import { RadioVehicleGeneralState } from '../moto/form.data';
+import TagsControlled from '../../Tags/TagsControlled';
 import { FormContext } from '../../../context/FormContext';
 import DamageSelectorControlledCar from '../../Damages/DamageSelectorControlledCar';
 
 const Step = ({ onSubmitStep, prevStep, nextStep }) => {
-    const formRef = useRef(null);
     const { formDataContext } = useContext(FormContext);
     const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
-        defaultValues: formDataContext
+        defaultValues: formDataContext,
     });
 
     return (
-        <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
+        <form className="form_wizard" onSubmit={handleSubmit(onSubmitStep)}>
+            <button type="button" onClick={() => console.log(getValues())}>CLICK</button>
             <Header text="Etat du véhicule"/>
 
             <FieldWrapper label="Etat général">
@@ -28,7 +28,6 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                     name="vehicleGeneralState"
                     options={RadioVehicleGeneralState}
                     control={control}
-                    rules={{ required: 'Title is required' }}
                     errors={errors}
                 />
             </FieldWrapper>
@@ -39,7 +38,6 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                     options={SelectOptionsUtils([2, 3, 4, 5])}
                     placeholder="Select number of owners"
                     control={control}
-                    rules={{ required: 'Field required' }}
                     errors={errors}
                 />
             </FieldWrapper>
@@ -55,7 +53,6 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
             <FieldWrapper label="Tags">
                 <TagsControlled
                     name="tags"
-                    maxTags={20}
                     control={control}
                     errors={errors}
                 />

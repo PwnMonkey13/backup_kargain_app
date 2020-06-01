@@ -21,13 +21,13 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
     const [maxActiveStep, setMaxActiveStep] = useState(steps.length);
     const [pourcent, setPourcent] = useState(() => calculatePourcent(activeStep, steps.length));
     const [stepChanges, setStepChanges] = useState([]);
-    const [endForm, triggerEndForm] = useState(false);
+    const [endForm, setEndForm] = useState(false);
 
-    const formConfig = {
-        mode: 'onChange',
-        validateCriteriaMode: 'all',
-        defaultValues: formDataContext,
-    };
+    useEffect(()=>{
+        dispatchFormUpdate({
+            vehicleType : formKey.toLowerCase()
+        });
+    },[])
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -37,6 +37,15 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
             setPourcent(calculatePourcent(activeStep, steps.length));
         }
     }, [activeStep]);
+
+    useEffect(() => {
+        if (isMounted && endForm) {
+            const { currentStep, ...formData } = formDataContext;
+            console.log('end form reached');
+            onFinalSubmit(formData);
+            setEndForm(false);
+        }
+    }, [endForm]);
 
     const collectStepChanges = useCallback(item => {
         setStepChanges(stepChanges => ({
@@ -68,24 +77,18 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
 
     const handleSubmitForm = (data, event) => {
         triggerDispatchFormData(data);
-        triggerEndForm(true);
+        setEndForm(true);
     };
 
-    useEffect(() => {
-        if (isMounted && endForm === true) {
-            const { currentStep, ...formData } = formDataContext;
-            console.log('end form reached');
-            onFinalSubmit(formData);
-            triggerEndForm(false);
-        }
-    }, [endForm]);
-
-    console.log('render');
+    console.log('render form wizard');
 
     return (
-        <main id={props.id} className={props.className}>
-            <BreadcrumbSteps activeStepIndex={activeStep} steps={steps} setStep={setStep}
-                             maxActiveStep={maxActiveStep}/>
+        <div className="formWizardContainer">
+            <BreadcrumbSteps activeStepIndex={activeStep}
+                             steps={steps}
+                             setStep={setStep}
+                             maxActiveStep={maxActiveStep}
+            />
             <ProgressBar percent={pourcent} filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"/>
             {props.enableResume ? (
                 <Row className="mx-auto px-2 my-4">
@@ -96,12 +99,14 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
                             onSubmitStep={onSubmitStep}
                             prevStep={prevStep}
                             nextStep={nextStep}
-                            formConfig={formConfig}
                             handleSubmitForm={handleSubmitForm}
                         />
                     </Col>
                     <Col md={4} lg={3}>
-                        <FormResume resumeModel={resumeModel} formValues={{ ...formDataContext, ...stepChanges }}/>
+                        <FormResume
+                            resumeModel={resumeModel}
+                            formValues={{ ...formDataContext, ...stepChanges }}
+                        />
                     </Col>
                 </Row>
             ) : (
@@ -111,11 +116,9 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
                     onSubmitStep={onSubmitStep}
                     prevStep={prevStep}
                     nextStep={nextStep}
-                    formConfig={formConfig}
                     handleSubmitForm={handleSubmitForm}
                 />
-            )
-            }
+            )}
 
             {debug && (
                 <Row>
@@ -131,7 +134,7 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
                 </Row>
             )}
 
-        </main>
+        </div>
     );
 };
 

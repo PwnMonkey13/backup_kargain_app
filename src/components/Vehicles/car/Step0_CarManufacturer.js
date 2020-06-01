@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form';
+import { Col, Row } from 'reactstrap'
 import Divider from '../../Divider'
 import Header from '../../Header'
-import { Col, Row } from 'reactstrap'
 import useIsMounted from '../../../hooks/useIsMounted'
 import FieldWrapper from '../../Form/FieldWrapper'
 import StepNavigation from '../../Form/StepNavigation'
@@ -10,14 +11,25 @@ import { SelectInput, TextInput } from '../../Form/Inputs'
 import { ModalDialogContext } from '../../../context/ModalDialogContext'
 import CarApiService from '../../../services/vehicles/CarApiService'
 import VinDecoderService from '../../../services/VinDecoderService'
+import { FormContext } from '../../../context/FormContext';
 
-const ColCenter = ({ children }) => <Col className="d-flex flex-column align-items-center">{children}</Col>
+const ColCenter = ({ children }) => (
+    <Col className="d-flex flex-column align-items-center">
+        {children}
+    </Col>
+)
 
-const Step0CarManufacturer = ({ methods, formConfig, collectStepChanges, triggerSkipStep, onSubmitStep, prevStep, nextStep, ...rest }) => {
+const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitStep, prevStep, nextStep }) => {
     const formRef = useRef(null)
     const isMounted = useIsMounted()
-    const { dispatchModal } = useContext(ModalDialogContext)
-    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = methods
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext)
+    const { formDataContext } = useContext(FormContext);
+    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all',
+        defaultValues: formDataContext
+    });
+
     const [vinDecoded, storeVinDecoded] = useState(null)
     const [manufacturersData, setManufacturersData] = useState({
         makes: [],
@@ -96,7 +108,7 @@ const Step0CarManufacturer = ({ methods, formConfig, collectStepChanges, trigger
                 )
             })
             .catch(err => {
-                dispatchModal({ type: 'error', err })
+                dispatchModalError({ err })
             })
         return function cleanup () {
             console.log('unmount')
@@ -116,7 +128,7 @@ const Step0CarManufacturer = ({ methods, formConfig, collectStepChanges, trigger
                         )
                     })
                     .catch(err => {
-                        dispatchModal({ type: 'error', err })
+                        dispatchModalError({ err, persist : true })
                     })
             }
         }
@@ -139,7 +151,7 @@ const Step0CarManufacturer = ({ methods, formConfig, collectStepChanges, trigger
                         )
                     })
                     .catch(err => {
-                        dispatchModal({ type: 'error', err })
+                        dispatchModalError({ err })
                     })
             }
         }
@@ -160,7 +172,7 @@ const Step0CarManufacturer = ({ methods, formConfig, collectStepChanges, trigger
                         )
                     })
                     .catch(err => {
-                        dispatchModal({ type: 'error', err })
+                            dispatchModalError({ err })
                     }
                     )
             }
@@ -202,7 +214,7 @@ const Step0CarManufacturer = ({ methods, formConfig, collectStepChanges, trigger
             <Header text="Sélectionnez votre voiture"/>
 
             <Row>
-                <Col md={3}>
+                <Col sm={12} md={6} lg={3}>
                     <FieldWrapper label="Marque" labelTop>
                         <SelectInput
                             name="manufacturer.make"
@@ -218,7 +230,7 @@ const Step0CarManufacturer = ({ methods, formConfig, collectStepChanges, trigger
                         />
                     </FieldWrapper>
                 </Col>
-                <Col md={3}>
+                <Col sm={12} md={6} lg={3}>
                     <FieldWrapper label="Modele" labelTop>
                         <SelectInput
                             name="manufacturer.model"
@@ -234,7 +246,7 @@ const Step0CarManufacturer = ({ methods, formConfig, collectStepChanges, trigger
                         />
                     </FieldWrapper>
                 </Col>
-                <Col md={3}>
+                <Col sm={12} md={6} lg={3}>
                     <FieldWrapper label="Version" labelTop>
                         <SelectInput
                             name="manufacturer.generation"
@@ -250,7 +262,7 @@ const Step0CarManufacturer = ({ methods, formConfig, collectStepChanges, trigger
                         />
                     </FieldWrapper>
                 </Col>
-                <Col md={3}>
+                <Col sm={12} md={6} lg={3}>
                     <FieldWrapper label="Année" labelTop>
                         <SelectInput
                             name="manufacturer.year"

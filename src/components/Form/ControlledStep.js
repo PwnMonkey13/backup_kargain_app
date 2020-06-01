@@ -1,5 +1,4 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const useStyles = makeStyles(() => ({
@@ -11,20 +10,20 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Step = ({ step, ...props }) => {
-    const methods = useForm(props.formConfig);
+const Step = ({ step, ...stepProps }) => {
     const classes = useStyles();
-    const { nextStep } = props;
+    const { nextStep } = stepProps;
 
     const triggerSkipStep = () => {
         nextStep();
     };
 
+    console.log('render step');
+
     return (
         <section className={classes.root}>
             {step ? React.cloneElement(step, {
-                methods,
-                triggerSkipStep, ...props,
+                triggerSkipStep, ...stepProps,
             }) : 'step not found'}
         </section>
     );

@@ -1,7 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { Col, Row } from 'reactstrap';
+import { useForm } from 'react-hook-form';
 import Header from '../../Header';
 import { NumberInput, SelectInput } from '../../Form/Inputs';
+import StepNavigation from '../../Form/StepNavigation';
+import FieldWrapper from '../../Form/FieldWrapper';
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import { RadioFunctionVehicle } from '../moto/form.data';
+import { FormContext } from '../../../context/FormContext';
 import {
     CheckboxOptionsEquipments,
     RadioChoicesEmission,
@@ -12,21 +18,22 @@ import {
     RadioChoicesPaints,
     RadioTypeFunction,
 } from './form.data.js';
-import StepNavigation from '../../Form/StepNavigation';
-import FieldWrapper from '../../Form/FieldWrapper';
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
-import { RadioFunctionVehicle } from '../moto/form.data';
 
-const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep, ...props }) => {
+const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
     const formRef = useRef(null);
-    const { watch, control, errors, getValues, register, formState, handleSubmit } = methods;
+    const { formDataContext } = useContext(FormContext);
+    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all',
+        defaultValues: formDataContext
+    });
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
             <Row>
                 <Col>
                     <FieldWrapper label="Type">
-                        <SelectInput name="vehicleType"
+                        <SelectInput name="vehicleFunctionType"
                                      options={RadioTypeFunction}
                                      control={control}
                                      errors={errors}
@@ -61,7 +68,7 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                         <NumberInput name="vehicleEngine.cylinder"
                                      control={control}
                                      errors={errors}
-                                     placeholder={0}
+                                     placeholder="150 ch"
 
                         />
                     </FieldWrapper>
@@ -81,7 +88,7 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                 <Col>
                     <FieldWrapper label="Boite de vitesse">
                         <SelectInput
-                            name="vehicleEngine.engine"
+                            name="vehicleEngine.type"
                             options={RadioChoicesEngine}
                             control={control}
                             errors={errors}
@@ -121,7 +128,7 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                             name="consumption.mixt"
                             control={control}
                             errors={errors}
-                            placeholder={0}
+                            placeholder="20 g/100"
 
                         />
                     </FieldWrapper>
@@ -132,7 +139,7 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                             name="consumption.city"
                             control={control}
                             errors={errors}
-                            placeholder={0}
+                            placeholder="20 g/100"
 
                         />
                     </FieldWrapper>
@@ -143,7 +150,7 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                             name="consumption.road"
                             control={control}
                             errors={errors}
-                            placeholder={0}
+                            placeholder="20 g/100"
 
                         />
                     </FieldWrapper>
@@ -161,28 +168,32 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                 </Col>
             </Row>
 
-            <FieldWrapper label="Classe d'émission">
-                <SelectInput
-                    name="emission"
-                    options={RadioChoicesEmission}
-                    control={control}
-                    errors={errors}
-                />
-            </FieldWrapper>
+            <Row>
+                <Col>
+                    <FieldWrapper label="Classe d'émission">
+                        <SelectInput
+                            name="emission"
+                            options={RadioChoicesEmission}
+                            control={control}
+                            errors={errors}
+                        />
+                    </FieldWrapper>
+                </Col>
+                <Col>
+                    <FieldWrapper label="Equipements">
+                        <SelectInput
+                            name="equipments"
+                            isMulti
+                            options={CheckboxOptionsEquipments}
+                            defaultChecked={['ABS', 'ESP']}
+                            control={control}
+                            errors={errors}
+                        />
+                    </FieldWrapper>
+                </Col>
+            </Row>
 
             <Header text="Données du véhicule"/>
-
-            <FieldWrapper label="Equipements">
-                <SelectInput
-                    name="equipments"
-                    isMulti
-                    options={CheckboxOptionsEquipments}
-                    defaultChecked={['ABS', 'ESP']}
-                    control={control}
-                    errors={errors}
-                />
-            </FieldWrapper>
-
             <Row>
                 <Col>
                     <FieldWrapper label="Nombre de portes">
@@ -223,6 +234,7 @@ const Step1CarDetails = ({ methods, formConfig, onSubmitStep, prevStep, nextStep
                     <FieldWrapper label="Matériaux">
                         <SelectInput
                             name="materials"
+                            isMulti
                             options={RadioChoicesMaterials}
                             control={control}
                             errors={errors}

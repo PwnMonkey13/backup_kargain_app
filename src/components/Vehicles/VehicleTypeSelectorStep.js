@@ -6,7 +6,7 @@ import Header from '../Header'
 import Divider from '../Divider'
 import { FormContext } from '../../context/FormContext'
 
-const VehicleTypeSelectorStep = ({ handleSelectType, ...props }) => {
+const VehicleTypeSelectorStep = ({ handleSelectVehicleType, ...props }) => {
     const formRef = useRef(null)
     const { register, handleSubmit } = useForm()
     const { dispatchFormUpdate } = useContext(FormContext)
@@ -48,7 +48,7 @@ const VehicleTypeSelectorStep = ({ handleSelectType, ...props }) => {
     const onSubmit = (data) => {
         const tab = tabsRadio.find(tab => tab.value === data.vehicleType)
         dispatchFormUpdate({ vehicleType: { value: tab.value, label: tab.label } })
-        handleSelectType(data.vehicleType)
+        handleSelectVehicleType(data.vehicleType)
     }
 
     const Img = styled.img`
@@ -63,14 +63,14 @@ const VehicleTypeSelectorStep = ({ handleSelectType, ...props }) => {
                     return (
                         <Col key={index} xs={6} sm={3} md={3} lg={2}>
                             <div className="form-check form-check-vehicle m-0" style={{ minHeight: '5rem' }}>
-                                <input id={`name_${index}`}
+                                <input id={`vehicle_type${index}`}
                                     type="radio"
                                     name="vehicleType"
                                     value={tab.value}
                                     ref={register}
                                     onChange={() => triggerSubmit()}
                                 />
-                                <label htmlFor={`name_${index}`} style={{ minHeight: '5rem' }}>
+                                <label htmlFor={`vehicle_type${index}`} style={{ minHeight: '5rem' }}>
                                     <Img src={`/images/${tab.img}`} alt={tab.label} title={tab.label} />
                                 </label>
                             </div>
