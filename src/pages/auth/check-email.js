@@ -4,8 +4,8 @@ import { useAuth } from '../../context/AuthProvider'
 
 const CheckEmail = () => {
     const { authenticatedUser } = useAuth()
-    const email = authenticatedUser ? authenticatedUser.email : null
-    const text = email ? <span className="font-weight-bold">{authenticatedUser.email}</span> : <span>your inbox</span>
+    const email = authenticatedUser ? authenticatedUser.getEmail : null
+    const text = email ? <span className="font-weight-bold">{authenticatedUser.getEmail}</span> : <span>your inbox</span>
 
     return (
         <main>

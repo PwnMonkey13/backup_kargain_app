@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container } from 'reactstrap'
 
-const About = () => {
+const About = (props) => {
     return (
         <Container>
 
