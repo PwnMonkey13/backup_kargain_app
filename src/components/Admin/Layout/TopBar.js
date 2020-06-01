@@ -40,12 +40,6 @@ const useStyles = makeStyles((theme) => ({
     grow: {
         flexGrow: 1,
     },
-    title: {
-        display: 'none',
-        [theme.breakpoints.up('sm')]: {
-            display: 'block',
-        },
-    },
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
@@ -205,12 +199,15 @@ const TopBar = ({handleDrawerToggle, open, ...props}) => {
                         })}>
                         <MenuIcon/>
                     </IconButton>
-                    <Link href="/admin">
-                        <a>
-                            <Typography className={classes.title} variant="h6" noWrap style={{color : theme.palette.white}}>
-                                Kargain Admin
-                            </Typography>
-                        </a>
+                    <Link href="/admin" passHref>
+                        <Typography
+                            component="a"
+                            className="decoration-none"
+                            variant="h3"
+                            noWrap
+                            style={{color : theme.palette.white}}>
+                            Kargain Admin
+                        </Typography>
                     </Link>
                     <div style={{flexGrow: 1}}/>
                     <div className={classes.sectionDesktop}>

@@ -1,19 +1,21 @@
-import MuiTableCell from "./MuiTableCell";
-import MuiTableRow from "./MuiTableRow";
-import MuiTypography from "./MuiTypography";
-import MuiPaper from "./MuiPaper";
-import MuiButton from "./MuiButton";
-import MuiIconButton from "./MuiIconButton";
-import MuiTableHead from "./MuiTableHead";
-import MuiDrawer from "./MuiDrawer"
+import MuiButton from './MuiButton';
+import MuiDrawer from './MuiDrawer';
+import MuiIconButton from './MuiIconButton';
+import MuiPaper from './MuiPaper';
+import MuiTableCell from './MuiTableCell';
+import MuiTableHead from './MuiTableHead';
+import MuiTableRow from './MuiTableRow';
+import MuiTooltipPopper from './MuiTooltipPopper';
+import MuiTypography from './MuiTypography';
 
 export default {
-  MuiDrawer,
-  MuiTableCell,
-  MuiTableRow,
-  MuiTypography,
-  MuiPaper,
-  MuiButton,
-  MuiIconButton,
-  MuiTableHead
-}
+    MuiDrawer,
+    MuiTableCell,
+    MuiTableRow,
+    MuiTooltipPopper,
+    MuiTypography,
+    MuiPaper,
+    MuiButton,
+    MuiIconButton,
+    MuiTableHead,
+};

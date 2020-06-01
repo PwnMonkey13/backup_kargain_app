@@ -1,34 +1,33 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core';
-import { themeColors } from '../theme/palette'
+import { themeColors } from '../theme/palette';
 
 let theme = createMuiTheme();
 theme = responsiveFontSizes(theme);
 
-const TitleMUI = ({as, variant, children, color, gutterBottom, ...rest }) => {
+const TitleMUI = ({ as, variant, children, color, gutterBottom, ...rest }) => {
     return (
-        <Typography component={as} variant={variant} style={{color : themeColors[color] }} gutterBottom>
+        <Typography component={as} variant={variant} style={{ color: themeColors[color] }} gutterBottom {...rest} >
             {children}
         </Typography>
     );
-}
+};
 
 TitleMUI.propTypes = {
-    as : PropTypes.string,
-    variant : PropTypes.string,
+    as: PropTypes.string,
+    variant: PropTypes.string,
     children: PropTypes.node,
-    color : PropTypes.string,
-    gutterBottom : PropTypes.bool
+    color: PropTypes.string,
+    gutterBottom: PropTypes.bool,
 };
 
 TitleMUI.defaultProps = {
-    as : 'h3',
-    variant : 'h2',
-    color : 'primary',
-    gutterBottom : true
+    as: 'h3',
+    variant: 'h2',
+    color: 'primary',
+    gutterBottom: true,
 };
 
-export default TitleMUI
+export default TitleMUI;

@@ -10,12 +10,11 @@ import IconButton from '@material-ui/core/IconButton';
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { getLogo } from '../libs/utils';
-import User from '../class/user.class';
 import { useAuth } from '../context/AuthProvider';
+import CTALink from './CTALink';
 
 const NavbarClient = () => {
     const { isAuthenticated, authenticatedUser } = useAuth();
-    const user = new User(authenticatedUser);
     const [collapsed, setCollapsed] = useState(false);
     const toggleNavbar = () => setCollapsed(!collapsed);
 
@@ -37,6 +36,7 @@ const NavbarClient = () => {
             }));
         };
 
+        //TODO
         const DropdownNotifs = ({ isOpen, keyName, toggle }) => {
             return (
                 <li className="nav-item p-2 navbar_icon navbar-icon-notifications">
@@ -93,17 +93,17 @@ const NavbarClient = () => {
 
             return (
                 <li className="nav-item navbar-dropdown p-2" data-dropdown="dropdownUser">
-                    {user.getAvatar &&
+                    {authenticatedUser.getAvatar &&
                     <img className="dropdown-toggler rounded-circle"
                          width="40"
                          height="40"
-                         src={user.getAvatar}
+                         src={authenticatedUser.getAvatar}
                          alt="avatar"
                          onClick={() => toggle(keyName)}
                     />}
 
                     <ul className={clsx('dropdown', isOpen && 'show')} id="dropdownUser">
-                        {user.isAdmin && (
+                        {authenticatedUser.isAdmin && (
                             <li className="px-0 dropdown-item">
                                 <Link href={`/admin`} prefetch={false}>
                                     <a className="nav-link text-left"><DashboardIcon/><span className="m-1">Admin</span></a>
@@ -111,7 +111,7 @@ const NavbarClient = () => {
                             </li>
                         )}
                         <li className="px-0 dropdown-item">
-                            <Link href={`/profile/${user.getFullName}`} prefetch={false}>
+                            <Link href={`/profile/${authenticatedUser.getUsername}`} prefetch={false}>
                                 <a className="nav-link text-left"><FaceIcon/><span className="m-1">Mon profil</span></a>
                             </Link>
                         </li>
@@ -168,17 +168,34 @@ const NavbarClient = () => {
                     <Collapse isOpen={collapsed} navbar>
                         <Nav navbar style={{ flex: 1 }}>
                             <NavItem className="p-2">
-                                <Link href="/deposer-une-annonce" prefetch={false}>
-                                    <a className="btn btn-outline-primary cta_nav_link">
-                                        Ajouter une annonce
-                                    </a>
-                                </Link>
+                                <CTALink
+                                    title="Ajouter une annonce"
+                                    href="/deposer-une-annonce"
+                                    className="cta_nav_link"
+                                />
                             </NavItem>
                             <NavItem className="p-2">
-                                <FormGroup className='form-inline search-header-wrapper m-auto'>
-                                    <Input className="form-control" type="search" name="search" id="search"
-                                           placeholder="Rechercher"/>
-                                </FormGroup>
+                                <form method="GET" action="/search">
+                                    <FormGroup className='form-inline search-header-wrapper m-auto'>
+                                        <Input
+                                            className="form-control"
+                                            type="search"
+                                            name="query"
+                                            id="search"
+                                            placeholder="Rechercher"/>
+                                        <input
+                                            type="submit"
+                                            tabIndex="-1"
+                                            style={{
+                                                position: 'absolute',
+                                                left: '-9999px',
+                                                width: '1px',
+                                                height: '1px',
+                                            }}
+                                        />
+                                    </FormGroup>
+                                </form>
+
                             </NavItem>
                         </Nav>
 

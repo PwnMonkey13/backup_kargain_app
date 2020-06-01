@@ -1,16 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import clsx from 'clsx';
 
-const FieldWrapper = ({ children, ...props }) => {
+const   FieldWrapper = ({ classNameWrapper, isRow, children, ...props }) => {
     const { tooltip, label } = props
     if(!children) return null;
     const { name, rules } = children.props
     const { required } = rules || {}
 
     return (
-        <div className="my-2">
+        <div className={clsx(isRow && 'row align-items-center', 'FieldWrapper m-2', classNameWrapper)}>
             {label && (
-                <label htmlFor={name}>
+                <label className="mb-0" htmlFor={name}>
                     <span>
                         {label}
                         {required && <span className="required_label">*</span>}
