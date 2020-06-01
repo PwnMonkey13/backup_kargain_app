@@ -1,29 +1,31 @@
-import React, { useContext, useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import { MapPin } from 'react-feather'
+import React, { useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
+import RoomIcon from '@material-ui/icons/Room';
+import { GeoCitiesInput, SelectInput, SliderInput, TextInput } from '../../Form/Inputs';
+import CarApiService from '../../../services/vehicles/CarApiService';
+import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import useAddress from '../../../hooks/useAddress';
+import FieldWrapper from '../../Form/FieldWrapper';
+import Header from '../../Header';
 import {
-    RadioTypeFunction,
     CheckboxOptionsEquipments,
     RadioChoicesEmission,
     RadioChoicesEngine,
     RadioChoicesExternalColor,
     RadioChoicesGas,
-    RadioChoicesPaints,
     RadioChoicesMaterials,
-    RadioVehicleGeneralState
-} from '../../Vehicles/camper/form.data'
-import Header from '../../Header'
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
-import { SliderInput, NumberInput, SelectInput, GeoCitiesInput } from '../../Form/Inputs'
-import CarApiService from '../../../services/vehicles/CarApiService'
-import { ModalDialogContext } from '../../../context/ModalDialogContext'
-import ReactFlagsSelect from '../../SelectCountriesFlags'
-import useAddress from '../../../hooks/useAddress'
+    RadioChoicesPaints,
+    RadioTypeFunction,
+    RadioVehicleGeneralState,
+} from '../../Vehicles/camper/form.data';
 
 const CamperFilters = ({ control, watch, errors, ...props }) => {
-    const [addressObj, address, geolocation] = useAddress()
-    const [makes, setMakes] = useState([])
-    const { dispatchModalError } = useContext(ModalDialogContext)
+    const [addressObj, address, coordinates] = useAddress();
+    const [makes, setMakes] = useState([]);
+    const { dispatchModalError } = useContext(ModalDialogContext);
     const popularMakesId = [
         3, // AlphaRomeo
         9, // Audi
@@ -37,30 +39,33 @@ const CamperFilters = ({ control, watch, errors, ...props }) => {
         102, // Opel
         47, // Fiat
         140, // Toyota
-        133 // Susuki
-    ]
+        133, // Susuki
+    ];
 
     useEffect(() => {
-        control.register({ name: 'geoloc' })
-    }, [])
-
-    useEffect(() => {
-        control.setValue('geoloc', geolocation)
-    }, [geolocation])
+        control.register({ name: 'coordinates' });
+        control.setValue('coordinates', coordinates);
+    }, [coordinates]);
 
     useEffect(() => {
         CarApiService.getMakes(popularMakesId)
             .then(cars => {
-                const makesOptions = cars.map(car => ({ value: car.make, label: car.make }))
-                const defaultOption = { value: 'other', label: 'Je ne sais pas/Autre' }
-                setMakes([...makesOptions, defaultOption])
+                const makesOptions = cars.map(car => ({
+                    value: car.make,
+                    label: car.make,
+                }));
+                const defaultOption = {
+                    value: 'other',
+                    label: 'Je ne sais pas/Autre',
+                };
+                setMakes([...makesOptions, defaultOption]);
             })
             .catch(err => {
-                dispatchModalError({ err })
-            })
-    }, [])
+                dispatchModalError({ err });
+            });
+    }, []);
 
-    const countrySelect = watch('country')
+    const countrySelect = watch('countrySelect');
 
     return (
         <>
@@ -72,7 +77,20 @@ const CamperFilters = ({ control, watch, errors, ...props }) => {
                 options={makes}
             />
 
-            <Header p strong className="my-2" text="Type de voiture"/>
+            <Typography component="span" gutterBottom>Prix</Typography>
+            <SliderInput
+                classNames="my-4 mt-2"
+                name="price"
+                defaultValue={[0, 200000]}
+                min={0}
+                max={200000}
+                step={1000}
+                errors={errors}
+                control={control}
+                suffix="€"
+            />
+
+            <Typography component="span" gutterBottom>Type de camping-car</Typography>
             <SelectInput
                 name="vehicleFunctionUse"
                 options={RadioTypeFunction}
@@ -80,7 +98,15 @@ const CamperFilters = ({ control, watch, errors, ...props }) => {
                 errors={errors}
             />
 
-            <Header p strong className="my-2" text="Boite de vitesse"/>
+            <Typography component="span" gutterBottom>Etat du véhicule</Typography>
+            <SelectInput
+                name="vehicleGeneralState"
+                options={RadioVehicleGeneralState}
+                control={control}
+                errors={errors}
+            />
+
+            <Typography component="span" gutterBottom>Boite de vitesse</Typography>
             <SelectInput
                 name="vehicleEngine.type"
                 options={RadioChoicesEngine}
@@ -88,7 +114,7 @@ const CamperFilters = ({ control, watch, errors, ...props }) => {
                 errors={errors}
             />
 
-            <Header p strong className="my-2" text="Carburant"/>
+            <Typography component="span" gutterBottom>Carburant</Typography>
             <SelectInput
                 name="vehicleEngine.gas"
                 className="mb-2"
@@ -97,115 +123,105 @@ const CamperFilters = ({ control, watch, errors, ...props }) => {
                 errors={errors}
             />
 
-            <Header p strong className="my-2" text="Prix"/>
+            <Typography component="span" gutterBottom>Cylindrée (cm3)</Typography>
+            <div className="d-flex my-2">
+                <SliderInput
+                    classNames="my-4 mt-2"
+                    name="vehicleEngine.cylinder"
+                    defaultValue={[1, 20]}
+                    min={1}
+                    max={20}
+                    step={1}
+                    errors={errors}
+                    control={control}
+                />
+            </div>
+
+            <Typography component="span" gutterBottom>Kilométrage (km)</Typography>
             <SliderInput
-                name="price"
-                defaultValue={[10000, 80000]}
-                min={1000}
-                max={100000}
+                classNames="my-4 mt-2"
+                name="mileage"
+                defaultValue={[0, 200000]}
+                min={0}
+                max={200000}
                 step={1000}
                 errors={errors}
                 control={control}
-                suffix="€"
-                classNames="mb-2 my-4"
+                suffix="km"
             />
 
-            <Header as="label" text="Kilométrage (km)"/>
-            <div className="d-flex">
-                <NumberInput
-                    name="mileage.from"
-                    className="mb-2 mx-1"
-                    placeholder="de"
-                    control={control}
-                    errors={errors}
-                />
+            <Typography component="span" gutterBottom>Puissance</Typography>
+            <SliderInput
+                classNames="my-4 mt-2"
+                name="power.kw"
+                defaultValue={[0, 200]}
+                min={0}
+                max={200}
+                step={1}
+                errors={errors}
+                control={control}
+                suffix="kw"
+            />
 
-                <NumberInput
-                    name="mileage.to"
-                    className="mb-2 mx-1"
-                    placeholder="a"
-                    control={control}
-                    errors={errors}
-                />
-            </div>
-
-            <Header p strong className="my-2" text="Cylindrée (cm3)"/>
-            <div className="d-flex">
-                <NumberInput
-                    name="vehicleEngine.cylinder.from"
-                    className="mb-2 mx-1"
-                    placeholder="de"
-                    control={control}
-                    errors={errors}
-                />
-
-                <NumberInput
-                    name="vehicleEngine.cylinder.to"
-                    className="mb-2 mx-1"
-                    placeholder="a"
-                    control={control}
-                    errors={errors}
-                />
-            </div>
-
-            <Header p strong className="my-2" text="Puissance"/>
-            <div className="d-flex">
-                <NumberInput
-                    name="power.kw.from"
-                    className="mb-2 mx-1"
-                    control={control}
-                    errors={errors}
-                />
-                <NumberInput
-                    name="power.kw.to"
-                    className="mb-2 mx-1"
-                    control={control}
-                    errors={errors}
-                />
-            </div>
-
-            <Header p strong className="my-2" text="Pays"/>
-            <ReactFlagsSelect
-                name="country"
+            <Typography component="span">Pays</Typography>
+            <SelectCountryFlags
+                name="countrySelect"
                 errors={errors}
                 control={control}
             />
 
-            { (countrySelect && countrySelect.value === 'FR') && (
+            {address && (
                 <>
+                    <Typography component="span" gutterBottom>Adresse approximative</Typography>
                     <Header p strong className="my-2">
-                        <MapPin/> Adresse approximative : {address}
+                        <RoomIcon/> : {address}
                     </Header>
-
-                    <GeoCitiesInput
-                        name="location"
-                        enableGeoloc
-                        lat={geolocation.latitude}
-                        long={geolocation.longitude}
-                        typeAPI="geo" // vicopo
-                        control={control}
-                        errors={errors}
-                    />
-
-                    <Header p strong className="my-2" text="Rayon"/>
-                    <SliderInput
-                        name="radius"
-                        defaultValue={15}
-                        min={0}
-                        max={30}
-                        step={5}
-                        suffix="km"
-                        control={control}
-                        errors={errors}
-                        classNames="mb-2 my-4"
-                    />
                 </>
             )}
 
-            <Header p strong className="my-2" text="Etat du véhicule"/>
+            <Typography component="span" gutterBottom>Ville</Typography>
+            {countrySelect && countrySelect.value === 'FR' ? (
+                <GeoCitiesInput
+                    name="address.city"
+                    enableGeoloc
+                    long={coordinates?.[0]}
+                    lat={coordinates?.[1]}
+                    typeAPI="geo" // vicopo
+                    control={control}
+                    errors={errors}
+                />
+            ) : (
+                <>
+                    <FieldWrapper label="Ville">
+                        <TextInput
+                            name="address.city"
+                            errors={errors}
+                            control={control}
+                            rules={{ required: 'Required' }}
+                        />
+                    </FieldWrapper>
+                </>
+            )}
+
+            <Typography component="span" gutterBottom>Rayon (0 = off)</Typography>
+            <SliderInput
+                name="radius"
+                classNames="mb-2 my-4"
+                defaultValue={0}
+                min={0}
+                max={500}
+                step={5}
+                control={control}
+                errors={errors}
+                suffix="km"
+            />
+
+            <Typography component="span">Equipements</Typography>
             <SelectInput
-                name="vehicleGeneralState"
-                options={RadioVehicleGeneralState}
+                name="equipments"
+                options={CheckboxOptionsEquipments}
+                isMulti
+                defaultChecked={['ABS', 'ESP']}
                 control={control}
                 errors={errors}
             />
@@ -218,100 +234,84 @@ const CamperFilters = ({ control, watch, errors, ...props }) => {
                 errors={errors}
             />
 
-            <Header p strong className="my-2" text="Consommation CO2"/>
-            <div className="d-flex">
-                <NumberInput
-                    name="consumption.gkm.from"
-                    control={control}
-                    errors={errors}
-                />
-
-                <NumberInput
-                    name="consumption.gkm.to"
-                    control={control}
-                    errors={errors}
-                />
-            </div>
-
-            <Header p strong className="my-2" text="Equipements"/>
-            <SelectInput
-                name="equipments"
-                options={CheckboxOptionsEquipments}
-                isMulti
-                defaultChecked={['ABS', 'ESP']}
-                control={control}
+            <Typography component="span" gutterBottom>Consommation CO2</Typography>
+            <SliderInput
+                classNames="my-4 mt-2"
+                name="consumption.gkm"
+                defaultValue={[0, 200]}
+                min={0}
+                max={200}
+                step={1}
                 errors={errors}
+                control={control}
+                suffix="kw"
             />
 
-            <Header p strong className="my-2" text="Peinture"/>
-            <SelectInput
-                name="paint"
-                options={RadioChoicesPaints}
-                control={control}
+            <Typography component="span" gutterBottom>Nombre de places</Typography>
+            <SliderInput
+                classNames="my-4 mt-2"
+                name="seats"
+                defaultValue={[1, 10]}
+                min={1}
+                max={10}
+                step={1}
                 errors={errors}
+                control={control}
             />
 
-            <Header p strong className="my-2" text="Nombre de places"/>
-            <div className="d-flex">
-                <NumberInput
-                    name="seats.from"
-                    control={control}
-                    errors={errors}
-                />
-                <NumberInput
-                    name="seats.to"
-                    control={control}
-                    errors={errors}
-                />
-            </div>
+            <Typography component="span" gutterBottom>Nombre de portes</Typography>
+            <SliderInput
+                classNames="my-4 mt-2"
+                name="doors"
+                defaultValue={[1, 10]}
+                min={1}
+                max={10}
+                step={1}
+                errors={errors}
+                control={control}
+            />
 
-            <Header p strong className="my-2" text="Nombre de portes"/>
-            <div className="d-flex">
-                <NumberInput
-                    name="doors.from"
-                    control={control}
-                    errors={errors}
-                />
-                <NumberInput
-                    name="doors.to"
-                    control={control}
-                    errors={errors}
-                />
-            </div>
+            <Typography component="span" gutterBottom>Nombre de couchettes</Typography>
+            <SliderInput
+                classNames="my-4 mt-2"
+                name="bunks"
+                defaultValue={[1, 10]}
+                min={1}
+                max={10}
+                step={1}
+                errors={errors}
+                control={control}
+            />
 
-            <Header p strong className="my-2" text="Nombre de couchettes"/>
-            <div className="d-flex">
-                <NumberInput
-                    name="bunks.from"
-                    control={control}
-                    errors={errors}
-                />
-                <NumberInput
-                    name="bunks.to"
-                    control={control}
-                    errors={errors}
-                />
-            </div>
+            <Typography component="span" gutterBottom>Nombre de lits</Typography>
+            <SliderInput
+                classNames="my-4 mt-2"
+                name="beds"
+                defaultValue={[1, 10]}
+                min={1}
+                max={10}
+                step={1}
+                errors={errors}
+                control={control}
+            />
 
-            <Header p strong className="my-2" text="Type de lit"/>
+            <Typography component="span">Couleur extérieure</Typography>
             <SelectInput
                 name="bedType"
-                className="mb-2"
                 options={SelectOptionsUtils(['simple', 'double', 'depliant', 'gonflable'])}
-                placeholder="5"
                 control={control}
                 errors={errors}
             />
 
-            <Header p strong className="my-2" text="Materiaux"/>
+            <Typography component="span">Materiaux</Typography>
             <SelectInput
-                name="internalColor"
+                name="externalColor"
                 options={RadioChoicesMaterials}
                 control={control}
                 errors={errors}
             />
 
-            <Header p strong className="my-2" text="Peinture"/>
+            <Typography component="span">Peinture</Typography>
             <SelectInput
                 name="paint"
                 options={RadioChoicesPaints}
@@ -319,7 +319,7 @@ const CamperFilters = ({ control, watch, errors, ...props }) => {
                 errors={errors}
             />
 
-            <Header p strong className="my-2" text="Couleur extérieure"/>
+            <Typography component="span">Couleur extérieure</Typography>
             <SelectInput
                 name="externalColor"
                 options={RadioChoicesExternalColor}
@@ -327,21 +327,22 @@ const CamperFilters = ({ control, watch, errors, ...props }) => {
                 errors={errors}
             />
 
-            <Header p strong className="my-2" text="Couleur intérieure"/>
+            <Typography component="span">Peinture</Typography>
             <SelectInput
-                name="internalColor"
-                options={RadioChoicesExternalColor}
+                name="paint"
+                options={RadioChoicesPaints}
                 control={control}
                 errors={errors}
             />
+
         </>
-    )
-}
+    );
+};
 
 CamperFilters.propTypes = {
     control: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
-    watch: PropTypes.func
-}
+    watch: PropTypes.func,
+};
 
-export default CamperFilters
+export default CamperFilters;

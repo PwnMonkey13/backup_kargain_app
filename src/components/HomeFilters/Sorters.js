@@ -5,33 +5,41 @@ const Sorters = ({ updateSorter }) => {
     const options = [
         {
             label: 'Les plus récentes',
-            value: { key: 'createdAt', desc: true }
+            value: { key: 'DATE', asc: false }
         },
         {
             label: 'Les moins récentes',
-            value: { key: 'createdAt', desc: false }
+            value: { key: 'DATE', asc: true }
         },
         {
             label: 'Les plus chères',
-            value: { key: 'price', desc: true }
+            value: { key: 'PRICE', asc: false }
         },
         {
             label: 'Les moins chères',
-            value: { key: 'price', desc: false }
+            value: { key: 'PRICE', asc: true }
         },
         {
             label: 'Les plus kilométrées',
-            value: { key: 'mileage', desc: false }
+            value: { key: 'MILEAGE', asc: false }
         },
         {
             label: 'Les moins kilométrées',
-            value: { key: 'mileage', desc: true }
+            value: { key: 'MILEAGE', asc: true }
+        },
+        {
+            label: 'Les plus proches',
+            value: { key: 'MILEAGE', asc: true }
+        },
+        {
+            label: 'Les moins proches',
+            value: { key: 'MILEAGE', asc: false }
         }
     ]
     const [sorter, setSorter] = useState(options[0])
     const onHandleChange = (sort) => {
         setSorter(sort)
-        updateSorter(sort)
+        updateSorter(sort.value)
     }
 
     return (
