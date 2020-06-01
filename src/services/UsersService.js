@@ -23,13 +23,13 @@ function getUsers (params = {}) {
         );
 }
 
-function getUser (username) {
+function getUserByUsername (username) {
     const requestOptions = {
         method: 'GET',
     };
 
     if (!username) throw 'missing username during fetch user';
-    let url = `${config.api}/users/${username}`;
+    let url = `${config.api}/users/username/${username}`;
 
     return fetch(url, requestOptions)
         .then(handleResponse)
@@ -40,27 +40,123 @@ function getUser (username) {
         );
 }
 
-function updateUser (username, updates, token) {
-    // const formData = {
-    //     // _csrf: await NextAuth.csrfToken(),
-    //     user
-    // };
-
+function getUserByUsernameSSR (username, headers) {
     const requestOptions = {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: JSON.stringify(updates),
+        method: 'GET',
+        credentials: 'include',
+        headers,
     };
 
-    const url = `${config.api}/users/${username}`;
+    if (!username) throw 'missing username during fetch user';
+    let url = `${config.api}/users/username/${username}`;
 
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
+        .then(json => json.data)
+        .catch(err => {
+                throw err;
+            },
+        );
+}
+
+function updateUser (updates) {
+    const requestOptions = {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+    };
+
+    const url = `${config.api}/users/update`;
+
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+                throw err;
+            },
+        );
+}
+
+function uploadAvatar (formData) {
+    const requestOptions = {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+    };
+
+    const url = `${config.api}/users/upload/avatar`;
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+                throw err;
+            },
+        );
+}
+
+function addFavoriteAnnounce (announceId) {
+    const requestOptions = {
+        method: 'POST',
+        credentials: 'include',
+    };
+
+    const url = `${config.api}/users/favorite/${announceId}`;
+
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+                throw err;
+            },
+        );
+}
+
+function removeFavoriteAnnounce (announceId) {
+    const requestOptions = {
+        method: 'POST',
+        credentials: 'include',
+    };
+
+    const url = `${config.api}/users/unfavorite/${announceId}`;
+
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+                throw err;
+            },
+        );
+}
+
+function followUser (userId) {
+    const requestOptions = {
+        method: 'POST',
+        credentials: 'include',
+    };
+
+    const url = `${config.api}/users/follow/${userId}`;
+
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+                throw err;
+            },
+        );
+}
+
+function unFollowUser (userId) {
+    const requestOptions = {
+        method: 'POST',
+        credentials: 'include',
+    };
+
+    const url = `${config.api}/users/unfollow/${userId}`;
+
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
         .catch(err => {
                 throw err;
             },
@@ -69,6 +165,12 @@ function updateUser (username, updates, token) {
 
 export default {
     getUsers,
-    getUser,
+    getUserByUsername,
+    getUserByUsernameSSR,
     updateUser,
+    uploadAvatar,
+    addFavoriteAnnounce,
+    removeFavoriteAnnounce,
+    followUser,
+    unFollowUser,
 };

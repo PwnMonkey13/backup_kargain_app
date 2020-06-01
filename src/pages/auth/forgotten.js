@@ -4,6 +4,7 @@ import { EmailInput } from '../../components/Form/Inputs';
 import FieldWrapper from '../../components/Form/FieldWrapper';
 import AuthService from '../../services/AuthService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
+import CTAButton from '../../components/CTAButton';
 
 const formConfig = {
     mode: 'onChange',
@@ -24,7 +25,7 @@ const LoginPage = () => {
             }).catch(err => {
                 dispatchModalError({
                     err,
-                    msg: 'User not found',
+                    // msg: 'User not found',
                 });
             },
         );
@@ -45,9 +46,11 @@ const LoginPage = () => {
                 </FieldWrapper>
 
                 <div className="submit">
-                    <button className="btn btn-outline-primary" type="submit">Demander un nouveau mot de passe</button>
+                    <CTAButton
+                        title="Demander un nouveau mot de passe"
+                        submit
+                    />
                 </div>
-
             </form>
         </main>
     );

@@ -1,49 +1,56 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import AuthService from '../services/AuthService';
-import { useRouter } from 'next/router';
+import UserModel from '../models/user.model';
 
 const AuthContext = createContext({
     isLoading: false,
     authenticatedUser: null,
     isAuthenticated: false,
     isAuthenticatedUserAdmin: false,
-    setAuthenticatedUser : () => {},
-    setIsAuthenticated: () => {},
 });
 
 export const AuthProvider = ({ children }) => {
-    const router = useRouter()
+    const [stateReady, setStateReady] = useState(true);
     const [isLoading, setLoading] = useState(false);
+    const [forceLoginModal, setForceLoginModal] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [authenticatedUser, setAuthenticatedUser] = useState(null);
+    const [authenticatedUser, setAuthenticatedUser] = useState(new UserModel());
     const [isAuthenticatedUserAdmin, setIsAuthenticatedUserAdmin] = useState(false);
+
+    const updateRawUser = (rawUser) => {
+        setAuthenticatedUser(new UserModel(rawUser))
+    }
 
     useEffect(() => {
         const initializeAuth = async () => {
-            setLoading(true)
-            try{
-                const result = await AuthService.authorizeSSR();
-                const { user } = result;
-                setIsAuthenticated(true);
-                setAuthenticatedUser(user);
-                setIsAuthenticatedUserAdmin(user.isAdmin);
+            setLoading(true);
+            setStateReady(false);
+            try {
+                const user = await AuthService.authorize();
+                const User = new UserModel(user);
+                setIsAuthenticated(!!user);
+                setAuthenticatedUser(User);
+                setIsAuthenticatedUserAdmin(User.isAdmin);
                 setLoading(false);
+                setStateReady(true);
             } catch (err) {
-                console.log(err);
-                console.log('not logged in');
                 setLoading(false);
+                setStateReady(true);
             }
         };
-        // initializeAuth();
+        initializeAuth();
     }, []);
 
     return (
         <AuthContext.Provider value={{
+            stateReady,
             isLoading,
             isAuthenticated,
             isAuthenticatedUserAdmin,
             authenticatedUser,
-            setAuthenticatedUser,
+            forceLoginModal,
+            setForceLoginModal,
+            updateRawUser,
             setIsAuthenticated,
         }}>
             {children}
@@ -52,7 +59,7 @@ export const AuthProvider = ({ children }) => {
 };
 
 export function useAuth () {
-    const context = React.useContext(AuthContext);
+    const context = useContext(AuthContext);
     if (context === undefined) {
         throw new Error('useAuth must be used within an AuthProvider');
     }

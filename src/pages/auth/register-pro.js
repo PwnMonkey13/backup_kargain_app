@@ -5,8 +5,14 @@ import { useForm } from 'react-hook-form';
 import AuthService from '../../services/AuthService';
 import Divider from '../../components/Divider';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import { CheckBoxInput, EmailInput, PasswordInput, SelectInput, TextInput } from '../../components/Form/Inputs';
+import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../components/Form/Inputs';
 import FieldWrapper from '../../components/Form/FieldWrapper';
+import GeoStreetsInput from '../../components/Form/Inputs/GeoAddressSearchInput';
+import Typography from '@material-ui/core/Typography';
+import SelectCountryFlags from '../../components/Form/Inputs/SelectCountryFlags';
+import Spacer from '../../components/Spacer';
+import useAddress from '../../hooks/useAddress';
+import CTALink from '../../components/CTALink';
 
 const formConfig = {
     mode: 'onChange',
@@ -16,6 +22,7 @@ const formConfig = {
 const RegisterPro = () => {
     const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const [addressParts, addressString, coordinates] = useAddress();
 
     const onSubmit = (form) => {
         const { confirm, confirmPwd, ...data } = form;
@@ -30,12 +37,14 @@ const RegisterPro = () => {
         });
     };
 
+    const countrySelect = watch('countrySelect');
+
     return (
         <main>
             <h1>Créer un compte Pro</h1>
             <Row>
-                <Col className="m-auto" sm="12" md="5">
-                    <div className="flex-column">
+                <Col sm="12" md="5">
+                    <div className="flex-column p-3 mt-3">
                         <Link href="#">
                             <a className="register-fb">
                                 <img src="/images/fb.png" alt=""/>
@@ -50,18 +59,17 @@ const RegisterPro = () => {
                             </a>
                         </Link>
                         <Divider text="ou"/>
-                        <Link href="/auth/login">
-                            <a className="btn btn-outline-primary submit">
-                                Se connecter
-                            </a>
-                        </Link>
-                        <Link href="/auth/register">
-                            <a className="btn btn-outline-primary submit">
-                                Creer un compte client
-                            </a>
-                        </Link>
+                        <CTALink
+                            title="Se connecter"
+                            href="/auth/login"
+                        />
+                        <CTALink
+                            title="Creer un compte client"
+                            href="/auth/register"
+                        />
                     </div>
                 </Col>
+
                 <Col className="m-auto" sm="12" md="7">
                     <style jsx>{`
                         form{
@@ -71,10 +79,10 @@ const RegisterPro = () => {
                         }
                     `}
                     </style>
-                    <form className="p-3 mt-3 mx-auto"
-                          onSubmit={handleSubmit(onSubmit)}>
+                    <form className="p-3 mt-3 mx-auto" onSubmit={handleSubmit(onSubmit)}>
 
-                        <FieldWrapper label="Nom de société">
+                        <Typography component="h3" variant="h3">Votre société</Typography>
+                        <FieldWrapper label="Raison sociale">
                             <TextInput
                                 name="company.name"
                                 errors={errors}
@@ -83,7 +91,7 @@ const RegisterPro = () => {
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="SIREN de la société">
+                        <FieldWrapper label="SIREN">
                             <TextInput
                                 name="company.siren"
                                 errors={errors}
@@ -92,41 +100,53 @@ const RegisterPro = () => {
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="Gérant de la société">
-                            <TextInput
-                                name="company.owner"
-                                errors={errors}
-                                control={control}
-                                rules={{ required: 'Required' }}
-                            />
-                        </FieldWrapper>
-
                         <FieldWrapper label="Pays">
-                            <SelectInput
-                                name="country"
+                            <SelectCountryFlags
+                                name="countrySelect"
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="Ville ou code postal">
-                            <TextInput
-                                name="postalcode"
-                                errors={errors}
-                                control={control}
-                                rules={{ required: 'Required' }}
-                            />
-                        </FieldWrapper>
+                        {countrySelect && countrySelect.value === 'FR' ? (
+                            <FieldWrapper label="Ville ou code postal">
+                                <GeoStreetsInput
+                                    name="address"
+                                    enableGeoloc
+                                    long={coordinates?.[0]}
+                                    lat={coordinates?.[1]}
+                                    control={control}
+                                    errors={errors}
+                                    rules={{ required: 'Required' }}
+                                    inputProps={{
+                                        placeholder: '10 avenue du Prado, 13008 Marseille',
+                                    }}
+                                />
+                            </FieldWrapper>
+                        ) : (
+                            <>
+                                <FieldWrapper label="Ville">
+                                    <TextInput
+                                        name="address.city"
+                                        errors={errors}
+                                        control={control}
+                                        rules={{ required: 'Required' }}
+                                    />
+                                </FieldWrapper>
 
-                        <FieldWrapper label="Adresse">
-                            <TextInput
-                                name="address"
-                                errors={errors}
-                                control={control}
-                                rules={{ required: 'Required' }}
-                            />
-                        </FieldWrapper>
+                                <FieldWrapper label="Adresse">
+                                    <TextInput
+                                        name="address.street"
+                                        errors={errors}
+                                        control={control}
+                                        rules={{ required: 'Required' }}
+                                    />
+                                </FieldWrapper>
+                            </>
+                        )}
+
+                        <Spacer bottom="30"/>
+                        <Typography component="h3" variant="h3">Vous </Typography>
 
                         <FieldWrapper label="Nom">
                             <TextInput

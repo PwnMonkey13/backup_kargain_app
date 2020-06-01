@@ -1,8 +1,11 @@
 import React, { memo, useContext, useState } from 'react';
-import Link from 'next/link';
 import clsx from 'clsx';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { Row, Col } from 'reactstrap'
 import { useForm } from 'react-hook-form';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import {useTheme, makeStyles} from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import TrackChangesIcon from '@material-ui/icons/TrackChanges';
 import ExploreIcon from '@material-ui/icons/Explore';
 import ForumIcon from '@material-ui/icons/Forum';
@@ -13,6 +16,8 @@ import { CheckBoxInput, EmailInput, PasswordInput } from './Form/Inputs';
 import { themeColors } from '../theme/palette';
 import Divider from './Divider';
 import TitleMUI from './TitleMUI';
+import CTAButton from './CTAButton';
+import CTALink from './CTALink';
 
 const formConfig = {
     mode: 'onChange',
@@ -31,6 +36,7 @@ const useStyles = makeStyles(() => ({
         background: 'rgba(0, 0, 0,0.5)',
         display: 'flex',
         zIndex: 999,
+        paddingTop : '3rem'
     },
 
     popupContent: {
@@ -48,7 +54,7 @@ const useStyles = makeStyles(() => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '450px',
+        // width: '450px',
         height: '100%',
         textAlign: 'center',
         borderRadius: '10px',
@@ -65,7 +71,7 @@ const useStyles = makeStyles(() => ({
     wrapperForm: {
         borderRadius: '10px',
         backgroundColor: '#fff',
-        width: '300px',
+        maxWidth: '300px',
         height: '100%',
         padding: '1rem',
         margin: 'auto',
@@ -78,156 +84,175 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default () => {
+    const theme = useTheme();
     const classes = useStyles();
+    const router = useRouter();
     const { isAuthenticated } = useAuth();
     const { control, errors, handleSubmit } = useForm(formConfig);
-    const { dispatchModal } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [openLoginModal, toggleLoginModal] = useState(!isAuthenticated);
+    const isMobile = useMediaQuery(theme.breakpoints.up('sm'), {
+        defaultMatches: true,
+    });
 
     const onSubmit = (form) => {
         const { email, password } = form;
-        AuthService.login({ email, password })
+        AuthService.login({
+            email,
+            password,
+        })
             .then(data => {
                 const { user } = data;
+                router.reload();
                 toggleLoginModal(false);
-                dispatchModal({ type: 'success', msg: `Welcome back ${user.firstname}`,
+                dispatchModal({
+                    type: 'success',
+                    msg: `Welcome back ${user.firstname}`,
                 });
             }).catch(err => {
-                dispatchModal({
-                    type: 'error',
-                    err,
-                });
+                dispatchModalError({ err });
                 close();
             },
         );
     };
 
-    const LeftBlock = memo(() => {
-        return (
-            <div className={classes.wrapperLeft}>
-                <div style={{ flex: 1 }}>
-                    <div className="over-header m-b-lg">
-                        <img className="img-fluid" width={300} src="/images/kargain-logo-white.png" alt="kargain"/>
-                    </div>
-                </div>
-                <div className={clsx(classes.contentleft, 'm-3')} style={{ flex: 3 }}>
-                    <div className="p-2">
-                        <TrackChangesIcon fontSize="large"/>
-                        <TitleMUI as="h4" variant="h3" color="white">
-                            Petites annonces automobiles
-                        </TitleMUI>
-                    </div>
-
-                    <div className="p-2">
-                        <ExploreIcon fontSize="large"/>
-                        <TitleMUI as="h4" variant="h3" color="white">
-                            Trouvez, vendez des véhicules prés de chez vous
-                        </TitleMUI>
-                    </div>
-
-                    <div className="p-2">
-                        <ForumIcon fontSize="large"/>
-                        <TitleMUI as="h4" variant="h3" color="white">
-                            Publiez et partagez du contenu avec la communauté
-                        </TitleMUI>
-                    </div>
-                </div>
-            </div>
-        );
-    });
-
-    const Providers = memo(() => {
-        return (
-            <div className="d-flex flex-column">
-                <Link href="#">
-                    <a className="p-2 register-fb">
-                        <img src="/images/fb.png" alt=""/>
-                        Se connecter avec Facebook
-                    </a>
-                </Link>
-                <Link href="#">
-                    <a className="p-2 register-g">
-                        <img src="/images/g+.png" alt=""/>
-                        Se connecter avec Google+
-                    </a>
-                </Link>
-            </div>
-        );
-    });
-
     if (!openLoginModal) return null;
 
     return (
         <div className={classes.popupOverlay}>
-            <div className={classes.popupContent}>
-                <LeftBlock/>
-
-                <div className={classes.wrapperForm}>
-
-                    <Providers/>
-                    <Divider className="m-3"/>
-                    <div className="auth_form m-auto">
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <div className="mt-2 form-group">
-                                <EmailInput
-                                    name="email"
-                                    placeholder="email"
-                                    errors={errors}
-                                    control={control}
-                                    rules={{
-                                        required: 'field required',
-                                    }}
-                                />
-                            </div>
-
-                            <div className="mt-2 form-group">
-                                <PasswordInput
-                                    name="password"
-                                    placeholder="Mot de passe"
-                                    errors={errors}
-                                    control={control}
-                                    rules={{
-                                        required: 'field required',
-                                    }}
-                                />
-                            </div>
-
-                            <div className="mt-2 form-group">
-                                <CheckBoxInput
-                                    name="confirm"
-                                    label="Se souvenir de moi"
-                                    errors={errors}
-                                    control={control}
-                                />
-
-                            </div>
-
-                            <div className="submit">
-                                <button className="p-2 btn btn-outline-primary" type="submit">Se connecter</button>
-                            </div>
-                        </form>
-
-                        <div className="d-block text-center">
-                            <Link href="/auth/reset-password">
-                                <a>Mot de passe oublié</a>
-                            </Link>
-
+            <Row className={classes.popupContent}>
+                {!isMobile && (
+                    <Col sm={12} md={6}>
+                        <div className={classes.wrapperLeft}>
+                            <LeftBlock/>
                         </div>
+                    </Col>
+                )}
 
+                <Col sm={12} md={isMobile ? 12 : 6}>
+                    <div className={classes.wrapperForm}>
+                        <Providers/>
                         <Divider className="m-3"/>
-                        <Link href='/auth/register'>
-                            <a className="p-2 lead btn btn-outline-primary submit">
-                                Créer un compte
-                            </a>
-                        </Link>
-                        <Link href="/auth/register-pro">
-                            <a className="p-2 lead btn btn-outline-primary submit">
-                                S'enregistrer en tant que Pro
-                            </a>
-                        </Link>
+                        <div className="auth_form m-auto">
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <div className="mt-2 form-group">
+                                    <EmailInput
+                                        name="email"
+                                        placeholder="email"
+                                        errors={errors}
+                                        control={control}
+                                        rules={{
+                                            required: 'field required',
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="mt-2 form-group">
+                                    <PasswordInput
+                                        name="password"
+                                        placeholder="Mot de passe"
+                                        errors={errors}
+                                        control={control}
+                                        rules={{
+                                            required: 'field required',
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="mt-2 form-group">
+                                    <CheckBoxInput
+                                        name="confirm"
+                                        label="Se souvenir de moi"
+                                        errors={errors}
+                                        control={control}
+                                    />
+
+                                </div>
+
+                                <div className="submit">
+                                    <CTAButton
+                                        title="Se connecter"
+                                        submit
+                                    />
+                                </div>
+                            </form>
+
+                            <div className="d-block text-center">
+                                <Link href="/auth/reset-password">
+                                    <a>Mot de passe oublié</a>
+                                </Link>
+
+                            </div>
+
+                            <Divider className="m-3"/>
+                            <CTALink
+                                className="submit"
+                                title="Créer un compte"
+                                href="/auth/register"
+                            />
+                            <CTALink
+                                className="submit"
+                                title="S'enregistrer en tant que Pro"
+                                href="/auth/register-pro"
+                            />
+                        </div>
                     </div>
-                </div>
-            </div>
+                </Col>
+            </Row>
         </div>
     );
 }
+
+const LeftBlock = memo(() => {
+    const classes = useStyles();
+    return (
+        <>
+            <div style={{ flex: 1 }}>
+                <div className="over-header m-b-lg">
+                    <img className="img-fluid" width={300} src="/images/kargain-logo-white.png" alt="kargain"/>
+                </div>
+            </div>
+            <div className={clsx(classes.contentleft, 'm-3')} style={{ flex: 3 }}>
+                <div className="p-2">
+                    <TrackChangesIcon fontSize="large"/>
+                    <TitleMUI as="h4" variant="h3" color="white">
+                        Petites annonces automobiles
+                    </TitleMUI>
+                </div>
+
+                <div className="p-2">
+                    <ExploreIcon fontSize="large"/>
+                    <TitleMUI as="h4" variant="h3" color="white">
+                        Trouvez, vendez des véhicules prés de chez vous
+                    </TitleMUI>
+                </div>
+
+                <div className="p-2">
+                    <ForumIcon fontSize="large"/>
+                    <TitleMUI as="h4" variant="h3" color="white">
+                        Publiez et partagez du contenu avec la communauté
+                    </TitleMUI>
+                </div>
+            </div>
+        </>
+    );
+});
+
+const Providers = memo(() => {
+    return (
+        <div className="d-flex flex-column">
+            <Link href="#">
+                <a className="p-2 register-fb">
+                    <img src="/images/fb.png" alt=""/>
+                    Se connecter avec Facebook
+                </a>
+            </Link>
+            <Link href="#">
+                <a className="p-2 register-g">
+                    <img src="/images/g+.png" alt=""/>
+                    Se connecter avec Google+
+                </a>
+            </Link>
+        </div>
+    );
+});

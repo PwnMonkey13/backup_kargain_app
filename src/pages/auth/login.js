@@ -9,6 +9,8 @@ import Divider from '../../components/Divider';
 import AuthService from '../../services/AuthService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import withoutAuth from '../../hoc/withoutAuth';
+import CTALink from '../../components/CTALink';
+import CTAButton from '../../components/CTAButton';
 
 const formConfig = {
     mode: 'onChange',
@@ -29,11 +31,11 @@ export default withoutAuth(() => {
         })
             .then(data => {
                 if (redirect) {
-                    router.push({ pathname: redirect });
+                    router.push(redirect);
                 } else {
                     const isAdmin = data.user.isAdmin;
                     if (isAdmin) {
-                        router.push(`/admin?test=true`);
+                        router.push(`/auth/callback?redirect=/admin`);
                     } else {
                         router.push(`/auth/callback?redirect=/profile/${data.user.username}`);
                     }
@@ -61,16 +63,14 @@ export default withoutAuth(() => {
                     </a>
                 </Link>
                 <Divider text="ou"/>
-                <Link href='/auth/register'>
-                    <a className="btn btn-outline-primary submit">
-                        Créer un compte
-                    </a>
-                </Link>
-                <Link href="/auth/register-pro">
-                    <a className="btn btn-outline-primary submit">
-                        S'enregistrer en tant que Pro
-                    </a>
-                </Link>
+                <CTALink
+                    title="Créer un compte"
+                    href="/auth/register"
+                />
+                <CTALink
+                    title="S'enregistrer en tant que Pro"
+                    href="/auth/register-pro"
+                />
             </div>
         );
     });
@@ -127,7 +127,10 @@ export default withoutAuth(() => {
                         </div>
 
                         <div className="submit">
-                            <button className="btn btn-outline-primary" type="submit">Se connecter</button>
+                            <CTAButton
+                                title="Se connecter"
+                                submit
+                            />
                         </div>
                     </form>
                 </Col>

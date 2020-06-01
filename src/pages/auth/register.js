@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
 import Link from 'next/link';
 import { Col, Row } from 'reactstrap';
+import { useForm } from 'react-hook-form';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import Divider from '../../components/Divider';
 import AuthService from '../../services/AuthService';
-import { useForm } from 'react-hook-form';
 import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../components/Form/Inputs';
 import FieldWrapper from '../../components/Form/FieldWrapper';
+import CTALink from '../../components/CTALink';
+import CTAButton from '../../components/CTAButton';
 
 const formConfig = {
     mode: 'onChange',
@@ -35,8 +37,8 @@ const RegisterPage = () => {
         <main>
             <h1>Créer un compte</h1>
             <Row>
-                <Col className="m-auto" sm="12" md="5">
-                    <div className="flex-column">
+                <Col sm="12" md="5">
+                    <div className="flex-column p-3 mt-3">
                         <Link href="#">
                             <a className="register-fb">
                                 <img src="/images/fb.png" alt=""/>
@@ -51,16 +53,14 @@ const RegisterPage = () => {
                             </a>
                         </Link>
                         <Divider text="ou"/>
-                        <Link href="/auth/login">
-                            <a className="btn btn-outline-primary submit">
-                                Se connecter
-                            </a>
-                        </Link>
-                        <Link href="/auth/register-pro">
-                            <a className="btn btn-outline-primary submit">
-                                Créer un compte Pro
-                            </a>
-                        </Link>
+                        <CTALink
+                            title="Se connecter"
+                            href="/auth/login"
+                        />
+                        <CTALink
+                            title="Créer un compte Pro"
+                            href="/auth/register-pro"
+                        />
                     </div>
                 </Col>
                 <Col className="m-auto" sm="12" md="6" lg="7">
@@ -149,7 +149,10 @@ const RegisterPage = () => {
                         </FieldWrapper>
 
                         <div className="submit">
-                            <button className="btn btn-outline-primary" type="submit">S'enregistrer</button>
+                            <CTAButton
+                                title="S'enregistrer"
+                                submit
+                            />
                         </div>
                     </form>
                 </Col>

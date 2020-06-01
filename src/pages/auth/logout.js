@@ -6,14 +6,14 @@ import { ModalDialogContext } from '../../context/ModalDialogContext';
 
 export default withAuth(() => {
     const { dispatchModalError } = useContext(ModalDialogContext)
-    const { setAuthenticatedUser, setIsAuthenticated } = useAuth();
+    const { updateRawUser, setIsAuthenticated } = useAuth();
 
     useEffect(() => {
         const logout = async () => {
 
             try {
                 await AuthService.logout();
-                setAuthenticatedUser(null);
+                updateRawUser(null);
                 setIsAuthenticated(false);
             } catch (err) {
                 dispatchModalError({ err })

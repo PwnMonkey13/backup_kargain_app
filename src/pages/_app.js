@@ -19,6 +19,7 @@ import theme from '../theme';
 import Loader from '../components/Loader';
 
 const MyApp = ({ Component, pageProps }) => {
+    const { formKey } = pageProps;
 
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
@@ -49,7 +50,7 @@ const MyApp = ({ Component, pageProps }) => {
         <ThemeProvider theme={theme}>
             <ModalDialogContextProvider>
                 <AuthProvider>
-                    <FormContextProvider>
+                    <FormContextProvider formKey={formKey}>
                         <NextProgress/>
                         <DefaultSeo {...SEO} />
                         <PopupAlert/>
@@ -65,27 +66,25 @@ const MyApp = ({ Component, pageProps }) => {
 
 const ProtectedRouter = ({ children }) => {
     const router = useRouter();
-    const isAdminRoute = router.route.split('/').includes('admin');
-    const { isLoading, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
     const pageProps = children.props;
+    const isAdminRoute = router.route.split('/').includes('admin');
+    const { stateReady, isLoading, forceLoginModal, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
+    const showLoginModal = (pageProps.requiredAuth && !isAuthenticated) || forceLoginModal
 
+    if (!stateReady) return null;
     if (isLoading) return <Loader/>;
-
+    if (isAdminRoute && !isAuthenticatedUserAdmin) return <Forbidden403Page/>;
     if (isAdminRoute) {
-        if (isAuthenticatedUserAdmin) {
-            return (
-                <AdminLayout>
-                    {children}
-                </AdminLayout>
-            );
-        } else {
-            return <Forbidden403Page/>;
-        }
+        return (
+            <AdminLayout>
+                {children}
+            </AdminLayout>
+        );
     }
 
     return (
         <Layout>
-            {(pageProps.requiredAuth && !isAuthenticated) && <PopupLogin pageProps={pageProps}/>}
+            {showLoginModal && <PopupLogin pageProps={pageProps}/>}
             {children}
         </Layout>
     );

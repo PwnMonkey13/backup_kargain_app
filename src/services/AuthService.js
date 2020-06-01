@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-unfetch';
+
 import handleResponse from '../libs/handleResponse';
 import config from '../config/config';
 
@@ -69,9 +70,8 @@ function registerPro (form) {
             return json.data;
         })
         .catch(err => {
-                throw err;
-            },
-        );
+            throw err;
+        });
 }
 
 function authorize () {
@@ -80,34 +80,31 @@ function authorize () {
         credentials: 'include',
     };
 
-    const url = `${config.api}/auth/authorizeSSR`;
+    const url = `${config.api}/auth/authorize`;
+
     return fetch(url, requestOptions)
-        .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
-        .catch(err => {
-                throw err;
-            },
-        );
+      .then(handleResponse)
+      .then(json => json.data)
+      .catch(err => {
+          throw err;
+      });
 }
 
-function authorizeSSR () {
+function authorizeSSR (headers) {
     const requestOptions = {
         method: 'GET',
         credentials: 'include',
+        headers
     };
 
-    const url = `${config.api}/auth/authorizeSSR`;
+    const url = `${config.api}/auth/authorize`;
+
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
+        .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
-        );
+            throw err;
+        });
 }
 
 function confirmAccount (token) {
@@ -121,9 +118,8 @@ function confirmAccount (token) {
             return json;
         })
         .catch(err => {
-                throw err;
-            },
-        );
+            throw err;
+        });
 }
 
 function forgotPassword (email) {
@@ -141,9 +137,8 @@ function forgotPassword (email) {
             return json.data;
         })
         .catch(err => {
-                throw err;
-            },
-        );
+            throw err;
+        });
 }
 
 function resetPassword (token, password) {
@@ -164,9 +159,8 @@ function resetPassword (token, password) {
             return json.data;
         })
         .catch(err => {
-                throw err;
-            },
-        );
+            throw err;
+        });
 }
 
 export default {
@@ -174,6 +168,7 @@ export default {
     logout,
     register,
     registerPro,
+    authorize,
     authorizeSSR,
     confirmAccount,
     forgotPassword,
