@@ -1,0 +1,63 @@
+import React, { useContext, useEffect, useState } from 'react';
+import EditIcon from '@material-ui/icons/Edit';
+import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { useAuth } from '../../context/AuthProvider';
+import UsersService from '../../services/UsersService';
+
+const FileInput = ({ value, onChange = noop, ...rest }) => (
+    <input
+        {...rest}
+        // style={{ display: "none" }}
+        type="file"
+        id="imageUpload"
+        accept=".png, .jpg, .jpeg"
+        onChange={e => {
+            onChange([...e.target.files]);
+        }}
+    />
+);
+
+const AvatarPreviewUpload = () => {
+    const { authenticatedUser, updateRawUser, isAuthenticated } = useAuth();
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const [avatarLocation, setAvatarLocation] = useState(authenticatedUser.getAvatar);
+
+    const onChangeFile = (files) => {
+        dispatchModal({ msg: 'Uploading...', persist : true });
+        let data = new FormData();
+        data.append('avatar', files[0]);
+
+        UsersService.uploadAvatar(data)
+            .then(doc => {
+                console.log(doc);
+                updateRawUser(doc);
+                dispatchModal({ msg: 'Upload Successful'});
+            }).catch(err => {
+                dispatchModalError({ err });
+            },
+        );
+    };
+
+    useEffect(() => {
+        console.log(authenticatedUser.getAvatar);
+        setAvatarLocation(authenticatedUser.getAvatar);
+    }, [authenticatedUser]);
+
+    return (
+        <div className="avatar-upload">
+            {isAuthenticated && (
+                <div className="avatar-edit">
+                    <FileInput onChange={onChangeFile}/>
+                    <label htmlFor="imageUpload">
+                        <EditIcon/>
+                    </label>
+                </div>
+            )}
+            <div className="avatar-preview" style={{ height : 160, width : 160}}>
+                <div id="imagePreview" style={{ backgroundImage: `url(${avatarLocation})` }}/>
+            </div>
+        </div>
+    );
+};
+
+export default AvatarPreviewUpload;
