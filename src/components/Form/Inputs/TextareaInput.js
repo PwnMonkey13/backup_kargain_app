@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import ValidationError from '../Validations/ValidationError'
 
@@ -27,4 +27,4 @@ TextareaInput.defaultProps = {
     rules: {}
 }
 
-export default memo(TextareaInput)
+export default TextareaInput

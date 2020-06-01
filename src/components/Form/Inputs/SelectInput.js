@@ -98,15 +98,9 @@ const SelectInput = memo(({ name, control, rules, errors, ...props }) => {
             ([...carry, options.find(option => option.value.toLowerCase() === selected.toString().toLowerCase())]), [])
     }
 
-    const InputClasses = clsx(
-        'select-field',
-        'my-2',
-        props.className
-    )
-
     return (
         <>
-            <div className={InputClasses}>
+            <div className={clsx('select-field', 'my-2', props.className)}>
                 <Controller
                     instanceId={name}
                     name={name}

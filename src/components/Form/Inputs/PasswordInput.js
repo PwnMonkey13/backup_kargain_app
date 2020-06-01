@@ -1,19 +1,18 @@
-import React, { memo, useState } from 'react'
-import ValidationError from '../Validations/ValidationError'
+import React, { memo, useState } from 'react';
+import ValidationError from '../Validations/ValidationError';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import ClassNames from 'classnames'
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
 const PasswordInput = memo(({ name, control, rules, errors, ...props }) => {
-    const [hidden, setHidden] = useState(true)
-    const classnames = ClassNames('input-field', { 'w-100': props.fullwidth })
+    const [hidden, setHidden] = useState(true);
 
-    if(!control) return null;
+    if (!control) return null;
 
     return (
         <>
-            <div className={classnames}>
+            <div className={clsx('input-field', props.fullwidth && 'w-100')}>
                 <input
                     name={name}
                     ref={control.register(rules)}
@@ -23,23 +22,23 @@ const PasswordInput = memo(({ name, control, rules, errors, ...props }) => {
                     disabled={props.disabled}
                 />
                 <span className="password__show" onClick={() => setHidden(!hidden)}>
-                    {hidden ? <VisibilityIcon/>: <VisibilityOffIcon/> }
+                    {hidden ? <VisibilityIcon/> : <VisibilityOffIcon/>}
                 </span>
             </div>
             {errors && <ValidationError errors={errors} name={name}/>}
         </>
-    )
-})
+    );
+});
 
 PasswordInput.propTypes = {
-    control : PropTypes.any.isRequired,
-}
+    control: PropTypes.any.isRequired,
+};
 
 PasswordInput.defaultProps = {
     required: false,
     disabled: false,
     hidden: true,
-    display: 'col'
-}
+    display: 'col',
+};
 
-export default PasswordInput
+export default PasswordInput;

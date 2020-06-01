@@ -1,19 +1,18 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import ValidationError from '../Validations/ValidationError'
-import ClassNames from 'classnames'
+import React from 'react';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import ValidationError from '../Validations/ValidationError';
 
-const TextInput = ({ name, rules, control, errors, ...props }) => {
-    const classnames = ClassNames('input-field', { 'w-100': props.fullwidth })
+const TextInput = ({ name, rules, control, errors, defaultValue, ...props }) => {
 
     return (
         <>
-            <div className={classnames}>
+            <div className={clsx('input-field', props.fullwidth && 'w-100')}>
                 <input
                     type="text"
-                    ref={control.register(rules)}
+                    ref={control && control.register(rules)}
                     name={name}
-                    defaultValue={props.defaultValue}
+                    defaultValue={defaultValue}
                     placeholder={props.placeholder}
                     disabled={props.disabled}
                     onBlur={props.onBlur}
@@ -21,15 +20,16 @@ const TextInput = ({ name, rules, control, errors, ...props }) => {
             </div>
             {errors && <ValidationError errors={errors} name={name}/>}
         </>
-    )
-}
+    );
+};
 
 TextInput.propTypes = {
-    name: PropTypes.string.isRequired
-}
+    name: PropTypes.string,
+    disabled : PropTypes.bool
+};
 
 TextInput.defaultProps = {
-    rules: {}
-}
+    rules: {},
+};
 
-export default TextInput
+export default TextInput;

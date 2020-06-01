@@ -1,48 +1,54 @@
-import React, { useState } from 'react'
-import clsx from 'clsx'
-import ReactPhoneInput from 'react-phone-input-2'
-import ValidationError from '../Validations/ValidationError'
+import React, { useState } from 'react';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { Controller } from 'react-hook-form';
+import ReactPhoneInput from 'react-phone-input-2';
+import fr from 'react-phone-input-2/lang/fr.json';
+import ValidationError from '../Validations/ValidationError';
 
-import PropTypes from 'prop-types'
+function TelInput ({ name, rules, control, errors, innerProps, ...props }) {
+    const classnames = clsx('input-field', props.fullwidth && 'w-100');
+    const [phone, setPhone] = useState('');
 
-function TelInput ({ name, rules, control, errors, ...props }) {
-    const classnames = clsx('input-field',  props.fullwidth && 'w-100' )
-    const [phone, setPhone] = useState('')
-
-    const handleOnChange = value => {
-        setPhone(value)
-    }
+    const handleOnChange = ([value]) => {
+        setPhone(value);
+        return value
+    };
 
     return (
         <>
             <div className={classnames}>
-                <ReactPhoneInput
-                    ref={control.register(rules)}
-                    className="input-field"
+
+                <Controller
+                    instanceId={name}
                     name={name}
-                    inputExtraProps={{
-                        name: 'phone',
-                        required: true,
-                        autoFocus: true
-                    }}
-                    defaultCountry={props.country}
-                    value={phone}
+                    control={control}
+                    rules={rules}
+                    defaultValue={phone}
                     onChange={handleOnChange}
-                    placeholder="Enter phone number"
-                />
+                    as={<ReactPhoneInput
+                        className="input-field"
+                        required
+                        regions={'europe'}
+                        value={phone}
+                        country={innerProps.country}
+                        placeholder={innerProps.placeholder}
+                        {...innerProps}/>
+                    }/>
             </div>
             {errors && <ValidationError errors={errors} name={name}/>}
         </>
-    )
+    );
 }
 
 TelInput.propTypes = {
-    name: PropTypes.string.isRequired
-}
+    name: PropTypes.string.isRequired,
+};
 
 TelInput.defaultProps = {
     rules: {},
-    country: 'FR'
-}
+    country: 'fr',
+    placeholder: 'Enter phone number',
+};
 
-export default TelInput
+export default TelInput;
