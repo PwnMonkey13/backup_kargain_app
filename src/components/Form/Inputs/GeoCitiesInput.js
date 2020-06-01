@@ -4,6 +4,10 @@ import { Controller } from 'react-hook-form'
 import PlacesServices from '../../../services/PlacesService'
 import ValidationError from '../Validations/ValidationError'
 import { Search } from 'react-feather'
+import { ModalDialogContext } from '../../../context/ModalDialogContext';
+
+const { useContext } = require('react');
+
 const DropdownIndicator = props => {
     return (
         components.DropdownIndicator && (
@@ -17,6 +21,8 @@ const DropdownIndicator = props => {
 const Menu = props => props.options.length ? <components.Menu {...props}>{props.children}</components.Menu> : null
 
 const GeoCitiesInput = memo(({ name, control, rules, errors, ...props }) => {
+    const { dispatchModalError } = useContext(ModalDialogContext)
+
     const [state, setState] = useState({
         suggestions: [],
         selectOptions: []
@@ -38,13 +44,9 @@ const GeoCitiesInput = memo(({ name, control, rules, errors, ...props }) => {
 
     const FetchGouvApi = async (query) => {
         const format = [
-            'housenumber',
-            'street',
             'name',
             'postcode',
-            'citycode',
             'city',
-            'context'
         ]
 
         let params = { q: query }
@@ -52,43 +54,56 @@ const GeoCitiesInput = memo(({ name, control, rules, errors, ...props }) => {
             params = { ...params, lat: props.lat, lng: props.long }
         }
 
-        const suggestions = await PlacesServices.fetchGeoGouvCities(params)
-        setState(state => ({
-            ...state,
-            selectOptions: suggestions.map(suggestion => {
-                const properties = suggestion.properties
-                const { label } = properties
-                const value = format.reduce((carry, key) => {
-                    if (properties[key]) return { ...carry, [key]: properties[key] }
-                    else return carry
-                }, { label })
+        try{
+            const suggestions = await PlacesServices.fetchGeoGouvCities(params)
+            setState(state => ({
+                ...state,
+                selectOptions: suggestions.map(suggestion => {
+                    const properties = suggestion.properties
+                    const { label } = properties
+                    const addressParts = format.reduce((carry, key) => {
+                        if (properties[key]) return { ...carry, [key]: properties[key] }
+                        else return carry
+                    }, {})
 
-                return {
-                    label,
-                    value
-                }
-            })
-        }))
+                    return {
+                        label,
+                        value: {
+                            ...addressParts,
+                            fullAddress : label,
+                        },
+                    };
+                })
+            }))
+        }
+        catch (err) {
+            dispatchModalError({err})
+        }
     }
 
     const FetchVipocoApi = async (query) => {
-        const suggestions = await PlacesServices.fetchVipocoCities(query)
+        try{
+            const suggestions = await PlacesServices.fetchVipocoCities(query)
 
-        // TODO Format parser
-        setState(state => ({
-            ...state,
-            selectOptions: suggestions.map(suggestion => {
-                return {
-                    label: suggestion.city,
-                    value: suggestion
-                }
-            })
-        }))
+            // TODO Format parser
+            setState(state => ({
+                ...state,
+                selectOptions: suggestions.map(suggestion => {
+                    return {
+                        label: suggestion.city,
+                        value: suggestion
+                    }
+                })
+            }))
+        }
+        catch (err) {
+            dispatchModalError({err})
+        }
     }
 
     return (
         <>
-            <div className="select-field">
+            <div className="select-field my-2">
                 <Controller
                     instanceId={name}
                     name={name}
@@ -115,7 +130,8 @@ const GeoCitiesInput = memo(({ name, control, rules, errors, ...props }) => {
 
 GeoCitiesInput.defaultProps = {
     typeAPI : "geo",
-    enableGeoloc : true
+    enableGeoloc : true,
+    placeholder : "Ville"
 }
 
 export default GeoCitiesInput

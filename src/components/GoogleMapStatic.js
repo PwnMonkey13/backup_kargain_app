@@ -11,6 +11,8 @@ const useStyles = makeStyles(theme => ({
     },
     root: props => ({
         border : '1px solid',
+        textAlign : 'center',
+        margin: '0 auto',
         borderColor : theme.palette.grey,
         height: props.height,
         width : props.width,
@@ -56,6 +58,6 @@ GoogleMapStatic.defaultProps = {
     markers: [],
     width : 600,
     height : 600,
-    zoom : 15,
+    zoom : 9,
 };
 export default GoogleMapStatic;

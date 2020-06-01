@@ -1,16 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import { useGeolocation } from 'react-use'
-import { geoCodeFromLatLng } from '../libs/geocoding'
+import React, { useEffect, useState } from 'react';
+import { useGeolocation } from 'react-use';
+import { geoCodeFromLatLng } from '../libs/geocoding';
 
 const useAddress = () => {
     const [addressRaw, setRawAddress] = useState({})
-
+    const [coordinatesLongLat, setCoordinatesLongLat ] = useState(null)
     const geolocation = useGeolocation({
         enableHighAccuracy: true,
         timeout: 10000
     })
 
-    const getAddressParts = () => {
+    const addressParts = getAddressParts()
+    const addressString = getStringAddress(addressParts)
+
+    useEffect(() => {
+        (async () => {
+
+            if(geolocation.latitude && geolocation.longitude){
+                const address = await geoCodeFromLatLng(geolocation.latitude, geolocation.longitude)
+                setCoordinatesLongLat([geolocation.longitude, geolocation.latitude])
+                setRawAddress(address)
+            }
+        })()
+    }, [geolocation])
+
+    function getAddressParts(){
         if (!addressRaw) return null
         if (!addressRaw.address_components) return null
         const { address_components } = addressRaw
@@ -32,7 +46,7 @@ const useAddress = () => {
         }, {})
     }
 
-    const getStringAddress = (parts, formatParam = null) => {
+    function getStringAddress(parts, formatParam = null){
         if (!addressParts) return null
         const defaultFormat = [
             'street_number',
@@ -45,25 +59,10 @@ const useAddress = () => {
         return format.map(key => parts[key]).join(' ')
     }
 
-    const addressParts = getAddressParts()
-    const addressString = getStringAddress(addressParts)
-
-    useEffect(() => {
-        (async () => {
-            if (geolocation.latitude && geolocation.longitude) {
-                const address = await geoCodeFromLatLng(geolocation.latitude, geolocation.longitude)
-                setRawAddress(address)
-            }
-        })()
-    }, [geolocation])
-
     return [
         addressParts,
         addressString,
-        {
-            latitude: geolocation.latitude,
-            longitude: geolocation.longitude,
-        }
+        coordinatesLongLat
     ]
 }
 
