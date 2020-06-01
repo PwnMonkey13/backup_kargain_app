@@ -54,7 +54,7 @@ const Filters = ({ defaultFilters, updateFilters: fireFilters }) => {
     )
 
     return (
-        <form className="d-flex flex-column form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+        <form className="filters_form" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
             <ControlButtons/>
             <Header p strong className="m-0" text="Type d'annonce :"/>
             <RadioGroupInput
