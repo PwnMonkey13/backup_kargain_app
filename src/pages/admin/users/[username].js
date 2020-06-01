@@ -7,7 +7,7 @@ import { useAuth } from '../../../context/AuthProvider';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import SelectInput from '../../../components/Form/Inputs/SelectInput';
 import Tabs from '../../../components/Tabs/Tabs';
-import User from '../../../class/user.class';
+import User from '../../../models/user.model';
 
 const formConfig = {
     mode: 'onChange',
@@ -48,19 +48,19 @@ const Profile = (props) => {
                         </div>
                         <p className="top-profile-login"> {user.getUsername} </p>
                         <div className="top-profile-data-wrapper">
-                            {user.getAddress !== '' &&
+                            {user.getAddressParts.fullAddress &&
                             <p className="top-profile-location">
                                 <img src="images/location.png" alt=""/>
-                                {user.getAddress}
+                                {user.getAddressParts.fullAddress}
                             </p>
                             }
 
-                            <p className="top-profile-abones">
-                                {user.getCountFollowers}
+                            <p className="top-profile-abonnes">
+                                {user.getCountFollowers} abonnés
                             </p>
 
-                            <p className="top-profile-abones">
-                                {user.getCountFollowing}
+                            <p className="top-profile-abonnes">
+                                {user.getCountFollowing} abonnements
                             </p>
 
                         </div>

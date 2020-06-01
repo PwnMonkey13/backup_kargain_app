@@ -1,44 +1,35 @@
 import React, { useState } from 'react';
-import { Row } from 'reactstrap';
-import { useForm } from 'react-hook-form';
+import { Col, Row } from 'reactstrap';
 import Link from 'next/link';
 import clsx from 'clsx';
-import { useAuth } from '../../context/AuthProvider';
-import UsersService from '../../services/UsersService';
-import Tabs from '../../components/Tabs/Tabs';
-import ProfileAvatar from '../../components/ProfileAvatar';
-import Filters from '../../components/Profile/Filters';
-import CarCard from '../../components/CarCard';
 import Button from '@material-ui/core/Button';
 import ChatIcon from '@material-ui/icons/Chat';
-import AnnounceService from '../../services/AnnounceService';
-import User from '../../class/user.class';
-import AnnounceClass from '../../class/announce.class';
+import { useAuth } from '../../context/AuthProvider';
+import UsersService from '../../services/UsersService';
+import AvatarPreview from '../../components/Avatar/AvatarPreview';
+import Filters from '../../components/Profile/Filters';
+import Tabs from '../../components/Tabs/Tabs';
+import UserModel from '../../models/user.model';
 import Error from '../_error';
+import Typography from '@material-ui/core/Typography';
+import AnnounceCard from '../../components/AnnounceCard';
 
-const formConfig = {
-    mode: 'onChange',
-    validateCriteriaMode: 'all',
-};
-
-const Profile = ({ profile, err, ...props }) => {
+const Profile = ({ profileRaw, username, err, ...props }) => {
+    if (!profileRaw || err) return <Error statusCode={err?.statusCode}/>;
     const { authenticatedUser, isAuthenticated } = useAuth();
-    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm(formConfig);
-
     const [isModalOpen, toggleModalOpen] = useState(false);
-
+    const profile = new UserModel(profileRaw);
+    const [filtersOpened, toggleFilters] = useState(false);
     const [state, setState] = useState({
         loading: true,
         sorter: props.sorter,
         filters: {},
-        announces: [],
         total: 0,
     });
 
-    const user = new User(authenticatedUser);
-    const isCurrentLoggedInUser = isAuthenticated && user.getUsername === profile.username;
-
-    const [filtersOpened, toggleFilters] = useState(false);
+    const isAuthor = isAuthenticated &&
+        authenticatedUser &&
+        authenticatedUser.getUsername === profile.getUsername;
 
     const toggleOpenFilters = () => {
         toggleFilters(open => !open);
@@ -51,65 +42,24 @@ const Profile = ({ profile, err, ...props }) => {
         }));
     };
 
-    const TabsContainer = () => {
         return (
-            <Tabs defaultActive={0} classname="nav-tabs-profile" id="myTab">
-                <Tabs.Item id="home-tab" title="Vitrine">
-                    <Row className="my-2 d-flex justify-content-center">
-                        {props.announces.map((announce, i) => {
-                            const ad = new AnnounceClass(announce);
-                            return (
-                                <div key={i} className="m-2 mx-auto">
-                                    <CarCard
-                                        location={`/announces/${ad.getSlug}`}
-                                        topText={ad.getExpirationDaysLeft && `${ad.getExpirationDaysLeft} jours`}
-                                        imgSrc="/images/car4.png"
-                                        title={ad.getTitle}
-                                        subTitle={`${ad.getPrice} €`}
-                                        excerpt={ad.getTheExcerpt()}
-                                        viewsCount={ad.getCountViews}
-                                        commentsCount={ad.getCountComments}
-                                    />
-                                </div>
-                            );
-                        })}
-                    </Row>
-                </Tabs.Item>
-                <Tabs.Item id="profile-tab" title="Location">
-                    <p>Content 2</p>
-                </Tabs.Item>
-                <Tabs.Item id="contact-tab" title="Vitrine">
-                    <p>Content 3</p>
-                </Tabs.Item>
-                <Tabs.Item id="favoris-tab" title="Favoris">
-                    <p>Content 4</p>
-                </Tabs.Item>
-            </Tabs>
-        );
-    };
-
-    if (!profile) return <Error statusCode={err.statusCode}/>;
-
-    return (
         <>
             <div>
-                <Row className="d-flex mx-auto">
-
-                    <div style={{ flex: 1 }}>
-                        <ProfileAvatar src={user.getAvatar}/>
-                    </div>
-
-                    <div className="d-flex flex-column" style={{ flex: 3 }}>
+                <Row className="mx-auto">
+                    <Col md={2}>
+                        <AvatarPreview src={profile.getAvatar}/>
+                    </Col>
+                    <Col md={10}>
                         <div className="d-flex justify-content-between">
                             <div className="d-flex">
-                                <h2>{user.getFullName}</h2>
+                                <h2>{profile.getFullName}</h2>
                                 <div className="mx-2 float-left">
                                     <img src="/images/star.png" alt=""/>
                                 </div>
 
                             </div>
 
-                            {isCurrentLoggedInUser ? (
+                            {isAuthor ? (
                                 <div className="mx-2">
                                     <Link href={'/profile/edit'}>
                                         <a className="btn btn-outline-dark">Editer mon profil</a>
@@ -131,43 +81,36 @@ const Profile = ({ profile, err, ...props }) => {
                             )}
                         </div>
 
-                        <h3>{user.getUsername}</h3>
+                        <Typography>{profile.getUsername}</Typography>
 
-                        <div className="d-flex">
-
-                            {user.getAddress !== '' &&
-                            <div style={{ flex: 1 }}>
+                        <Row>
+                            {profile.getAddressParts.fullAddress && (
+                                <Col sm={12}>
                                     <span className="top-profile-location">
-                                        <img src="images/location.png" alt=""/>
-                                        {user.getAddress}
+                                        <img src="/images/location.png" alt=""/>
+                                        {profile.getAddressParts.fullAddress}
                                     </span>
-                            </div>
-
-                            }
-
-                            <div style={{ flex: 1 }}>
-                                 <span className="top-profile-abones">
-                                    {user.getCountFollowers}
+                                </Col>
+                            )}
+                            <Col>
+                                <span className="top-profile-abonnes">
+                                    {profile.getCountFollowers} abonnés
                                 </span>
-                            </div>
-
-                            <div style={{ flex: 1 }}>
-                                <span className="top-profile-abones">
-                                    {user.getCountFollowing}
+                            </Col>
+                            <Col>
+                                  <span className="top-profile-abonnes">
+                                    {profile.getCountFollowing} abonnements
                                 </span>
-                            </div>
-
-                        </div>
+                            </Col>
+                        </Row>
 
                         <p className="top-profile-desc">
-                            {user.getDescription}
+                            {profile.getDescription}
                         </p>
 
-                    </div>
-
+                    </Col>
                 </Row>
             </div>
-
             <section className="content_tabs">
 
                 <div className={clsx('cd-filter-trigger', filtersOpened && 'filter-is-visible')}
@@ -181,25 +124,73 @@ const Profile = ({ profile, err, ...props }) => {
                 </div>
 
                 <div className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
-                    <TabsContainer/>
+                    <TabsContainer {...{
+                        profile,
+                        isAuthor,
+                        isAuthenticated,
+                    }} />
                 </div>
             </section>
         </>
     );
 };
 
-Profile.getInitialProps = async function({ query, res }) {
-    const { username } = query;
+const TabsContainer = ({ profile, isAuthenticated, isAuthor }) => {
+    return (
+        <Tabs defaultActive={0} className="nav-tabs-profile" id="myTab">
+            <Tabs.Item id="home-tab" title="Vitrine">
+                <Row className="my-2 d-flex justify-content-center">
+                    {profile.getGarage ? profile.getGarage.map((announceRaw, index) => (
+                        <Col key={index} sm={12} md={12} lg={6} xl={6}>
+                            <AnnounceCard announceRaw={announceRaw}/>
+                        </Col>
+                    )) : (
+                        <p>No announces found</p>
+                    )}
+                </Row>
+            </Tabs.Item>
+
+            {isAuthor && (
+                <Tabs.Item id="profile-tab" title="Location">
+                    <p>Content 2</p>
+                </Tabs.Item>
+            )}
+
+            {isAuthor && (
+                <Tabs.Item id="favoris-tab" title="Favoris">
+                    <Row className="my-2 d-flex justify-content-center">
+                        {profile.getFavorites && profile.getFavorites.map((announceRaw, index) => (
+                            <Col key={index} sm={12} md={12} lg={6} xl={6}>
+                                <AnnounceCard announceRaw={announceRaw}/>
+                            </Col>
+                        ))}
+                    </Row>
+                </Tabs.Item>
+            )}
+        </Tabs>
+    );
+};
+
+export async function getServerSideProps (ctx) {
+    const { username } = ctx.query;
     try {
-        const profile = await UsersService.getUser(username);
-        const announces = await AnnounceService.getAnnouncesByUser(profile._id);
+        const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
+        const profileRaw = await UsersService.getUserByUsernameSSR(username, additionalHeaders);
         return {
-            username,
-            profile,
-            announces,
+            props: {
+                username,
+                profileRaw,
+            },
         };
     } catch (err) {
-        return { err };
+        return {
+            props: {
+                err: {
+                    message: err.message,
+                    statusCode: err.statusCode,
+                },
+            },
+        };
     }
 };
 

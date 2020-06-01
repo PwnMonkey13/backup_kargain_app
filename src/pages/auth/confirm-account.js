@@ -3,7 +3,7 @@ import AuthService from '../../services/AuthService'
 import { useRouter } from 'next/router'
 import querystring from 'querystring'
 
-const ConfirmAccount = (props) => {
+const ConfirmAccount = () => {
     const router = useRouter()
     const { token } = router.query
 
@@ -15,15 +15,14 @@ const ConfirmAccount = (props) => {
             })
             .catch(err => {
                 const action = err.name === 'AlreadyActivatedError' ? 'already-activated' : 'activation-invalid'
-                const redirect = `/auth/error?${querystring({ action })}`
+                const redirect = `/auth/error?${querystring.stringify({ action })}`
                 router.push(`/auth/callback?redirect=${redirect}`)
             }
             )
     }, [])
 
     return (
-        <main>
-        </main>
+        <main>...</main>
     )
 }
 
