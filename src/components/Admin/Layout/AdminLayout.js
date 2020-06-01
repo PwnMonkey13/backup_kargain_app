@@ -1,12 +1,10 @@
-import React, {useState} from "react";
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import {makeStyles, useTheme} from "@material-ui/styles";
-import {Grid, useMediaQuery} from "@material-ui/core";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
-import Sidebar from "./Sidebar";
-import TopBar from "./TopBar";
+import React from 'react';
+import { makeStyles, useTheme } from '@material-ui/styles';
+import { useMediaQuery } from '@material-ui/core';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Link from '@material-ui/core/Link';
+import Sidebar from './Sidebar';
+import TopBar from './TopBar';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -17,16 +15,16 @@ const useStyles = makeStyles(theme => ({
     },
     content: {
         width: '95%',
-        height: '100%'
-    }
+        height: '100%',
+    },
 }));
 
-const AdminLayout = ({children}) => {
+const AdminLayout = ({ children }) => {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
-        defaultMatches: true
+        defaultMatches: true,
     });
 
     const handleDrawerToggle = () => {
@@ -56,7 +54,7 @@ const AdminLayout = ({children}) => {
 };
 
 const BreadCrumb = () => {
-    return(
+    return (
         <Breadcrumbs aria-label="breadcrumb">
             <Link color="inherit" href="/">
                 Material-UI
@@ -72,7 +70,7 @@ const BreadCrumb = () => {
                 Breadcrumb
             </Link>
         </Breadcrumbs>
-    )
+    );
 };
 
 export default AdminLayout;
