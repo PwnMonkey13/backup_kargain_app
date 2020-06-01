@@ -1,139 +1,170 @@
-import React from 'react'
-import Link from 'next/link'
-import clsx from 'clsx'
-import IconButton from '@material-ui/core/IconButton'
-import { PhotoCamera } from '@material-ui/icons'
-import { useMediaQuery } from '@material-ui/core'
-import useTheme from '@material-ui/core/styles/useTheme'
-import AnnounceClass from '../class/announce.class'
-import { getTimeAgo } from '../libs/utils'
+import React, { useContext, useState } from 'react';
+import Link from 'next/link';
+import { Col, Row } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import IconButton from '@material-ui/core/IconButton';
+import { PhotoCamera } from '@material-ui/icons';
+import Typography from '@material-ui/core/Typography';
+import { ReactComponent as StarSVG } from '../../public/images/svg/star.svg';
+import { ModalDialogContext } from '../context/ModalDialogContext';
+import CommentsListLight from './Comments/CommentsListLight';
+import AnnounceService from '../services/AnnounceService';
+import AnnounceClass from '../models/announce.model';
+import { useAuth } from '../context/AuthProvider';
+import { getTimeAgo } from '../libs/utils';
+import CarInfos from './Vehicles/car/CarInfos';
+import TagsList from './Tags/TagsList';
+import TitleMUI from './TitleMUI';
+import CTALink from './CTALink';
 
-const AnnounceCard = ({ announce }) => {
-    const theme = useTheme();
-    const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
-        defaultMatches: true
-    });
-    const ad = new AnnounceClass(announce)
+const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
+    const announce = new AnnounceClass(announceRaw);
+    const { dispatchModalError } = useContext(ModalDialogContext);
+    const [likesCounter, setLikesCounter] = useState(announce.getLikesLength);
+    const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
+    const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
 
-    const CarInfos = () => {
-        return(
-            <div className="specs auction-box m-b-30 m-t-30">
-                <div className="row">
-                    <div className="specs-line col-md-6">
-                        <span>Année</span>{ad.getManufacturer.year}
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Kilométrage</span>{ad.getMileage} km
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Carburant</span>{ad.geVehicleEngine.gas}
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Boite</span>Manuelle
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Moteur</span>4 cyl.
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Cylindrée</span>{ad.geVehicleEngine.cylinder}
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Puissance</span>34cv
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Carte grise</span>Française
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Localisation</span>France, Saint paul les durances (13115)
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Vendeur</span>Pro
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Visites</span>Oui
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Prix de réserve</span>non
-                    </div>
-                    <div className="specs-line col-md-6">
-                        <span>Livraison</span>Oui en supp.
-                    </div>
-                </div>
-            </div>
-        )
-    }
+    const handleClickLikeButton = async () => {
+        if (!isAuthenticated) return setForceLoginModal(true);
+        if(isAuthor) return
+        try {
+            const likesCount = await AnnounceService.toggleUserLike(announce.getID);
+            setLikesCounter(likesCount);
+        } catch (err) {
+            dispatchModalError({ err });
+        }
+    };
 
     return (
-        <Link href={`/announces/${ad.getSlug}`} prefetch={false}>
-            <div className="objava-wrapper cardAd">
-                <div className="cardAd_Content">
-                    <div className="cardAd_Header">
-                        <div className={clsx( isDesktop && 'd-flex')}>
-                            <img src={ad.getAuthor.getAvatar} className="img-profile-wrapper" width={80} alt={ad.getTitle} />
-                            <div className="cardAd_Title">
-                                <h2> { ad.getTitle }
-                                    <span> { ad.getSubTitle } </span>
-                                </h2>
-                                <div className="top-profile-name-btn">
-                                    <Link href={ad.getAuthor.getProfileLink} prefetch={false}>
-                                        <a className="top-profile-name">
-                                            { ad.getAuthor.getFullName }
-                                        </a>
-                                    </Link>
-                                </div>
-                                <div className="top-profile-data-wrapper">
-                                    <div className="top-profile-location">
-                                        <img src="/images/location.png" alt=""/>
-                                        { ad.getAuthor.getAddress }
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="share"> il y a { getTimeAgo(ad.raw.updatedAt) }
-                                <img src="images/share.png" alt=""/>
-                            </div>
-                        </div>
+        <div className="objava-wrapper cardAd my-1">
+            <Row className="my-1">
+                <Col md={2} className="p-2">
+                    <Link href={announce.getAuthor.getProfileLink} prefetch={false}>
+                        <a className="decoration-none">
+                            <img className="img-profile-wrapper rounded-circle"
+                                 src={announce.getAuthor.getAvatar}
+                                 alt={announce.getTitle}
+                                 width={70}
+                            />
+                        </a>
+                    </Link>
+                </Col>
+
+                <Col md={10} className="cardAd_Title p-2">
+                    <Link href={`/announces/${announce.getSlug}`} prefetch={false}>
+                        <a className="decoration-none">
+                            <Typography component="p" variant="h3">
+                                {announce.getTitle}
+                            </Typography>
+                        </a>
+                    </Link>
+                    <div className="d-flex align-items-center">
+                        <span className="mr-2">{announce.getManufacturerFormated}</span>
+                        <small> il y a {getTimeAgo(announce.getCreationDate.raw)}</small>
                     </div>
-                    <div className="cardAd_Featured">
-                        <img src={ad.getFeaturedImg} alt=""/>
-                        <div className="moreThumbs">
-                            <IconButton>
-                                <PhotoCamera/>
-                                {ad.getCountImages}
-                            </IconButton>
-                        </div>
-                    </div>
-                    <div className="price-stars-wrapper">
-                        <div className="icons-profile-wrapper">
-                            <div className="icons-star-prof icons-star-current">
-                                <img src="images/svg/star.svg" alt=""/>
-                                <span>{ad.getCountComments}</span>
-                            </div>
-                            <a href="#" className="icons-star-prof">
-                                <img src="images/svg/comment.svg" alt=""/>
-                                <span>{ad.getCountComments}</span>
+                </Col>
+            </Row>
+
+            <div>
+                <div className="d-flex flex-column">
+                    <div className="top-profile-name-btn">
+                        <Link href={announce.getAuthor.getProfileLink} prefetch={false}>
+                            <a className="top-profile-name">
+                                <Typography as="p" variant="h4">{announce.getAuthor.getFullName}</Typography>
                             </a>
-                        </div>
-                        <p className="price-annonce">
-                            { ad.getPrice} €TTC
-                            <span> {ad.getPriceHT} €HT</span>
-                        </p>
+                        </Link>
                     </div>
-                    <CarInfos/>
-                    {
-                        announce.tags && (
-                            <p className="hashes-wrapper">
-                                {announce.tags && announce.tags.map(tag => (
-                                    <Link href={`/tag/${tag.name}`}>
-                                        <span>{tag.name}</span>
-                                    </Link>
-                                ))}
-                            </p>
-                        )
-                    }
+
+                    {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country']) && (
+                        <div className="top-profile-data-wrapper">
+                            <div className="top-profile-location">
+                                <img src="/images/location.png" alt=""/>
+                                {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country'])}
+                            </div>
+                        </div>
+                    )}
+
+                </div>
+
+                <div className="cardAd_Featured">
+                    {announce.getFeaturedImg && (
+                        <Link href={`/announces/${announce.getSlug}`} prefetch={false}>
+                            <a>
+                                <LazyLoadImage
+                                    effect="blur"
+                                    src={announce.getFeaturedImg.getLocation}
+                                    alt={announce.getFeaturedImg.getName}
+                                    height={featuredImgHeight}
+                                />
+                            </a>
+                        </Link>
+                    )}
+
+                    <div className="moreThumbs">
+                        <IconButton>
+                            <PhotoCamera/>
+                            {announce.getCountImages}
+                        </IconButton>
+                    </div>
+                </div>
+
+                <div className="price-stars-wrapper">
+                    <div className="icons-profile-wrapper">
+                        <div className="icons-star-prof icons-star-current"
+                             onClick={handleClickLikeButton}>
+                            <StarSVG/>
+                            <span>{likesCounter}</span>
+                        </div>
+                        <a href="#" className="icons-star-prof">
+                            <img src="/images/svg/comment.svg" alt=""/>
+                            <span>{announce.getCountComments}</span>
+                        </a>
+                    </div>
+                    <p className="price-announce">
+                        {announce.getPrice} €TTC
+                        {authenticatedUser.isPro && (
+                            <span> {announce.getPriceHT} €HT</span>
+                        )}
+                    </p>
+                </div>
+
+                <CarInfos announce={announce}/>
+
+                <TagsList tags={announce.getTags}/>
+
+                {announce.getCountComments > 0 && (
+                    <>
+                        <TitleMUI as="p" variant="h4">Commentaires ({announce.getCountComments})</TitleMUI>
+                        <CommentsListLight comments={announce.getComments}/>
+                    </>
+                )}
+
+                <div className="my-2 text-center">
+                    <CTALink
+                        title="Voir l'annonce"
+                        href={`/announces/${announce.getSlug}`}
+                    />
+
+                    {isAuthor && (
+                        <CTALink
+                            title="Modifier"
+                            href={`/announces/${announce.getSlug}/edit`}
+                        />
+                    )}
+
                 </div>
             </div>
-        </Link>
-    )
-}
+        </div>
+    );
+};
 
-export default AnnounceCard
+AnnounceCard.propTypes = {
+    announceRaw: PropTypes.any.isRequired,
+    featuredImgHeight: PropTypes.number,
+};
+
+AnnounceService.defaultProps = {
+    featuredImgHeight: 500,
+};
+export default AnnounceCard;
