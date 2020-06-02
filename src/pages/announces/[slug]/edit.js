@@ -8,15 +8,16 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import PageViewIcon from '@material-ui/icons/Pageview';
 import SaveIcon from '@material-ui/icons/Save';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { themeColors } from '../../../theme/palette';
 import resolveObjectKey from '../../../libs/resolveObjectKey';
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import AnnounceService from '../../../services/AnnounceService';
-import { useAuth } from '../../../context/AuthProvider';
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import { useAuth } from '../../../context/AuthProvider';
 import AnnounceClass from '../../../models/announce.model';
 import FieldWrapper from '../../../components/Form/FieldWrapper';
 import TextInput from '../../../components/Form/Inputs/TextInput';
@@ -25,8 +26,6 @@ import SelectInput from '../../../components/Form/Inputs/SelectInput';
 import TagsControlled from '../../../components/Tags/TagsControlled';
 import TextareaInput from '../../../components/Form/Inputs/TextareaInput';
 import AnnounceImagesAutoUpload from '../../../components/Uploads/AnnounceImagesAutoUpload';
-import CheckboxControlledMUI from '../../../components/Form/Inputs/CheckboxControlledMUI';
-import CheckboxMultipleInput from '../../../components/Form/Inputs/CheckboxMultipleInput';
 import DamageSelectorControlledCar from '../../../components/Damages/DamageSelectorControlledCar';
 import Error from '../../_error';
 import {
@@ -44,6 +43,8 @@ import {
 import GalleryViewer from '../../../components/Gallery/GalleryViewer';
 import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy';
 import NumberInputMUI from '../../../components/Form/Inputs/NumberInputMUI';
+import CheckboxGroup from '../../../components/Form/Inputs/CheckboxGroup';
+import CheckboxMUI from '../../../components/Form/Inputs/CheckboxMUI';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     navMobile: {
-        display : 'flex',
+        display: 'flex',
     },
 
     button: {
@@ -193,7 +194,7 @@ const AnnounceEdit = ({ announceRaw, err }) => {
     const theme = useTheme();
     const { isAuthenticated, authenticatedUser } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const [activeTab, setActiveTab] = useState(1);
+    const [activeTab, setActiveTab] = useState(4);
     const [buttonText, setButtonText] = useState('Enregistrer et publier');
     const [announce, setAnnounce] = useState(new AnnounceClass(announceRaw));
     const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
@@ -211,6 +212,8 @@ const AnnounceEdit = ({ announceRaw, err }) => {
     if (!isAuthenticated) return <Error statusCode="403"/>;
     if (!isAuthor) return <Error statusCode="403"/>;
 
+    console.log(announce);
+
     const handleCLickImg = (index) => {
         if (refImg.current) {
             refImg.current.slideToIndex(index);
@@ -226,6 +229,10 @@ const AnnounceEdit = ({ announceRaw, err }) => {
 
     const triggerSubmit = () => {
         formRef.current.dispatchEvent(new Event('submit'));
+    };
+
+    const handleRemove = () => {
+        console.log('sfsefsef');
     };
 
     const onSubmit = (form) => {
@@ -266,9 +273,9 @@ const AnnounceEdit = ({ announceRaw, err }) => {
                 }}/>
             )}
 
-            <Row>
+            <Row className="justify-content-center">
                 {isDesktop && (
-                    <Col sm="12" md="4" lg="4">
+                    <Col sm="12" md="3" lg="3">
                         <NavDesktop {...{
                             activeTab,
                             toggleTab,
@@ -278,7 +285,7 @@ const AnnounceEdit = ({ announceRaw, err }) => {
                     </Col>
                 )}
 
-                <Col sm="12" md="8" lg="8">
+                <Col sm="12" md="9" lg="9">
                     <form className="p-3 mx-auto" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
                         <TabContent activeTab={activeTab}>
                             <TabPane tabId={0}>
@@ -292,7 +299,7 @@ const AnnounceEdit = ({ announceRaw, err }) => {
                                     <Typography component="h3" variant="h3" className="text-center" gutterBottom>
                                         Sélection des équipements
                                     </Typography>
-                                    <CheckboxMultipleInput
+                                    <CheckboxGroup
                                         name="equipments"
                                         options={CheckboxOptionsEquipments}
                                         defaultOptions={['ABS', 'ESP']}
@@ -339,6 +346,7 @@ const AnnounceEdit = ({ announceRaw, err }) => {
                                     control,
                                     errors,
                                     register,
+                                    handleRemove,
                                 }} />
                             </TabPane>
                         </TabContent>
@@ -347,7 +355,10 @@ const AnnounceEdit = ({ announceRaw, err }) => {
             </Row>
 
             {!isDesktop && (
-                <Buttons {...{buttonText, triggerSubmit}}/>
+                <Buttons {...{
+                    buttonText,
+                    triggerSubmit,
+                }}/>
             )}
         </>
     );
@@ -664,7 +675,9 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
     );
 };
 
-const PublicationInfosPartialForm = ({ register, control, errors }) => {
+const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }) => {
+    const classes = useStyles()
+
     return (
         <div className="form-fields">
             <Typography component="h3" variant="h3" className="text-center" gutterBottom>Données de
@@ -712,52 +725,43 @@ const PublicationInfosPartialForm = ({ register, control, errors }) => {
                     register={register}
                     rules={{
                         validate: {
-                            maxItems: (v) => {
-                                console.log(v);
-                                return v.length > 5 ? 'max 5' : null;
-                            },
+                            maxItems: (v) => v.length > 5 ? 'max 5' : null,
                         },
                     }}
                     errors={errors}
                 />
             </FieldWrapper>
 
-            <Typography component="h3" variant="h3" className="text-center" gutterBottom>Gestion de l'announce
+            <Typography component="h3" variant="h3" className="text-center" gutterBottom>
+                Gestion de l'announce
             </Typography>
 
-            <CheckboxControlledMUI
+            <CheckboxMUI
                 name="status"
-                value="visible"
-                label="Publier l'announce"
-                control={control}
-                errors={errors}
-            />
-
-            <CheckboxControlledMUI
-                name="status"
-                value="archived"
+                value="active"
                 label="Archiver l'announce"
                 color="warning"
                 control={control}
                 errors={errors}
             />
 
-            <CheckboxControlledMUI
-                name="status"
-                value="deleted"
-                label="Supprimer l'announce"
-                color="error"
-                control={control}
-                errors={errors}
-            />
+            <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                startIcon={<DeleteIcon/>}
+                onClick={() => handleRemove}>
+                Supprimer l'announce
+            </Button>
+
         </div>
     );
 };
 
-const Buttons = ({buttonText, triggerSubmit }) => {
+const Buttons = ({ buttonText, triggerSubmit }) => {
     const classes = useStyles();
 
-    return(
+    return (
         <div className="d-flex flex-column my-3">
             <Button
                 variant="contained"
@@ -781,8 +785,8 @@ const Buttons = ({buttonText, triggerSubmit }) => {
                 Voir l'annonce
             </Button>
         </div>
-    )
-}
+    );
+};
 
 const NavDesktop = ({ activeTab, toggleTab, buttonText, triggerSubmit }) => {
     const classes = useStyles();
@@ -802,7 +806,10 @@ const NavDesktop = ({ activeTab, toggleTab, buttonText, triggerSubmit }) => {
                 </Nav>
             </div>
 
-            <Buttons {...{buttonText, triggerSubmit}}/>
+            <Buttons {...{
+                buttonText,
+                triggerSubmit,
+            }}/>
         </div>
     );
 };

@@ -108,25 +108,122 @@ const tabs = [
     },
 ];
 
-const NavDesktop = ({ activeTab, toggleTab, triggerSubmit }) => {
+const Edit = () => {
+    const theme = useTheme();
+    const formRef = useRef();
     const classes = useStyles();
-    return (
-        <div className={clsx(classes.nav, classes.stickyNav)}>
-            <div className="my-2">
-                <Nav vertical className={classes.navList}>
-                    {tabs && tabs.map((tab, index) => (
-                        <NavItem
-                            key={index}
-                            className={clsx(classes.navItem, activeTab === index && 'active')}
-                            onClick={() => toggleTab(index)}>
-                            {tab.title}
-                        </NavItem>
-                    ))}
-                </Nav>
-            </div>
+    const { authenticatedUser, setAuthenticatedUser, isAuthenticated } = useAuth();
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const [activeTab, setActiveTab] = useState(0);
+    const [user, setUser] = useState(authenticatedUser.getRaw);
+    const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
+        defaultMatches: true,
+    });
+    if (!isAuthenticated) return <Error statusCode="403"/>;
 
-            <Buttons triggerSubmit={triggerSubmit}/>
-        </div>
+    const { control, watch, errors, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all',
+        defaultValues: {
+            ...user,
+            address: {
+                label: user?.address?.fullAddress,
+                value: user?.address,
+            },
+        },
+    });
+
+    const toggleTab = (tabIndex) => {
+        if (activeTab !== tabIndex) {
+            setActiveTab(tabIndex);
+        }
+    };
+
+    const triggerSubmit = () => {
+        formRef.current.dispatchEvent(new Event('submit'));
+    };
+
+    const onSubmit = (form) => {
+        const data = inflate(Object.keys(dataMapper).reduce((carry, key) => {
+            const value = resolveObjectKey(form, key);
+            if (value) {
+                return {
+                    ...carry,
+                    [dataMapper[key]]: value,
+                };
+            } else {
+                return carry;
+            }
+        }, {}));
+
+        UsersService.updateUser(data)
+            .then((updatedUser) => {
+                setUser(updatedUser);
+                setAuthenticatedUser(updatedUser);
+                dispatchModal({
+                    msg: 'User successufully updated',
+                });
+            }).catch(err => {
+                dispatchModalError({ err });
+            },
+        );
+    };
+
+    return (
+        <>
+            <Typography component="h2" variant="h2" className="text-center" gutterBottom>Edition de votre
+                profil
+            </Typography>
+
+            {!isDesktop && (
+                <NavMobile {...{
+                    activeTab,
+                    toggleTab,
+                }}/>
+            )}
+
+            <Row className="justify-content-center">
+                {isDesktop && (
+                    <Col sm="12" md="3" lg="3">
+                        <NavDesktop {...{
+                            classes,
+                            activeTab,
+                            toggleTab,
+                            triggerSubmit,
+                        }}/>
+                    </Col>
+                )}
+
+                <Col xs="12" md="9" lg="9">
+                    <form className="p-3 mx-auto" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+                        <TabContent activeTab={activeTab}>
+                            <TabPane tabId={0}>
+                                <ProfilePartialForm {...{
+                                    control,
+                                    errors,
+                                }}/>
+                            </TabPane>
+                            <TabPane tabId={1}>
+                                <Typography component="h2" variant="h2">Abonnements</Typography>
+                            </TabPane>
+                            <TabPane tabId={2}>
+                                <Typography component="h2" variant="h2">Paiements & Factures</Typography>
+                            </TabPane>
+                            <TabPane tabId={3}>
+                                <Typography component="h2" variant="h2">Aide & Contact</Typography>
+                            </TabPane>
+                        </TabContent>
+                    </form>
+                </Col>
+            </Row>
+
+            {!isDesktop && (
+                <Buttons {...{
+                    triggerSubmit,
+                }}/>
+            )}
+
+        </>
     );
 };
 
@@ -212,122 +309,25 @@ const ProfilePartialForm = ({ control, errors }) => {
     );
 };
 
-const Edit = () => {
-    const theme = useTheme();
-    const formRef = useRef();
+const NavDesktop = ({ activeTab, toggleTab, triggerSubmit }) => {
     const classes = useStyles();
-    const { authenticatedUser, setAuthenticatedUser, isAuthenticated } = useAuth();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const [activeTab, setActiveTab] = useState(0);
-    const [user, setUser] = useState(authenticatedUser.getRaw);
-    const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
-        defaultMatches: true,
-    });
-    if (!isAuthenticated) return <Error statusCode="403"/>;
-
-    const { control, watch, errors, handleSubmit } = useForm({
-        mode: 'onChange',
-        validateCriteriaMode: 'all',
-        defaultValues: {
-            ...user,
-            address: {
-                label: user?.address?.fullAddress,
-                value: user?.address,
-            },
-        },
-    });
-
-    const toggleTab = (tabIndex) => {
-        if (activeTab !== tabIndex) {
-            setActiveTab(tabIndex);
-        }
-    };
-
-    const triggerSubmit = () => {
-        formRef.current.dispatchEvent(new Event('submit'));
-    };
-
-    const onSubmit = (form) => {
-        const data = inflate(Object.keys(dataMapper).reduce((carry, key) => {
-            const value = resolveObjectKey(form, key);
-            if (value) {
-                return {
-                    ...carry,
-                    [dataMapper[key]]: value,
-                };
-            } else {
-                return carry;
-            }
-        }, {}));
-
-        UsersService.updateUser(data)
-            .then((updatedUser) => {
-                setUser(updatedUser);
-                setAuthenticatedUser(updatedUser);
-                dispatchModal({
-                    msg: 'User successufully updated',
-                });
-            }).catch(err => {
-                dispatchModalError({ err });
-            },
-        );
-    };
-
     return (
-        <>
-            <Typography component="h2" variant="h2" className="text-center" gutterBottom>Edition de votre
-                profil
-            </Typography>
+        <div className={clsx(classes.nav, classes.stickyNav)}>
+            <div className="my-2">
+                <Nav vertical className={classes.navList}>
+                    {tabs && tabs.map((tab, index) => (
+                        <NavItem
+                            key={index}
+                            className={clsx(classes.navItem, activeTab === index && 'active')}
+                            onClick={() => toggleTab(index)}>
+                            {tab.title}
+                        </NavItem>
+                    ))}
+                </Nav>
+            </div>
 
-            {!isDesktop && (
-                <NavMobile {...{
-                    activeTab,
-                    toggleTab,
-                }}/>
-            )}
-
-            <Row>
-                {isDesktop && (
-                    <Col sm="12" md="4" lg="4">
-                        <NavDesktop {...{
-                            classes,
-                            activeTab,
-                            toggleTab,
-                            triggerSubmit,
-                        }}/>
-                    </Col>
-                )}
-
-                <Col xs="12" md="8" lg="8">
-                    <form className="p-3 mx-auto" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-                        <TabContent activeTab={activeTab}>
-                            <TabPane tabId={0}>
-                                <ProfilePartialForm {...{
-                                    control,
-                                    errors,
-                                }}/>
-                            </TabPane>
-                            <TabPane tabId={1}>
-                                <Typography component="h2" variant="h2">Abonnements</Typography>
-                            </TabPane>
-                            <TabPane tabId={2}>
-                                <Typography component="h2" variant="h2">Paiements & Factures</Typography>
-                            </TabPane>
-                            <TabPane tabId={3}>
-                                <Typography component="h2" variant="h2">Aide & Contact</Typography>
-                            </TabPane>
-                        </TabContent>
-                    </form>
-                </Col>
-            </Row>
-
-            {!isDesktop && (
-                <Buttons {...{
-                    triggerSubmit,
-                }}/>
-            )}
-
-        </>
+            <Buttons triggerSubmit={triggerSubmit}/>
+        </div>
     );
 };
 

@@ -8,7 +8,6 @@ import Link from 'next/link';
 import Divider from '../../components/Divider';
 import AuthService from '../../services/AuthService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import withoutAuth from '../../hoc/withoutAuth';
 import CTALink from '../../components/CTALink';
 import CTAButton from '../../components/CTAButton';
 
@@ -17,7 +16,7 @@ const formConfig = {
     validateCriteriaMode: 'all',
 };
 
-export default withoutAuth(() => {
+export default () => {
     const router = useRouter();
     const { redirect } = router.query;
     const { dispatchModalError } = useContext(ModalDialogContext);
@@ -46,34 +45,6 @@ export default withoutAuth(() => {
             },
         );
     };
-
-    const Providers = memo(() => {
-        return (
-            <div className="d-flex flex-column">
-                <Link href="#">
-                    <a className="register-fb">
-                        <img src="/images/fb.png" alt=""/>
-                        Se connecter avec Facebook
-                    </a>
-                </Link>
-                <Link href="#">
-                    <a className="register-g">
-                        <img src="/images/g+.png" alt=""/>
-                        Se connecter avec Google+
-                    </a>
-                </Link>
-                <Divider text="ou"/>
-                <CTALink
-                    title="Créer un compte"
-                    href="/auth/register"
-                />
-                <CTALink
-                    title="S'enregistrer en tant que Pro"
-                    href="/auth/register-pro"
-                />
-            </div>
-        );
-    });
 
     return (
         <main>
@@ -136,5 +107,53 @@ export default withoutAuth(() => {
                 </Col>
             </Row>
         </main>
+    );
+}
+
+const Providers = memo(() => {
+
+    const checkPopup = () => {
+        const check = setInterval(() => {
+            const { popup } = this;
+            if (!popup || popup.closed || popup.closed === undefined) {
+                clearInterval(check);
+                this.setState({ disabled: '' });
+            }
+        }, 1000);
+    };
+
+    const startAuth = async (provider) => {
+        const token = await AuthService.OAuthLogin(provider)
+        // await checkPopup();
+        // toggleOpenModal(false)
+    };
+
+    return (
+        <div className="d-flex flex-column">
+
+            <button
+                className="register-fb"
+                onClick={() => startAuth('facebook')}>
+                <img src="/images/fb.png" alt=""/>
+                Login with Facebook
+            </button>
+
+            <button
+                className="register-g"
+                onClick={() => startAuth('google')}>
+                <img src="/images/fb.png" alt=""/>
+                Login with Google
+            </button>
+
+            <Divider text="ou"/>
+            <CTALink
+                title="Créer un compte"
+                href="/auth/register"
+            />
+            <CTALink
+                title="S'enregistrer en tant que Pro"
+                href="/auth/register-pro"
+            />
+        </div>
     );
 });

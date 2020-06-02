@@ -27,7 +27,7 @@ export default function withAuthRedirect ({
 }) {
     return props => {
         const router = useRouter();
-        const { isLoading, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
+        const { isLoading, isAuthenticated } = useAuth();
         if (isLoading) {
             return <LoadingComponent/>;
         }
