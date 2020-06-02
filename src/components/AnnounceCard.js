@@ -39,7 +39,7 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
     return (
         <div className="objava-wrapper cardAd my-1">
             <Row className="my-1">
-                <Col md={2} className="p-2">
+                <Col sm={3} md={3} className="p-2">
                     <Link href={announce.getAuthor.getProfileLink} prefetch={false}>
                         <a className="decoration-none">
                             <img className="img-profile-wrapper rounded-circle"
@@ -51,7 +51,7 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                     </Link>
                 </Col>
 
-                <Col md={10} className="cardAd_Title p-2">
+                <Col sm={9} md={9} className="cardAd_Title p-2">
                     <Link href={`/announces/${announce.getSlug}`} prefetch={false}>
                         <a className="decoration-none">
                             <Typography component="p" variant="h3">

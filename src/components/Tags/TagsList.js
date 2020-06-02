@@ -9,7 +9,6 @@ const useStyles = makeStyles(() => ({
         display: 'inline-flex',
         flexWrap: 'wrap',
         width: '100%',
-        margin: 0,
     },
 
     tag: {
@@ -28,7 +27,7 @@ const TagsList = memo(({tags, editMode, onRemoveTag}) => {
     if(!tags) return null
 
     return(
-        <ul className={clsx(classes.tags)}>
+        <ul className={classes.tags}>
             {tags.map((tag, i) => (
                 <li key={i} className={classes.tag}>
                     #{tag}

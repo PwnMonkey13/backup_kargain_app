@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import ValidationError from '../Validations/ValidationError';
 
-const CheckboxMultipleInput = ({ name, control, rules, errors, options, defaultOptions, ...props }) => {
+const CheckboxGroup = ({ name, control, rules, errors, options, defaultOptions, ...props }) => {
     const [modelOptions, setModelOptions] = useState([]);
 
     useEffect(() => {
@@ -61,15 +61,15 @@ const CheckboxMultipleInput = ({ name, control, rules, errors, options, defaultO
     );
 };
 
-CheckboxMultipleInput.propTypes = {
+CheckboxGroup.propTypes = {
     defaultChecked: PropTypes.arrayOf(PropTypes.string),
     name: PropTypes.string.isRequired,
     center: PropTypes.bool,
 };
 
-CheckboxMultipleInput.defaultProps = {
+CheckboxGroup.defaultProps = {
     center: true,
     defaultOptions: [],
 };
 
-export default CheckboxMultipleInput;
+export default CheckboxGroup;

@@ -42,20 +42,22 @@ const Tags = ({ defaultTags, onChange: fireTags }) => {
     }, [tags]);
 
     return (
-        <div className="row">
-            <li className="input-field">
+        <div>
+            <div className="input-field">
                 <input
                     type="text"
                     className="input-text"
                     onKeyDown={inputKeyDown}
                     ref={tagInput}
                 />
-            </li>
-            <TagsList
-                editMode
-                tags={tags}
-                onRemoveTag={removeTag}
-            />
+            </div>
+            <div className="my-2">
+                <TagsList
+                    editMode
+                    tags={tags}
+                    onRemoveTag={removeTag}
+                />
+            </div>
         </div>
     );
 };

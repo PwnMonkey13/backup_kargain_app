@@ -3,7 +3,7 @@ import Tags from './Tags';
 import PropTypes from 'prop-types';
 import ValidationError from '../Form/Validations/ValidationError';
 
-const TagsControlled = ({ name, rules, control, register, errors }) => {
+const TagsControlled = ({ name, rules, control, errors }) => {
     const [tags, setTags] = useState([]);
 
     useEffect(() => {
@@ -14,14 +14,7 @@ const TagsControlled = ({ name, rules, control, register, errors }) => {
 
     return (
         <>
-            <div className="d-flex flex-column">
-
-                <input
-                    name="test"
-                    type="text"
-                    // ref={(e) => register(e, rules)}
-                />
-
+            <div className="d-flex flex-column my-2">
                 <Tags
                     defaultTags={tags}
                     onChange={tags => {

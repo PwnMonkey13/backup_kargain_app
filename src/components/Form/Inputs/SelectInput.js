@@ -21,50 +21,6 @@ const ClearIndicator = props => {
     )
 }
 
-const Menu = props => {
-    return (
-        <>
-            <FeaturedMenu {...props} />
-            <MenuOptions {...props} />
-        </>
-    )
-}
-
-const menuHeaderStyle = {
-    padding: '8px 12px',
-    color: 'white'
-}
-
-const MenuOptions = props => {
-    return (
-        <>
-            { props.options.length && (
-                <components.MenuList {...props}>
-                    <div style={menuHeaderStyle}>Custom Menu List</div>
-                    {props.children}
-                </components.MenuList>
-            )}
-        </>
-    )
-}
-
-const FeaturedMenu = props => {
-    const menuHeaderStyle = {
-        padding: '8px 12px'
-    }
-
-    return (
-        <>
-            { props.selectProps.forwardProps && props.selectProps.forwardProps.featured && (
-                <components.Menu {...props}>
-                    {props.selectProps.forwardProps.featured}
-                    <div style={menuHeaderStyle}>Custom Menu List</div>
-                </components.Menu>
-            )}
-        </>
-    )
-}
-
 const customStyles = {
     menu: (provided, state) => ({
         ...provided,

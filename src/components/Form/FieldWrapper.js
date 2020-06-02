@@ -19,9 +19,7 @@ const   FieldWrapper = ({ classNameWrapper, isRow, children, ...props }) => {
                 </label>
             )}
             {tooltip}
-            <div>
-                {children}
-            </div>
+            {children}
         </div>
     )
 }
