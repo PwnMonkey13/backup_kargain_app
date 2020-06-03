@@ -25,7 +25,7 @@ const RegisterPage = () => {
             .then(() => {
                 dispatchModal({
                     persist: true,
-                    msg: 'Account created. Please check your email to validate your account',
+                    msg: 'Account created. Please check your email box to validate your account',
                 });
             }).catch(err => {
                 dispatchModalError({ err });
@@ -34,11 +34,11 @@ const RegisterPage = () => {
     };
 
     return (
-        <main>
+        <>
             <h1>Créer un compte</h1>
             <Row>
                 <Col sm="12" md="5">
-                    <div className="flex-column p-3 mt-3">
+                    <div className="d-flex flex-column mx-auto" style={{ maxWidth : '400px'}}>
                         <Link href="#">
                             <a className="register-fb">
                                 <img src="/images/fb.png" alt=""/>
@@ -54,10 +54,12 @@ const RegisterPage = () => {
                         </Link>
                         <Divider text="ou"/>
                         <CTALink
+                            className="my-2"
                             title="Se connecter"
                             href="/auth/login"
                         />
                         <CTALink
+                            className="my-2"
                             title="Créer un compte Pro"
                             href="/auth/register-pro"
                         />
@@ -157,7 +159,7 @@ const RegisterPage = () => {
                     </form>
                 </Col>
             </Row>
-        </main>
+        </>
     );
 };
 

@@ -11,16 +11,14 @@ import { ModalDialogContext } from '../../context/ModalDialogContext';
 import CTALink from '../../components/CTALink';
 import CTAButton from '../../components/CTAButton';
 
-const formConfig = {
-    mode: 'onChange',
-    validateCriteriaMode: 'all',
-};
-
 export default () => {
     const router = useRouter();
     const { redirect } = router.query;
     const { dispatchModalError } = useContext(ModalDialogContext);
-    const { control, errors, handleSubmit } = useForm(formConfig);
+    const { control, errors, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all'
+    });
 
     const onSubmit = (form) => {
         const { email, password } = form;
@@ -39,7 +37,7 @@ export default () => {
                         router.push(`/auth/callback?redirect=/profile/${data.user.username}`);
                     }
                 }
-            }).catch(err => {
+            }).catch(err => {pr
                 dispatchModalError({ err });
                 if (redirect) router.push({ pathname: redirect });
             },
@@ -47,7 +45,7 @@ export default () => {
     };
 
     return (
-        <main>
+        <>
             <h1>Se connecter</h1>
             <Row>
                 <Col className="m-auto" sm="12" md="5">
@@ -106,7 +104,7 @@ export default () => {
                     </form>
                 </Col>
             </Row>
-        </main>
+        </>
     );
 }
 
@@ -129,7 +127,7 @@ const Providers = memo(() => {
     };
 
     return (
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column mx-auto" style={{ maxWidth : '400px'}}>
 
             <button
                 className="register-fb"
@@ -147,10 +145,12 @@ const Providers = memo(() => {
 
             <Divider text="ou"/>
             <CTALink
+                className="my-2"
                 title="Créer un compte"
                 href="/auth/register"
             />
             <CTALink
+                className="my-2"
                 title="S'enregistrer en tant que Pro"
                 href="/auth/register-pro"
             />

@@ -11,7 +11,6 @@ import GeoStreetsInput from '../../components/Form/Inputs/GeoAddressSearchInput'
 import Typography from '@material-ui/core/Typography';
 import SelectCountryFlags from '../../components/Form/Inputs/SelectCountryFlags';
 import Spacer from '../../components/Spacer';
-import useAddress from '../../hooks/useAddress';
 import CTALink from '../../components/CTALink';
 
 const formConfig = {
@@ -22,7 +21,6 @@ const formConfig = {
 const RegisterPro = () => {
     const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const [addressParts, addressString, coordinates] = useAddress();
 
     const onSubmit = (form) => {
         const { confirm, confirmPwd, ...data } = form;
@@ -30,7 +28,7 @@ const RegisterPro = () => {
             .then(() => {
                 dispatchModal({
                     persist: true,
-                    msg: 'Account created. Please check your email to validate your account',
+                    msg: 'Account created. Please check your email box to validate your account',
                 });
             }).catch(err => {
             dispatchModalError({ err });
@@ -40,11 +38,11 @@ const RegisterPro = () => {
     const countrySelect = watch('countrySelect');
 
     return (
-        <main>
+        <>
             <h1>Créer un compte Pro</h1>
             <Row>
                 <Col sm="12" md="5">
-                    <div className="flex-column p-3 mt-3">
+                    <div className="d-flex flex-column mx-auto" style={{ maxWidth : '400px'}}>
                         <Link href="#">
                             <a className="register-fb">
                                 <img src="/images/fb.png" alt=""/>
@@ -60,10 +58,12 @@ const RegisterPro = () => {
                         </Link>
                         <Divider text="ou"/>
                         <CTALink
+                            className="my-2"
                             title="Se connecter"
                             href="/auth/login"
                         />
                         <CTALink
+                            className="my-2"
                             title="Creer un compte client"
                             href="/auth/register"
                         />
@@ -224,7 +224,7 @@ const RegisterPro = () => {
                     </form>
                 </Col>
             </Row>
-        </main>
+        </>
     );
 };
 

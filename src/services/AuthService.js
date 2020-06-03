@@ -137,16 +137,31 @@ function authorizeSSR (headers) {
         });
 }
 
-function confirmAccount (token) {
+function askForEmailActivation (email) {
     const requestOptions = {
-        method: 'GET',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
     };
 
-    return fetch(`${config.api}/auth/confirm-account?token=${token}`, requestOptions)
+    return fetch(`${config.api}/auth/ask-email-activation`, requestOptions)
         .then(handleResponse)
         .then(json => {
             return json;
         })
+        .catch(err => {
+            throw err;
+        });
+}
+
+function confirmAccount (token) {
+    const requestOptions = {
+        method: 'PUT',
+    };
+
+    return fetch(`${config.api}/auth/confirm-account/${token}`, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
         .catch(err => {
             throw err;
         });
@@ -201,6 +216,7 @@ export default {
     registerPro,
     authorize,
     authorizeSSR,
+    askForEmailActivation,
     confirmAccount,
     forgotPassword,
     resetPassword,

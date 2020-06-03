@@ -9,14 +9,14 @@ const Callback = () => {
     useEffect(() => {
         setTimeout(() => {
             router.push(redirect || '/')
-        }, 3000)
+        }, 2000)
     }, [])
 
     return (
-        <>
+        <div className="flex flex-colmun">
             <Loader fullscreen={false}/>
             <a>Redirection...</a>
-        </>
+        </div>
     )
 }
 
