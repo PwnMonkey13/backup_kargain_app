@@ -22,66 +22,66 @@ import {
 
 const CarFilters = ({ control, watch, errors }) => {
     const [, address, coordinates] = useAddress();
-    const [makes, setMakes] = useState([]);
-    const { dispatchModalError } = useContext(ModalDialogContext);
-    const popularMakesId = [
-        3, // AlphaRomeo
-        9, // Audi
-        16, // BMW
-        107, // Peugeot
-        117, // Renault
-        28, // Citroen
-        147, // Volkswagen
-        48, // Ford
-        88, // Mercedes-Benz
-        102, // Opel
-        47, // Fiat
-        140, // Toyota
-        133, // Susuki
-    ];
+    // const [makes, setMakes] = useState([]);
+    // const { dispatchModalError } = useContext(ModalDialogContext);
+    // const popularMakesId = [
+    //     3, // AlphaRomeo
+    //     9, // Audi
+    //     16, // BMW
+    //     107, // Peugeot
+    //     117, // Renault
+    //     28, // Citroen
+    //     147, // Volkswagen
+    //     48, // Ford
+    //     88, // Mercedes-Benz
+    //     102, // Opel
+    //     47, // Fiat
+    //     140, // Toyota
+    //     133, // Susuki
+    // ];
 
     useEffect(() => {
         control.register({ name: 'coordinates' });
         control.setValue('coordinates', coordinates);
     }, [coordinates]);
 
-    useEffect(() => {
-        let mounted = true;
-        CarApiService.getMakes(popularMakesId)
-            .then(cars => {
-                const makesOptions = cars.map(car => ({
-                    value: car.make,
-                    label: car.make,
-                }));
-                const defaultOption = {
-                    value: 'other',
-                    label: 'Je ne sais pas/Autre',
-                };
-                if (mounted) {
-                    setMakes([...makesOptions, defaultOption]);
-                }
-            })
-            .catch(err => {
-                dispatchModalError({ err });
-            });
-
-        return function cleanup () {
-            console.log('cleanup');
-            mounted = false;
-        };
-    }, []);
+    // useEffect(() => {
+    //     let mounted = true;
+    //     CarApiService.getMakes(popularMakesId)
+    //         .then(cars => {
+    //             const makesOptions = cars.map(car => ({
+    //                 value: car.make,
+    //                 label: car.make,
+    //             }));
+    //             const defaultOption = {
+    //                 value: 'other',
+    //                 label: 'Je ne sais pas/Autre',
+    //             };
+    //             if (mounted) {
+    //                 setMakes([...makesOptions, defaultOption]);
+    //             }
+    //         })
+    //         .catch(err => {
+    //             dispatchModalError({ err });
+    //         });
+    //
+    //     return function cleanup () {
+    //         console.log('cleanup');
+    //         mounted = false;
+    //     };
+    // }, []);
 
     const countrySelect = watch('countrySelect');
 
     return (
         <>
-            <Typography component="span">Marque</Typography>
-            <SelectInput
-                name="manufacturer.make"
-                control={control}
-                errors={errors}
-                options={makes}
-            />
+            {/*<Typography component="span">Marque</Typography>*/}
+            {/*<SelectInput*/}
+            {/*    name="manufacturer.make"*/}
+            {/*    control={control}*/}
+            {/*    errors={errors}*/}
+            {/*    options={makes}*/}
+            {/*/>*/}
 
             <Typography component="span" gutterBottom>Prix</Typography>
             <SliderInput

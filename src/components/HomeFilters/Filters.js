@@ -2,19 +2,20 @@ import React, { memo, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '@material-ui/core/Button';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import useIsMounted from '../../hooks/useIsMounted';
-import VehicleTypeFilterSelector from './VehicleTypeFilterSelector';
-import { RadioGroupInput } from '../Form/Inputs';
-import Header from '../Header';
 import announcesFiltersMapper from '../../libs/announcesFiltersMapper';
-import CarFilters from './Vehicles/CarFilters';
 import resolveObjectKey from '../../libs/resolveObjectKey';
+import useIsMounted from '../../hooks/useIsMounted';
+import RadioGroupInput from '../Form/Inputs/RadioGroupInput';
+import getFiltersVehicleComponent from './Vehicles'
+import CarFilters from './Vehicles/CarFilters';
+import VehicleTypeFilterSelector from './VehicleTypeFilterSelector';
+import Header from '../Header';
 
 const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
     const isMounted = useIsMounted();
     const formRef = useRef(null);
     const [filters, setFilters] = useState(defaultFilters);
-    // const DynamicFiltersComponent = getFiltersVehicleComponent(filters.vehicleType);
+    const DynamicFiltersComponent = getFiltersVehicleComponent(filters.vehicleType);
 
     const formConfig = {
         mode: 'onChange',
@@ -92,14 +93,14 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
             </Button>
 
 
-            <Button
-                className="my-1"
-                variant="contained"
-                onClick={(e) => {
-                    console.log(watch());
-                }}>
-                WATCH
-            </Button>
+            {/*<Button*/}
+            {/*    className="my-1"*/}
+            {/*    variant="contained"*/}
+            {/*    onClick={(e) => {*/}
+            {/*        console.log(watch());*/}
+            {/*    }}>*/}
+            {/*    WATCH*/}
+            {/*</Button>*/}
         </div>
     );
 
@@ -138,13 +139,13 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
                         watch={watch}
             />
 
-            {/*{DynamicFiltersComponent && (*/}
-            {/*    <DynamicFiltersComponent*/}
-            {/*        control={control}*/}
-            {/*        errors={errors}*/}
-            {/*        watch={watch}*/}
-            {/*    />*/}
-            {/*)}*/}
+            {DynamicFiltersComponent && (
+                <DynamicFiltersComponent
+                    control={control}
+                    errors={errors}
+                    watch={watch}
+                />
+            )}
 
             <ControlButtons/>
         </form>

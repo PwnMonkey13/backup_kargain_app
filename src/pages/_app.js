@@ -21,6 +21,16 @@ import Loader from '../components/Loader';
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;
 
+    Facebook.load()
+        .then(() => {
+            Facebook.init({
+                appId: '3103914796332638',
+                status: false, // the SDK will attempt to get info about the current user immediately after init
+                cookie: false,  // enable cookies to allow the server to access the session
+                xfbml: false,  // With xfbml set to true, the SDK wil
+            });
+        });
+
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles && jssStyles.parentNode) {
@@ -69,11 +79,11 @@ const ProtectedRouter = ({ children }) => {
     const pageProps = children.props;
     const isAdminRoute = router.route.split('/').includes('admin');
     const { stateReady, isLoading, forceLoginModal, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
-    const showLoginModal = (pageProps.requiredAuth && !isAuthenticated) || forceLoginModal
+    const showLoginModal = (pageProps.requiredAuth && !isAuthenticated) || forceLoginModal;
 
-    if (!stateReady) return null;
-    if (isLoading) return <Loader/>;
-    if (isAdminRoute && !isAuthenticatedUserAdmin) return <Forbidden403Page/>;
+    if (!stateReady || isLoading) return <Loader/>;
+    if (stateReady && !isLoading && isAdminRoute && !isAuthenticatedUserAdmin) return <Forbidden403Page/>;
+
     if (isAdminRoute) {
         return (
             <AdminLayout>
@@ -83,10 +93,12 @@ const ProtectedRouter = ({ children }) => {
     }
 
     return (
-        <Layout>
+        <>
             {showLoginModal && <PopupLogin pageProps={pageProps}/>}
-            {children}
-        </Layout>
+            <Layout>
+                {children}
+            </Layout>
+        </>
     );
 };
 

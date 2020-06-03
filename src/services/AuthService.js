@@ -1,7 +1,8 @@
 import fetch from 'isomorphic-unfetch';
-
+import querystring from 'query-string';
 import handleResponse from '../libs/handleResponse';
 import config from '../config/config';
+import * as Facebook from 'fb-sdk-wrapper';
 
 function login (form) {
     const requestOptions = {
@@ -22,6 +23,36 @@ function login (form) {
         );
 }
 
+function OAuthLogin (provider) {
+
+    // Login + get authorisation for additional scopes
+    Facebook.login({
+        scope: 'public_profile,email',
+        return_scopes: true,
+    })
+        .then((response) => {
+            console.log(response);
+            if (response.authResponse) {
+                const query = querystring.stringify({ access_token: response.authResponse.accessToken });
+                const requestOptions = {
+                    method: 'GET',
+                };
+
+                const url = `${config.api}/auth/${provider}?${query}`
+                return fetch(url, requestOptions)
+                    .then(handleResponse)
+                    .then(json => {
+                        console.log(json);
+                        return json.data;
+                    })
+                    .catch(err => {
+                            throw err;
+                        },
+                    );
+            }
+        });
+}
+
 function logout () {
     const requestOptions = {
         method: 'POST',
@@ -34,9 +65,8 @@ function logout () {
             return json.data;
         })
         .catch(err => {
-                throw err;
-            },
-        );
+            throw err;
+        });
 }
 
 function register (form) {
@@ -83,18 +113,18 @@ function authorize () {
     const url = `${config.api}/auth/authorize`;
 
     return fetch(url, requestOptions)
-      .then(handleResponse)
-      .then(json => json.data)
-      .catch(err => {
-          throw err;
-      });
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+            throw err;
+        });
 }
 
 function authorizeSSR (headers) {
     const requestOptions = {
         method: 'GET',
         credentials: 'include',
-        headers
+        headers,
     };
 
     const url = `${config.api}/auth/authorize`;
@@ -165,6 +195,7 @@ function resetPassword (token, password) {
 
 export default {
     login,
+    OAuthLogin,
     logout,
     register,
     registerPro,

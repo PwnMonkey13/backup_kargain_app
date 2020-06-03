@@ -8,6 +8,7 @@ import AnnounceService from '../services/AnnounceService';
 import Sorters from '../components/HomeFilters/Sorters';
 import AnnounceCard from '../components/AnnounceCard';
 import { useAuth } from '../context/AuthProvider';
+import Filters from '../components/HomeFilters/Filters';
 
 const Index = (props) => {
     const { dispatchModalError } = useContext(ModalDialogContext);
@@ -114,7 +115,7 @@ const Index = (props) => {
                 <div className="cd-filters-top" onClick={() => toggleOpenFilters()}>
                     <span className="cd-close-trigger"/>
                 </div>
-                {/*<Filters updateFilters={updateFilters}/>*/}
+                <Filters updateFilters={updateFilters}/>
             </div>
 
             <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
