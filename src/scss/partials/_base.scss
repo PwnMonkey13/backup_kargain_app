@@ -205,6 +205,12 @@ main {
     }
 }
 
+@media (max-width: 768px) {
+    .divider_stick{
+        margin: 1rem;
+    }
+}
+
 /**
  * Fix for Reactstrap
  **/

@@ -29,3 +29,9 @@
     background-color: #d63116;
   }
 }
+
+@media (max-width: 768px) {
+  .register-fb, .register-g{
+    padding: .5rem;
+  }
+}

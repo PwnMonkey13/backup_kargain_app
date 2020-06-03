@@ -13,6 +13,7 @@ import UserModel from '../../models/user.model';
 import Error from '../_error';
 import Typography from '@material-ui/core/Typography';
 import AnnounceCard from '../../components/AnnounceCard';
+import CTALink from '../../components/CTALink';
 
 const Profile = ({ profileRaw, username, err, ...props }) => {
     if (!profileRaw || err) return <Error statusCode={err?.statusCode}/>;
@@ -135,17 +136,25 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
     );
 };
 
-const TabsContainer = ({ profile, isAuthenticated, isAuthor }) => {
+const TabsContainer = ({ profile, isAuthor }) => {
     return (
         <Tabs defaultActive={0} className="nav-tabs-profile" id="myTab">
             <Tabs.Item id="home-tab" title="Vitrine">
                 <Row className="my-2 d-flex justify-content-center">
-                    {profile.getGarage ? profile.getGarage.map((announceRaw, index) => (
+                    {profile.getGarage.length ? profile.getGarage.map((announceRaw, index) => (
                         <Col key={index} sm={12} md={12} lg={6} xl={6}>
                             <AnnounceCard announceRaw={announceRaw}/>
                         </Col>
                     )) : (
-                        <p>No announces found</p>
+                        <div className="d-flex flex-column align-items-center smy-2">
+                            <p>No announces found</p>
+                            <CTALink
+                                title="Créer votre première annonce"
+                                href="/deposer-une-annonce"
+                                className="cta_nav_link"
+                            />
+                        </div>
+
                     )}
                 </Row>
             </Tabs.Item>
@@ -159,7 +168,7 @@ const TabsContainer = ({ profile, isAuthenticated, isAuthor }) => {
             {isAuthor && (
                 <Tabs.Item id="favoris-tab" title="Favoris">
                     <Row className="my-2 d-flex justify-content-center">
-                        {profile.getFavorites && profile.getFavorites.map((announceRaw, index) => (
+                        {profile.getFavorites.length && profile.getFavorites.map((announceRaw, index) => (
                             <Col key={index} sm={12} md={12} lg={6} xl={6}>
                                 <AnnounceCard announceRaw={announceRaw}/>
                             </Col>
