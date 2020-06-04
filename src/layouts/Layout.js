@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { initGA, logPageView } from '../libs/analytics'
 import Footer from '../components/Footer'
 import ScrollUpButton from 'react-scroll-up-button'
 import NavbarClient from '../components/NavbarClient'
@@ -11,10 +10,10 @@ const Layout = ({ children }) => {
 
     useEffect(() => {
         if (!window.GA_INITIALIZED) {
-            initGA()
+            // initGA()
             window.GA_INITIALIZED = true
         }
-        logPageView()
+        // logPageView()
     }, [])
 
     return (

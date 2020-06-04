@@ -7,7 +7,7 @@ const NumberInput = memo(({ name, rules, control, errors, ...props }) => {
     const numericRegex = /[0-9]|\./;
 
     const onValidate = e => {
-        const event = e || window.event;
+        const event = e;
         let key = null;
 
         if (event.type === 'paste') {

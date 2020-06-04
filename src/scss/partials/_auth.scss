@@ -1,11 +1,12 @@
 .register-fb {
-  display: flex;
-  justify-content: center;
+  display: inline-flex;
   align-items: center;
+  width: 100%;
   margin: .5rem auto;
   background-color: #445aae;
-  padding: 1rem;
-  border-radius: 35px;
+  padding: .5rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
   text-decoration: none;
   color: #fff;
   transition: 0.5s;

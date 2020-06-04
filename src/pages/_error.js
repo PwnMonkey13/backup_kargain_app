@@ -1,11 +1,9 @@
 import React from 'react';
-import Link from 'next/link';
 import { Container } from 'reactstrap';
 import CTALink from '../components/CTALink';
 
-const Error = ({ message, statusCode }) => {
+const Error = ({ statusCode }) => {
     let response;
-    console.log(message);
 
     switch (statusCode) {
     case 200:
@@ -17,7 +15,7 @@ const Error = ({ message, statusCode }) => {
                     title="Retour kargain"
                     href="/"
                 />
-                <div className="imgContainer mt-1" >
+                <div className="imgContainer mt-1">
                     <img src="/images/404_template1.jpg" alt="404" height={350}/>
                 </div>
             </>
