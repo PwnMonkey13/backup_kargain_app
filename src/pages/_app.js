@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Router, { useRouter } from 'next/router';
 import { DefaultSeo } from 'next-seo';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
-
 import { ModalDialogContextProvider } from '../context/ModalDialogContext';
 import { AuthProvider, useAuth } from '../context/AuthProvider';
 import { FormContextProvider } from '../context/FormContext';
@@ -15,7 +14,6 @@ import SEO from '../next-seo.config';
 import Forbidden403Page from './403';
 import theme from '../theme';
 import '../scss/theme.scss';
-import * as Facebook from 'fb-sdk-wrapper';
 import Loader from '../components/Loader';
 
 const MyApp = ({ Component, pageProps }) => {

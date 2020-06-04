@@ -43,7 +43,7 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
         }));
     };
 
-        return (
+    return (
         <>
             <div>
                 <Row className="mx-auto">
@@ -195,12 +195,12 @@ export async function getServerSideProps (ctx) {
         return {
             props: {
                 err: {
-                    message: err.message,
-                    statusCode: err.statusCode,
+                    message: err?.message ?? null,
+                    statusCode: err?.statusCode ?? 404
                 },
             },
         };
     }
-};
+}
 
 export default Profile;

@@ -841,8 +841,8 @@ export async function getServerSideProps (ctx) {
         return {
             props: {
                 err: {
-                    message: err.message,
-                    statusCode: err.statusCode,
+                    message: err?.message ?? null,
+                    statusCode: err?.statusCode ?? 404
                 },
             },
         };
