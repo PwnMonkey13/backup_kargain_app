@@ -50,8 +50,8 @@ export const AuthProvider = ({ children }) => {
             authenticatedUser,
             forceLoginModal,
             setForceLoginModal,
-            updateRawUser,
             setIsAuthenticated,
+            updateRawUser,
         }}>
             {children}
         </AuthContext.Provider>

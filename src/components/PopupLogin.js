@@ -18,6 +18,7 @@ import Divider from './Divider';
 import TitleMUI from './TitleMUI';
 import CTAButton from './CTAButton';
 import CTALink from './CTALink';
+import SSOProviders from './SSOProviders';
 
 const formConfig = {
     mode: 'onChange',
@@ -101,12 +102,10 @@ export default () => {
             email,
             password,
         })
-            .then(data => {
-                const { user } = data;
+            .then(user => {
                 router.reload();
                 toggleLoginModal(false);
                 dispatchModal({
-                    type: 'success',
                     msg: `Welcome back ${user.firstname}`,
                 });
             }).catch(err => {
@@ -131,7 +130,9 @@ export default () => {
 
                 <Col sm={12} md={isMobile ? 12 : 6}>
                     <div className={classes.wrapperForm}>
-                        <Providers/>
+                        <div className="d-flex flex-column">
+                            <SSOProviders/>
+                        </div>
                         <Divider className="m-3"/>
                         <div className="auth_form m-auto">
                             <form onSubmit={handleSubmit(onSubmit)}>
@@ -235,24 +236,5 @@ const LeftBlock = memo(() => {
                 </div>
             </div>
         </>
-    );
-});
-
-const Providers = memo(() => {
-    return (
-        <div className="d-flex flex-column">
-            <Link href="#">
-                <a className="p-2 register-fb">
-                    <img src="/images/fb.png" alt=""/>
-                    Se connecter avec Facebook
-                </a>
-            </Link>
-            <Link href="#">
-                <a className="p-2 register-g">
-                    <img src="/images/g+.png" alt=""/>
-                    Se connecter avec Google+
-                </a>
-            </Link>
-        </div>
     );
 });

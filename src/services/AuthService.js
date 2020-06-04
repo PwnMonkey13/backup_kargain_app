@@ -1,8 +1,7 @@
 import fetch from 'isomorphic-unfetch';
-import querystring from 'query-string';
+import * as Facebook from 'fb-sdk-wrapper';
 import handleResponse from '../libs/handleResponse';
 import config from '../config/config';
-import * as Facebook from 'fb-sdk-wrapper';
 
 function login (form) {
     const requestOptions = {
@@ -14,43 +13,31 @@ function login (form) {
 
     return fetch(`${config.api}/auth/login`, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
+        .then(json => json.data)
         .catch(err => {
                 throw err;
             },
         );
 }
 
-function OAuthLogin (provider) {
+function SSOAuthLogin (provider, data) {
+    const url = `${config.api}/auth/sso-register`;
+    return request(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    });
 
-    // Login + get authorisation for additional scopes
-    Facebook.login({
-        scope: 'public_profile,email',
-        return_scopes: true,
-    })
-        .then((response) => {
-            console.log(response);
-            if (response.authResponse) {
-                const query = querystring.stringify({ access_token: response.authResponse.accessToken });
-                const requestOptions = {
-                    method: 'GET',
-                };
-
-                const url = `${config.api}/auth/${provider}?${query}`
-                return fetch(url, requestOptions)
-                    .then(handleResponse)
-                    .then(json => {
-                        console.log(json);
-                        return json.data;
-                    })
-                    .catch(err => {
-                            throw err;
-                        },
-                    );
-            }
-        });
+    function request (url, requestOptions) {
+        return fetch(url, requestOptions)
+            .then(handleResponse)
+            .then(json => json.data)
+            .catch(err => {
+                throw err;
+            },
+        );
+    }
 }
 
 function logout () {
@@ -61,9 +48,7 @@ function logout () {
 
     return fetch(`${config.api}/auth/logout`, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
+        .then(json => json.data)
         .catch(err => {
             throw err;
         });
@@ -210,7 +195,7 @@ function resetPassword (token, password) {
 
 export default {
     login,
-    OAuthLogin,
+    SSOAuthLogin,
     logout,
     register,
     registerPro,

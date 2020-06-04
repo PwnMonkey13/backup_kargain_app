@@ -36,6 +36,8 @@ const nextConfig = {
     // Have to list all the environment variables used here to make it available to the client side code
     env: {
         GOOGLE_STATIC_API_KEY: process.env.GOOGLE_STATIC_API_KEY,
+        GOOGLE_SSO_CLIENT_ID : process.env.GOOGLE_SSO_CLIENT_ID,
+        FACEBOOK_SSO_APP_ID : process.env.FACEBOOK_SSO_APP_ID,
     },
     webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
         config.resolve.mainFields = ['main', 'browser', 'module'];

@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import SelectCountryFlags from '../../components/Form/Inputs/SelectCountryFlags';
 import Spacer from '../../components/Spacer';
 import CTALink from '../../components/CTALink';
+import SSOProviders from '../../components/SSOProviders';
 
 const formConfig = {
     mode: 'onChange',
@@ -43,19 +44,7 @@ const RegisterPro = () => {
             <Row>
                 <Col sm="12" md="5">
                     <div className="d-flex flex-column mx-auto" style={{ maxWidth : '400px'}}>
-                        <Link href="#">
-                            <a className="register-fb">
-                                <img src="/images/fb.png" alt=""/>
-                                Se connecter avec Facebook
-                            </a>
-                        </Link>
-
-                        <Link href="#">
-                            <a className="register-g">
-                                <img src="/images/g+.png" alt=""/>
-                                Se connecter avec Google+
-                            </a>
-                        </Link>
+                        <SSOProviders/>
                         <Divider text="ou"/>
                         <CTALink
                             className="my-2"

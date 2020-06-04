@@ -1,24 +1,32 @@
-import React, { memo, useContext } from 'react';
-import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
-import { EmailInput, PasswordInput } from '../../components/Form/Inputs';
-import FieldWrapper from '../../components/Form/FieldWrapper';
-import { Col, Row } from 'reactstrap';
+import React, { useContext, useEffect } from 'react';
 import Link from 'next/link';
-import Divider from '../../components/Divider';
-import AuthService from '../../services/AuthService';
+import { useForm } from 'react-hook-form';
+import { Col, Row } from 'reactstrap';
+import cookies from 'next-cookies'
+import { EmailInput, PasswordInput } from '../../components/Form/Inputs';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import CTALink from '../../components/CTALink';
+import FieldWrapper from '../../components/Form/FieldWrapper';
+import SSOProviders from '../../components/SSOProviders';
 import CTAButton from '../../components/CTAButton';
+import AuthService from '../../services/AuthService';
+import CTALink from '../../components/CTALink';
+import Divider from '../../components/Divider';
+import { useRouter } from 'next/router';
 
-export default () => {
+export default ({ forceLogout }) => {
     const router = useRouter();
     const { redirect } = router.query;
     const { dispatchModalError } = useContext(ModalDialogContext);
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
-        validateCriteriaMode: 'all'
+        validateCriteriaMode: 'all',
     });
+
+    useEffect(()=>{
+        if (forceLogout){
+            return router.push('/auth/logout');
+        }
+    },[])
 
     const onSubmit = (form) => {
         const { email, password } = form;
@@ -26,18 +34,18 @@ export default () => {
             email,
             password,
         })
-            .then(data => {
+            .then(user => {
                 if (redirect) {
                     router.push(redirect);
                 } else {
-                    const isAdmin = data.user.isAdmin;
+                    const isAdmin = user.isAdmin;
                     if (isAdmin) {
                         router.push(`/auth/callback?redirect=/admin`);
                     } else {
-                        router.push(`/auth/callback?redirect=/profile/${data.user.username}`);
+                        router.push(`/auth/callback?redirect=/profile/${user.username}`);
                     }
                 }
-            }).catch(err => {pr
+            }).catch(err => {
                 dispatchModalError({ err });
                 if (redirect) router.push({ pathname: redirect });
             },
@@ -49,7 +57,20 @@ export default () => {
             <h1>Se connecter</h1>
             <Row>
                 <Col className="m-auto" sm="12" md="5">
-                    <Providers/>
+                    <div className="d-flex flex-column mx-auto" style={{ maxWidth: '400px' }}>
+                        <SSOProviders/>
+                        <Divider text="ou"/>
+                        <CTALink
+                            className="my-2"
+                            title="Créer un compte"
+                            href="/auth/register"
+                        />
+                        <CTALink
+                            className="my-2"
+                            title="S'enregistrer en tant que Pro"
+                            href="/auth/register-pro"
+                        />
+                    </div>
                 </Col>
                 <Col className="m-auto" sm="12" md="7">
 
@@ -108,52 +129,11 @@ export default () => {
     );
 }
 
-const Providers = memo(() => {
-
-    const checkPopup = () => {
-        const check = setInterval(() => {
-            const { popup } = this;
-            if (!popup || popup.closed || popup.closed === undefined) {
-                clearInterval(check);
-                this.setState({ disabled: '' });
-            }
-        }, 1000);
+export async function getServerSideProps (ctx) {
+    const { token } = cookies(ctx);
+    return {
+        props: {
+            forceLogout: !!token,
+        },
     };
-
-    const startAuth = async (provider) => {
-        const token = await AuthService.OAuthLogin(provider)
-        // await checkPopup();
-        // toggleOpenModal(false)
-    };
-
-    return (
-        <div className="d-flex flex-column mx-auto" style={{ maxWidth : '400px'}}>
-
-            <button
-                className="register-fb"
-                onClick={() => startAuth('facebook')}>
-                <img src="/images/fb.png" alt=""/>
-                Login with Facebook
-            </button>
-
-            <button
-                className="register-g"
-                onClick={() => startAuth('google')}>
-                <img src="/images/fb.png" alt=""/>
-                Login with Google
-            </button>
-
-            <Divider text="ou"/>
-            <CTALink
-                className="my-2"
-                title="Créer un compte"
-                href="/auth/register"
-            />
-            <CTALink
-                className="my-2"
-                title="S'enregistrer en tant que Pro"
-                href="/auth/register-pro"
-            />
-        </div>
-    );
-});
+};

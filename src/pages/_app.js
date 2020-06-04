@@ -19,16 +19,6 @@ import Loader from '../components/Loader';
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;
 
-    Facebook.load()
-        .then(() => {
-            Facebook.init({
-                appId: '3103914796332638',
-                status: false, // the SDK will attempt to get info about the current user immediately after init
-                cookie: false,  // enable cookies to allow the server to access the session
-                xfbml: false,  // With xfbml set to true, the SDK wil
-            });
-        });
-
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles && jssStyles.parentNode) {
