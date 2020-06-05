@@ -4,16 +4,9 @@ import { getTimeAgo } from '../../libs/utils';
 import Link from 'next/link';
 import Typography from '@material-ui/core/Typography';
 
-const CommentsBlockLight = ({ comment, index, disableReply }) => {
+const CommentsBlockLight = ({ comment, index }) => {
     const date = comment.getRaw?.updatedAt;
     const timeAgo = date && getTimeAgo(date);
-    const textareaResponseRefs = useRef([]);
-    const [doneSubmitting, setDoneSubmitting] = useState(true);
-
-    const handleLikeComment = (commentId) => {
-        console.log(commentId);
-    };
-
     const responsesLength = comment.getResponses.length;
 
     return (
@@ -37,11 +30,9 @@ const CommentsBlockLight = ({ comment, index, disableReply }) => {
                         {comment.getLikes.length} j'aime
                     </small>
                 </div>
-                <div className="my-1">
-                    <p className="comment-text">
-                        {comment.getMessage}
-                    </p>
-                </div>
+                <p className="my-1 comment-text">
+                    {comment.getMessage}
+                </p>
                 {responsesLength > 0 && (
                     <Typography>{responsesLength} {responsesLength > 1 ? 'réponses' : 'response'} </Typography>
                 )}

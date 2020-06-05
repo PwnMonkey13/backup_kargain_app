@@ -6,11 +6,15 @@ import CommentsBlockLight from './CommentBlockLight';
 const CommentsList = ({ comments }) => {
 
     return (
-        <div className="comments m-2">
+        <div className="comments">
             <div className="comments-list-preview">
                 {comments && comments.map((item, index) => {
                     const comment = new Comment(item);
-                    return <CommentsBlockLight key={index} comment={comment} index={index}/>;
+                    return <CommentsBlockLight
+                        key={index}
+                        comment={comment}
+                        index={index}
+                    />;
                 })}
             </div>
         </div>

@@ -73,7 +73,7 @@ const Comments = ({ announceRaw }) => {
     };
 
     return (
-        <div className="comments m-t-60 m-b-60">
+        <div id="comments" className="comments m-t-60 m-b-60">
             <div className="comments-header"><h4>Commentaires </h4>
                 <div className="comments-mode">
                     <a href="https://benzin.fr/auctions/show/m50360e34019920sans0reserve-5eac26fe1b710?order=recents"
@@ -94,11 +94,12 @@ const Comments = ({ announceRaw }) => {
             <div className="comments-list">
                 {comments && comments.map((item, indexComment) => {
                     const comment = new Comment(item);
-                    return <CommentBlock key={indexComment} {...{
-                        comment,
-                        indexComment,
-                        onSubmitResponse,
-                    }}/>;
+                    return <CommentBlock
+                        key={indexComment}
+                        comment={comment}
+                        indexComment={indexComment}
+                        onSubmitResponse={onSubmitResponse}
+                    />;
                 })}
             </div>
         </div>

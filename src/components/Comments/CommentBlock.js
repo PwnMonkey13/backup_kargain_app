@@ -103,7 +103,7 @@ const CommentBlock = ({ comment, indexComment, disableReply, onSubmitResponse : 
 
 CommentBlock.propTypes = {
     comment : PropTypes.any.isRequired,
-    indexComment : PropTypes.number.isRequired,
+    indexComment : PropTypes.number,
     onSubmitResponse : PropTypes.func
 }
 

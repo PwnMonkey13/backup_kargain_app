@@ -1,6 +1,5 @@
 .comments {
-    border : 1px solid black;
-    padding : .5rem;
+    padding : 0 .5rem;
 
     textarea {
         margin-left: unset;
@@ -54,7 +53,7 @@
     }
 
     .comments-list-preview {
-        max-height: 200px;
+        max-height: 300px;
         margin-bottom: 5px;
         padding-bottom: 5px;
         border-bottom: 3px solid #777;
