@@ -95,40 +95,6 @@ function uploadAvatar (formData) {
         );
 }
 
-function addFavoriteAnnounce (announceId) {
-    const requestOptions = {
-        method: 'POST',
-        credentials: 'include',
-    };
-
-    const url = `${config.api}/users/favorite/${announceId}`;
-
-    return fetch(url, requestOptions)
-        .then(handleResponse)
-        .then(json => json.data)
-        .catch(err => {
-                throw err;
-            },
-        );
-}
-
-function removeFavoriteAnnounce (announceId) {
-    const requestOptions = {
-        method: 'POST',
-        credentials: 'include',
-    };
-
-    const url = `${config.api}/users/unfavorite/${announceId}`;
-
-    return fetch(url, requestOptions)
-        .then(handleResponse)
-        .then(json => json.data)
-        .catch(err => {
-                throw err;
-            },
-        );
-}
-
 function followUser (userId) {
     const requestOptions = {
         method: 'POST',
@@ -169,8 +135,6 @@ export default {
     getUserByUsernameSSR,
     updateUser,
     uploadAvatar,
-    addFavoriteAnnounce,
-    removeFavoriteAnnounce,
     followUser,
     unFollowUser,
 };

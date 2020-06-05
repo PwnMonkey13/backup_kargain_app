@@ -144,24 +144,35 @@ function uploadImages (slug, formData) {
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
-        );
+            throw err;
+        });
 }
 
-const toggleUserLike = (announceId) => {
+const addLikeLoggedInUser = (announceId) => {
     const requestOptions = {
         method: 'PUT',
         credentials: 'include',
     };
 
-    const url = `${config.api}/ads/toggleLike/${announceId}`;
-
+    const url = `${config.api}/ads/addLike/${announceId}`;
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
+        .then(json => json.data)
+        .catch(err => {
+            throw err;
+        });
+};
+
+const removeLikeLoggedInUser = (announceId) => {
+    const requestOptions = {
+        method: 'PUT',
+        credentials: 'include',
+    };
+
+    const url = `${config.api}/ads/removeLike/${announceId}`;
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
         .catch(err => {
             throw err;
         });
@@ -176,5 +187,6 @@ export default {
     confirmAnnounce,
     updateAnnounce,
     uploadImages,
-    toggleUserLike,
+    addLikeLoggedInUser,
+    removeLikeLoggedInUser,
 };
