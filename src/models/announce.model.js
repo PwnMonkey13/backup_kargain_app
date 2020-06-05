@@ -217,13 +217,6 @@ export default class Announce {
         return this.getImages?.length ?? 0;
     }
 
-    get getFormatedImagesViewer () {
-        return this.getImages.map((image => ({
-            original: image.location,
-            thumbnail: image.location,
-        })));
-    }
-
     get getFeaturedImg () {
         return this.getImages[0];
     }
@@ -248,12 +241,12 @@ export default class Announce {
         return this.raw?.showCellPhone;
     }
 
-    get isVisible () {
+    get getIsVisible () {
         return this.raw?.visible;
     }
 
-    get isPublished () {
-        return this.raw?.published;
+    get getIsActivated () {
+        return this.raw?.activated;
     }
 
     get getActiveStatus () {

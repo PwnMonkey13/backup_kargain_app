@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { PhotoCamera } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
 import { ReactComponent as StarSVG } from '../../public/images/svg/star.svg';
+import { ReactComponent as StarSVGYellow } from '../../public/images/svg/star-yellow.svg';
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import CommentsListLight from './Comments/CommentsListLight';
 import AnnounceService from '../services/AnnounceService';
@@ -18,55 +19,84 @@ import TagsList from './Tags/TagsList';
 import TitleMUI from './TitleMUI';
 import CTALink from './CTALink';
 
-const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
+const AnnounceCard = ({ announceRaw, featuredImgHeight, detailsFontSize }) => {
     const announce = new AnnounceClass(announceRaw);
     const { dispatchModalError } = useContext(ModalDialogContext);
     const [likesCounter, setLikesCounter] = useState(announce.getLikesLength);
     const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
     const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
 
+    const alreadyLikeCurrentUser = () => {
+        const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite.id === announce.getID);
+        const matchAnnounceLike = announce.getLikes.find(like => like.user === authenticatedUser.getID);
+        return !!matchUserFavorite || !!matchAnnounceLike;
+    };
+
     const handleClickLikeButton = async () => {
         if (!isAuthenticated) return setForceLoginModal(true);
-        if(isAuthor) return
         try {
-            const likesCount = await AnnounceService.toggleUserLike(announce.getID);
-            setLikesCounter(likesCount);
+            if (alreadyLikeCurrentUser()) {
+                await AnnounceService.addLikeLoggedInUser(announce.getID);
+                setLikesCounter(likesCount => likesCount + 1);
+            } else {
+                await AnnounceService.removeLikeLoggedInUser(announce.getID);
+                setLikesCounter(likesCount => likesCount - 1);
+            }
         } catch (err) {
             dispatchModalError({ err });
         }
     };
 
     return (
-        <div className="objava-wrapper cardAd my-1">
-            <Row className="my-1">
-                <Col sm={3} md={3} className="p-2">
-                    <Link href={announce.getAuthor.getProfileLink} prefetch={false}>
-                        <a className="decoration-none">
-                            <img className="img-profile-wrapper rounded-circle"
-                                 src={announce.getAuthor.getAvatar}
-                                 alt={announce.getTitle}
-                                 width={70}
+        <div className="objava-wrapper cardAd">
+            {announce.getFeaturedImg && (
+                <div className="cardAd_Featured">
+                    <Link href={`/announces/${announce.getSlug}`} prefetch={false}>
+                        <a>
+                            <LazyLoadImage
+                                effect="blur"
+                                src={announce.getFeaturedImg.getLocation}
+                                alt={announce.getFeaturedImg.getName}
+                                height={featuredImgHeight}
                             />
                         </a>
                     </Link>
-                </Col>
-
-                <Col sm={9} md={9} className="cardAd_Title p-2">
-                    <Link href={`/announces/${announce.getSlug}`} prefetch={false}>
-                        <a className="decoration-none">
-                            <Typography component="p" variant="h3">
-                                {announce.getTitle}
-                            </Typography>
-                        </a>
-                    </Link>
-                    <div className="d-flex align-items-center">
-                        <span className="mr-2">{announce.getManufacturerFormated}</span>
-                        <small> il y a {getTimeAgo(announce.getCreationDate.raw)}</small>
+                    <div className="moreThumbs">
+                        <IconButton>
+                            <PhotoCamera/>
+                            {announce.getCountImages}
+                        </IconButton>
                     </div>
-                </Col>
-            </Row>
+                </div>
+            )}
+            <div className="cardAd_Content">
+                <Row>
+                    <Col sm={3} md={3} className="p-2">
+                        <Link href={announce.getAuthor.getProfileLink} prefetch={false}>
+                            <a className="decoration-none">
+                                <img className="img-profile-wrapper rounded-circle"
+                                     src={announce.getAuthor.getAvatar}
+                                     alt={announce.getTitle}
+                                     width={70}
+                                />
+                            </a>
+                        </Link>
+                    </Col>
 
-            <div>
+                    <Col sm={9} md={9} className="cardAd_Title p-2">
+                        <Link href={`/announces/${announce.getSlug}`} prefetch={false}>
+                            <a className="decoration-none">
+                                <Typography component="p" variant="h3">
+                                    {announce.getTitle}
+                                </Typography>
+                            </a>
+                        </Link>
+                        <div className="d-flex align-items-center">
+                            <span className="mr-2">{announce.getManufacturerFormated}</span>
+                            <small> il y a {getTimeAgo(announce.getCreationDate.raw)}</small>
+                        </div>
+                    </Col>
+                </Row>
                 <div className="d-flex flex-column">
                     <div className="top-profile-name-btn">
                         <Link href={announce.getAuthor.getProfileLink} prefetch={false}>
@@ -84,42 +114,22 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                             </div>
                         </div>
                     )}
-
                 </div>
 
-                <div className="cardAd_Featured">
-                    {announce.getFeaturedImg && (
-                        <Link href={`/announces/${announce.getSlug}`} prefetch={false}>
-                            <a>
-                                <LazyLoadImage
-                                    effect="blur"
-                                    src={announce.getFeaturedImg.getLocation}
-                                    alt={announce.getFeaturedImg.getName}
-                                    height={featuredImgHeight}
-                                />
-                            </a>
-                        </Link>
-                    )}
-
-                    <div className="moreThumbs">
-                        <IconButton>
-                            <PhotoCamera/>
-                            {announce.getCountImages}
-                        </IconButton>
-                    </div>
-                </div>
 
                 <div className="price-stars-wrapper">
                     <div className="icons-profile-wrapper">
                         <div className="icons-star-prof icons-star-current"
+                             title="J'aime"
                              onClick={handleClickLikeButton}>
-                            <StarSVG/>
+                            {alreadyLikeCurrentUser() ? <StarSVGYellow/> : <StarSVG/>}
                             <span>{likesCounter}</span>
                         </div>
-                        <a href="#" className="icons-star-prof">
+                        <div className="icons-star-prof"
+                             title="Commenter">
                             <img src="/images/svg/comment.svg" alt=""/>
                             <span>{announce.getCountComments}</span>
-                        </a>
+                        </div>
                     </div>
                     <p className="price-announce">
                         {announce.getPrice} €TTC
@@ -129,7 +139,10 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                     </p>
                 </div>
 
-                <CarInfos announce={announce}/>
+                <CarInfos
+                    announce={announce}
+                    fontSize={detailsFontSize}
+                />
 
                 <TagsList tags={announce.getTags}/>
 
@@ -148,11 +161,10 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
 
                     {isAuthor && (
                         <CTALink
-                            title="Modifier"
+                            title="Modifier l'annonce"
                             href={`/announces/${announce.getSlug}/edit`}
                         />
                     )}
-
                 </div>
             </div>
         </div>

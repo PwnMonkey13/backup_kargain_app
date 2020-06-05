@@ -1,16 +1,15 @@
 import React, { useContext, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { NextSeo } from 'next-seo';
-import { Col, Row } from 'reactstrap';
+import { Container, Col, Row } from 'reactstrap';
 import { useMediaQuery } from '@material-ui/core';
 import PhoneIcon from '@material-ui/icons/Phone';
 import Typography from '@material-ui/core/Typography';
 import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import Alert from '@material-ui/lab/Alert';
 import { ReactComponent as StarSVG } from '../../../../public/images/svg/star.svg';
-import AnnounceService from '../../../services/AnnounceService';
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
-import { useAuth } from '../../../context/AuthProvider';
+import { ReactComponent as StarSVGYellow } from '../../../../public/images/svg/star-yellow.svg';
 import GoogleMapStatic from '../../../components/GoogleMapStatic';
 import GalleryViewer from '../../../components/Gallery/GalleryViewer';
 import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy';
@@ -20,7 +19,10 @@ import Comments from '../../../components/Comments/Comments';
 import TitleMUI from '../../../components/TitleMUI';
 import TagsList from '../../../components/Tags/TagsList';
 import CTALink from '../../../components/CTALink';
+import AnnounceService from '../../../services/AnnounceService';
 import AnnounceClass from '../../../models/announce.model';
+import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import { useAuth } from '../../../context/AuthProvider';
 import { getTimeAgo } from '../../../libs/utils';
 import Error from '../../_error';
 
@@ -51,7 +53,7 @@ const Announce = ({ slug, announceRaw, err }) => {
     const refImg = useRef();
     const theme = useTheme();
     const classes = useStyles();
-    const { isAuthenticated, authenticatedUser } = useAuth();
+    const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
     const { dispatchModalError } = useContext(ModalDialogContext);
     const announce = new AnnounceClass(announceRaw);
     const [likesCounter, setLikesCounter] = useState(announce.getLikesLength);
@@ -67,167 +69,198 @@ const Announce = ({ slug, announceRaw, err }) => {
         }
     };
 
-    const handleClickLikeButton = () => {
-        AnnounceService.toggleUserLike(announce.getID).then(likesCount => {
-            setLikesCounter(likesCount);
-        }).catch(err => {
+    const alreadyLikeCurrentUser = () => {
+        const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite.id === announce.getID);
+        const matchAnnounceLike = announce.getLikes.find(like => like.user === authenticatedUser.getID);
+        return !!matchUserFavorite || !!matchAnnounceLike;
+    };
+
+    const handleClickLikeButton = async () => {
+        if (!isAuthenticated) return setForceLoginModal(true);
+        try {
+            if (alreadyLikeCurrentUser()) {
+                await AnnounceService.addLikeLoggedInUser(announce.getID);
+                setLikesCounter(likesCount => likesCount + 1);
+            } else {
+                await AnnounceService.removeLikeLoggedInUser(announce.getID);
+                setLikesCounter(likesCount => likesCount - 1);
+            }
+        } catch (err) {
             dispatchModalError({ err });
-        });
+        }
     };
 
     if (!announceRaw && err) return <Error message={err.statusCode} statusCode={err.statusCode}/>;
 
     return (
-        <div className="objava-wrapper">
-            <NextSeo
-                title={`${announce.getTitle} - Kargain`}
-                description={announce.getTheExcerpt}
-            />
-
-            <Row>
-                <Col sm={12} md={6}>
-                    <div className="top">
-                        <TitleMUI as="h1" variant="h1"><strong>{announce.getTitle}</strong></TitleMUI>
-                        <div className={classes.formRow}>
-                            <Typography as="h2" variant="h2">
-                                {announce.getManufacturerFormated}
-                            </Typography>
-                            <div>
-                                <small> il y a {getTimeAgo(announce.getCreationDate.raw)}</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="pics">
-                        {announce.getCountImages > 0 && (
-                            <>
-                                <GalleryViewer images={announce.getFormatedImagesViewer} ref={refImg}/>
-                                {isDesktop && (
-                                    <GalleryImgsLazy
-                                        images={announce.getImages}
-                                        handleCLickImg={handleCLickImg}
-                                    />
-                                )}
-                            </>
-                        )}
-                    </div>
-                </Col>
-
-                <Col sm={12} md={6}>
-                    <div className={classes.formRow}>
-                        <div className="pic" style={{ flex: 1 }}>
-                            <img
-                                src={announce.getAuthor.getAvatar}
-                                className="img-profile-wrapper avatar-preview"
-                                width={80}
-                                alt={announce.getTitle}
-                            />
-                        </div>
-
-                        <div className="pic" style={{ flex: 4 }}>
-                            <Typography variant="h3" component="h2">
-                                {announce.getAuthor.getFullName}
-                            </Typography>
-
-                            {announce.getAdOrAuthorCustomAddress(['city', 'postCode']) && (
-                                <div className="top-profile-data-wrapper">
-                                    <div className="top-profile-location">
-                                        <img src="/images/location.png" alt=""/>
-                                        {announce.getAdOrAuthorCustomAddress(['city', 'postCode'])}
-                                    </div>
-                                </div>
-                            )}
-
-                            {announce.showCellPhone && (
-                                <p>
-                                    <PhoneIcon/>
-                                    <small>{announce.getAuthor.getPhone}</small>
-                                </p>
-                            )}
-
-                            {isAuthor && (
-                                <div className="mx-2">
-                                    <CTALink
-                                        href={`/announces/${slug}/edit`}
-                                        title="Modifier"
-                                    />
-                                </div>
-                            )}
-
-                        </div>
-                    </div>
-
-                    <div className={clsx('price-stars-wrapper', classes.priceStarsWrapper)}>
-                        <div className="icons-profile-wrapper">
-                            <div className="icons-star-prof icons-star-current" onClick={handleClickLikeButton}>
-                                <StarSVG/>
-                                <span>{likesCounter}</span>
-                            </div>
-                            <a href="#" className="icons-star-prof">
-                                <img src="/images/svg/comment.svg" alt=""/>
-                                <span>{announce.getCountComments}</span>
-                            </a>
-                        </div>
-                        <p className="price-announce">
-                            {announce.getPrice} €TTC
-                            <span> {announce.getPriceHT} €HT</span>
-                        </p>
-                    </div>
-
-                    <Typography component="p" variant="h4" gutterBottom>Tags ({announce.getTags.length})</Typography>
-                    <TagsList tags={announce.getTags}/>
-
-                </Col>
-            </Row>
-
-            <section className="my-2">
-                <div className={classes.wysiwyg}>
-                    {announce.getDescription}
-                </div>
-            </section>
-
-            <section className="my-2">
-                <Typography component="h3" variant="h3">Données du véhicule</Typography>
-                <CarInfos
-                    announce={announce}
-                    enableThirdColumn
+        <Container>
+            <div className="objava-wrapper">
+                <NextSeo
+                    title={`${announce.getTitle} - Kargain`}
+                    description={announce.getTheExcerpt}
                 />
-            </section>
 
-            <section className="my-2">
-                <Typography component="h3" variant="h3">Equipements</Typography>
-                <Row>
-                    {announce.getVehicleEquipments && announce.getVehicleEquipments.map((equipment, index) => {
-                        return (
-                            <Col sm={6} md={3} key={index}>
-                                <div className="equipment m-3">
-                                    <Typography>{equipment.label}</Typography>
-                                </div>
-                            </Col>
-                        );
-                    })}
-                </Row>
-            </section>
-
-            <section className="my-2">
-                <TitleMUI as="h3" variant="h3">Fiches techniques ({announce.getCountDamages})</TitleMUI>
-                <DamageViewerTabs tabs={announce.getDamagesTabs}/>
-            </section>
-
-            <section className="my-2">
-                {announce.getLocation.latitude && announce.getLocation.longitude && (
-                    <GoogleMapStatic
-                        width={600}
-                        height={300}
-                        markers={[
-                            [announce.getLocation.latitude, announce.getLocation.longitude].join(' ')]
-                        }
-                    />
+                {!announce.getIsActivated && (
+                    <Alert severity="warning">
+                        Your announce is hidden from public & waiting for moderator activation
+                    </Alert>
                 )}
-            </section>
 
-            <Comments announceRaw={announceRaw}/>
-        </div>
+                {!announce.getIsVisible && (
+                    <Alert color="warning">
+                        Your announce is currently not published (draft mode)
+                    </Alert>
+                )}
+
+                <Row>
+                    <Col sm={12} md={6}>
+                        <div className="top">
+                            <TitleMUI as="h1" variant="h1"><strong>{announce.getTitle}</strong></TitleMUI>
+                            <div className={classes.formRow}>
+                                <Typography as="h2" variant="h2">
+                                    {announce.getManufacturerFormated}
+                                </Typography>
+                                <div>
+                                    <small> il y a {getTimeAgo(announce.getCreationDate.raw)}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="pics">
+                            {announce.getCountImages > 0 && (
+                                <>
+                                    <GalleryViewer images={announce.getImages} ref={refImg}/>
+                                    {isDesktop && (
+                                        <GalleryImgsLazy
+                                            images={announce.getImages}
+                                            handleCLickImg={handleCLickImg}
+                                        />
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    </Col>
+
+                    <Col sm={12} md={6}>
+                        <div className={classes.formRow}>
+                            <div className="pic" style={{ flex: 1 }}>
+                                <img
+                                    src={announce.getAuthor.getAvatar}
+                                    className="img-profile-wrapper avatar-preview"
+                                    width={80}
+                                    alt={announce.getTitle}
+                                />
+                            </div>
+
+                            <div className="pic" style={{ flex: 4 }}>
+                                <Typography variant="h3" component="h2">
+                                    {announce.getAuthor.getFullName}
+                                </Typography>
+
+                                {announce.getAdOrAuthorCustomAddress(['city', 'postCode']) && (
+                                    <div className="top-profile-data-wrapper">
+                                        <div className="top-profile-location">
+                                            <img src="/images/location.png" alt=""/>
+                                            {announce.getAdOrAuthorCustomAddress(['city', 'postCode'])}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {announce.showCellPhone && (
+                                    <p>
+                                        <PhoneIcon/>
+                                        <small>{announce.getAuthor.getPhone}</small>
+                                    </p>
+                                )}
+
+                                {isAuthor && (
+                                    <div className="mx-2">
+                                        <CTALink
+                                            href={`/announces/${slug}/edit`}
+                                            title="Modifier"
+                                        />
+                                    </div>
+                                )}
+
+                            </div>
+                        </div>
+
+                        <div className={clsx('price-stars-wrapper', classes.priceStarsWrapper)}>
+                            <div className="icons-profile-wrapper">
+                                <div
+                                    className="icons-star-prof icons-star-current"
+                                    onClick={handleClickLikeButton}
+                                    title="J'aime">
+                                    {alreadyLikeCurrentUser() ? <StarSVGYellow/> : <StarSVG/>}
+                                    <span>{likesCounter}</span>
+                                </div>
+                                <a href="#comments" className="icons-star-prof" title="Commenter">
+                                    <img src="/images/svg/comment.svg" alt=""/>
+                                    <span>{announce.getCountComments}</span>
+                                </a>
+                            </div>
+                            <p className="price-announce">
+                                {announce.getPrice} €TTC
+                                <span> {announce.getPriceHT} €HT</span>
+                            </p>
+                        </div>
+
+                        <Typography component="p" variant="h4" gutterBottom>Tags ({announce.getTags.length})</Typography>
+                        <TagsList tags={announce.getTags}/>
+
+                    </Col>
+                </Row>
+
+                <section className="my-2">
+                    <div className={classes.wysiwyg}>
+                        {announce.getDescription}
+                    </div>
+                </section>
+
+                <section className="my-2">
+                    <Typography component="h3" variant="h3">Données du véhicule</Typography>
+                    <CarInfos
+                        announce={announce}
+                        enableThirdColumn
+                    />
+                </section>
+
+                <section className="my-2">
+                    <Typography component="h3" variant="h3">Equipements</Typography>
+                    <Row>
+                        {announce.getVehicleEquipments && announce.getVehicleEquipments.map((equipment, index) => {
+                            return (
+                                <Col sm={6} md={3} key={index}>
+                                    <div className="equipment m-3">
+                                        <Typography>{equipment.label}</Typography>
+                                    </div>
+                                </Col>
+                            );
+                        })}
+                    </Row>
+                </section>
+
+                <section className="my-2">
+                    <TitleMUI as="h3" variant="h3">Localisation</TitleMUI>
+                    {announce.getLocation.latitude && announce.getLocation.longitude && (
+                        <GoogleMapStatic
+                            width={600}
+                            height={300}
+                            markers={[
+                                [announce.getLocation.latitude, announce.getLocation.longitude].join(' ')]
+                            }
+                        />
+                    )}
+                </section>
+
+                <section className="my-2">
+                    <TitleMUI as="h3" variant="h3">Fiches techniques ({announce.getCountDamages})</TitleMUI>
+                    <DamageViewerTabs tabs={announce.getDamagesTabs}/>
+                </section>
+
+                <Comments announceRaw={announceRaw}/>
+            </div>
+        </Container>
     );
 };
 
@@ -247,7 +280,7 @@ export async function getServerSideProps (ctx) {
             props: {
                 err: {
                     message: err?.message ?? null,
-                    statusCode: err?.statusCode ?? 404
+                    statusCode: err?.statusCode ?? 404,
                 },
             },
         };
