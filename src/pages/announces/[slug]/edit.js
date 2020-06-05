@@ -27,6 +27,12 @@ import TagsControlled from '../../../components/Tags/TagsControlled';
 import TextareaInput from '../../../components/Form/Inputs/TextareaInput';
 import AnnounceImagesAutoUpload from '../../../components/Uploads/AnnounceImagesAutoUpload';
 import DamageSelectorControlledCar from '../../../components/Damages/DamageSelectorControlledCar';
+import GalleryViewer from '../../../components/Gallery/GalleryViewer';
+import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy';
+import NumberInputMUI from '../../../components/Form/Inputs/NumberInputMUI';
+import CheckboxGroup from '../../../components/Form/Inputs/CheckboxGroup';
+import CheckboxMUI from '../../../components/Form/Inputs/CheckboxMUI';
+import ButtonLink from '../../../components/ButtonLink';
 import Error from '../../_error';
 import {
     CheckboxOptionsEquipments,
@@ -40,13 +46,8 @@ import {
     RadioTypeFunction,
     RadioVehicleGeneralState,
 } from '../../../components/Vehicles/car/form.data';
-import GalleryViewer from '../../../components/Gallery/GalleryViewer';
-import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy';
-import NumberInputMUI from '../../../components/Form/Inputs/NumberInputMUI';
-import CheckboxGroup from '../../../components/Form/Inputs/CheckboxGroup';
-import CheckboxMUI from '../../../components/Form/Inputs/CheckboxMUI';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 
     stickyNav: {
         position: 'fixed',
@@ -212,8 +213,6 @@ const AnnounceEdit = ({ announceRaw, err }) => {
     if (!isAuthenticated) return <Error statusCode="403"/>;
     if (!isAuthor) return <Error statusCode="403"/>;
 
-    console.log(announce);
-
     const handleCLickImg = (index) => {
         if (refImg.current) {
             refImg.current.slideToIndex(index);
@@ -232,7 +231,8 @@ const AnnounceEdit = ({ announceRaw, err }) => {
     };
 
     const handleRemove = () => {
-        console.log('sfsefsef');
+        //TODO
+        console.log('TODO');
     };
 
     const onSubmit = (form) => {
@@ -262,8 +262,8 @@ const AnnounceEdit = ({ announceRaw, err }) => {
 
     return (
         <>
-            <Typography component="h2" variant="h2" className="text-center" gutterBottom>Edition de votre
-                annonce
+            <Typography component="h2" variant="h2" className="text-center" gutterBottom>
+                Edition de votre annonce
             </Typography>
 
             {!isDesktop && (
@@ -281,6 +281,7 @@ const AnnounceEdit = ({ announceRaw, err }) => {
                             toggleTab,
                             buttonText,
                             triggerSubmit,
+                            slug: announce.getSlug,
                         }}/>
                     </Col>
                 )}
@@ -325,7 +326,10 @@ const AnnounceEdit = ({ announceRaw, err }) => {
                                 <div className="pics">
                                     {announce.getCountImages > 0 && (
                                         <>
-                                            <GalleryViewer images={announce.getFormatedImagesViewer} ref={refImg}/>
+                                            <GalleryViewer
+                                                images={announce.getImages}
+                                                ref={refImg}
+                                            />
                                             {isDesktop && (
                                                 <GalleryImgsLazy
                                                     images={announce.getImages}
@@ -355,10 +359,13 @@ const AnnounceEdit = ({ announceRaw, err }) => {
             </Row>
 
             {!isDesktop && (
-                <Buttons {...{
-                    buttonText,
-                    triggerSubmit,
-                }}/>
+                <Buttons
+                    announcePageLink={`/announces/${announce.getSlug}`}
+                    {...{
+                        buttonText,
+                        triggerSubmit,
+                    }}
+                />
             )}
         </>
     );
@@ -676,7 +683,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 };
 
 const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }) => {
-    const classes = useStyles()
+    const classes = useStyles();
 
     return (
         <div className="form-fields">
@@ -733,13 +740,13 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
             </FieldWrapper>
 
             <Typography component="h3" variant="h3" className="text-center" gutterBottom>
-                Gestion de l'announce
+                Gestion de l'annonce
             </Typography>
 
             <CheckboxMUI
                 name="status"
                 value="active"
-                label="Archiver l'announce"
+                label="Archiver l'annonce"
                 color="warning"
                 control={control}
                 errors={errors}
@@ -751,16 +758,15 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
                 className={classes.button}
                 startIcon={<DeleteIcon/>}
                 onClick={() => handleRemove}>
-                Supprimer l'announce
+                Supprimer l'annonce
             </Button>
 
         </div>
     );
 };
 
-const Buttons = ({ buttonText, triggerSubmit }) => {
+const Buttons = ({ buttonText, triggerSubmit, announcePageLink }) => {
     const classes = useStyles();
-
     return (
         <div className="d-flex flex-column my-3">
             <Button
@@ -770,7 +776,7 @@ const Buttons = ({ buttonText, triggerSubmit }) => {
                 className={classes.button}
                 startIcon={<SaveIcon/>}
                 type="submit"
-                onClick={(e) => {
+                onClick={() => {
                     triggerSubmit();
                 }}>
                 {buttonText}
@@ -781,6 +787,8 @@ const Buttons = ({ buttonText, triggerSubmit }) => {
                 size="medium"
                 className={classes.button}
                 startIcon={<PageViewIcon/>}
+                component={ButtonLink}
+                href={announcePageLink}
             >
                 Voir l'annonce
             </Button>
@@ -788,7 +796,7 @@ const Buttons = ({ buttonText, triggerSubmit }) => {
     );
 };
 
-const NavDesktop = ({ activeTab, toggleTab, buttonText, triggerSubmit }) => {
+const NavDesktop = ({ activeTab, toggleTab, buttonText, triggerSubmit, slug }) => {
     const classes = useStyles();
 
     return (
@@ -806,10 +814,13 @@ const NavDesktop = ({ activeTab, toggleTab, buttonText, triggerSubmit }) => {
                 </Nav>
             </div>
 
-            <Buttons {...{
-                buttonText,
-                triggerSubmit,
-            }}/>
+            <Buttons
+                announcePageLink={`/announces/${slug}`}
+                {...{
+                    buttonText,
+                    triggerSubmit,
+                }}
+            />
         </div>
     );
 };
@@ -842,7 +853,7 @@ export async function getServerSideProps (ctx) {
             props: {
                 err: {
                     message: err?.message ?? null,
-                    statusCode: err?.statusCode ?? 404
+                    statusCode: err?.statusCode ?? 404,
                 },
             },
         };

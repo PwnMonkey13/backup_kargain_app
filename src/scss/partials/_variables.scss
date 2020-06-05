@@ -1,31 +1,27 @@
-@import '../../../node_modules/bootstrap/scss/variables';
-
-@mixin google-font($family) {
-    @import url("http://fonts.googleapis.com/css?family=#{$family}");
-}
-
-@include google-font("Droid Sans");
-@include google-font("Raleway");
-
-$ionicons-font-path: "/fonts/ionicons" !default;
-$ionicons-font-family: "Ionicons" !default;
-$ionicons-version: "3.0.0-alpha.3" !default;
-
 $default-font-family: "Raleway", "Droid Sans", sans-serif;
 $default-font-color: #263238;
 
 //colors
 $black: #111111;
-$black2 : #111;
-$grey : #AAAAAA;
-$grey2 : gainsboro;
-$green : #2ECC40;
-$blue_light : #4685FC;
-$blue : #2C6BFC;
-$blue_strong : #2650D9;
-$yellow : #FFDC00;
-$orange : #FF851B;
-$red : #FF4136;
+$black2: #111;
+$grey: #AAAAAA;
+$grey2: gainsboro;
+$green: #2ECC40;
+$blue_light: #4685FC;
+$blue: #2C6BFC;
+$blue_strong: #2650D9;
+$yellow: #FFDC00;
+$orange: #FF851B;
+$red: #FF4136;
 
-$font-weight-base:400;
+$font-weight-base: 400;
 $font-weight-bold: 600;
+
+//Boostrap overrides
+$container-max-widths: (
+        xs: 500px,
+        sm: 650px,
+        md: 900px, //overrides
+        lg: 992px,
+        xl: 1200px
+);

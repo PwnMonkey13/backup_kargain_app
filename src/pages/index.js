@@ -99,7 +99,6 @@ const Index = (props) => {
 
     return (
         <div className="home">
-
             <section className="cd-tab-filter-wrapper">
                 <div className={clsx('cd-tab-filter', filtersOpened && 'filter-is-visible')}>
                     <Sorters updateSorter={updateSorter}/>
@@ -122,10 +121,11 @@ const Index = (props) => {
 
                 <Row className="my-2 d-flex justify-content-center">
                     {state.announces ? state.announces.map((announceRaw, index) => (
-                        <Col key={index} sm={12} md={6} lg={6} xl={6}>
+                        <Col key={index} sm={12} md={6} lg={6} xl={6} className="my-2">
                             <AnnounceCard {...{
                                 announceRaw,
                                 isAuthenticated,
+                                detailsFontSize : "13px"
                             }}/>
                         </Col>
                     )) : (

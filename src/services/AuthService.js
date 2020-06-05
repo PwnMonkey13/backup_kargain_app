@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-unfetch';
-import * as Facebook from 'fb-sdk-wrapper';
 import handleResponse from '../libs/handleResponse';
 import config from '../config/config';
 

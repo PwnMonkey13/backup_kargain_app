@@ -4,22 +4,23 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
 import ChatIcon from '@material-ui/icons/Chat';
+import Typography from '@material-ui/core/Typography';
 import { useAuth } from '../../context/AuthProvider';
 import UsersService from '../../services/UsersService';
 import AvatarPreview from '../../components/Avatar/AvatarPreview';
-import Filters from '../../components/Profile/Filters';
+import Filters from '../../components/HomeFilters/Filters';
+import AnnounceCard from '../../components/AnnounceCard';
+import CTALink from '../../components/CTALink';
 import Tabs from '../../components/Tabs/Tabs';
 import UserModel from '../../models/user.model';
 import Error from '../_error';
-import Typography from '@material-ui/core/Typography';
-import AnnounceCard from '../../components/AnnounceCard';
-import CTALink from '../../components/CTALink';
 
 const Profile = ({ profileRaw, username, err, ...props }) => {
     if (!profileRaw || err) return <Error statusCode={err?.statusCode}/>;
     const { authenticatedUser, isAuthenticated } = useAuth();
     const [isModalOpen, toggleModalOpen] = useState(false);
     const profile = new UserModel(profileRaw);
+    const isCurrentLoggedUser = isAuthenticated && authenticatedUser.getUsername === profile.getUsername;
     const [filtersOpened, toggleFilters] = useState(false);
     const [state, setState] = useState({
         loading: true,
@@ -27,10 +28,6 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
         filters: {},
         total: 0,
     });
-
-    const isAuthor = isAuthenticated &&
-        authenticatedUser &&
-        authenticatedUser.getUsername === profile.getUsername;
 
     const toggleOpenFilters = () => {
         toggleFilters(open => !open);
@@ -60,7 +57,7 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
 
                             </div>
 
-                            {isAuthor ? (
+                            {isCurrentLoggedUser ? (
                                 <div className="mx-2">
                                     <Link href={'/profile/edit'}>
                                         <a className="btn btn-outline-dark">Editer mon profil</a>
@@ -124,25 +121,25 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
                     <span className="cd-close-trigger" onClick={() => toggleOpenFilters()}/>
                 </div>
 
-                <div className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
+                <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
                     <TabsContainer {...{
                         profile,
-                        isAuthor,
+                        isCurrentLoggedUser,
                         isAuthenticated,
-                    }} />
-                </div>
+                    }}/>
+                </section>
             </section>
         </>
     );
 };
 
-const TabsContainer = ({ profile, isAuthor }) => {
+const TabsContainer = ({ profile, isCurrentLoggedUser }) => {
     return (
         <Tabs defaultActive={0} className="nav-tabs-profile" id="myTab">
             <Tabs.Item id="home-tab" title="Vitrine">
                 <Row className="my-2 d-flex justify-content-center">
                     {profile.getGarage.length ? profile.getGarage.map((announceRaw, index) => (
-                        <Col key={index} sm={12} md={12} lg={6} xl={6}>
+                        <Col key={index} sm={12} md={12} lg={6} xl={6} className="my-2">
                             <AnnounceCard announceRaw={announceRaw}/>
                         </Col>
                     )) : (
@@ -159,17 +156,17 @@ const TabsContainer = ({ profile, isAuthor }) => {
                 </Row>
             </Tabs.Item>
 
-            {isAuthor && (
+            {isCurrentLoggedUser && (
                 <Tabs.Item id="profile-tab" title="Location">
                     <p>Content 2</p>
                 </Tabs.Item>
             )}
 
-            {isAuthor && (
+            {isCurrentLoggedUser && (
                 <Tabs.Item id="favoris-tab" title="Favoris">
                     <Row className="my-2 d-flex justify-content-center">
                         {profile.getFavorites.length && profile.getFavorites.map((announceRaw, index) => (
-                            <Col key={index} sm={12} md={12} lg={6} xl={6}>
+                            <Col key={index} sm={12} md={12} lg={6} xl={6} className="my-2">
                                 <AnnounceCard announceRaw={announceRaw}/>
                             </Col>
                         ))}

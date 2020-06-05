@@ -1,7 +1,14 @@
 @charset "UTF-8";
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
-@import url('https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700');
 
+@mixin google-font($family) {
+    @import url("http://fonts.googleapis.com/css?family=#{$family}");
+}
+
+@include google-font("Droid Sans");
+@include google-font("Raleway");
+@include google-font("Quicksand:300,400,500,700");
+
+@import 'partials/variables';
 @import '~bootstrap/scss/bootstrap';
 @import '~react-step-progress-bar/styles.css';
 @import '~react-input-range/lib/css/index.css';
@@ -14,7 +21,6 @@
     content : none!important
 }
 
-@import 'partials/variables';
 @import 'partials/base';
 @import 'partials/navbar';
 @import "partials/content-filter";
