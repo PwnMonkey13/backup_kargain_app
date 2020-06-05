@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
+import { Col, Row, TabContent, TabPane } from 'reactstrap';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Header from '../Header';
+import DamagesNavResponsive from './DamagesNavResponsive';
 
 const useStyles = makeStyles(() => ({
     annoInputs: {
@@ -65,17 +65,49 @@ const useStyles = makeStyles(() => ({
 
 }));
 
-const DamageViewerTabs = ({ tabs, ...props }) => {
-    const classes = useStyles();
+const DamageViewerTabs = ({ tabs }) => {
     const warningDamageRef = useRef(null);
     const [activeTab, setActiveTab] = useState(0);
     let annoRefs = [];
 
-    const toggle = tab => {
-        if (activeTab !== tab) setActiveTab(tab);
-    };
+    return (
+        <section className="anno">
+            <DamagesNavResponsive
+                {...{
+                    damagesTabsLight: tabs && tabs.map(tab => ({
+                        title: tab.title,
+                        countStages: tab.stages.length,
+                    })),
+                    activeTab,
+                    setActiveTab,
+                }}
+            />
 
-    const DamagesMappedImg = ({ tab, index }) => (
+            <TabContent ref={warningDamageRef} activeTab={activeTab}>
+                {Object.keys(tabs).map((key, index) => {
+                    const tab = tabs[key];
+
+                    return (
+                        <TabPane key={index} tabId={index}>
+                            <Row>
+                                <Col md={6}>
+                                    <DamagesMappedImg {...{index, tab, annoRefs}}/>
+                                </Col>
+                                <Col md={6}>
+                                    <DamagesList tab={tab}/>
+                                </Col>
+                            </Row>
+                        </TabPane>
+                    );
+                })}
+            </TabContent>
+        </section>
+    );
+};
+
+const DamagesMappedImg = ({ tab, index, annoRefs }) => {
+    const classes = useStyles();
+    return (
         <div className={clsx(classes.annoContainer)}>
             <div className={clsx(classes.annoStage)}
                  id={`anno_${index}`}
@@ -93,8 +125,11 @@ const DamageViewerTabs = ({ tabs, ...props }) => {
             </div>
         </div>
     );
+};
 
-    const DamagesList = ({ tab }) => (
+const DamagesList = ({ tab }) => {
+    const classes = useStyles();
+    return (
         <div className={clsx(classes.annoInputs)}>
             <Header h3> Dégats :</Header>
             {tab.stages && tab.stages.map((stage, index) => {
@@ -115,62 +150,15 @@ const DamageViewerTabs = ({ tabs, ...props }) => {
                                    placeholder={`Description du défaut ${index + 1} du véhicule`}
                             />
                         </div>
-
                     </div>
                 );
             })}
         </div>
     );
-
-    return (
-        <div>
-            <Nav tabs>
-                {Object.keys(tabs).map((key, index) => {
-                    const tab = tabs[key];
-                    return (
-                        <NavItem key={index}>
-                            <NavLink
-                                className={clsx(activeTab === index && 'active' )}
-                                onClick={() => {
-                                    toggle(index);
-                                }}
-                            >
-                                {tab.title}
-                            </NavLink>
-                        </NavItem>
-                    );
-                })}
-            </Nav>
-
-            <TabContent ref={warningDamageRef} activeTab={activeTab}>
-                {Object.keys(tabs).map((key, index) => {
-                    const tab = tabs[key];
-
-                    return (
-                        <TabPane key={index} tabId={index}>
-                            <Row>
-                                <Col md={6}>
-                                    <DamagesMappedImg index={index} tab={tab} />
-                                </Col>
-                                <Col md={6}>
-                                    <DamagesList tab={tab}/>
-                                </Col>
-                            </Row>
-                        </TabPane>
-                    );
-                })}
-            </TabContent>
-            {props.enableDebug && (
-                <pre>{JSON.stringify(damages, null, 2)}</pre>
-            )}
-        </div>
-    );
 };
 
-DamageViewerTabs.propTypes = {
-};
+DamageViewerTabs.propTypes = {};
 
-DamageViewerTabs.defaultProps = {
-};
+DamageViewerTabs.defaultProps = {};
 
 export default DamageViewerTabs;

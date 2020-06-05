@@ -1,33 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import NiceSelect, { components } from 'react-select';
 import { Alert, Col, Row, TabContent, TabPane } from 'reactstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { makeStyles, useTheme } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 import IconButton from '@material-ui/core/IconButton';
+import DamagesNavResponsive from './DamagesNavResponsive';
 import Header from '../Header';
-import { useMediaQuery } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
-
-    annoNav: {
-        display: 'flex',
-        border: 'none',
-        borderRadius: 0,
-        justifyContent: 'center',
-        marginTop: '20px',
-    },
-
-    annoNavItem: {
-        border: 'none',
-        borderBottom: '4px solid #c2bdbd',
-        borderRadius: 0,
-        textAlign: 'center',
-        textDecoration: 'none',
-        margin: '0 1px',
-    },
-
     annoPickerContainer: {
         display: 'flex',
         justifyContent: 'center',
@@ -86,72 +67,16 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-const scrollToRef = (ref, offsetTop = 0) => {
-    return window.scrollTo(0, ref.current.offsetTop);
-};
-
-const getScrollTop = () => {
-    return document.documentElement.scrollTop;
-};
-
-const getCoords = (elem) => { // crossbrowser version
-    const box = elem.getBoundingClientRect();
-
-    const body = document.body;
-    const docEl = document.documentElement;
-    const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-    const scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-
-    const clientTop = docEl.clientTop || body.clientTop || 0;
-    const clientLeft = docEl.clientLeft || body.clientLeft || 0;
-
-    const top = box.top + scrollTop - clientTop;
-    const left = box.left + scrollLeft - clientLeft;
-
-    return {
-        top: Math.round(top),
-        left: Math.round(left),
-    };
-};
-
-const DamagesPicker = ({ annoRefs, indexTab, damageTab, getClick, classes }) => (
-    <div className={clsx(classes.annoPickerContainer)}>
-        <div className={clsx(classes.annoStage)}
-             id={`anno_${indexTab}`}
-             ref={annoRef => annoRefs[indexTab] = annoRef}
-             onClick={(e) => getClick(e, indexTab)}
-        >
-            <img className={clsx(classes.annoImg)} src={damageTab.img} alt={damageTab.title}/>
-
-            {damageTab.stages && damageTab.stages.map((stage, indexStage) => (
-                <span key={indexStage}
-                      style={{ ...stage.position }}
-                      className={clsx(classes.annoFloatingNumber, classes.annoNumber)}>
-                    {indexStage + 1}
-                </span>
-            ))}
-        </div>
-    </div>
-);
-
 const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFullWidth, ...props }) => {
     const classes = useStyles();
-    const theme = useTheme();
     let annoRefs = [];
     const warningDamageRef = useRef(null);
     const [activeTab, setActiveTab] = useState(0);
     const [damagesTabs, setDamagesTabs] = useState(tabs);
-    const isUpTablet = useMediaQuery(theme.breakpoints.up('md'), {
-        defaultMatches: true,
-    });
 
     useEffect(() => {
         fireChanges(damagesTabs);
     }, [damagesTabs]);
-
-    const toggle = tab => {
-        if (activeTab !== tab) setActiveTab(tab);
-    };
 
     const getClick = (e, indexTab) => {
         const annoRef = annoRefs[indexTab];
@@ -227,35 +152,16 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
 
     return (
         <section className="anno">
-            <div className="annoNav">
-                {isUpTablet ? (
-                    <ul className="nav nav-tabs">
-                        {damagesTabs.map((tab, indexTab) => {
-                            return (
-                                <li key={indexTab} className={clsx('nav-item')}>
-                                    <a className={clsx('nav-link', activeTab === indexTab && 'active')}
-                                       onClick={() => {
-                                           toggle(indexTab);
-                                       }}>
-                                        {tab.title}
-                                    </a>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                ) : (
-                    <NiceSelect
-                        options={damagesTabs.map((tab, index) => ({
-                            label: `${tab.title} (${tab.stages.length})`,
-                            value: index,
-                        }))}
-                        onChange={({ value }) => {
-                            toggle(value);
-                        }}
-
-                    />
-                )}
-            </div>
+            <DamagesNavResponsive
+                {...{
+                    damagesTabsLight: damagesTabs && damagesTabs.map(tab => ({
+                        title: tab.title,
+                        countStages: tab.stages.length,
+                    })),
+                    activeTab,
+                    setActiveTab,
+                }}
+            />
 
             <TabContent ref={warningDamageRef} activeTab={activeTab}>
                 {damagesTabs.map((damageTab, indexTab) => {
@@ -268,7 +174,12 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
                         <TabPane key={indexTab} tabId={indexTab}>
                             <Row>
                                 <Col sm={12} md={col} lg={6}>
-                                    <DamagesPicker {...{ annoRefs, indexTab, damageTab, getClick, classes }}/>
+                                    <DamagesPicker {...{
+                                        annoRefs,
+                                        indexTab,
+                                        damageTab,
+                                        getClick,
+                                    }}/>
                                 </Col>
                                 <Col sm={12} md={col} lg={6}>
                                     <div className={clsx(classes.annoInputs)}>
@@ -301,7 +212,6 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
                                                                placeholder={`Description du défaut ${indexStage + 1} du véhicule`}
                                                         />
                                                     </div>
-
                                                 </div>
                                             );
                                         })}
@@ -318,6 +228,29 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
             )}
 
         </section>
+    );
+};
+
+const DamagesPicker = ({ annoRefs, indexTab, damageTab, getClick }) => {
+    const classes = useStyles();
+    return (
+        <div className={clsx(classes.annoPickerContainer)}>
+            <div className={clsx(classes.annoStage)}
+                 id={`anno_${indexTab}`}
+                 ref={annoRef => annoRefs[indexTab] = annoRef}
+                 onClick={(e) => getClick(e, indexTab)}
+            >
+                <img className={clsx(classes.annoImg)} src={damageTab.img} alt={damageTab.title}/>
+
+                {damageTab.stages && damageTab.stages.map((stage, indexStage) => (
+                    <span key={indexStage}
+                          style={{ ...stage.position }}
+                          className={clsx(classes.annoFloatingNumber, classes.annoNumber)}>
+                    {indexStage + 1}
+                </span>
+                ))}
+            </div>
+        </div>
     );
 };
 
