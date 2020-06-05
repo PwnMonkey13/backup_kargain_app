@@ -31,7 +31,7 @@ const GalleryImgsLazy = ({ images, handleCLickImg }) => {
     return (
         <div className="m-2 m-auto p-2">
             <div className="row">
-                {images.map((Image, index) => {
+                {images.map((imageModel, index) => {
                     return (
                         <Col key={index} md={4}>
                             <div className="m-2">
@@ -39,8 +39,8 @@ const GalleryImgsLazy = ({ images, handleCLickImg }) => {
                                     <LazyLoadImage
                                         onClick={() => handleCLickImg(index)}
                                         effect="black-and-white"
-                                        src={Image.getImageLocation}
-                                        alt={Image.getTile}
+                                        src={imageModel.getLocation}
+                                        alt={imageModel.getTile}
                                         className={clsx('img-hover', classes.galleryImgSrc)}
                                     />
                                 </div>

@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import ImageGallery from 'react-image-gallery';
 
 const GalleryViewer = forwardRef(({ images }, ref) => {
-    if(!images || images.length === 0) return null;
+    if (!images || images.length === 0) return null;
 
-    const filteredImages = images.filter(image => !!image.location && !!image.thumbnail)
+    const items = images.map(image => ({
+        original: image.getLocation,
+        thumbnail: image.getLocation,
+    }));
 
     return <ImageGallery
         ref={ref}
@@ -13,7 +16,7 @@ const GalleryViewer = forwardRef(({ images }, ref) => {
         autoPlay
         showIndex
         showBullets
-        items={filteredImages}
+        items={items}
     />;
 });
 
@@ -23,6 +26,10 @@ GalleryViewer.propTypes = {
             original: PropTypes.string,
             thumbnail: PropTypes.string,
         })),
+};
+
+GalleryViewer.defaultProps = {
+    images: [],
 };
 
 export default GalleryViewer;
