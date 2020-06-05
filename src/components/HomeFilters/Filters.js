@@ -70,40 +70,6 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
         }
     }, [filters]);
 
-    const ControlButtons = () => (
-        <div className="d-flex flex-column my-3">
-            <Button
-                className="my-1"
-                variant="contained"
-                color="primary"
-                startIcon={<FilterListIcon/>}
-                type="submit"
-            >
-                Appliquer filtres
-            </Button>
-
-            <Button
-                className="my-1"
-                variant="contained"
-                onClick={(e) => {
-                    e.preventDefault();
-                    window.location.reload();
-                }}>
-                Reinitialiser
-            </Button>
-
-
-            {/*<Button*/}
-            {/*    className="my-1"*/}
-            {/*    variant="contained"*/}
-            {/*    onClick={(e) => {*/}
-            {/*        console.log(watch());*/}
-            {/*    }}>*/}
-            {/*    WATCH*/}
-            {/*</Button>*/}
-        </div>
-    );
-
     console.log('render filters');
 
     return (
@@ -151,6 +117,30 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
         </form>
     );
 });
+
+const ControlButtons = () => (
+    <div className="d-flex flex-column my-3">
+        <Button
+            className="my-1"
+            variant="contained"
+            color="primary"
+            startIcon={<FilterListIcon/>}
+            type="submit"
+        >
+            Appliquer filtres
+        </Button>
+
+        <Button
+            className="my-1"
+            variant="contained"
+            onClick={(e) => {
+                e.preventDefault();
+                window.location.reload();
+            }}>
+            Reinitialiser
+        </Button>
+    </div>
+);
 
 Filters.defaultProps = {
     defaultFilters: {
