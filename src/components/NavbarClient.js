@@ -12,6 +12,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { getLogo } from '../libs/utils';
 import { useAuth } from '../context/AuthProvider';
 import CTALink from './CTALink';
+import DropdownSwitchLang from './Locales/DropdownSwitchLang';
 
 const NavbarClient = () => {
     const { isAuthenticated, authenticatedUser } = useAuth();
@@ -134,6 +135,7 @@ const NavbarClient = () => {
 
         return (
             <Nav navbar>
+                <DropdownSwitchLang/>
                 <DropdownNotifs isOpen={state.isOpen1} keyName="isOpen1" toggle={toggle}/>
                 <DropdownUser isOpen={state.isOpen2} keyName="isOpen2" toggle={toggle}/>
             </Nav>

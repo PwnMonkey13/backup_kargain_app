@@ -1,8 +1,0 @@
-{
-  "h1": "A simple example",
-  "title": "I am a sentence in English.",
-  "change-locale": "Change locale",
-  "to-second-page": "To second page",
-  "error-with-status": "A {{statusCode}} error occurred on server",
-  "error-without-status": "An error occurred on the server"
-}

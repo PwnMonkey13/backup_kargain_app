@@ -15,6 +15,8 @@ import Forbidden403Page from './403';
 import theme from '../theme';
 import '../scss/theme.scss';
 import Loader from '../components/Loader';
+import appWithI18n from '../components/Locales/appWithI18n'
+import i18nConfig from "../../i18n.json";
 
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;
@@ -90,4 +92,4 @@ const ProtectedRouter = ({ children }) => {
     );
 };
 
-export default MyApp;
+export default appWithI18n(MyApp, i18nConfig)

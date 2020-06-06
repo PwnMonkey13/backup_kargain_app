@@ -1,7 +1,7 @@
 const withPlugins = require('next-compose-plugins');
 const withImages = require('next-images');
 const path = require('path');
-require('dotenv').config()
+require('dotenv').config();
 
 const nextBundleAnalyzer = ({ enabled = true }) => (nextConfig = {}) => ({
     ...nextConfig,
@@ -39,9 +39,9 @@ const nextConfig = {
         GOOGLE_SSO_CLIENT_ID : process.env.GOOGLE_SSO_CLIENT_ID,
         FACEBOOK_SSO_APP_ID : process.env.FACEBOOK_SSO_APP_ID,
     },
-    webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    webpack: (config, options) => {
+        config.resolve.alias['~'] = path.resolve(__dirname);
         config.resolve.mainFields = ['main', 'browser', 'module'];
-
         config.module.rules.push(
             {
                 test: /\.tsx?$/,

@@ -1,10 +1,11 @@
 import React from 'react';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
+import documentLang from 'next-translate/documentLang'
 
 class MyDocument extends Document {
     render () {
         return (
-            <Html lang="fr">
+            <Html lang={documentLang(this.props)}>
                 <Head>
                     <meta charSet="UTF-8"/>
                     <meta name="viewport" content="width=device-width, initial-scale=1"/>
