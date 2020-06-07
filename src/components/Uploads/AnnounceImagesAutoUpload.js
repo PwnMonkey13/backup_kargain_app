@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { Col, Row } from 'reactstrap';
 import Typography from '@material-ui/core/Typography';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import UploadDropZone from '../../components/Uploads/UploadDropZone';
-import CardMediaMUI from '../../components/CardMediaMUI';
+import UploadDropZone from './UploadDropZone';
+import CardMediaMUI from '../CardMediaMUI';
 import AnnounceService from '../../services/AnnounceService';
 
 const AnnounceImagesAutoUpload = ({ announceSlug, enableRefreshAfterUpload }) => {

@@ -2,8 +2,8 @@
   "allLanguages": ["fr", "en"],
   "defaultLanguage": "fr",
   "currentPagesDir": "src/routes",
-  "finalPagesDir": "src/pages",
   "localesPath": "src/locales",
+  "finalPagesDir": "src/pages",
   "pages": {
     "*": ["layout"],
     "/" : ["sorters", "filters"]
