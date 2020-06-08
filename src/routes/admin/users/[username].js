@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
 import { Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import UsersService from '../../../services/UsersService';

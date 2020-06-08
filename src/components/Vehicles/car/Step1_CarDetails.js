@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import { Col, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
+import useTranslation from 'next-translate/useTranslation';
 import Header from '../../Header';
 import { NumberInput, SelectInput } from '../../Form/Inputs';
 import StepNavigation from '../../Form/StepNavigation';
@@ -22,17 +23,18 @@ import {
 const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
     const formRef = useRef(null);
     const { formDataContext } = useContext(FormContext);
-    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
+    const { t } = useTranslation();
+    const { watch, control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
-        defaultValues: formDataContext
+        defaultValues: formDataContext,
     });
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
             <Row>
                 <Col>
-                    <FieldWrapper label="Type">
+                    <FieldWrapper label={t('vehicles:type')}>
                         <SelectInput name="vehicleFunctionType"
                                      options={RadioTypeFunction}
                                      control={control}
@@ -41,7 +43,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Fonction du véhicule">
+                    <FieldWrapper label={t('vehicles:vehicle-function')}>
                         <SelectInput
                             name="vehicleFunction"
                             options={RadioFunctionVehicle}
@@ -54,7 +56,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Kilométrage" required>
+                    <FieldWrapper label={t('vehicles:mileage')}>
                         <NumberInput name="mileage"
                                      placeholder="20000 km"
                                      control={control}
@@ -64,7 +66,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Cylindrée">
+                    <FieldWrapper label={t('vehicles:cylinder')}>
                         <NumberInput name="vehicleEngine.cylinder"
                                      control={control}
                                      errors={errors}
@@ -77,7 +79,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Carburant" required>
+                    <FieldWrapper label={t('vehicles:gas')}>
                         <SelectInput name="vehicleEngine.gas"
                                      options={RadioChoicesGas}
                                      control={control}
@@ -86,7 +88,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Boite de vitesse">
+                    <FieldWrapper label={t('vehicles:gear-box')}>
                         <SelectInput
                             name="vehicleEngine.type"
                             options={RadioChoicesEngine}
@@ -99,7 +101,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Puissance kW">
+                    <FieldWrapper label={t('vehicles:power')}>
                         <NumberInput name="power.kw"
                                      control={control}
                                      errors={errors}
@@ -120,10 +122,10 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 </Col>
             </Row>
 
-            <Header strong text="Consommation"/>
+            <Header strong text={t('vehicles:consumption')}/>
             <Row>
                 <Col>
-                    <FieldWrapper label="Mixte (g/km)">
+                    <FieldWrapper label={`{${t('vehicles:consumption')} mixt`}>
                         <NumberInput
                             name="consumption.mixt"
                             control={control}
@@ -134,7 +136,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Ville (g/km)">
+                    <FieldWrapper label={`{${t('vehicles:consumption')} (g/km)`}>
                         <NumberInput
                             name="consumption.city"
                             control={control}
@@ -145,7 +147,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Route (g/km)">
+                    <FieldWrapper label={`{${t('vehicles:road')} (g/km)`}>
                         <NumberInput
                             name="consumption.road"
                             control={control}
@@ -170,7 +172,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Classe d'émission">
+                    <FieldWrapper label={t('vehicles:class-emission')}>
                         <SelectInput
                             name="emission"
                             options={RadioChoicesEmission}
@@ -180,7 +182,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Equipements">
+                    <FieldWrapper label={t('vehicles:equipments')}>
                         <SelectInput
                             name="equipments"
                             isMulti
@@ -193,10 +195,10 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 </Col>
             </Row>
 
-            <Header text="Données du véhicule"/>
+            <Header text={t('vehicles:vehicle-informations')}/>
             <Row>
                 <Col>
-                    <FieldWrapper label="Nombre de portes">
+                    <FieldWrapper label={t('vehicles:doors-quantity')}>
                         <SelectInput
                             name="doors"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -207,7 +209,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Nombre de places">
+                    <FieldWrapper label={t('vehicles:seats-quantity')}>
                         <SelectInput
                             name="seats"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -221,7 +223,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Peinture">
+                    <FieldWrapper label={t('vehicles:paint')}>
                         <SelectInput
                             name="paint"
                             options={RadioChoicesPaints}
@@ -231,7 +233,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Matériaux">
+                    <FieldWrapper label={t('vehicles:materials')}>
                         <SelectInput
                             name="materials"
                             isMulti
@@ -242,7 +244,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Couleur extérieure">
+                    <FieldWrapper label={t('vehicles:external-color')}>
                         <SelectInput
                             name="externalColor"
                             options={RadioChoicesExternalColor}
@@ -252,7 +254,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Couleur intérieure">
+                    <FieldWrapper label={t('vehicles:internal-color')}>
                         <SelectInput
                             name="internalColor"
                             options={RadioChoicesExternalColor}

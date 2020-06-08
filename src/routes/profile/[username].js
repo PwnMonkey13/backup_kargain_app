@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
 import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
 import ChatIcon from '@material-ui/icons/Chat';
 import Typography from '@material-ui/core/Typography';
+import useTranslation from 'next-translate/useTranslation';
 import { useAuth } from '../../context/AuthProvider';
 import UsersService from '../../services/UsersService';
 import AvatarPreview from '../../components/Avatar/AvatarPreview';
@@ -20,6 +21,7 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
     const { authenticatedUser, isAuthenticated } = useAuth();
     const [isModalOpen, toggleModalOpen] = useState(false);
     const profile = new UserModel(profileRaw);
+    const { t, lang } = useTranslation();
     const isCurrentLoggedUser = isAuthenticated && authenticatedUser.getUsername === profile.getUsername;
     const [filtersOpened, toggleFilters] = useState(false);
     const [state, setState] = useState({
@@ -60,7 +62,9 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
                             {isCurrentLoggedUser ? (
                                 <div className="mx-2">
                                     <Link href={'/profile/edit'}>
-                                        <a className="btn btn-outline-dark">Editer mon profil</a>
+                                        <a className="btn btn-outline-dark">
+                                            {t('vehicles:edit-my-profile')}
+                                        </a>
                                     </Link>
                                 </div>
                             ) : (
@@ -73,7 +77,7 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
                                             toggleModalOpen(true);
                                         }}
                                     >
-                                        Contacter
+                                        {t('vehicles:contact')}
                                     </Button>
                                 </div>
                             )}
@@ -92,12 +96,12 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
                             )}
                             <Col>
                                 <span className="top-profile-abonnes">
-                                    {profile.getCountFollowers} abonnés
+                                    {profile.getCountFollowers} {t('vehicles:followers')}
                                 </span>
                             </Col>
                             <Col>
                                   <span className="top-profile-abonnes">
-                                    {profile.getCountFollowing} abonnements
+                                    {profile.getCountFollowing} {t('vehicles:subscriptions')}
                                 </span>
                             </Col>
                         </Row>
@@ -110,7 +114,6 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
                 </Row>
             </div>
             <section className="content_tabs">
-
                 <div className={clsx('cd-filter-trigger', filtersOpened && 'filter-is-visible')}
                      onClick={() => toggleOpenFilters()}>
                     <img src="/images/svg/icon_filter_white.svg" alt=""/>
@@ -134,6 +137,7 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
 };
 
 const TabsContainer = ({ profile, isCurrentLoggedUser }) => {
+    const { t, lang } = useTranslation();
     return (
         <Tabs defaultActive={0} className="nav-tabs-profile" id="myTab">
             <Tabs.Item id="home-tab" title="Vitrine">
@@ -144,9 +148,9 @@ const TabsContainer = ({ profile, isCurrentLoggedUser }) => {
                         </Col>
                     )) : (
                         <div className="d-flex flex-column align-items-center smy-2">
-                            <p>No announces found</p>
+                            <p>{t('vehicles:no-ads-found')}</p>
                             <CTALink
-                                title="Créer votre première annonce"
+                                title={t('vehicles:create-my-first-ad')}
                                 href="/deposer-une-annonce"
                                 className="cta_nav_link"
                             />
@@ -163,7 +167,7 @@ const TabsContainer = ({ profile, isCurrentLoggedUser }) => {
             )}
 
             {isCurrentLoggedUser && (
-                <Tabs.Item id="favoris-tab" title="Favoris">
+                <Tabs.Item id="favoris-tab" title={t('vehicles:favorites')}>
                     <Row className="my-2 d-flex justify-content-center">
                         {profile.getFavorites.length && profile.getFavorites.map((announceRaw, index) => (
                             <Col key={index} sm={12} md={12} lg={6} xl={6} className="my-2">

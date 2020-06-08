@@ -1,7 +1,8 @@
 import React, { useContext, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
 import AnnounceClass from '../../models/announce.model';
 import { useAuth } from '../../context/AuthProvider';
-import { useRouter } from 'next/router';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import commentsService from '../../services/commentsService';
 import Comment from '../../models/comment.model';
@@ -12,7 +13,7 @@ const Comments = ({ announceRaw }) => {
     const { isAuthenticated } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const textareaCommentRef = useRef();
-    const textareaResponseRefs = useRef([]);
+    const { t } = useTranslation();
     const announce = new AnnounceClass(announceRaw);
     const [comments, setComments] = useState(announce.getComments);
     const [doneSubmitting, setDoneSubmitting] = useState(true);
@@ -74,13 +75,14 @@ const Comments = ({ announceRaw }) => {
 
     return (
         <div id="comments" className="comments m-t-60 m-b-60">
-            <div className="comments-header"><h4>Commentaires </h4>
+            <div className="comments-header">
+                <h4>{t('vehicles:comment')}</h4>
                 <div className="comments-mode">
                     <a href="https://benzin.fr/auctions/show/m50360e34019920sans0reserve-5eac26fe1b710?order=recents"
-                       className="active">Récents
+                       className="active">{t('vehicles:recent')}
                     </a>
                     <a href="https://benzin.fr/auctions/show/m50360e34019920sans0reserve-5eac26fe1b710?order=populars">
-                        Populaires
+                        {t('vehicles:popular')}
                     </a>
                 </div>
             </div>
@@ -107,6 +109,7 @@ const Comments = ({ announceRaw }) => {
 };
 
 const CommentForm = ({ onSubmitComment, textareaCommentRef, doneSubmitting }) => {
+    const { t } = useTranslation();
     return (
         <form onSubmit={e => onSubmitComment(e)}
               className="comments-write">
@@ -124,7 +127,8 @@ const CommentForm = ({ onSubmitComment, textareaCommentRef, doneSubmitting }) =>
                 <button
                     disabled={!doneSubmitting}
                     type="submit"
-                    className="btn btn-primary">Envoyer
+                    className="btn btn-primary">
+                    {t('vehicles:send')}
                 </button>
             </div>
         </form>

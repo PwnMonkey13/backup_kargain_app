@@ -1,5 +1,5 @@
 {
   "language-name-fr": "Francais",
   "language-name-en": "Anglais",
-  "example": "on utilise la variable {{count}}"
+  "settings" : "Préférences"
 }

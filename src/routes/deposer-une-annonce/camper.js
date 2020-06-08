@@ -30,7 +30,7 @@ const CarForm = (props) => {
         },
         {
             vin: 'Immat. VIN',
-            'manufacturer.make': 'Marque',
+            'manufacturer.make': t("vehicles:make'),
             'manufacturer.model': 'Modele',
             'manufacturer.generation': 'Version',
             'manufacturer.year': 'Année'

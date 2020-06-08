@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Col, Row } from 'reactstrap';
 import clsx from 'clsx';
+import useTranslation from 'next-translate/useTranslation';
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import PaginateResultsSituation from '../components/PaginateResultsSituation';
 import PaginateResults from '../components/PaginateResults';
@@ -9,11 +10,13 @@ import Sorters from '../components/HomeFilters/Sorters';
 import AnnounceCard from '../components/AnnounceCard';
 import { useAuth } from '../context/AuthProvider';
 import Filters from '../components/HomeFilters/Filters';
+import { NextSeo } from 'next-seo';
 
 const Index = (props) => {
     const { dispatchModalError } = useContext(ModalDialogContext);
     const { isAuthenticated } = useAuth();
     const [filtersOpened, toggleFilters] = useState(false);
+    const { t } = useTranslation();
     const [state, setState] = useState({
         loading: false,
         sorter: {},
@@ -99,6 +102,7 @@ const Index = (props) => {
 
     return (
         <div className="home">
+
             <section className="cd-tab-filter-wrapper">
                 <div className={clsx('cd-tab-filter', filtersOpened && 'filter-is-visible')}>
                     <Sorters updateSorter={updateSorter}/>
@@ -129,7 +133,7 @@ const Index = (props) => {
                             }}/>
                         </Col>
                     )) : (
-                        <p>No announces found</p>
+                        <p>{(t('vehicles:no-ads-found'))}</p>
                     )}
                 </Row>
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
 import { makeStyles } from '@material-ui/styles';
 import { colors, List, ListItem } from '@material-ui/core';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';

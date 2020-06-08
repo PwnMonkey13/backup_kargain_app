@@ -1,8 +1,9 @@
 import React, { useContext, useEffect } from 'react';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
 import { useForm } from 'react-hook-form';
 import { Col, Row } from 'reactstrap';
-import cookies from 'next-cookies'
+import cookies from 'next-cookies';
+import useTranslation from 'next-translate/useTranslation';
 import { EmailInput, PasswordInput } from '../../components/Form/Inputs';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import FieldWrapper from '../../components/Form/FieldWrapper';
@@ -17,16 +18,17 @@ export default ({ forceLogout }) => {
     const router = useRouter();
     const { redirect } = router.query;
     const { dispatchModalError } = useContext(ModalDialogContext);
+    const { t, lang } = useTranslation();
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
     });
 
-    useEffect(()=>{
-        if (forceLogout){
+    useEffect(() => {
+        if (forceLogout) {
             return router.push('/auth/logout');
         }
-    },[])
+    }, []);
 
     const onSubmit = (form) => {
         const { email, password } = form;
@@ -54,7 +56,7 @@ export default ({ forceLogout }) => {
 
     return (
         <>
-            <h1>Se connecter</h1>
+            <h1>{t('vehicles:login')}</h1>
             <Row>
                 <Col className="m-auto" sm="12" md="5">
                     <div className="d-flex flex-column mx-auto" style={{ maxWidth: '400px' }}>
@@ -62,12 +64,12 @@ export default ({ forceLogout }) => {
                         <Divider text="ou"/>
                         <CTALink
                             className="my-2"
-                            title="Créer un compte"
+                            title={t('vehicles:register')}
                             href="/auth/register"
                         />
                         <CTALink
                             className="my-2"
-                            title="S'enregistrer en tant que Pro"
+                            title={t('vehicles:register-pro')}
                             href="/auth/register-pro"
                         />
                     </div>
@@ -76,7 +78,7 @@ export default ({ forceLogout }) => {
 
                     <style jsx>{`
                         form{
-                            border-radius : 5px; 
+                            border-radius : 5px;
                             border : 1px solid gainsboro;
                             max-width : 500px
                         }
@@ -85,22 +87,23 @@ export default ({ forceLogout }) => {
                     <form className="p-3 mt-3 mx-auto"
                           onSubmit={handleSubmit(onSubmit)}>
 
-                        <FieldWrapper label="Email" required>
+                        <FieldWrapper label="Email">
                             <EmailInput
                                 name="email"
                                 inline
                                 errors={errors}
                                 control={control}
+                                rules={{ required: 'Required' }}
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="Mot de passe" required>
+                        <FieldWrapper label={t('vehicles:password')}>
                             <PasswordInput
                                 name="password"
                                 errors={errors}
                                 control={control}
                                 rules={{
-                                    required: 'field required',
+                                    required: 'Required',
                                     minLength: {
                                         value: 6,
                                         message: 'Min 6 chars',
@@ -112,13 +115,13 @@ export default ({ forceLogout }) => {
 
                         <div className="text-right">
                             <Link href="/auth/forgotten">
-                                <a className=""> mot de passe oublié</a>
+                                <a className="">{t('vehicles:password-forgotten')} </a>
                             </Link>
                         </div>
 
                         <div className="submit">
                             <CTAButton
-                                title="Se connecter"
+                                title={t('vehicles:login')}
                                 submit
                             />
                         </div>

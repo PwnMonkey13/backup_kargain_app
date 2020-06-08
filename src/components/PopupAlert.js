@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
 import CloseIcon from '@material-ui/icons/Close';
 import { Modal } from 'reactstrap';
 import { ModalDialogContext } from '../context/ModalDialogContext';

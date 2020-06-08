@@ -1,14 +1,16 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getTimeAgo } from '../../libs/utils';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
+import useTranslation from 'next-translate/useTranslation';
 import Typography from '@material-ui/core/Typography';
-import Comment from '../../models/comment.model';
 import SendIcon from '@material-ui/icons/Send';
+import Comment from '../../models/comment.model';
+import { getTimeAgo } from '../../libs/utils';
 
 const CommentBlock = ({ comment, indexComment, disableReply, onSubmitResponse : fireResponse,  }) => {
     const date = comment.getRaw?.updatedAt
-    const timeAgo = date && getTimeAgo(date);
+    const { t, lang } = useTranslation();
+    const timeAgo = getTimeAgo(date, lang);
     const textareaResponseRefs = useRef([]);
     const [doneSubmitting, setDoneSubmitting] = useState(true);
 
@@ -44,7 +46,7 @@ const CommentBlock = ({ comment, indexComment, disableReply, onSubmitResponse : 
                         </a>
                     </Link>
                     <small>
-                        { timeAgo ? `il y a ${timeAgo}` : "A l'instant" }
+                        {timeAgo}
                     </small>
                 </div>
                 <div className="comment-text my-1">
@@ -53,7 +55,7 @@ const CommentBlock = ({ comment, indexComment, disableReply, onSubmitResponse : 
                 <div className="comment-buttons">
                     <a className="">
                         <small
-                            onClick={e => handleLikeComment(comment.getID)}>{comment.getLikes.length} j'aime
+                            onClick={() => handleLikeComment(comment.getID)}>{comment.getLikes.length} j'aime
                         </small>
                     </a>
                 </div>
@@ -73,7 +75,7 @@ const CommentBlock = ({ comment, indexComment, disableReply, onSubmitResponse : 
 
                             <div className="new-comment-reply">
                                 <div className="form-group inline-submit m-0 pl-0">
-                                    <small>Répondre :</small>
+                                    <small>{t('vehicles:supply')} :</small>
                                     <div className="position-relative">
                                     <textarea
                                         ref={el => textareaResponseRefs.current[indexComment] = el}

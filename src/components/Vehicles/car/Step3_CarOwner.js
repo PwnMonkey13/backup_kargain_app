@@ -1,8 +1,9 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Col, Row } from 'reactstrap';
 import Typography from '@material-ui/core/Typography';
-import { GeoStreetsInput, NumberInput, TextInput, SelectCountryFlags } from '../../Form/Inputs';
+import useTranslation from 'next-translate/useTranslation';
+import { GeoStreetsInput, NumberInput, SelectCountryFlags, TextInput } from '../../Form/Inputs';
 import StepNavigation from '../../Form/StepNavigation';
 import FieldWrapper from '../../Form/FieldWrapper';
 import useAddress from '../../../hooks/useAddress';
@@ -12,9 +13,10 @@ import { FormContext } from '../../../context/FormContext';
 import Header from '../../Header';
 
 const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
-    const [addressParts, addressString, coordinates] = useAddress();
-    const { isAuthenticated, authenticatedUser } = useAuth();
+    const [, , coordinates] = useAddress();
+    const { authenticatedUser } = useAuth();
     const { formDataContext } = useContext(FormContext);
+    const { t } = useTranslation();
     const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
@@ -38,10 +40,10 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
 
     return (
         <form className="form_wizard" onSubmit={handleSubmit(handleSubmitForm)}>
-            <Header text="Publier votre annonce maintenant"/>
+            <Header text={t('vehicles:publish-my-ad-now')}/>
             <Row>
                 <Col>
-                    <FieldWrapper label="Titre de l'annonce">
+                    <FieldWrapper label={t('vehicles:announce-title')}>
                         <TextInput
                             name="title"
                             placeholder="BMW 633csi e24 - 1976"
@@ -49,7 +51,7 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
                             control={control}
                             errors={errors}
                             rules={{
-                                required: 'Title is required',
+                                required: t('vehicles:field-is-required'),
                                 minLength: {
                                     value: 5,
                                     message: 'Min length : 5 ',
@@ -59,7 +61,7 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Prix de l'annonce">
+                    <FieldWrapper label={t('vehicles:ad-price')}>
                         <NumberInput
                             name="price"
                             placeholder="15000€"
@@ -78,7 +80,7 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
                 </Col>
             </Row>
 
-            <FieldWrapper label="Pays">
+            <FieldWrapper label={t('vehicles:price')}>
                 <SelectCountryFlags
                     name="countrySelect"
                     errors={errors}
@@ -87,7 +89,7 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
             </FieldWrapper>
 
             {countrySelect && countrySelect.value === 'FR' ? (
-                <FieldWrapper label="Adresse">
+                <FieldWrapper label={t('vehicles:address')}>
                     <GeoStreetsInput
                         name="address"
                         enableGeoloc
@@ -99,7 +101,7 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
                 </FieldWrapper>
             ) : (
                 <>
-                    <FieldWrapper label="Ville">
+                    <FieldWrapper label={t('vehicles:city')}>
                         <TextInput
                             name="address.city"
                             errors={errors}
@@ -108,7 +110,7 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
                         />
                     </FieldWrapper>
 
-                    <FieldWrapper label="Adresse">
+                    <FieldWrapper label={t('vehicles:address')}>
                         <TextInput
                             name="address.street"
                             errors={errors}
@@ -119,11 +121,11 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
                 </>
             )}
 
-            <Header text="Informations sur le vendeur"/>
+            <Header text={t('filter:owner-informations')}/>
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Prénom">
+                    <FieldWrapper label={t('vehicles:firstname')}>
                         <TextInput
                             defaultValue={authenticatedUser.getFirstname}
                             disabled
@@ -131,7 +133,7 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Nom">
+                    <FieldWrapper label={t('vehicles:lastname')}>
                         <TextInput
                             defaultValue={authenticatedUser?.getLastname}
                             disabled
@@ -150,7 +152,7 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col md={4}>
-                    <FieldWrapper label="Telephone">
+                    <FieldWrapper label={t('vehicles:phone')}>
                         <TextInput
                             defaultValue={authenticatedUser?.getPhone}
                             disabled
@@ -159,19 +161,19 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
                 </Col>
             </Row>
 
-            <Header text="Photos"/>
+            <Header text={t('vehicles:pictures')}/>
             <UploadDropZone
                 maxFiles={10}
                 getFiles={getFiles}
                 hideSubmit
-                dragLabel="Uploader max 3 autres photos"
+                dragLabel={t('vehicles:upload-max-3-pictures')}
             />
 
             <Typography component="p" variant="body1" color="primary">
-                Vous pourrez ajouter d'autres photos plus tard
+                {t('vehicles:you-can-upload-more-after')}
             </Typography>
 
-            <StepNavigation prev={prevStep} submitLabel="Créer mon annonce" submit/>
+            <StepNavigation prev={prevStep} submitLabel={t('vehicles:create-my-ad')} submit/>
         </form>
     );
 };

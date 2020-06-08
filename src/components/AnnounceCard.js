@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
-import Link from 'next/link';
 import { Col, Row } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import IconButton from '@material-ui/core/IconButton';
 import { PhotoCamera } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
+import useTranslation from 'next-translate/useTranslation';
+import Link from 'next-translate/Link';
 import { ReactComponent as StarSVG } from '../../public/images/svg/star.svg';
 import { ReactComponent as StarSVGYellow } from '../../public/images/svg/star-yellow.svg';
 import { ModalDialogContext } from '../context/ModalDialogContext';
@@ -25,6 +26,7 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight, detailsFontSize }) => {
     const [likesCounter, setLikesCounter] = useState(announce.getLikesLength);
     const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
     const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
+    const { t, lang } = useTranslation();
 
     const alreadyLikeCurrentUser = () => {
         const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite.id === announce.getID);
@@ -58,6 +60,7 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight, detailsFontSize }) => {
                                 src={announce.getFeaturedImg.getLocation}
                                 alt={announce.getFeaturedImg.getName}
                                 height={featuredImgHeight}
+                                width="100%"
                             />
                         </a>
                     </Link>
@@ -93,7 +96,7 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight, detailsFontSize }) => {
                         </Link>
                         <div className="d-flex align-items-center">
                             <span className="mr-2">{announce.getManufacturerFormated}</span>
-                            <small> il y a {getTimeAgo(announce.getCreationDate.raw)}</small>
+                            <small> {getTimeAgo(announce.getCreationDate.raw, lang)}</small>
                         </div>
                     </Col>
                 </Row>
@@ -120,13 +123,13 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight, detailsFontSize }) => {
                 <div className="price-stars-wrapper">
                     <div className="icons-profile-wrapper">
                         <div className="icons-star-prof icons-star-current"
-                             title="J'aime"
+                             title={t('vehicles:i-like')}
                              onClick={handleClickLikeButton}>
                             {alreadyLikeCurrentUser() ? <StarSVGYellow/> : <StarSVG/>}
                             <span>{likesCounter}</span>
                         </div>
                         <div className="icons-star-prof"
-                             title="Commenter">
+                             title={t('vehicles:comment_plural')}>
                             <img src="/images/svg/comment.svg" alt=""/>
                             <span>{announce.getCountComments}</span>
                         </div>
@@ -148,20 +151,20 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight, detailsFontSize }) => {
 
                 {announce.getCountComments > 0 && (
                     <>
-                        <TitleMUI as="p" variant="h4">Commentaires ({announce.getCountComments})</TitleMUI>
+                        <TitleMUI as="p" variant="h4">{t('vehicles:comment_plural')} ({announce.getCountComments})</TitleMUI>
                         <CommentsListLight comments={announce.getComments}/>
                     </>
                 )}
 
                 <div className="my-2 text-center">
                     <CTALink
-                        title="Voir l'annonce"
+                        title={t('vehicles:see-announce')}
                         href={`/announces/${announce.getSlug}`}
                     />
 
                     {isAuthor && (
                         <CTALink
-                            title="Modifier l'annonce"
+                            title={t('vehicles:edit-announce')}
                             href={`/announces/${announce.getSlug}/edit`}
                         />
                     )}

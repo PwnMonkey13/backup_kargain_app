@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import Link from 'next-translate/Link';
 import useTranslation from 'next-translate/useTranslation';
-import i18nConfig from '~/i18n.json';
+import i18nConfig from '../../../i18n.json';
 import startsWithLang from 'next-translate/_helpers/startsWithLang';
 
 const DropdownSwitchLang = () => {

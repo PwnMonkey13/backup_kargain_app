@@ -1,5 +1,6 @@
 import React, { useRef, useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import useTranslation from 'next-translate/useTranslation';
 import Header from '../../Header';
 import { RadioVehicleGeneralState } from './form.data.js';
 import { SelectInput, TextareaInput } from '../../Form/Inputs';
@@ -13,6 +14,7 @@ import DamageSelectorControlledCar from '../../Damages/DamageSelectorControlledC
 const Step = ({ onSubmitStep, prevStep, nextStep }) => {
     const formRef = useRef(null);
     const { formDataContext } = useContext(FormContext);
+    const { t } = useTranslation();
     const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
@@ -28,7 +30,7 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                     name="vehicleGeneralState"
                     options={RadioVehicleGeneralState}
                     control={control}
-                    rules={{ required: 'Title is required' }}
+                    rules={{ required: t('vehicles:field-is-required') }}
                     errors={errors}
                 />
             </FieldWrapper>

@@ -2,12 +2,12 @@ import React, { memo, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '@material-ui/core/Button';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import useTranslation from 'next-translate/useTranslation';
 import announcesFiltersMapper from '../../libs/announcesFiltersMapper';
 import resolveObjectKey from '../../libs/resolveObjectKey';
 import useIsMounted from '../../hooks/useIsMounted';
 import RadioGroupInput from '../Form/Inputs/RadioGroupInput';
-import getFiltersVehicleComponent from './Vehicles'
-import CarFilters from './Vehicles/CarFilters';
+import getFiltersVehicleComponent from './Vehicles';
 import VehicleTypeFilterSelector from './VehicleTypeFilterSelector';
 import Header from '../Header';
 
@@ -16,6 +16,7 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
     const formRef = useRef(null);
     const [filters, setFilters] = useState(defaultFilters);
     const DynamicFiltersComponent = getFiltersVehicleComponent(filters.vehicleType);
+    const { t } = useTranslation();
 
     const formConfig = {
         mode: 'onChange',
@@ -75,8 +76,8 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
     return (
         <form className="filters_form" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
             <ControlButtons/>
-            <Header as="h3" text="Filtrer par :"/>
-            <Header p strong className="m-0" text="Type d'annonce :"/>
+            <Header as="h3" text={t('vehicles:filter-by')}/>
+            <Header p strong className="m-0" text={t('vehicles:vehicle-type')}/>
             <RadioGroupInput
                 name="adType"
                 noInputClass
@@ -84,25 +85,20 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
                 errors={errors}
                 options={[
                     {
-                        label: 'Location',
+                        label: t('vehicles:rent'),
                         value: 'rent',
                     },
                     {
-                        label: 'Vente',
+                        label: t('vehicles:save'),
                         value: 'sale',
                     }]
                 }
             />
 
-            <Header p strong className="my-2" text="Type de véhicule :"/>
+            <Header p strong className="my-2" text={t('vehicles:vehicle-type')}/>
             <VehicleTypeFilterSelector
                 name="vehicleType"
                 control={control}
-            />
-
-            <CarFilters control={control}
-                        errors={errors}
-                        watch={watch}
             />
 
             {DynamicFiltersComponent && (
@@ -118,29 +114,33 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
     );
 });
 
-const ControlButtons = () => (
-    <div className="d-flex flex-column my-3">
-        <Button
-            className="my-1"
-            variant="contained"
-            color="primary"
-            startIcon={<FilterListIcon/>}
-            type="submit"
-        >
-            Appliquer filtres
-        </Button>
+const ControlButtons = () => {
+    const { t } = useTranslation();
 
-        <Button
-            className="my-1"
-            variant="contained"
-            onClick={(e) => {
-                e.preventDefault();
-                window.location.reload();
-            }}>
-            Reinitialiser
-        </Button>
-    </div>
-);
+    return (
+        <div className="d-flex flex-column my-3">
+            <Button
+                className="my-1"
+                variant="contained"
+                color="primary"
+                startIcon={<FilterListIcon/>}
+                type="submit"
+            >
+                {t('vehicles:apply-filters')}
+            </Button>
+
+            <Button
+                className="my-1"
+                variant="contained"
+                onClick={(e) => {
+                    e.preventDefault();
+                    window.location.reload();
+                }}>
+                {t('vehicles:reset-filters')}
+            </Button>
+        </div>
+    );
+};
 
 Filters.defaultProps = {
     defaultFilters: {

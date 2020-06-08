@@ -1,10 +1,15 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
+import useTranslation from 'next-translate/useTranslation';
 
-const PaginateResultsSituation = memo(({count, page}) => {
-    if (page > 1) count += page * props.size;
+const PaginateResultsSituation = memo(({page, count, size}) => {
+    const { t } = useTranslation();
+
+    if (page > 1) count += page * size;
     return (
-        count ? <p className="py-2 text-center">{count} announces sur {count} </p> : null
+        count ? <p className="py-2 text-center">
+            {t('vehicles:{page}-announces-of-{pages}', { page, pages : count })}
+        </p> : null
     );
 });
 

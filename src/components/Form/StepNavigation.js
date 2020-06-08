@@ -3,6 +3,7 @@ import { Row } from 'reactstrap';
 import PropTypes from 'prop-types';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import clsx from 'clsx';
+import useTranslation from 'next-translate/useTranslation';
 
 const useStyles = makeStyles(() => ({
     button: {
@@ -15,6 +16,8 @@ const useStyles = makeStyles(() => ({
 
 const StepNavigation = ({ prev, prevLabel, next, nextLabel, submit, submitLabel }) => {
     const classes = useStyles();
+    const { t } = useTranslation();
+
     return (
         <Row className="form_navigation justify-content-around">
 
@@ -46,9 +49,9 @@ StepNavigation.propTypes = {
 };
 
 StepNavigation.defaultProps = {
-    prevLabel: 'Précédent',
-    nextLabel: 'Suivant',
-    submitLabel: 'Suivant',
+    prevLabel: t('vehicles:previous'),
+    nextLabel: t('vehicles:following'),
+    submitLabel: t('vehicles:following'),
 };
 
 export default StepNavigation;

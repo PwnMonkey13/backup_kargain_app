@@ -32,7 +32,7 @@ const nextBundleAnalyzer = ({ enabled = true }) => (nextConfig = {}) => ({
 });
 
 const nextConfig = {
-    distDir: "../dist/client",
+    distDir: "dist/client",
     // Have to list all the environment variables used here to make it available to the client side code
     env: {
         GOOGLE_STATIC_API_KEY: process.env.GOOGLE_STATIC_API_KEY,

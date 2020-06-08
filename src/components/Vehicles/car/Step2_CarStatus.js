@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import useTranslation from 'next-translate/useTranslation';
 import Header from '../../Header';
 import FieldWrapper from '../../Form/FieldWrapper';
 import StepNavigation from '../../Form/StepNavigation';
@@ -12,6 +13,7 @@ import DamageSelectorControlledCar from '../../Damages/DamageSelectorControlledC
 
 const Step = ({ onSubmitStep, prevStep, nextStep }) => {
     const { formDataContext } = useContext(FormContext);
+    const { t } = useTranslation();
     const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
@@ -21,9 +23,9 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
     return (
         <form className="form_wizard" onSubmit={handleSubmit(onSubmitStep)}>
             <button type="button" onClick={() => console.log(getValues())}>CLICK</button>
-            <Header text="Etat du véhicule"/>
+            <Header text={t('vehicles:vehicle-state')}/>
 
-            <FieldWrapper label="Etat général">
+            <FieldWrapper label={t('vehicles:vehicle-general-state')}>
                 <SelectInput
                     name="vehicleGeneralState"
                     options={RadioVehicleGeneralState}
@@ -32,7 +34,7 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label="Nombre de propriétaires">
+            <FieldWrapper label={t('vehicles:owners-quantity')}>
                 <SelectInput
                     name="ownersCount"
                     options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -42,7 +44,7 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label="Description">
+            <FieldWrapper label={t('vehicles:description')}>
                 <TextareaInput
                     name="description"
                     control={control}

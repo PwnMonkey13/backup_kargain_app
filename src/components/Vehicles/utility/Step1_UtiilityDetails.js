@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import { Col, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
+import useTranslation from 'next-translate/useTranslation';
 import FieldWrapper from '../../Form/FieldWrapper';
 import StepNavigation from '../../Form/StepNavigation';
 import { NumberInput, SelectInput } from '../../Form/Inputs';
@@ -21,6 +22,7 @@ import {
 const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
     const formRef = useRef(null);
     const { formDataContext } = useContext(FormContext);
+    const { t } = useTranslation();
     const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
@@ -45,7 +47,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                             name="vehicleFunction"
                             options={RadioFunctionVehicle}
                             control={control}
-                            rules={{ required: 'Title is required' }}
+                            rules={{ required: t('vehicles:field-is-required') }}
                             errors={errors}
                         />
                     </FieldWrapper>

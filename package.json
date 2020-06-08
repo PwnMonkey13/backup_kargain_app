@@ -16,10 +16,10 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "dev:client": "next-translate && next src",
+    "dev:client": "yarn clean && next-translate && next",
     "dev:server": "babel index.js --out-dir dist --source-maps --watch",
     "dev": "yarn dev:client & yarn dev:server",
-    "build:client": "next build src",
+    "build:client": "next build",
     "build:server": "babel index.js --out-dir dist",
     "prebuild": "yarn clean && next-translate",
     "build": "yarn build:client && yarn build:server",

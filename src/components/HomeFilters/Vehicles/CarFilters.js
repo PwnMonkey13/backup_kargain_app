@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import RoomIcon from '@material-ui/icons/Room';
-import Header from '../../Header';
+import Typography from '@material-ui/core/Typography';
+import useTranslation from 'next-translate/useTranslation';
 import { GeoCitiesInput, SelectInput, SliderInput, TextInput } from '../../Form/Inputs';
-import CarApiService from '../../../services/vehicles/CarApiService';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
 import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
-import useAddress from '../../../hooks/useAddress';
-import Typography from '@material-ui/core/Typography';
 import FieldWrapper from '../../Form/FieldWrapper';
+import useAddress from '../../../hooks/useAddress';
+import Header from '../../Header';
+
 import {
     CheckboxOptionsEquipments,
     RadioChoicesEmission,
@@ -22,68 +23,80 @@ import {
 
 const CarFilters = ({ control, watch, errors }) => {
     const [, address, coordinates] = useAddress();
-    // const [makes, setMakes] = useState([]);
-    // const { dispatchModalError } = useContext(ModalDialogContext);
-    // const popularMakesId = [
-    //     3, // AlphaRomeo
-    //     9, // Audi
-    //     16, // BMW
-    //     107, // Peugeot
-    //     117, // Renault
-    //     28, // Citroen
-    //     147, // Volkswagen
-    //     48, // Ford
-    //     88, // Mercedes-Benz
-    //     102, // Opel
-    //     47, // Fiat
-    //     140, // Toyota
-    //     133, // Susuki
-    // ];
+    const { t } = useTranslation();
+    const popularMakesOptions = [
+        {
+            label: 'AlphaRomeo',
+            value: 3,
+        },
+        {
+            label: 'Audi',
+            value: 9,
+        },
+        {
+            label: 'BMW',
+            value: 16,
+        },
+        {
+            label: 'Peugeot',
+            value: 107,
+        },
+        {
+            label: 'Renault',
+            value: 117,
+        },
+        {
+            label: 'Citroen',
+            value: 28,
+        },
+        {
+            label: 'Volkswagen',
+            value: 147,
+        },
+        {
+            label: 'Ford',
+            value: 48,
+        },
+        {
+            label: 'Mercedes-Benz',
+            value: 88,
+        },
+        {
+            label: 'Opel',
+            value: 182,
+        },
+        {
+            label: 'Fiat',
+            value: 47,
+        },
+        {
+            label: 'Toyota',
+            value: 140,
+        },
+        {
+            label: 'Susuki',
+            value: 133,
+        },
+    ];
 
     useEffect(() => {
         control.register({ name: 'coordinates' });
         control.setValue('coordinates', coordinates);
     }, [coordinates]);
 
-    // useEffect(() => {
-    //     let mounted = true;
-    //     CarApiService.getMakes(popularMakesId)
-    //         .then(cars => {
-    //             const makesOptions = cars.map(car => ({
-    //                 value: car.make,
-    //                 label: car.make,
-    //             }));
-    //             const defaultOption = {
-    //                 value: 'other',
-    //                 label: 'Je ne sais pas/Autre',
-    //             };
-    //             if (mounted) {
-    //                 setMakes([...makesOptions, defaultOption]);
-    //             }
-    //         })
-    //         .catch(err => {
-    //             dispatchModalError({ err });
-    //         });
-    //
-    //     return function cleanup () {
-    //         console.log('cleanup');
-    //         mounted = false;
-    //     };
-    // }, []);
-
     const countrySelect = watch('countrySelect');
 
     return (
         <>
-            {/*<Typography component="span">Marque</Typography>*/}
-            {/*<SelectInput*/}
-            {/*    name="manufacturer.make"*/}
-            {/*    control={control}*/}
-            {/*    errors={errors}*/}
-            {/*    options={makes}*/}
-            {/*/>*/}
+            <Typography component="span">{t('vehicles:make')}</Typography>
+            <SelectInput
+                name="manufacturer.make"
+                control={control}
+                errors={errors}
+                options={popularMakesOptions}
+            />
 
-            <Typography component="span" gutterBottom>Prix</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:price')}</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="price"
@@ -96,7 +109,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 suffix="€"
             />
 
-            <Typography component="span" gutterBottom>Type de voiture</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:vehicle-type')}</Typography>
             <SelectInput
                 name="vehicleFunctionUse"
                 options={RadioTypeFunction}
@@ -104,7 +117,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span" gutterBottom>Etat du véhicule</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:vehicle-state')}</Typography>
             <SelectInput
                 name="vehicleGeneralState"
                 options={RadioVehicleGeneralState}
@@ -112,7 +125,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span" gutterBottom>Boite de vitesse</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:gear-box')}</Typography>
             <SelectInput
                 name="vehicleEngine.type"
                 options={RadioChoicesEngine}
@@ -120,7 +133,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span" gutterBottom>Carburant</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:gas')}</Typography>
             <SelectInput
                 name="vehicleEngine.gas"
                 className="mb-2"
@@ -129,7 +142,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span" gutterBottom>Cylindrée (cm3)</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:cylinder')} (cm3)</Typography>
             <div className="d-flex my-2">
                 <SliderInput
                     classNames="my-4 mt-2"
@@ -143,7 +156,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 />
             </div>
 
-            <Typography component="span" gutterBottom>Kilométrage (km)</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:mileage')} (km)</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="mileage"
@@ -156,7 +169,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 suffix="km"
             />
 
-            <Typography component="span" gutterBottom>Puissance</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:power')}</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="power.kw"
@@ -169,7 +182,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 suffix="kw"
             />
 
-            <Typography component="span">Pays</Typography>
+            <Typography component="span">{t('vehicles:country')}</Typography>
             <SelectCountryFlags
                 name="countrySelect"
                 errors={errors}
@@ -178,14 +191,14 @@ const CarFilters = ({ control, watch, errors }) => {
 
             {address && (
                 <>
-                    <Typography component="span" gutterBottom>Adresse approximative</Typography>
+                    <Typography component="span" gutterBottom>{t('vehicles:approximate-address')}</Typography>
                     <Header p strong className="my-2">
                         <RoomIcon/> : {address}
                     </Header>
                 </>
             )}
 
-            <Typography component="span" gutterBottom>Ville</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:city')}</Typography>
             {countrySelect && countrySelect.value === 'FR' ? (
                 <GeoCitiesInput
                     name="address.city"
@@ -198,7 +211,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 />
             ) : (
                 <>
-                    <FieldWrapper label="Ville">
+                    <FieldWrapper label={t('vehicles:city')}>
                         <TextInput
                             name="address.city"
                             errors={errors}
@@ -209,7 +222,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 </>
             )}
 
-            <Typography component="span" gutterBottom>Rayon (0 = off)</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:radius')} (0 = off)</Typography>
             <SliderInput
                 name="radius"
                 classNames="mb-2 my-4"
@@ -222,7 +235,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 suffix="km"
             />
 
-            <Typography component="span">Equipements</Typography>
+            <Typography component="span">{t('vehicles:equipments')}</Typography>
             <SelectInput
                 name="equipments"
                 options={CheckboxOptionsEquipments}
@@ -232,7 +245,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span">Classe d'émission</Typography>
+            <Typography component="span">{t('vehicles:class-emission')}</Typography>
             <SelectInput
                 name="emission"
                 options={RadioChoicesEmission}
@@ -240,7 +253,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span" gutterBottom>Consommation CO2</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:co2-consumption')}</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="consumption.gkm"
@@ -253,7 +266,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 suffix="kw"
             />
 
-            <Typography component="span" gutterBottom>Nombre de portes</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:doors-quantity')}</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="doors"
@@ -265,7 +278,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 control={control}
             />
 
-            <Typography component="span">Nombre de places</Typography>
+            <Typography component="span">{t('seats:doors-quantity')}</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="seats"
@@ -277,7 +290,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 control={control}
             />
 
-            <Typography component="span">Peinture</Typography>
+            <Typography component="span">{t('vehicles:paint')}</Typography>
             <SelectInput
                 name="paint"
                 options={RadioChoicesPaints}
@@ -285,7 +298,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span">Couleur extérieure</Typography>
+            <Typography component="span">{t('vehicles:external-color')}</Typography>
             <SelectInput
                 name="externalColor"
                 options={RadioChoicesExternalColor}
@@ -293,7 +306,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span">Couleur intérieure</Typography>
+            <Typography component="span">{t('vehicles:internal-color')}</Typography>
             <SelectInput
                 name="internalColor"
                 options={RadioChoicesExternalColor}

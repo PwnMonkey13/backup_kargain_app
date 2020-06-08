@@ -1,7 +1,7 @@
 import React from 'react';
-import { useContext, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Col, Row } from 'reactstrap';
-import Header from '../../Header';
+import useTranslation from 'next-translate/useTranslation';
 import Typography from '@material-ui/core/Typography';
 import { GeoStreetsInput, NumberInput, TextInput } from '../../Form/Inputs';
 import StepNavigation from '../../Form/StepNavigation';
@@ -10,10 +10,12 @@ import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
 import useAddress from '../../../hooks/useAddress';
 import UploadDropZone from '../../Uploads/UploadDropZone';
 import { FormContext } from '../../../context/FormContext';
+import Header from '../../Header';
 
 const Step = ({ onSubmitStep, prevStep, nextStep }) => {
     const { formDataContext } = useContext(FormContext);
     const [addressParts, addressString, coordinates] = useAddress();
+    const { t } = useTranslation();
     const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
@@ -25,7 +27,6 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
     };
 
     const countrySelect = watch('countrySelect');
-    console.log(watch());
 
     return (
         <form className="form_wizard" onSubmit={handleSubmit(data => onSubmitStep(data, true))}>
@@ -40,7 +41,7 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                             control={control}
                             errors={errors}
                             rules={{
-                                required: 'Title is required',
+                                required: t('vehicles:field-is-required'),
                                 minLength: {
                                     value: 5,
                                     message: 'Min length : 5 ',

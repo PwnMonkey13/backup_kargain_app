@@ -1,11 +1,39 @@
 {
-  "allLanguages": ["fr", "en"],
+  "allLanguages": [
+    "fr",
+    "en"
+  ],
   "defaultLanguage": "fr",
   "currentPagesDir": "src/routes",
   "localesPath": "src/locales",
   "finalPagesDir": "src/pages",
   "pages": {
-    "*": ["layout"],
-    "/" : ["sorters", "filters"]
+    "*": [
+      "layout"
+    ],
+    "/": [
+      "vehicles"
+    ],
+    "/auth/login": [
+      "vehicles"
+    ],
+    "/auth/register": [
+      "vehicles"
+    ],
+    "/auth/register-pro": [
+      "vehicles"
+    ],
+    "/profile/[username]": [
+      "vehicles"
+    ],
+    "/profile/edit": [
+      "vehicles"
+    ],
+    "/announces/[slug]": [
+      "vehicles"
+    ],
+    "/announces/[slug]/edit": [
+      "vehicles"
+    ]
   }
 }

@@ -1,6 +1,6 @@
 import React, { memo, useContext, useState } from 'react';
 import clsx from 'clsx';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
 import { useRouter } from 'next/router';
 import { Row, Col } from 'reactstrap'
 import { useForm } from 'react-hook-form';

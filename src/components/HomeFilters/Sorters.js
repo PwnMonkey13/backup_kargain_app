@@ -1,63 +1,73 @@
 import React, { useState } from 'react';
 import NiceSelect from 'react-select';
 import useTranslation from 'next-translate/useTranslation';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 const Sorters = ({ updateSorter }) => {
     const { t } = useTranslation();
     const options = [
         {
-            label: t('sorters:most-recent'),
+            label: t('vehicles:most-recent'),
+            icon : ArrowUpwardIcon,
             value: {
                 key: 'DATE',
                 asc: false,
             },
         },
         {
-            label: t('sorters:less-recent'),
+            label: t('vehicles:less-recent'),
+            icon : ArrowDownwardIcon,
             value: {
                 key: 'DATE',
                 asc: true,
             },
         },
         {
-            label: t('sorters:most-recent'),
+            label: t('vehicles:most-recent'),
+            icon : ArrowUpwardIcon,
             value: {
                 key: 'PRICE',
                 asc: false,
             },
         },
         {
-            label: t('sorters:less-recent'),
+            label: t('vehicles:less-recent'),
+            icon : ArrowDownwardIcon,
             value: {
                 key: 'PRICE',
                 asc: true,
             },
         },
         {
-            label: 'Les plus kilométrées',
+            label: t('vehicles:most-mileage'),
+            icon : ArrowUpwardIcon,
             value: {
                 key: 'MILEAGE',
                 asc: false,
             },
         },
         {
-            label: 'Les moins kilométrées',
+            label: t('vehicles:less-mileage'),
+            icon : ArrowDownwardIcon,
             value: {
                 key: 'MILEAGE',
                 asc: true,
             },
         },
         {
-            label: 'Les plus proches',
+            label: t('vehicles:closest'),
+            icon : ArrowUpwardIcon,
             value: {
-                key: 'MILEAGE',
+                key: 'RADIUS',
                 asc: true,
             },
         },
         {
-            label: 'Les moins proches',
+            label: t('vehicles:farthest'),
+            icon : ArrowDownwardIcon,
             value: {
-                key: 'MILEAGE',
+                key: 'RADIUS',
                 asc: false,
             },
         },
@@ -69,13 +79,21 @@ const Sorters = ({ updateSorter }) => {
         updateSorter(sort.value);
     };
 
+    const customSingleValue = ({ data }) => (
+      <div className="input-select">
+          <div className="input-select__single-value">
+              <span>{ data.label }</span>
+          </div>
+      </div>
+    );
+
     return (
         <section style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-end',
         }}>
-            <span>{t('sorters:sort-by')}:</span>
+            <span>{t('vehicles:sort-by')}:</span>
             <div style={{
                 margin: '1rem',
                 width: '15rem',
@@ -85,6 +103,7 @@ const Sorters = ({ updateSorter }) => {
                     value={sorter}
                     autosize={true}
                     onChange={onHandleChange}
+                    components={ {SingleValue: customSingleValue } }
                     classNames='w-100'
                     options={options}
                 />

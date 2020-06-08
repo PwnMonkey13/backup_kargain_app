@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import clsx from 'clsx';
+import useTranslation from 'next-translate/useTranslation';
 import { Col, Row, TabContent, TabPane } from 'reactstrap';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Header from '../Header';
@@ -75,7 +76,7 @@ const DamageViewerTabs = ({ tabs }) => {
             <DamagesNavResponsive
                 {...{
                     damagesTabsLight: tabs && tabs.map(tab => ({
-                        title: tab.title,
+                        title: tab.key,
                         countStages: tab.stages.length,
                     })),
                     activeTab,
@@ -129,9 +130,11 @@ const DamagesMappedImg = ({ tab, index, annoRefs }) => {
 
 const DamagesList = ({ tab }) => {
     const classes = useStyles();
+    const { t, lang } = useTranslation();
+
     return (
         <div className={clsx(classes.annoInputs)}>
-            <Header h3> Dégats :</Header>
+            <Header h3> {t('vehicles:damages')} :</Header>
             {tab.stages && tab.stages.map((stage, index) => {
                 return (
                     <div key={index} className={classes.annoInput}>
@@ -147,7 +150,7 @@ const DamagesList = ({ tab }) => {
                                    value={stage.input}
                                    className={clsx(classes.annoInputField, 'form-control form-control-sm')}
                                    name={`annotation_${index + 1}`}
-                                   placeholder={`Description du défaut ${index + 1} du véhicule`}
+                                   placeholder={t('vehicles:damages-{number}-description', { number : index + 1})}
                             />
                         </div>
                     </div>

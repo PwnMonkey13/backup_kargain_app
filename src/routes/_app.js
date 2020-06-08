@@ -10,7 +10,7 @@ import NextProgress from '../components/NextProgress';
 import PopupAlert from '../components/PopupAlert';
 import PopupLogin from '../components/PopupLogin';
 import Layout from '../layouts/Layout';
-import SEO from '../next-seo.config';
+import SEO from '../../next-seo.config';
 import Forbidden403Page from './403';
 import theme from '../theme';
 import '../scss/theme.scss';

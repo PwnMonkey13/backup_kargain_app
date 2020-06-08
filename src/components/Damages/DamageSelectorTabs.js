@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import useTranslation from 'next-translate/useTranslation';
 import { Alert, Col, Row, TabContent, TabPane } from 'reactstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/styles';
@@ -70,6 +71,7 @@ const useStyles = makeStyles(theme => ({
 const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFullWidth, ...props }) => {
     const classes = useStyles();
     let annoRefs = [];
+    const { t, lang } = useTranslation();
     const warningDamageRef = useRef(null);
     const [activeTab, setActiveTab] = useState(0);
     const [damagesTabs, setDamagesTabs] = useState(tabs);
@@ -183,8 +185,8 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
                                 </Col>
                                 <Col sm={12} md={col} lg={6}>
                                     <div className={clsx(classes.annoInputs)}>
-                                        <Header h3> Dégats :</Header>
-                                        {stages.length === 0 && <Header p> (Cliquez sur l'image)</Header>}
+                                        <Header h3> {t('vehicles:damages')} :</Header>
+                                        {stages.length === 0 && <Header p> ()</Header>}
                                         {stages.length >= max && <Alert color="warning">Max {max} damages</Alert>}
                                         {stages.map((stage, indexStage) => {
                                             return (

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Col, Row } from 'reactstrap'
 import Divider from '../../Divider'
 import Header from '../../Header'
+import useTranslation from 'next-translate/useTranslation';
 import useIsMounted from '../../../hooks/useIsMounted'
 import FieldWrapper from '../../Form/FieldWrapper'
 import StepNavigation from '../../Form/StepNavigation'
@@ -12,6 +13,7 @@ import { ModalDialogContext } from '../../../context/ModalDialogContext'
 import CarApiService from '../../../services/vehicles/CarApiService'
 import VinDecoderService from '../../../services/VinDecoderService'
 import { FormContext } from '../../../context/FormContext';
+import Typography from '@material-ui/core/Typography';
 
 const ColCenter = ({ children }) => (
     <Col className="d-flex flex-column align-items-center">
@@ -24,6 +26,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
     const isMounted = useIsMounted()
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext)
     const { formDataContext } = useContext(FormContext);
+    const { t } = useTranslation();
     const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
@@ -183,15 +186,11 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
             <Row>
                 <ColCenter>
-                    <FieldWrapper label="Saisissez le numéro VIN de votre moto" tooltip={
+                    <FieldWrapper label={t('vehicles:vin-type-number-car')} tooltip={
                         <ToolTipWrapper
                             icon="?"
                             template="default">
-                            <p> Le numéro VIN, où Numéro d’Identification du Véhicule, est une série de caractères qui va permettre de
-                                distinguer tous les véhicules partout dans le monde. <br/> Vous pourrez retrouver ce numéro à
-                                plusieurs endroits de votre voiture et sera indispensable pour certaines démarches administratives <br/>
-                                Pour plus d'informations : <a href="https://www.boutiqueobdfacile.fr/blog/numero-vin-p73.html">https://www.boutiqueobdfacile.fr/blog/numero-vin-p73.html</a>
-                            </p>
+                            <p> {t('vehicles:vin-helper')}"></p>
                         </ToolTipWrapper>
                     }>
                         <TextInput
@@ -209,13 +208,14 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                 </ColCenter>
             </Row>
 
-            <Divider text="ou"/>
+            <Divider text={t('vehicles:or')}/>
 
-            <Header text="Sélectionnez votre voiture"/>
+            <Header text={t('vehicles:select-your-car')}/>
 
             <Row>
                 <Col sm={12} md={6} lg={3}>
-                    <FieldWrapper label="Marque" labelTop>
+
+                    <FieldWrapper label={t('vehicles:make')} labelTop>
                         <SelectInput
                             name="manufacturer.make"
                             placeholder="Select a car make"
@@ -231,10 +231,10 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6} lg={3}>
-                    <FieldWrapper label="Modele" labelTop>
+                    <FieldWrapper label={t('vehicles:modele')} labelTop>
                         <SelectInput
                             name="manufacturer.model"
-                            placeholder="Select a car model"
+                            placeholder={t('vehicles:select-vehicle-model')}
                             options={manufacturersData.models}
                             control={control}
                             errors={errors}
@@ -250,7 +250,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                     <FieldWrapper label="Version" labelTop>
                         <SelectInput
                             name="manufacturer.generation"
-                            placeholder="Select car version"
+                            placeholder={t('vehicles:select-vehicle-generation')}
                             options={manufacturersData.model}
                             control={control}
                             errors={errors}
@@ -263,10 +263,10 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6} lg={3}>
-                    <FieldWrapper label="Année" labelTop>
+                    <FieldWrapper label={t('vehicles:year')} labelTop>
                         <SelectInput
                             name="manufacturer.year"
-                            placeholder="Select car year"
+                            placeholder="Select year"
                             options={manufacturersData.years}
                             control={control}
                             errors={errors}
@@ -279,7 +279,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                     </FieldWrapper>
                 </Col>
             </Row>
-            <button className="btn" onClick={triggerSkipStep}>Passer cette étape</button>
+            <button className="btn" onClick={triggerSkipStep}>{t('vehicles:skip-step')}</button>
             <StepNavigation prev={prevStep} submit />
         </form>
     )

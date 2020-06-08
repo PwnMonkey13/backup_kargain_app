@@ -1,47 +1,45 @@
 import React, { useEffect } from 'react';
+import useTranslation from 'next-translate/useTranslation';
 import DamageSelectorTabs from './DamageSelectorTabs';
 import PropTypes from 'prop-types';
 
 const DamageSelectorControlledCar = ({ name, control, defaultValues, selectorFullWidth }) => {
+    const { t, lang } = useTranslation();
+
     const tabs = [
         {
-            title: 'Vue extérieure',
-            key: 'exterior',
+            title: t('vehicles:outside-view'),
+            key: 'outside-view',
             img: '/images/annotations-views/outside.png',
             maxDamages : 20
         },
         {
-            title: 'Vue intérieure',
-            key: 'interior',
+            title: t('vehicles:inside-view'),
+            key: 'inside-view',
             img: '/images/annotations-views/inside.png',
         },
         {
-            title: 'Face avant',
-            key: 'front',
+            title: t('vehicles:front-face'),
+            key: 'front-face',
             img: '/images/annotations-views/front.png',
         },
         {
-            title: 'Face arrière',
-            key: 'rear',
+            title: t('vehicles:rear-face'),
+            key: 'rear-face',
             img: '/images/annotations-views/rear.png',
         },
         {
-            title: 'Coté gauche',
+            title: t('vehicles:left-side'),
             key: 'side-left',
             img: '/images/annotations-views/side-left.png',
         },
         {
-            title: 'Coté droit',
+            title: t('vehicles:right-side'),
             key: 'side-right',
             img: '/images/annotations-views/side-right.png',
         },
         {
-            title: 'Coté droit',
-            key: 'side-right',
-            img: '/images/annotations-views/side-right.png',
-        },
-        {
-            title: 'Mécanique',
+            title: t('vehicles:mecanic'),
             key: 'mecanic',
             img: '/images/annotations-views/skeleton.png',
         },

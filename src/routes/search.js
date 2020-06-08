@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
 import { Col } from 'reactstrap';
 import Typography from '@material-ui/core/Typography';
 import PaginateResultsSituation from '../components/PaginateResultsSituation';

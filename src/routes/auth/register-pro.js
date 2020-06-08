@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import Link from 'next/link';
 import { Col, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
+import useTranslation from 'next-translate/useTranslation';
 import AuthService from '../../services/AuthService';
 import Divider from '../../components/Divider';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
@@ -13,6 +13,7 @@ import SelectCountryFlags from '../../components/Form/Inputs/SelectCountryFlags'
 import Spacer from '../../components/Spacer';
 import CTALink from '../../components/CTALink';
 import SSOProviders from '../../components/SSOProviders';
+import useAddress from '../../hooks/useAddress';
 
 const formConfig = {
     mode: 'onChange',
@@ -22,6 +23,8 @@ const formConfig = {
 const RegisterPro = () => {
     const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const [, , coordinates] = useAddress();
+    const { t, lang } = useTranslation();
 
     const onSubmit = (form) => {
         const { confirm, confirmPwd, ...data } = form;
@@ -40,7 +43,7 @@ const RegisterPro = () => {
 
     return (
         <>
-            <h1>Créer un compte Pro</h1>
+            <h1>{t('vehicles:register-pro')}</h1>
             <Row>
                 <Col sm="12" md="5">
                     <div className="d-flex flex-column mx-auto" style={{ maxWidth : '400px'}}>
@@ -48,12 +51,12 @@ const RegisterPro = () => {
                         <Divider text="ou"/>
                         <CTALink
                             className="my-2"
-                            title="Se connecter"
+                            title={t('vehicles:login')}
                             href="/auth/login"
                         />
                         <CTALink
                             className="my-2"
-                            title="Creer un compte client"
+                            title={t('vehicles:register')}
                             href="/auth/register"
                         />
                     </div>
@@ -89,7 +92,7 @@ const RegisterPro = () => {
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="Pays">
+                        <FieldWrapper label={t('vehicles:country')}>
                             <SelectCountryFlags
                                 name="countrySelect"
                                 errors={errors}
@@ -98,7 +101,7 @@ const RegisterPro = () => {
                         </FieldWrapper>
 
                         {countrySelect && countrySelect.value === 'FR' ? (
-                            <FieldWrapper label="Ville ou code postal">
+                            <FieldWrapper label={t('vehicles:address')}>
                                 <GeoStreetsInput
                                     name="address"
                                     enableGeoloc
@@ -114,7 +117,7 @@ const RegisterPro = () => {
                             </FieldWrapper>
                         ) : (
                             <>
-                                <FieldWrapper label="Ville">
+                                <FieldWrapper label={t('vehicles:city')}>
                                     <TextInput
                                         name="address.city"
                                         errors={errors}
@@ -123,7 +126,7 @@ const RegisterPro = () => {
                                     />
                                 </FieldWrapper>
 
-                                <FieldWrapper label="Adresse">
+                                <FieldWrapper label={t('vehicles:address')}>
                                     <TextInput
                                         name="address.street"
                                         errors={errors}
@@ -137,7 +140,7 @@ const RegisterPro = () => {
                         <Spacer bottom="30"/>
                         <Typography component="h3" variant="h3">Vous </Typography>
 
-                        <FieldWrapper label="Nom">
+                        <FieldWrapper label={t('vehicles:lastname')}>
                             <TextInput
                                 name="lastname"
                                 errors={errors}
@@ -146,7 +149,7 @@ const RegisterPro = () => {
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="Prénom">
+                        <FieldWrapper label={t('vehicles:firstname')}>
                             <TextInput
                                 name="firstname"
                                 errors={errors}
@@ -164,13 +167,13 @@ const RegisterPro = () => {
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="Mot de passe">
+                        <FieldWrapper label={t('vehicles:password')}>
                             <PasswordInput
                                 name="password"
                                 errors={errors}
                                 control={control}
                                 rules={{
-                                    required: 'field required',
+                                    required: 'Required',
                                     minLength: {
                                         value: 6,
                                         message: 'Min 6 chars',
@@ -180,7 +183,7 @@ const RegisterPro = () => {
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="Confirmer mot de passe">
+                        <FieldWrapper label={t('vehicles:password-confirm')}>
                             <PasswordInput
                                 name="confirmPwd"
                                 errors={errors}
@@ -203,7 +206,7 @@ const RegisterPro = () => {
 
                         <FieldWrapper>
                             <CheckBoxInput
-                                label="J’ai lu et j’accepte les conditions générales d’utilisation"
+                                label={t('vehicles:accept-cgu')}
                                 name="confirm"
                                 errors={errors}
                                 control={control}

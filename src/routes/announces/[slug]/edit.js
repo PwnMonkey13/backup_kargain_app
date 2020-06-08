@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { inflate } from 'flattenjs';
 import { useForm } from 'react-hook-form';
 import { Col, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
-
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import PageViewIcon from '@material-ui/icons/Pageview';
@@ -11,7 +10,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-
+import useTranslation from 'next-translate/useTranslation';
 import { themeColors } from '../../../theme/palette';
 import resolveObjectKey from '../../../libs/resolveObjectKey';
 import AnnounceService from '../../../services/AnnounceService';
@@ -171,24 +170,6 @@ const allowedFields = {
     'address.value.city': 'address.city',
 };
 
-const tabs = [
-    {
-        title: 'Caractéristiques du véhicule',
-    },
-    {
-        title: 'Equipements',
-    },
-    {
-        title: 'Etat du véhicule',
-    },
-    {
-        title: 'Photos',
-    },
-    {
-        title: 'Publication',
-    },
-];
-
 const AnnounceEdit = ({ announceRaw, err }) => {
     const refImg = useRef();
     const formRef = useRef();
@@ -196,6 +177,7 @@ const AnnounceEdit = ({ announceRaw, err }) => {
     const { isAuthenticated, authenticatedUser } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [activeTab, setActiveTab] = useState(4);
+    const { t } = useTranslation();
     const [buttonText, setButtonText] = useState('Enregistrer et publier');
     const [announce, setAnnounce] = useState(new AnnounceClass(announceRaw));
     const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
@@ -209,7 +191,7 @@ const AnnounceEdit = ({ announceRaw, err }) => {
         defaultMatches: true,
     });
 
-    if (!announceRaw) return <Error statusCode="404"/>;
+    if (!announceRaw && err) return <Error message={err.message} statusCode={err.statusCode}/>;
     if (!isAuthenticated) return <Error statusCode="403"/>;
     if (!isAuthor) return <Error statusCode="403"/>;
 
@@ -263,7 +245,7 @@ const AnnounceEdit = ({ announceRaw, err }) => {
     return (
         <>
             <Typography component="h2" variant="h2" className="text-center" gutterBottom>
-                Edition de votre annonce
+                {t('vehicles:edit-announce')}
             </Typography>
 
             {!isDesktop && (
@@ -298,7 +280,7 @@ const AnnounceEdit = ({ announceRaw, err }) => {
                             <TabPane tabId={1}>
                                 <div className="form-fields">
                                     <Typography component="h3" variant="h3" className="text-center" gutterBottom>
-                                        Sélection des équipements
+                                        {t('vehicles:equipments-selection')}
                                     </Typography>
                                     <CheckboxGroup
                                         name="equipments"
@@ -311,8 +293,8 @@ const AnnounceEdit = ({ announceRaw, err }) => {
                             </TabPane>
 
                             <TabPane tabId={2}>
-                                <Typography component="h3" variant="h3" className="text-center" gutterBottom>Sélection
-                                    des dégats éventuels
+                                <Typography component="h3" variant="h3" className="text-center" gutterBottom>
+                                    {t('vehicles:damages-potential-selection')}
                                 </Typography>
                                 <DamageSelectorControlledCar
                                     name="damages"
@@ -372,15 +354,16 @@ const AnnounceEdit = ({ announceRaw, err }) => {
 };
 
 const VehicleInfosPartialForm = ({ control, errors }) => {
+    const { t } = useTranslation();
     return (
         <div className="form-fields">
-            <Typography component="h3" variant="h3" className="text-center" gutterBottom>Données
-                constructeur
+            <Typography component="h3" variant="h3" className="text-center" gutterBottom>
+                {t('vehicles:manufacturer-data')}
             </Typography>
 
             <Row>
                 <Col sm={12} md={6} lg={3}>
-                    <FieldWrapper label="Marque">
+                    <FieldWrapper label={t('vehicles:make')}>
                         <TextInput
                             name={'manufacturer.make.label'}
                             control={control}
@@ -390,7 +373,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 </Col>
 
                 <Col sm={12} md={6} lg={3}>
-                    <FieldWrapper label="Modele">
+                    <FieldWrapper label={t('vehicles:model')}>
                         <TextInput
                             name={'manufacturer.model.label'}
                             control={control}
@@ -400,7 +383,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 </Col>
 
                 <Col sm={12} md={6} lg={3}>
-                    <FieldWrapper label="Version">
+                    <FieldWrapper label={t('vehicles:manufacturer-generation')}>
                         <TextInput
                             name={'manufacturer.generation.label'}
                             control={control}
@@ -410,7 +393,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 </Col>
 
                 <Col sm={12} md={6} lg={3}>
-                    <FieldWrapper label="Année">
+                    <FieldWrapper label={t('vehicles:year')}>
                         <TextInput
                             name={'manufacturer.year.label'}
                             control={control}
@@ -422,7 +405,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Cylindrée">
+                    <FieldWrapper label={t('vehicles:cylinder')}>
                         <NumberInput name="vehicleEngine.cylinder"
                                      control={control}
                                      errors={errors}
@@ -436,7 +419,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Carburant" required>
+                    <FieldWrapper label={t('vehicles:gas')}>
                         <SelectInput name="vehicleEngine.gas"
                                      options={RadioChoicesGas}
                                      control={control}
@@ -445,7 +428,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Boite de vitesse">
+                    <FieldWrapper label={t('vehicles:gear-box')}>
                         <SelectInput
                             name="vehicleEngine.type"
                             options={RadioChoicesEngine}
@@ -479,7 +462,9 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 </Col>
             </Row>
 
-            <Typography component="h3" variant="h3" className="text-center" gutterBottom>Utilisation</Typography>
+            <Typography component="h3" variant="h3" className="text-center" gutterBottom>
+                Utilisation
+            </Typography>
             <Row>
                 <Col>
                     <FieldWrapper label="Type">
@@ -491,7 +476,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Fonction du véhicule">
+                    <FieldWrapper label={t('vehicles:vehicle-function')}>
                         <SelectInput
                             name="vehicleFunction"
                             options={RadioFunctionVehicle}
@@ -504,7 +489,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Kilométrage" required>
+                    <FieldWrapper label={t('vehicles:mileage')}>
                         <NumberInput name="mileage"
                                      placeholder="20000 km"
                                      control={control}
@@ -514,7 +499,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Etat général">
+                    <FieldWrapper label={t('vehicles:vehicle-state')}>
                         <SelectInput
                             name="vehicleGeneralState"
                             options={RadioVehicleGeneralState}
@@ -527,7 +512,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Nombre de propriétaires">
+                    <FieldWrapper label={t('vehicles:owners-quantity')}>
                         <SelectInput
                             name="ownersCount"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -541,7 +526,9 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             </Row>
 
-            <Typography component="h3" variant="h3" className="text-center" gutterBottom>Consommation</Typography>
+            <Typography component="h3" variant="h3" className="text-center" gutterBottom>
+                {t('vehicles:consumption')}
+            </Typography>
             <Row>
                 <Col>
                     <FieldWrapper label="Mixte (g/km)">
@@ -594,7 +581,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Classe d'émission">
+                    <FieldWrapper label={t('vehicles:"class-emission')}>
                         <SelectInput
                             name="emission"
                             options={RadioChoicesEmission}
@@ -605,11 +592,12 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 </Col>
             </Row>
 
-            <Typography component="h3" variant="h3" className="text-center" gutterBottom>Données
-                supplémentaires</Typography>
+            <Typography component="h3" variant="h3" className="text-center" gutterBottom>
+                {t('vehicles:additional-data')}
+            </Typography>
             <Row>
                 <Col>
-                    <FieldWrapper label="Nombre de portes">
+                    <FieldWrapper label={t('vehicles:doors-quantity')}>
                         <SelectInput
                             name="doors"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -620,7 +608,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Nombre de places">
+                    <FieldWrapper label={t('vehicles:seats-quantity')}>
                         <SelectInput
                             name="seats"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -634,7 +622,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Peinture">
+                    <FieldWrapper label={t('vehicles:paint')}>
                         <SelectInput
                             name="paint"
                             options={RadioChoicesPaints}
@@ -644,7 +632,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Matériaux">
+                    <FieldWrapper label={t('vehicles:materials')}>
                         <SelectInput
                             name="materials"
                             isMulti
@@ -658,7 +646,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Couleur extérieure">
+                    <FieldWrapper label={t('vehicles:internal-color')}>
                         <SelectInput
                             name="externalColor"
                             options={RadioChoicesExternalColor}
@@ -668,7 +656,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Couleur intérieure">
+                    <FieldWrapper label={t('vehicles:external-color')}>
                         <SelectInput
                             name="internalColor"
                             options={RadioChoicesExternalColor}
@@ -684,6 +672,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
 const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }) => {
     const classes = useStyles();
+    const { t } = useTranslation();
 
     return (
         <div className="form-fields">
@@ -696,7 +685,7 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
                     name="title"
                     control={control}
                     rules={{
-                        required: 'Title is required',
+                        required: t('vehicles:field-is-required'),
                     }}
                 />
             </FieldWrapper>
@@ -740,13 +729,13 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
             </FieldWrapper>
 
             <Typography component="h3" variant="h3" className="text-center" gutterBottom>
-                Gestion de l'annonce
+                {t('vehicles:announce-management')}
             </Typography>
 
             <CheckboxMUI
                 name="status"
                 value="active"
-                label="Archiver l'annonce"
+                label={t('vehicles:archive-announce')}
                 color="warning"
                 control={control}
                 errors={errors}
@@ -758,15 +747,17 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
                 className={classes.button}
                 startIcon={<DeleteIcon/>}
                 onClick={() => handleRemove}>
-                Supprimer l'annonce
+                {t('vehicles:remove-announce')}
             </Button>
 
         </div>
     );
 };
 
-const Buttons = ({ buttonText, triggerSubmit, announcePageLink }) => {
+const Buttons = ({ triggerSubmit, announcePageLink }) => {
     const classes = useStyles();
+    const { t } = useTranslation();
+
     return (
         <div className="d-flex flex-column my-3">
             <Button
@@ -779,7 +770,7 @@ const Buttons = ({ buttonText, triggerSubmit, announcePageLink }) => {
                 onClick={() => {
                     triggerSubmit();
                 }}>
-                {buttonText}
+                {t('vehicles:save-announce')}
             </Button>
 
             <Button
@@ -790,7 +781,7 @@ const Buttons = ({ buttonText, triggerSubmit, announcePageLink }) => {
                 component={ButtonLink}
                 href={announcePageLink}
             >
-                Voir l'annonce
+                {t('vehicles:see-announce')}
             </Button>
         </div>
     );
@@ -798,7 +789,24 @@ const Buttons = ({ buttonText, triggerSubmit, announcePageLink }) => {
 
 const NavDesktop = ({ activeTab, toggleTab, buttonText, triggerSubmit, slug }) => {
     const classes = useStyles();
-
+    const { t } = useTranslation();
+    const tabs = [
+        {
+            title: t('vehicles:vehicle-informations'),
+        },
+        {
+            title: t('vehicles:equipments'),
+        },
+        {
+            title: t('vehicles:vehicle-state'),
+        },
+        {
+            title: t('vehicles:pictures'),
+        },
+        {
+            title: t('vehicles:publication'),
+        },
+    ];
     return (
         <div className={clsx(classes.nav, classes.stickyNav)}>
             <div className="my-2">
@@ -827,7 +835,23 @@ const NavDesktop = ({ activeTab, toggleTab, buttonText, triggerSubmit, slug }) =
 
 const NavMobile = ({ activeTab, toggleTab }) => {
     const classes = useStyles();
-
+    const tabs = [
+        {
+            title: t('vehicles:vehicle-informations'),
+        },
+        {
+            title: t('vehicles:equipments'),
+        },
+        {
+            title: t('vehicles:vehicle-state'),
+        },
+        {
+            title: t('vehicles:pictures'),
+        },
+        {
+            title: t('vehicles:publication'),
+        },
+    ];
     return (
         <Nav className={clsx(classes.navList, classes.navMobile)}>
             {tabs && tabs.map((tab, index) => (

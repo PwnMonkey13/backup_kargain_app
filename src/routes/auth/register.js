@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import Link from 'next/link';
 import { Col, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
+import useTranslation from 'next-translate/useTranslation';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import Divider from '../../components/Divider';
 import AuthService from '../../services/AuthService';
@@ -19,6 +19,7 @@ const formConfig = {
 const RegisterPage = () => {
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig);
+    const { t, lang } = useTranslation();
 
     const onSubmit = (form) => {
         const { confirm, confirmPwd, ...data } = form;
@@ -36,20 +37,20 @@ const RegisterPage = () => {
 
     return (
         <>
-            <h1>Créer un compte</h1>
+            <h1>{t('vehicles:register')}</h1>
             <Row>
                 <Col sm="12" md="5">
-                    <div className="d-flex flex-column mx-auto" style={{ maxWidth : '400px'}}>
+                    <div className="d-flex flex-column mx-auto" style={{ maxWidth: '400px' }}>
                         <SSOProviders/>
                         <Divider text="ou"/>
                         <CTALink
                             className="my-2"
-                            title="Se connecter"
+                            title={t('vehicles:login')}
                             href="/auth/login"
                         />
                         <CTALink
                             className="my-2"
-                            title="Créer un compte Pro"
+                            title={t('vehicles:register-pro')}
                             href="/auth/register-pro"
                         />
                     </div>
@@ -65,7 +66,7 @@ const RegisterPage = () => {
                     </style>
                     <form className="p-3 mt-3 mx-auto"
                           onSubmit={handleSubmit(onSubmit)}>
-                        <FieldWrapper label="Prénom" required>
+                        <FieldWrapper label={t('vehicles:firstname')}>
                             <TextInput
                                 name="firstname"
                                 errors={errors}
@@ -74,7 +75,7 @@ const RegisterPage = () => {
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="Nom" required>
+                        <FieldWrapper label={t('vehicles:lastname')}>
                             <TextInput
                                 name="lastname"
                                 errors={errors}
@@ -92,13 +93,13 @@ const RegisterPage = () => {
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="Mot de passe" required>
+                        <FieldWrapper label={t('vehicles:password')}>
                             <PasswordInput
                                 name="password"
                                 errors={errors}
                                 control={control}
                                 rules={{
-                                    required: 'field required',
+                                    required: 'Required',
                                     minLength: {
                                         value: 6,
                                         message: 'Min 6 chars',
@@ -108,7 +109,7 @@ const RegisterPage = () => {
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="Confirmer mot de passe" required>
+                        <FieldWrapper label={t('vehicles:"password-confirm')}>
                             <PasswordInput
                                 name="confirmPwd"
                                 errors={errors}
@@ -132,7 +133,7 @@ const RegisterPage = () => {
                         <FieldWrapper>
                             <CheckBoxInput
                                 name="confirm"
-                                label="J’ai lu et j’accepte les conditions générales d’utilisation"
+                                label={t('vehicles:accept-cgu')}
                                 errors={errors}
                                 control={control}
                                 rules={{ required: 'Required' }}
@@ -141,7 +142,7 @@ const RegisterPage = () => {
 
                         <div className="submit">
                             <CTAButton
-                                title="S'enregistrer"
+                                title={t('vehicles:register')}
                                 submit
                             />
                         </div>

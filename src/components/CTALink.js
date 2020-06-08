@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import React from 'react';
 import clsx from 'clsx';
+import Link from 'next-translate/Link';
 
 const CTALink = ({ href, title, id, className }) => {
     return (
@@ -17,4 +17,7 @@ const CTALink = ({ href, title, id, className }) => {
     );
 };
 
+CTALink.defaultProps = {
+    href : "/"
+}
 export default CTALink;

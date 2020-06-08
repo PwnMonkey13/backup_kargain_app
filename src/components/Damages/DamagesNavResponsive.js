@@ -2,11 +2,14 @@ import React, { memo } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import NiceSelect from 'react-select';
+import useTranslation from 'next-translate/useTranslation';
 import { useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
 
 const DamagesNav = memo(({ activeTab, setActiveTab, damagesTabsLight }) => {
     const theme = useTheme();
+    const { t, lang } = useTranslation();
+
     const isUpTablet = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true,
     });
@@ -21,7 +24,7 @@ const DamagesNav = memo(({ activeTab, setActiveTab, damagesTabsLight }) => {
                                    onClick={() => {
                                        setActiveTab(indexTab);
                                    }}>
-                                    {tab.title}
+                                    {t(`vehicles:${tab.title}`)}
                                 </a>
                             </li>
                         );

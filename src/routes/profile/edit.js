@@ -1,10 +1,11 @@
 import React, { useContext, useRef, useState } from 'react';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
 import clsx from 'clsx';
 import { inflate } from 'flattenjs';
 import { useForm } from 'react-hook-form';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Col, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
+import useTranslation from 'next-translate/useTranslation';
 import { useAuth } from '../../context/AuthProvider';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import { themeColors } from '../../theme/palette';
@@ -20,7 +21,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import AvatarPreviewUpload from '../../components/Avatar/AvatarPreviewUpload';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     stickyNav: {
         position: 'fixed',
         top: '5rem',
@@ -93,25 +94,11 @@ const dataMapper = {
     'address.value.city': 'address.city',
 };
 
-const tabs = [
-    {
-        title: 'Mon compte',
-    },
-    {
-        title: 'Abonnements',
-    },
-    {
-        title: 'Aide & contact',
-    },
-    {
-        title: 'Paiements & factures',
-    },
-];
-
 const Edit = () => {
     const theme = useTheme();
     const formRef = useRef();
     const classes = useStyles();
+    const { t, lang } = useTranslation();
     const { authenticatedUser, setAuthenticatedUser, isAuthenticated } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [activeTab, setActiveTab] = useState(0);
@@ -229,12 +216,12 @@ const Edit = () => {
 
 const ProfilePartialForm = ({ control, errors }) => {
     const classes = useStyles();
-
+    const { t, lang } = useTranslation();
     return (
         <>
             <AvatarPreviewUpload/>
             <div className={classes.formRow}>
-                <FieldWrapper label="Prénom">
+                <FieldWrapper label={t('vehicles:firstname')}>
                     <TextInput
                         name="firstname"
                         errors={errors}
@@ -243,7 +230,7 @@ const ProfilePartialForm = ({ control, errors }) => {
                     />
                 </FieldWrapper>
 
-                <FieldWrapper label="Nom">
+                <FieldWrapper label={t('vehicles:lastname')}>
                     <TextInput
                         name="lastname"
                         errors={errors}
@@ -263,7 +250,7 @@ const ProfilePartialForm = ({ control, errors }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label="Mot de passe" classNameWrapper="my-3">
+            <FieldWrapper label={t('vehicles:password')} classNameWrapper="my-3">
                 <Link href="/auth/reset-password">
                     <a className="m-2">
                         Reset password
@@ -271,7 +258,7 @@ const ProfilePartialForm = ({ control, errors }) => {
                 </Link>
             </FieldWrapper>
 
-            <FieldWrapper label="Adresse">
+            <FieldWrapper label={t('vehicles:address')}>
                 <GeoStreetsInput
                     name="address"
                     // enableGeoloc
@@ -286,7 +273,7 @@ const ProfilePartialForm = ({ control, errors }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label="Numéro de téléphone">
+            <FieldWrapper label={t('vehicles:phone')}>
                 <TelInput
                     name="phone"
                     errors={errors}
@@ -311,6 +298,18 @@ const ProfilePartialForm = ({ control, errors }) => {
 
 const NavDesktop = ({ activeTab, toggleTab, triggerSubmit }) => {
     const classes = useStyles();
+    const { t, lang } = useTranslation();
+    const tabs = [
+        {
+            title: t('vehicles:my-profile'),
+        },
+        {
+            title: t('vehicles:subscriptions'),
+        },
+        {
+            title: t('vehicles:payments-bills'),
+        },
+    ];
     return (
         <div className={clsx(classes.nav, classes.stickyNav)}>
             <div className="my-2">
@@ -333,7 +332,18 @@ const NavDesktop = ({ activeTab, toggleTab, triggerSubmit }) => {
 
 const NavMobile = ({ activeTab, toggleTab, buttonText, triggerSubmit }) => {
     const classes = useStyles();
-
+    const { t, lang } = useTranslation();
+    const tabs = [
+        {
+            title: t('vehicles:my-profile'),
+        },
+        {
+            title: t('vehicles:subscriptions'),
+        },
+        {
+            title: t('vehicles:payments-bills'),
+        },
+    ];
     return (
         <Nav className={clsx(classes.navList, classes.navMobile)}>
             {tabs && tabs.map((tab, index) => (
@@ -350,7 +360,7 @@ const NavMobile = ({ activeTab, toggleTab, buttonText, triggerSubmit }) => {
 
 const Buttons = ({ triggerSubmit }) => {
     const classes = useStyles();
-
+    const { t, lang } = useTranslation();
     return (
         <div className="d-flex flex-column my-3">
             <Button
@@ -363,7 +373,7 @@ const Buttons = ({ triggerSubmit }) => {
                 onClick={(e) => {
                     triggerSubmit();
                 }}>
-                Enregister
+                {t('vehicles:save')}
             </Button>
         </div>
     );

@@ -1,12 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
+import Link from 'next-translate/Link';
 import PropTypes from 'prop-types';
+import useTranslation from 'next-translate/useTranslation';
 import { getTimeAgo } from '../../libs/utils';
-import Link from 'next/link';
 import Typography from '@material-ui/core/Typography';
 
 const CommentsBlockLight = ({ comment, index }) => {
     const date = comment.getRaw?.updatedAt;
-    const timeAgo = date && getTimeAgo(date);
+    const { t, lang } = useTranslation();
+    const timeAgo = getTimeAgo(date, lang);
     const responsesLength = comment.getResponses.length;
 
     return (
@@ -23,7 +25,7 @@ const CommentsBlockLight = ({ comment, index }) => {
                         </a>
                     </Link>
                     <small>
-                        {timeAgo ? `il y a ${timeAgo}` : 'A l\'instant'}
+                        {timeAgo}
                     </small>
                     <br/>
                     <small>
@@ -34,7 +36,7 @@ const CommentsBlockLight = ({ comment, index }) => {
                     {comment.getMessage}
                 </p>
                 {responsesLength > 0 && (
-                    <Typography>{responsesLength} {responsesLength > 1 ? 'réponses' : 'response'} </Typography>
+                    <Typography>{t('vehicles:response')}</Typography>
                 )}
             </div>
         </div>

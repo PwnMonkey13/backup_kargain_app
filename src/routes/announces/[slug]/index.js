@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Alert from '@material-ui/lab/Alert';
+import useTranslation from 'next-translate/useTranslation';
 import { ReactComponent as StarSVG } from '../../../../public/images/svg/star.svg';
 import { ReactComponent as StarSVGYellow } from '../../../../public/images/svg/star-yellow.svg';
 import GoogleMapStatic from '../../../components/GoogleMapStatic';
@@ -56,6 +57,8 @@ const Announce = ({ slug, announceRaw, err }) => {
     const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
     const { dispatchModalError } = useContext(ModalDialogContext);
     const announce = new AnnounceClass(announceRaw);
+    const { t, lang } = useTranslation();
+
     const [likesCounter, setLikesCounter] = useState(announce.getLikesLength);
     const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
@@ -90,7 +93,7 @@ const Announce = ({ slug, announceRaw, err }) => {
         }
     };
 
-    if (!announceRaw && err) return <Error message={err.statusCode} statusCode={err.statusCode}/>;
+    if (!announceRaw && err) return <Error message={err.message} statusCode={err.statusCode}/>;
 
     return (
         <Container>
@@ -121,7 +124,7 @@ const Announce = ({ slug, announceRaw, err }) => {
                                     {announce.getManufacturerFormated}
                                 </Typography>
                                 <div>
-                                    <small> il y a {getTimeAgo(announce.getCreationDate.raw)}</small>
+                                    <small>{getTimeAgo(announce.getCreationDate.raw, lang)}</small>
                                 </div>
                             </div>
                         </div>
@@ -177,7 +180,7 @@ const Announce = ({ slug, announceRaw, err }) => {
                                     <div className="mx-2">
                                         <CTALink
                                             href={`/announces/${slug}/edit`}
-                                            title="Modifier"
+                                            title= {t('vehicles:edit-announce')}
                                         />
                                     </div>
                                 )}
@@ -190,7 +193,7 @@ const Announce = ({ slug, announceRaw, err }) => {
                                 <div
                                     className="icons-star-prof icons-star-current"
                                     onClick={handleClickLikeButton}
-                                    title="J'aime">
+                                    title= {t('vehicles:like')}>
                                     {alreadyLikeCurrentUser() ? <StarSVGYellow/> : <StarSVG/>}
                                     <span>{likesCounter}</span>
                                 </div>
@@ -218,7 +221,7 @@ const Announce = ({ slug, announceRaw, err }) => {
                 </section>
 
                 <section className="my-2">
-                    <Typography component="h3" variant="h3">Données du véhicule</Typography>
+                    <Typography component="h3" variant="h3">{t('vehciles:vehicle-informations')}</Typography>
                     <CarInfos
                         announce={announce}
                         enableThirdColumn
@@ -226,7 +229,7 @@ const Announce = ({ slug, announceRaw, err }) => {
                 </section>
 
                 <section className="my-2">
-                    <Typography component="h3" variant="h3">Equipements</Typography>
+                    <Typography component="h3" variant="h3">{t('vehicles:equipments')}</Typography>
                     <Row>
                         {announce.getVehicleEquipments && announce.getVehicleEquipments.map((equipment, index) => {
                             return (
@@ -241,7 +244,7 @@ const Announce = ({ slug, announceRaw, err }) => {
                 </section>
 
                 <section className="my-2">
-                    <TitleMUI as="h3" variant="h3">Localisation</TitleMUI>
+                    <TitleMUI as="h3" variant="h3">{t('vehicles:localiastion')}</TitleMUI>
                     {announce.getLocation.latitude && announce.getLocation.longitude && (
                         <GoogleMapStatic
                             width={600}
@@ -254,7 +257,7 @@ const Announce = ({ slug, announceRaw, err }) => {
                 </section>
 
                 <section className="my-2">
-                    <TitleMUI as="h3" variant="h3">Fiches techniques ({announce.getCountDamages})</TitleMUI>
+                    <TitleMUI as="h3" variant="h3">{t('vehicles:data-sheet')} ({announce.getCountDamages})</TitleMUI>
                     <DamageViewerTabs tabs={announce.getDamagesTabs}/>
                 </section>
 

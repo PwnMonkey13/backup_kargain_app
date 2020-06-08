@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
 
 const ButtonLink = ({ className, href, hrefAs, children, prefetch }) => {
     return (

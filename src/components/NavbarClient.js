@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
 import clsx from 'clsx';
 import { Collapse, FormGroup, Input, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -9,6 +9,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import useTranslation from 'next-translate/useTranslation';
 import { getLogo } from '../libs/utils';
 import { useAuth } from '../context/AuthProvider';
 import CTALink from './CTALink';
@@ -17,7 +18,114 @@ import DropdownSwitchLang from './Locales/DropdownSwitchLang';
 const NavbarClient = () => {
     const { isAuthenticated, authenticatedUser } = useAuth();
     const [collapsed, setCollapsed] = useState(false);
+    const { t, lang } = useTranslation();
+
     const toggleNavbar = () => setCollapsed(!collapsed);
+
+    const DropdownNotifs = ({ isOpen, keyName, toggle }) => {
+        return (
+            <li className="nav-item p-2 navbar_icon navbar-icon-notifications">
+                <div className="dropdown show">
+                    <IconButton color="inherit"
+                                data-toggle="dropdown-notifications"
+                                aria-haspopup="true"
+                                aria-expanded="true"
+                                id="dropdownMenu2"
+                                onClick={() => toggle(keyName)}>
+                        <Badge badgeContent={17} color="secondary">
+                            <NotificationsIcon/>
+                        </Badge>
+                    </IconButton>
+                    <div id="dropdown-notifications" className={clsx('dropdown-menu', isOpen && 'show')}
+                         aria-labelledby="dropdownMenu2">
+                        <div className="notf-wrapper">
+                            <div>
+                                <img
+                                    src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
+                                    alt=""/>
+                                <div className="text-podpiska"><span>kaleriya_volk</span> подписался(-ась) на вас.
+                                </div>
+                            </div>
+                            <a className="btn btn-primary subscribe-btn" href="#">Subscribe</a>
+                        </div>
+                        <div className="notf-wrapper">
+                            <div>
+                                <img
+                                    src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
+                                    alt=""/>
+                                <div className="text-podpiska"><span>kaleriya_volk</span> поставил лайк Вашему
+                                    объявлению
+                                </div>
+                            </div>
+                        </div>
+                        <div className="notf-wrapper">
+                            <div>
+                                <img
+                                    src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
+                                    alt=""/>
+                                <div className="text-podpiska"><span>kaleriya_volk</span> оставил комментарий Вашему
+                                    объявлению с каким-то названием
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        );
+    };
+
+    const DropdownUser = ({ isOpen, keyName, toggle }) => {
+        const { t, lang } = useTranslation();
+        return (
+            <li className="nav-item navbar-dropdown p-2" data-dropdown="dropdownUser">
+                {authenticatedUser.getAvatar &&
+                <img className="dropdown-toggler rounded-circle"
+                     width="40"
+                     height="40"
+                     src={authenticatedUser.getAvatar}
+                     alt="avatar"
+                     onClick={() => toggle(keyName)}
+                />}
+
+                <ul className={clsx('dropdown', isOpen && 'show')} id="dropdownUser">
+                    {authenticatedUser.isAdmin && (
+                        <li className="px-0 dropdown-item">
+                            <Link href={`/admin`} prefetch={false}>
+                                <a className="nav-link text-left"><DashboardIcon/><span className="m-1">Admin</span></a>
+                            </Link>
+                        </li>
+                    )}
+                    <li className="px-0 dropdown-item">
+                        <Link href={`/profile/${authenticatedUser.getUsername}`} prefetch={false}>
+                            <a className="nav-link text-left"><FaceIcon/>
+                                <span className="m-1">
+                                    {lang === 'fr' ? 'Mon profil' : 'My profile'}
+                                </span>
+                            </a>
+                        </Link>
+                    </li>
+                    <li className="px-0 dropdown-item">
+                        <Link href="/profile/edit" prefetch={false}>
+                            <a className="nav-link text-left"><SettingsIcon/>
+                                <span className="m-1">
+                                     {lang === 'fr' ? 'Paramétres' : 'Settings'}
+                                </span>
+                            </a>
+                        </Link>
+                    </li>
+                    <li className="px-0 dropdown-item">
+                        <Link href="/auth/logout" prefetch={false}>
+                            <a className="nav-link text-left"><ExitToAppIcon/>
+                                <span className="m-1">
+                                          {lang === 'fr' ? 'Déconnexion' : 'Logout'}
+                                    </span>
+                            </a>
+                        </Link>
+                    </li>
+                </ul>
+            </li>
+        );
+    };
 
     const LoggedInUserNav = () => {
         const [state, setState] = useState({
@@ -37,102 +145,6 @@ const NavbarClient = () => {
             }));
         };
 
-        //TODO
-        const DropdownNotifs = ({ isOpen, keyName, toggle }) => {
-            return (
-                <li className="nav-item p-2 navbar_icon navbar-icon-notifications">
-                    <div className="dropdown show">
-                        <IconButton color="inherit"
-                                    data-toggle="dropdown-notifications"
-                                    aria-haspopup="true"
-                                    aria-expanded="true"
-                                    id="dropdownMenu2"
-                                    onClick={() => toggle(keyName)}>
-                            <Badge badgeContent={17} color="secondary">
-                                <NotificationsIcon/>
-                            </Badge>
-                        </IconButton>
-                        <div id="dropdown-notifications" className={clsx('dropdown-menu', isOpen && 'show')}
-                             aria-labelledby="dropdownMenu2">
-                            <div className="notf-wrapper">
-                                <div>
-                                    <img
-                                        src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
-                                        alt=""/>
-                                    <div className="text-podpiska"><span>kaleriya_volk</span> подписался(-ась) на вас.
-                                    </div>
-                                </div>
-                                <a className="btn btn-primary subscribe-btn" href="#">Subscribe</a>
-                            </div>
-                            <div className="notf-wrapper">
-                                <div>
-                                    <img
-                                        src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
-                                        alt=""/>
-                                    <div className="text-podpiska"><span>kaleriya_volk</span> поставил лайк Вашему
-                                        объявлению
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="notf-wrapper">
-                                <div>
-                                    <img
-                                        src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
-                                        alt=""/>
-                                    <div className="text-podpiska"><span>kaleriya_volk</span> оставил комментарий Вашему
-                                        объявлению с каким-то названием
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            );
-        };
-
-        const DropdownUser = ({ isOpen, keyName, toggle }) => {
-
-            return (
-                <li className="nav-item navbar-dropdown p-2" data-dropdown="dropdownUser">
-                    {authenticatedUser.getAvatar &&
-                    <img className="dropdown-toggler rounded-circle"
-                         width="40"
-                         height="40"
-                         src={authenticatedUser.getAvatar}
-                         alt="avatar"
-                         onClick={() => toggle(keyName)}
-                    />}
-
-                    <ul className={clsx('dropdown', isOpen && 'show')} id="dropdownUser">
-                        {authenticatedUser.isAdmin && (
-                            <li className="px-0 dropdown-item">
-                                <Link href={`/admin`} prefetch={false}>
-                                    <a className="nav-link text-left"><DashboardIcon/><span className="m-1">Admin</span></a>
-                                </Link>
-                            </li>
-                        )}
-                        <li className="px-0 dropdown-item">
-                            <Link href={`/profile/${authenticatedUser.getUsername}`} prefetch={false}>
-                                <a className="nav-link text-left"><FaceIcon/><span className="m-1">Mon profil</span></a>
-                            </Link>
-                        </li>
-                        <li className="px-0 dropdown-item">
-                            <Link href="/profile/edit" prefetch={false}>
-                                <a className="nav-link text-left"><SettingsIcon/> <span
-                                    className="m-1">Préférences</span></a>
-                            </Link>
-                        </li>
-                        <li className="px-0 dropdown-item">
-                            <Link href="/auth/logout" prefetch={false}>
-                                <a className="nav-link text-left"><ExitToAppIcon/><span
-                                    className="m-1">Déconnection</span></a>
-                            </Link>
-                        </li>
-                    </ul>
-                </li>
-            );
-        };
-
         return (
             <Nav navbar>
                 <DropdownSwitchLang/>
@@ -143,8 +155,11 @@ const NavbarClient = () => {
     };
 
     const VisitorNav = memo(() => {
+        const { t, lang } = useTranslation();
+
         return (
             <Nav navbar>
+                <DropdownSwitchLang/>
                 <NavItem className="p-2">
                     <Link href="/auth/login" prefetch={false}>
                         <a className="nav-link">Connexion</a>
@@ -170,11 +185,20 @@ const NavbarClient = () => {
                     <Collapse isOpen={collapsed} navbar>
                         <Nav navbar style={{ flex: 1 }}>
                             <NavItem className="p-2">
-                                <CTALink
-                                    title="Ajouter une annonce"
-                                    href="/deposer-une-annonce"
-                                    className="cta_nav_link"
-                                />
+                                {lang === 'fr' ? (
+                                    <CTALink
+                                        title="Ajouter une annonce"
+                                        href="/deposer-une-annonce"
+                                        className="cta_nav_link"
+                                    />
+                                ) : (
+                                    <CTALink
+                                        title="Create an announce"
+                                        href="/deposer-une-annonce"
+                                        className="cta_nav_link"
+                                    />
+                                )}
+
                             </NavItem>
                             <NavItem className="p-2">
                                 <form method="GET" action="/search">
@@ -184,7 +208,7 @@ const NavbarClient = () => {
                                             type="search"
                                             name="query"
                                             id="search"
-                                            placeholder="Rechercher"/>
+                                            placeholder={lang === 'fr' ? 'Rechercher' : 'Search'}/>
                                         <input
                                             type="submit"
                                             tabIndex="-1"

@@ -1,18 +1,19 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
+import Link from 'next-translate/Link';
 import clsx from 'clsx';
-import IconButton from '@material-ui/core/IconButton';
 import { PhotoCamera } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import useTranslation from 'next-translate/useTranslation';
 import AnnounceClass from '../models/announce.model';
 import { getTimeAgo } from '../libs/utils';
-import TitleMUI from './TitleMUI';
 import CommentsListLight from './Comments/CommentsListLight';
-import Typography from '@material-ui/core/Typography';
 import AnnounceService from '../services/AnnounceService';
 import { ModalDialogContext } from '../context/ModalDialogContext';
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import TagsList from './Tags/TagsList';
+import TitleMUI from './TitleMUI';
 
 const useStyles = makeStyles((theme) => ({
     cardHeader: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AnnounceCardLight = ({ announceRaw, featuredImgHeight }) => {
     const classes = useStyles();
+    const { t, lang } = useTranslation();
     const { dispatchModalError } = useContext(ModalDialogContext);
     const announce = new AnnounceClass(announceRaw);
     const [likesCounter, setLikesCounter] = useState(announce.getLikesLength);
@@ -86,7 +88,7 @@ const AnnounceCardLight = ({ announceRaw, featuredImgHeight }) => {
                             </div>
                         </div>
                     )}
-                    <small> il y a {getTimeAgo(announce.getCreationDate.raw)}</small>
+                    <small> {getTimeAgo(announce.getCreationDate.raw, lang)}</small>
                 </div>
             </div>
 
