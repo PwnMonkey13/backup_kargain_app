@@ -36,28 +36,17 @@ export default function appWithI18n (AppToTranslate, config = {}) {
     }
 
     AppWithTranslations.getInitialProps = async ({ Component, ctx }) => {
+        const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx): {}
+
         const defaultLanguage = ctx.req
             ? getDefaultLang(ctx.req, config)
             : __NEXT_DATA__.props.defaultLanguage;
+
         const lang = getLang(ctx, {
             ...config,
             defaultLanguage,
         });
-        // const defaultLanguage = 'fr';
-        // const lang = 'fr';
-        console.log('lang');
-        console.log(lang);
 
-        let appProps = { pageProps: {} };
-
-        if (AppToTranslate.getInitialProps) {
-            appProps =
-                (await AppToTranslate.getInitialProps({
-                    Component,
-                    ctx,
-                    lang,
-                })) || {};
-        }
         const page = removeTrailingSlash(ctx.pathname);
         const namespaces = await getPageNamespaces(config, page, ctx);
         const pageNamespaces =
@@ -71,13 +60,13 @@ export default function appWithI18n (AppToTranslate, config = {}) {
             })) || [];
 
         return {
-            ...appProps,
             lang,
             defaultLanguage,
-            namespaces: namespaces.reduce((obj, ns, i) => {
-                obj[ns] = pageNamespaces[i];
-                return obj;
-            }, {}),
+            pageProps : {...pageProps, lang},
+            namespaces: namespaces.reduce((obj, ns, i) => ({
+                ...obj,
+                [ns]: pageNamespaces[i],
+            }), {}),
         };
     };
 

@@ -23,19 +23,19 @@ const StepNavigation = ({ prev, prevLabel, next, nextLabel, submit, submitLabel 
 
             {prev && (
                 <button className={clsx('btn', classes.button)} type="button" onClick={() => prev()}>
-                    {prevLabel}
+                    {t('vehicles:previous')}
                 </button>
             )}
 
             {next && !submit && (
                 <button className={clsx('btn', classes.button)} type="button" onClick={e => next(e)}>
-                    {nextLabel}
+                    {t('vehicles:following')}
                 </button>
             )}
 
             {!next && submit && (
                 <button className={clsx(classes.button, 'btn btn-primary')} type="submit">
-                    {submitLabel}
+                    {t('vehicles:following')}
                 </button>
             )}
 
@@ -49,9 +49,9 @@ StepNavigation.propTypes = {
 };
 
 StepNavigation.defaultProps = {
-    prevLabel: t('vehicles:previous'),
-    nextLabel: t('vehicles:following'),
-    submitLabel: t('vehicles:following'),
+    prevLabel: 'previous',
+    nextLabel: 'following',
+    submitLabel: 'following'
 };
 
 export default StepNavigation;

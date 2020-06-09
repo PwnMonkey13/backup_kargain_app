@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { useRouter } from 'next/router'
+import useTranslation from 'next-translate/useTranslation';
 import FormWizard from '../../components/Form/FormWizard'
 import AnnounceService from '../../services/AnnounceService'
 import { ModalDialogContext } from '../../context/ModalDialogContext'
@@ -11,6 +12,7 @@ import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner'
 const CarForm = (props) => {
     const { dispatchModal } = useContext(ModalDialogContext)
     const router = useRouter()
+    const { t, lang } = useTranslation();
 
     const onFinalSubmit = data => {
         AnnounceService.createAnnounce(data, props.token)
@@ -30,7 +32,7 @@ const CarForm = (props) => {
         },
         {
             vin: 'Immat. VIN',
-            'manufacturer.make': t("vehicles:make'),
+            'manufacturer.make': t('vehicles:make'),
             'manufacturer.model': 'Modele',
             'manufacturer.generation': 'Version',
             'manufacturer.year': 'Année'

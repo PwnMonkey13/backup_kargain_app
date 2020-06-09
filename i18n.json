@@ -9,30 +9,7 @@
   "finalPagesDir": "src/pages",
   "pages": {
     "*": [
-      "layout"
-    ],
-    "/": [
-      "vehicles"
-    ],
-    "/auth/login": [
-      "vehicles"
-    ],
-    "/auth/register": [
-      "vehicles"
-    ],
-    "/auth/register-pro": [
-      "vehicles"
-    ],
-    "/profile/[username]": [
-      "vehicles"
-    ],
-    "/profile/edit": [
-      "vehicles"
-    ],
-    "/announces/[slug]": [
-      "vehicles"
-    ],
-    "/announces/[slug]/edit": [
+      "layout",
       "vehicles"
     ]
   }

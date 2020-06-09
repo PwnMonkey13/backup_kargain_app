@@ -15,12 +15,11 @@ import Forbidden403Page from './403';
 import theme from '../theme';
 import '../scss/theme.scss';
 import Loader from '../components/Loader';
-import appWithI18n from '../components/Locales/appWithI18n'
-import i18nConfig from "../../i18n.json";
+import appWithI18n from '../components/Locales/appWithI18n';
+import i18nConfig from '../../i18n.json';
 
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;
-
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles && jssStyles.parentNode) {
@@ -54,8 +53,8 @@ const MyApp = ({ Component, pageProps }) => {
                         <NextProgress/>
                         <DefaultSeo {...SEO} />
                         <PopupAlert/>
-                        <ProtectedRouter>
-                            <Component {...pageProps}/>
+                        <ProtectedRouter pageProps={pageProps}>
+                            <Component/>
                         </ProtectedRouter>
                     </FormContextProvider>
                 </AuthProvider>
@@ -64,9 +63,9 @@ const MyApp = ({ Component, pageProps }) => {
     );
 };
 
-const ProtectedRouter = ({ children }) => {
+const ProtectedRouter = ({ children, pageProps }) => {
     const router = useRouter();
-    const pageProps = children.props;
+    const { lang } = pageProps;
     const isAdminRoute = router.route.split('/').includes('admin');
     const { stateReady, isLoading, forceLoginModal, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
     const showLoginModal = (pageProps.requiredAuth && !isAuthenticated) || forceLoginModal;
@@ -84,7 +83,7 @@ const ProtectedRouter = ({ children }) => {
 
     return (
         <>
-            {showLoginModal && <PopupLogin pageProps={pageProps}/>}
+            {showLoginModal && <PopupLogin lang={lang}/>}
             <Layout>
                 {children}
             </Layout>
@@ -92,4 +91,5 @@ const ProtectedRouter = ({ children }) => {
     );
 };
 
-export default appWithI18n(MyApp, i18nConfig)
+// export default MyApp
+export default appWithI18n(MyApp, i18nConfig);

@@ -178,10 +178,9 @@ const AnnounceEdit = ({ announceRaw, err }) => {
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [activeTab, setActiveTab] = useState(4);
     const { t } = useTranslation();
-    const [buttonText, setButtonText] = useState('Enregistrer et publier');
     const [announce, setAnnounce] = useState(new AnnounceClass(announceRaw));
     const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
-    const { control, register, getValues, setValue, watch, errors, handleSubmit } = useForm({
+    const { control, register, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: announceRaw,
@@ -191,9 +190,11 @@ const AnnounceEdit = ({ announceRaw, err }) => {
         defaultMatches: true,
     });
 
-    if (!announceRaw && err) return <Error message={err.message} statusCode={err.statusCode}/>;
     if (!isAuthenticated) return <Error statusCode="403"/>;
     if (!isAuthor) return <Error statusCode="403"/>;
+    if (announceRaw !== undefined || err) {
+        return <Error message={err.message} statusCode={err.statusCode}/>;
+    }
 
     const handleCLickImg = (index) => {
         if (refImg.current) {
@@ -261,7 +262,6 @@ const AnnounceEdit = ({ announceRaw, err }) => {
                         <NavDesktop {...{
                             activeTab,
                             toggleTab,
-                            buttonText,
                             triggerSubmit,
                             slug: announce.getSlug,
                         }}/>
@@ -344,7 +344,6 @@ const AnnounceEdit = ({ announceRaw, err }) => {
                 <Buttons
                     announcePageLink={`/announces/${announce.getSlug}`}
                     {...{
-                        buttonText,
                         triggerSubmit,
                     }}
                 />
@@ -787,7 +786,7 @@ const Buttons = ({ triggerSubmit, announcePageLink }) => {
     );
 };
 
-const NavDesktop = ({ activeTab, toggleTab, buttonText, triggerSubmit, slug }) => {
+const NavDesktop = ({ activeTab, toggleTab, triggerSubmit, slug }) => {
     const classes = useStyles();
     const { t } = useTranslation();
     const tabs = [
@@ -824,10 +823,7 @@ const NavDesktop = ({ activeTab, toggleTab, buttonText, triggerSubmit, slug }) =
 
             <Buttons
                 announcePageLink={`/announces/${slug}`}
-                {...{
-                    buttonText,
-                    triggerSubmit,
-                }}
+                triggerSubmit={triggerSubmit}
             />
         </div>
     );

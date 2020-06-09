@@ -13,12 +13,13 @@ import AuthService from '../services/AuthService';
 import { useAuth } from '../context/AuthProvider';
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import { CheckBoxInput, EmailInput, PasswordInput } from './Form/Inputs';
+import SSOProvidersSSR from './SSOProvidersSSR';
 import { themeColors } from '../theme/palette';
 import Divider from './Divider';
 import TitleMUI from './TitleMUI';
 import CTAButton from './CTAButton';
 import CTALink from './CTALink';
-import SSOProviders from './SSOProviders';
+
 
 const formConfig = {
     mode: 'onChange',
@@ -84,7 +85,7 @@ const useStyles = makeStyles(() => ({
 
 }));
 
-export default () => {
+export default ({lang}) => {
     const theme = useTheme();
     const classes = useStyles();
     const router = useRouter();
@@ -131,7 +132,7 @@ export default () => {
                 <Col sm={12} md={isMobile ? 12 : 6}>
                     <div className={classes.wrapperForm}>
                         <div className="d-flex flex-column">
-                            <SSOProviders/>
+                            <SSOProvidersSSR lang={lang}/>
                         </div>
                         <Divider className="m-3"/>
                         <div className="auth_form m-auto">

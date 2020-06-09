@@ -1,13 +1,6 @@
 {
   "functions": {
-    "source": ".",
-    "ignore": [
-      ".firebase/**",
-      ".firebaserc",
-      "firebase.json",
-      "**/node_modules/**",
-      "**/public/**"
-    ]
+    "source": "."
   },
   "hosting": {
     "public": "public",

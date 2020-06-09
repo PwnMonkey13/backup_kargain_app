@@ -98,7 +98,6 @@ const Edit = () => {
     const theme = useTheme();
     const formRef = useRef();
     const classes = useStyles();
-    const { t, lang } = useTranslation();
     const { authenticatedUser, setAuthenticatedUser, isAuthenticated } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [activeTab, setActiveTab] = useState(0);
@@ -106,6 +105,7 @@ const Edit = () => {
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true,
     });
+
     if (!isAuthenticated) return <Error statusCode="403"/>;
 
     const { control, watch, errors, handleSubmit } = useForm({

@@ -17,7 +17,11 @@ import UserModel from '../../models/user.model';
 import Error from '../_error';
 
 const Profile = ({ profileRaw, username, err, ...props }) => {
-    if (!profileRaw || err) return <Error statusCode={err?.statusCode}/>;
+
+    if (profileRaw !== undefined || err) {
+        return <Error statusCode={err?.statusCode}/>;
+    }
+
     const { authenticatedUser, isAuthenticated } = useAuth();
     const [isModalOpen, toggleModalOpen] = useState(false);
     const profile = new UserModel(profileRaw);
@@ -186,6 +190,7 @@ export async function getServerSideProps (ctx) {
     try {
         const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
         const profileRaw = await UsersService.getUserByUsernameSSR(username, additionalHeaders);
+
         return {
             props: {
                 username,
@@ -197,7 +202,7 @@ export async function getServerSideProps (ctx) {
             props: {
                 err: {
                     message: err?.message ?? null,
-                    statusCode: err?.statusCode ?? 404
+                    statusCode: err?.statusCode ?? 404,
                 },
             },
         };

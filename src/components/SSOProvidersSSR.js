@@ -8,10 +8,9 @@ import { ModalDialogContext } from '../context/ModalDialogContext';
 import Loader from './Loader';
 import config from '../config/config';
 
-const SSOProviders = memo(() => {
+const SSOProvidersSSR = memo(({lang}) => {
     const router = useRouter();
     const { redirect } = router.query;
-    const { t, lang } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const { dispatchModalError } = useContext(ModalDialogContext);
 
@@ -71,7 +70,7 @@ const SSOProviders = memo(() => {
 
             <GoogleLogin
                 clientId={config.google.sso.CLIENT_ID}
-                buttonText={t('vehicles:login-google')}
+                buttonText={lang === 'fr' ? "Se connecter avec Google" : "Connect with Google"}
                 onSuccess={responseGoogle}
                 onFailure={badResponseGoogle}
                 cookiePolicy={'single_host_origin'}
@@ -79,13 +78,14 @@ const SSOProviders = memo(() => {
 
             <FacebookLogin
                 appId={config.facebook.sso.APP_ID}
+                autoLoad={true}
                 fields="last_name,first_name,name,email,picture"
                 scope={'public_profile,email'}
                 callback={responseFacebook}
                 render={renderProps => (
                     <button className="register-fb" onClick={renderProps.onClick}>
                         <img src="/images/fb.png" alt=""/>
-                        {t('vehicles:login-facebook')}
+                        {lang === 'fr' ? "Se connecter avec Facebook" : "Connect with Facebook"}
                     </button>
                 )}
             />
@@ -93,4 +93,4 @@ const SSOProviders = memo(() => {
     );
 });
 
-export default SSOProviders;
+export default SSOProvidersSSR;

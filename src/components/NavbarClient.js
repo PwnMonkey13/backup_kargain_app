@@ -12,8 +12,8 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import useTranslation from 'next-translate/useTranslation';
 import { getLogo } from '../libs/utils';
 import { useAuth } from '../context/AuthProvider';
-import CTALink from './CTALink';
 import DropdownSwitchLang from './Locales/DropdownSwitchLang';
+import CTALink from './CTALink';
 
 const NavbarClient = () => {
     const { isAuthenticated, authenticatedUser } = useAuth();
@@ -155,8 +155,6 @@ const NavbarClient = () => {
     };
 
     const VisitorNav = memo(() => {
-        const { t, lang } = useTranslation();
-
         return (
             <Nav navbar>
                 <DropdownSwitchLang/>

@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { NextSeo } from 'next-seo';
-import { Container, Col, Row } from 'reactstrap';
+import { Col, Container, Row } from 'reactstrap';
 import { useMediaQuery } from '@material-ui/core';
 import PhoneIcon from '@material-ui/icons/Phone';
 import Typography from '@material-ui/core/Typography';
@@ -65,6 +65,10 @@ const Announce = ({ slug, announceRaw, err }) => {
         defaultMatches: true,
     });
 
+    if (announceRaw !== undefined || err) {
+        return <Error message={err.message} statusCode={err.statusCode}/>;
+    }
+
     const handleCLickImg = (index) => {
         if (refImg.current) {
             refImg.current.slideToIndex(index);
@@ -92,8 +96,6 @@ const Announce = ({ slug, announceRaw, err }) => {
             dispatchModalError({ err });
         }
     };
-
-    if (!announceRaw && err) return <Error message={err.message} statusCode={err.statusCode}/>;
 
     return (
         <Container>
@@ -180,7 +182,7 @@ const Announce = ({ slug, announceRaw, err }) => {
                                     <div className="mx-2">
                                         <CTALink
                                             href={`/announces/${slug}/edit`}
-                                            title= {t('vehicles:edit-announce')}
+                                            title={t('vehicles:edit-announce')}
                                         />
                                     </div>
                                 )}
@@ -193,7 +195,7 @@ const Announce = ({ slug, announceRaw, err }) => {
                                 <div
                                     className="icons-star-prof icons-star-current"
                                     onClick={handleClickLikeButton}
-                                    title= {t('vehicles:like')}>
+                                    title={t('vehicles:like')}>
                                     {alreadyLikeCurrentUser() ? <StarSVGYellow/> : <StarSVG/>}
                                     <span>{likesCounter}</span>
                                 </div>
@@ -208,7 +210,8 @@ const Announce = ({ slug, announceRaw, err }) => {
                             </p>
                         </div>
 
-                        <Typography component="p" variant="h4" gutterBottom>Tags ({announce.getTags.length})</Typography>
+                        <Typography component="p" variant="h4" gutterBottom>Tags
+                            ({announce.getTags.length})</Typography>
                         <TagsList tags={announce.getTags}/>
 
                     </Col>
