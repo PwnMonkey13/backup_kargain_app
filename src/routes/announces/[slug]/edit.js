@@ -45,6 +45,9 @@ import {
     RadioTypeFunction,
     RadioVehicleGeneralState,
 } from '../../../components/Vehicles/car/form.data';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
 
 const useStyles = makeStyles(() => ({
 
@@ -192,7 +195,7 @@ const AnnounceEdit = ({ announceRaw, err }) => {
 
     if (!isAuthenticated) return <Error statusCode="403"/>;
     if (!isAuthor) return <Error statusCode="403"/>;
-    if (announceRaw !== undefined || err) {
+    if (announceRaw === undefined || err) {
         return <Error message={err.message} statusCode={err.statusCode}/>;
     }
 
@@ -214,8 +217,13 @@ const AnnounceEdit = ({ announceRaw, err }) => {
     };
 
     const handleRemove = () => {
-        //TODO
-        console.log('TODO');
+        AnnounceService.removeAnnounce(announce.getSlug)
+            .then(() => {
+                dispatchModal({ msg: 'Announce successfully removed' });
+            }).catch(err => {
+                dispatchModalError({ err });
+            },
+        );
     };
 
     const onSubmit = (form) => {
@@ -233,7 +241,6 @@ const AnnounceEdit = ({ announceRaw, err }) => {
 
         AnnounceService.updateAnnounce(announce.getSlug, updates)
             .then((updatedAd) => {
-                setAnnounce(updatedAd);
                 dispatchModal({
                     msg: 'Ad successufully updated',
                 });
@@ -672,11 +679,20 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }) => {
     const classes = useStyles();
     const { t } = useTranslation();
+    const [openDialogRemove, setOpenDialogRemove] = React.useState(false);
+
+    const handleOpenDialogRemove = () => {
+        setOpenDialogRemove(true);
+    };
+
+    const handleCloseDialogRemove = () => {
+        setOpenDialogRemove(false);
+    };
 
     return (
         <div className="form-fields">
-            <Typography component="h3" variant="h3" className="text-center" gutterBottom>Données de
-                publication
+            <Typography component="h3" variant="h3" className="text-center" gutterBottom>
+                Données de publication
             </Typography>
 
             <FieldWrapper label="Titre de l'annonce">
@@ -742,13 +758,36 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
 
             <Button
                 variant="contained"
-                color="secondary"
+                color="warning"
                 className={classes.button}
                 startIcon={<DeleteIcon/>}
-                onClick={() => handleRemove}>
+                onClick={handleOpenDialogRemove}>
                 {t('vehicles:remove-announce')}
             </Button>
 
+            <Dialog
+                open={openDialogRemove}
+                onClose={handleCloseDialogRemove}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title" disableTypography>
+                    {t('vehicles:confirm-suppression')}
+                </DialogTitle>
+                <DialogActions>
+                    <Button onClick={handleCloseDialogRemove} color="primary" autoFocus>
+                        {t('vehicles:cancel')}
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="warning"
+                        className={classes.button}
+                        startIcon={<DeleteIcon/>}
+                        onClick={() => handleRemove}>
+                        {t('vehicles:remove-announce')}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

@@ -5,15 +5,16 @@ import FieldWrapper from '../../components/Form/FieldWrapper';
 import AuthService from '../../services/AuthService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import CTAButton from '../../components/CTAButton';
+import { useAuth } from '../../context/AuthProvider';
 
-const formConfig = {
-    mode: 'onChange',
-    validateCriteriaMode: 'all',
-};
-
-const LoginPage = () => {
+const ForgottenForm = () => {
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const { control, errors, handleSubmit } = useForm(formConfig);
+    const { authenticatedUser } = useAuth();
+    const { control, errors, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all',
+        defaultValues: authenticatedUser.getRaw,
+    });
 
     const onSubmit = (form) => {
         AuthService.forgotPassword(form.email)
@@ -23,10 +24,7 @@ const LoginPage = () => {
                     persist: true,
                 });
             }).catch(err => {
-                dispatchModalError({
-                    err,
-                    // msg: 'User not found',
-                });
+                dispatchModalError({ err });
             },
         );
     };
@@ -39,7 +37,7 @@ const LoginPage = () => {
                 <FieldWrapper label="Email" required center>
                     <EmailInput
                         name="email"
-                        inline
+                        disabled
                         errors={errors}
                         control={control}
                     />
@@ -56,4 +54,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default ForgottenForm;
