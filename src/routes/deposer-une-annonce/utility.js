@@ -4,10 +4,13 @@ import FormWizard from '../../components/Form/FormWizard'
 import AnnounceService from '../../services/AnnounceService'
 import { ModalDialogContext } from '../../context/ModalDialogContext'
 import Step1CamperDetails from '../../components/Vehicles/utility/Step1_UtiilityDetails'
+import Step2CarStatus from '../../components/Vehicles/car/Step2_CarStatus';
+import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner';
 
 const UtilityForm = (props) => {
-    const { dispatchModal } = useContext(ModalDialogContext)
     const router = useRouter()
+    const { dispatchModal } = useContext(ModalDialogContext)
+    const { t, lang } = useTranslation();
 
     const onFinalSubmit = data => {
         AnnounceService.createAnnounce(data, props.token)
@@ -42,6 +45,8 @@ const UtilityForm = (props) => {
             onFinalSubmit={onFinalSubmit}
         >
             <Step1CamperDetails title="Description du véhicule"/>
+            <Step2CarStatus title={t('vehicles:vehicle-state')}/>
+            <Step3CarOwner title={t('vehicles:your-announce')}/>
         </FormWizard>
     )
 }

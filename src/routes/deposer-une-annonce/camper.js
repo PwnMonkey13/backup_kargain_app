@@ -8,6 +8,8 @@ import Step0_CamperManufacturer from '../../components/Vehicles/camper/Step0_Cam
 import Step1CamperDetails from '../../components/Vehicles/camper/Step1_CamperDetails'
 import Step2CamperStatus from '../../components/Vehicles/camper/Step2_CamperStatus'
 import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner'
+import Step0CarManufacturer from '../../components/Vehicles/car/Step0_CarManufacturer';
+import Step2CarStatus from '../../components/Vehicles/car/Step2_CarStatus';
 
 const CarForm = (props) => {
     const { dispatchModal } = useContext(ModalDialogContext)
@@ -45,10 +47,10 @@ const CarForm = (props) => {
             prevRoute="/deposer-une-annonce"
             resumeModel={resumeModel}
             onFinalSubmit={onFinalSubmit}>
-            <Step0_CamperManufacturer title="Selection du véhicule"/>
-            <Step1CamperDetails title="Description du véhicule"/>
-            <Step2CamperStatus title="Etat du véhicule"/>
-            <Step3CarOwner title="Votre annonce"/>
+            <Step0_CamperManufacturer title={t('vehicles:vehicle-selection')}/>
+            <Step1CamperDetails title={t('vehicles:vehicle-description')}/>
+            <Step2CamperStatus title={t('vehicles:vehicle-state')}/>
+            <Step3CarOwner title={t('vehicles:your-announce')}/>
         </FormWizard>
     )
 }

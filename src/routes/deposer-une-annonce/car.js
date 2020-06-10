@@ -7,9 +7,11 @@ import Step0CarManufacturer from '../../components/Vehicles/car/Step0_CarManufac
 import Step1CarDetails from '../../components/Vehicles/car/Step1_CarDetails';
 import Step2CarStatus from '../../components/Vehicles/car/Step2_CarStatus';
 import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner';
+import useTranslation from 'next-translate/useTranslation';
 
 const CarForm = (props) => {
     const router = useRouter();
+    const { t, lang } = useTranslation();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
 
     const onFinalSubmit = form => {
@@ -65,10 +67,10 @@ const CarForm = (props) => {
             resumeModel={resumeModel}
             // enableResume={true}
             onFinalSubmit={onFinalSubmit}>
-            <Step0CarManufacturer title="Sélection du véhicule"/>
-            <Step1CarDetails title="Description du véhicule"/>
-            <Step2CarStatus title="Etat du véhicule"/>
-            <Step3CarOwner title="Votre annonce"/>
+            <Step0CarManufacturer title={t('vehicles:vehicle-selection')}/>
+            <Step1CarDetails title={t('vehicles:vehicle-description')}/>
+            <Step2CarStatus title={t('vehicles:vehicle-state')}/>
+            <Step3CarOwner title={t('vehicles:your-announce')}/>
         </FormWizard>
     );
 };

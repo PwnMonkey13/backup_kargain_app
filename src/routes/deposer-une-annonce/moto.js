@@ -7,10 +7,13 @@ import Step0MotosManufacturer from '../../components/Vehicles/moto/Step0_MotosMa
 import Step1MotoDetails from '../../components/Vehicles/moto/Step1_MotoDetails';
 import Step2MotoStatus from '../../components/Vehicles/moto/Step2_MotoStatus';
 import Step3MotoOwner from '../../components/Vehicles/moto/Step3_MotoOwner';
+import Step2CarStatus from '../../components/Vehicles/car/Step2_CarStatus';
+import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner';
 
 const MotorCyclesForm = (props) => {
     const router = useRouter();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { t, lang } = useTranslation();
 
     const onFinalSubmit = data => {
         AnnounceService.createAnnounce(data, props.token)
@@ -33,10 +36,10 @@ const MotorCyclesForm = (props) => {
             prevRoute="/deposer-une-annonce"
             // resumeModel={[]}
             onFinalSubmit={onFinalSubmit}>
-            <Step0MotosManufacturer title="Sélection du véhicule"/>
-            <Step1MotoDetails title="Description du véhicule"/>
-            <Step2MotoStatus title="Etat du véhicule"/>
-            <Step3MotoOwner title="Votre annonce"/>
+            <Step0MotosManufacturer title={t('vehicles:vehicle-selection')}/>
+            <Step1MotoDetails title={t('vehicles:vehicle-description')}/>
+            <Step2MotoStatus title={t('vehicles:vehicle-state')}/>
+            <Step3MotoOwner title={t('vehicles:your-announce')}/>
         </FormWizard>
     );
 };

@@ -10,6 +10,7 @@ import TagsControlled from '../../Tags/TagsControlled';
 import { FormContext } from '../../../context/FormContext';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import DamageSelectorControlledCar from '../../Damages/DamageSelectorControlledCar';
+import { CheckboxOptionsEquipments } from './form.data.js';
 
 const Step = ({ onSubmitStep, prevStep, nextStep }) => {
     const { formDataContext } = useContext(FormContext);
@@ -39,6 +40,17 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                     name="ownersCount"
                     options={SelectOptionsUtils([2, 3, 4, 5])}
                     placeholder="Select number of owners"
+                    control={control}
+                    errors={errors}
+                />
+            </FieldWrapper>
+
+            <FieldWrapper label={t('vehicles:equipments')}>
+                <SelectInput
+                    name="equipments"
+                    isMulti
+                    options={CheckboxOptionsEquipments}
+                    defaultChecked={['ABS', 'ESP']}
                     control={control}
                     errors={errors}
                 />

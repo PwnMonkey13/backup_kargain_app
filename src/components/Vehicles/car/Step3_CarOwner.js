@@ -121,7 +121,7 @@ const Step = ({ handleSubmitForm, prevStep, nextStep }) => {
                 </>
             )}
 
-            <Header text={t('filter:owner-informations')}/>
+            <Header text={t('vehicles:owner-informations')}/>
 
             <Row>
                 <Col>

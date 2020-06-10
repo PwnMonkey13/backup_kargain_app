@@ -10,7 +10,6 @@ import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import { RadioFunctionVehicle } from '../moto/form.data';
 import { FormContext } from '../../../context/FormContext';
 import {
-    CheckboxOptionsEquipments,
     RadioChoicesEmission,
     RadioChoicesEngine,
     RadioChoicesExternalColor,
@@ -176,18 +175,6 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                         <SelectInput
                             name="emission"
                             options={RadioChoicesEmission}
-                            control={control}
-                            errors={errors}
-                        />
-                    </FieldWrapper>
-                </Col>
-                <Col>
-                    <FieldWrapper label={t('vehicles:equipments')}>
-                        <SelectInput
-                            name="equipments"
-                            isMulti
-                            options={CheckboxOptionsEquipments}
-                            defaultChecked={['ABS', 'ESP']}
                             control={control}
                             errors={errors}
                         />

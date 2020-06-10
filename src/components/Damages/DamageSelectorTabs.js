@@ -186,7 +186,7 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
                                 <Col sm={12} md={col} lg={6}>
                                     <div className={clsx(classes.annoInputs)}>
                                         <Header h3> {t('vehicles:damages')} :</Header>
-                                        {stages.length === 0 && <Header p> ()</Header>}
+                                        {stages.length === 0 && <Header p> {t('vehicles:click-image')}</Header>}
                                         {stages.length >= max && <Alert color="warning">Max {max} damages</Alert>}
                                         {stages.map((stage, indexStage) => {
                                             return (
@@ -211,7 +211,7 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
                                                                onChange={(e) => onInputStageChange(indexTab, indexStage, e.target.value)}
                                                                className={clsx('form-control form-control-sm')}
                                                                name={`annotation_${indexStage + 1}`}
-                                                               placeholder={`Description du défaut ${indexStage + 1} du véhicule`}
+                                                               placeholder={t('vehicles:damages-{number}-description',{ number : indexStage + 1})}
                                                         />
                                                     </div>
                                                 </div>

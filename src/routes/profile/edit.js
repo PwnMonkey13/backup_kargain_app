@@ -4,6 +4,10 @@ import clsx from 'clsx';
 import { inflate } from 'flattenjs';
 import { useForm } from 'react-hook-form';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import SaveIcon from '@material-ui/icons/Save';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Col, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
 import useTranslation from 'next-translate/useTranslation';
 import { useAuth } from '../../context/AuthProvider';
@@ -11,15 +15,11 @@ import { ModalDialogContext } from '../../context/ModalDialogContext';
 import { themeColors } from '../../theme/palette';
 import FieldWrapper from '../../components/Form/FieldWrapper';
 import { EmailInput, TelInput, TextareaInput, TextInput } from '../../components/Form/Inputs';
-import Typography from '@material-ui/core/Typography';
 import GeoStreetsInput from '../../components/Form/Inputs/GeoAddressSearchInput';
 import resolveObjectKey from '../../libs/resolveObjectKey';
 import UsersService from '../../services/UsersService';
-import Error from '../_error';
-import Button from '@material-ui/core/Button';
-import SaveIcon from '@material-ui/icons/Save';
 import AvatarPreviewUpload from '../../components/Avatar/AvatarPreviewUpload';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Error from '../_error';
 
 const useStyles = makeStyles(() => ({
     stickyNav: {
@@ -98,7 +98,8 @@ const Edit = () => {
     const theme = useTheme();
     const formRef = useRef();
     const classes = useStyles();
-    const { authenticatedUser, setAuthenticatedUser, isAuthenticated } = useAuth();
+    const { t, lang } = useTranslation();
+    const { authenticatedUser, updateRawUser, isAuthenticated } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [activeTab, setActiveTab] = useState(0);
     const [user, setUser] = useState(authenticatedUser.getRaw);
@@ -146,7 +147,7 @@ const Edit = () => {
         UsersService.updateUser(data)
             .then((updatedUser) => {
                 setUser(updatedUser);
-                setAuthenticatedUser(updatedUser);
+                updateRawUser(updatedUser);
                 dispatchModal({
                     msg: 'User successufully updated',
                 });
@@ -158,8 +159,8 @@ const Edit = () => {
 
     return (
         <>
-            <Typography component="h2" variant="h2" className="text-center" gutterBottom>Edition de votre
-                profil
+            <Typography component="h2" variant="h2" className="text-center" gutterBottom>
+                {t('vehicles:edit-my-profile')}
             </Typography>
 
             {!isDesktop && (
@@ -191,25 +192,25 @@ const Edit = () => {
                                 }}/>
                             </TabPane>
                             <TabPane tabId={1}>
-                                <Typography component="h2" variant="h2">Abonnements</Typography>
+                                <Typography component="h2" variant="h2">
+                                    {t('vehicles:subscriptions')}
+                                </Typography>
                             </TabPane>
                             <TabPane tabId={2}>
-                                <Typography component="h2" variant="h2">Paiements & Factures</Typography>
-                            </TabPane>
-                            <TabPane tabId={3}>
-                                <Typography component="h2" variant="h2">Aide & Contact</Typography>
+                                <Typography component="h2" variant="h2">
+                                    {t('vehicles:payments-bills')}
+                                </Typography>
                             </TabPane>
                         </TabContent>
+
+                        {!isDesktop && (
+                            <Buttons {...{
+                                triggerSubmit,
+                            }}/>
+                        )}
                     </form>
                 </Col>
             </Row>
-
-            {!isDesktop && (
-                <Buttons {...{
-                    triggerSubmit,
-                }}/>
-            )}
-
         </>
     );
 };
@@ -251,7 +252,7 @@ const ProfilePartialForm = ({ control, errors }) => {
             </FieldWrapper>
 
             <FieldWrapper label={t('vehicles:password')} classNameWrapper="my-3">
-                <Link href="/auth/reset-password">
+                <Link href="/auth/forgotten">
                     <a className="m-2">
                         Reset password
                     </a>

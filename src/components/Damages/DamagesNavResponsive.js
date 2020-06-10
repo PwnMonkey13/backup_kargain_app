@@ -24,7 +24,7 @@ const DamagesNav = memo(({ activeTab, setActiveTab, damagesTabsLight }) => {
                                    onClick={() => {
                                        setActiveTab(indexTab);
                                    }}>
-                                    {t(`vehicles:${tab.title}`)}
+                                    {tab.title}
                                 </a>
                             </li>
                         );
