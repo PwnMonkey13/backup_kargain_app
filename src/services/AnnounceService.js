@@ -24,9 +24,10 @@ function getAnnounces (params = {}) {
 }
 
 function getAnnouncesAll () {
-    const url = `${config.api}/ads`;
+    const url = `${config.api}/ads/all`;
     const requestOptions = {
         method: 'GET',
+        credentials: 'include',
     };
 
     return fetch(url, requestOptions)
@@ -82,12 +83,9 @@ function createAnnounce (data) {
     };
 
     const url = `${config.api}/ads`;
-
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
+        .then(json => json.data)
         .catch(err => {
             throw err;
         });
@@ -120,13 +118,24 @@ function updateAnnounce (slug, data) {
     };
 
     const url = `${config.api}/ads/update/${slug}`;
-    console.log(url);
-
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
+        .then(json => json.data)
+        .catch(err => {
+            throw err;
+        });
+}
+
+function removeAnnounce (slug) {
+    const requestOptions = {
+        method: 'DELETE',
+        credentials: 'include',
+    };
+
+    const url = `${config.api}/ads/remove/${slug}`;
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
         .catch(err => {
             throw err;
         });
@@ -186,6 +195,7 @@ export default {
     createAnnounce,
     confirmAnnounce,
     updateAnnounce,
+    removeAnnounce,
     uploadImages,
     addLikeLoggedInUser,
     removeLikeLoggedInUser,

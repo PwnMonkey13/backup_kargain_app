@@ -92,7 +92,7 @@ TableMUI.defaultProps = {
     filtering: true,
     grouping: true,
     exportButton: true,
-    tableLength: 10,
+    tableLength: 15,
     exportFileName: 'export_data_sci',
 };
 

@@ -6,9 +6,10 @@ import config from '../config/config';
 function getUsers (params = {}) {
     const requestOptions = {
         method: 'GET',
+        credentials: 'include',
     };
 
-    let url = `${config.api}/users`;
+    let url = `${config.api}/users/all`;
 
     if (Object.keys(params).length !== 0) {
         url += `?${queryString.stringify(params)}`;
@@ -35,9 +36,8 @@ function getUserByUsername (username) {
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
-        );
+            throw err;
+        });
 }
 
 function getUserByUsernameSSR (username, headers) {

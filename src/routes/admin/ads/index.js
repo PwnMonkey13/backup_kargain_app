@@ -1,12 +1,10 @@
-import React from 'react'
-import AdsTable from '../../../components/Admin/Ads/AdsTableMUI'
+import React from 'react';
+import AdsTable from '../../../components/Admin/Ads/AdsTableMUI';
 
 const Index = () => {
-    return(
-        <div>
-            <AdsTable/>
-        </div>
-    )
-}
+    return (
+        <AdsTable/>
+    );
+};
 
 export default Index;
