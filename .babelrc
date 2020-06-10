@@ -24,6 +24,7 @@
     "inline-react-svg",
     "@babel/plugin-transform-react-jsx",
     "@babel/plugin-syntax-dynamic-import",
+    "add-react-displayname",
     [
       "styled-components",
       {
