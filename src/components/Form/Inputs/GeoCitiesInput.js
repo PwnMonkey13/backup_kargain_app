@@ -1,9 +1,9 @@
 import React, { memo, useState, useRef } from 'react'
 import NiceSelect, { components } from 'react-select'
 import { Controller } from 'react-hook-form'
+import SearchIcon from '@material-ui/icons/Search';
 import PlacesServices from '../../../services/PlacesService'
 import ValidationError from '../Validations/ValidationError'
-import { Search } from 'react-feather'
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
 
 const { useContext } = require('react');
@@ -12,7 +12,7 @@ const DropdownIndicator = props => {
     return (
         components.DropdownIndicator && (
             <components.DropdownIndicator {...props}>
-                <Search/>
+                <SearchIcon/>
             </components.DropdownIndicator>
         )
     )

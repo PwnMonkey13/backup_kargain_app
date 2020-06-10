@@ -61,9 +61,9 @@ export default class Announce {
     }
 
     get geVehicleEngine () {
-        const type = this.raw.vehicleEngine?.type?.label;
-        const gas = this.raw.vehicleEngine?.gas?.label;
-        const cylinder = this.raw.vehicleEngine?.cylinder;
+        const type = this.raw?.vehicleEngine?.type?.label;
+        const gas = this.raw?.vehicleEngine?.gas?.label;
+        const cylinder = this.raw?.vehicleEngine?.cylinder;
 
         return {
             type,
@@ -173,7 +173,7 @@ export default class Announce {
     }
 
     get getTags () {
-        return this.raw?.tags;
+        return this.raw?.tags ?? [];
     }
 
     get getDamagesTabs () {

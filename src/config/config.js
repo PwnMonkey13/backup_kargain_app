@@ -6,14 +6,14 @@ module.exports = {
     isProd,
     env,
     api,
-    sso_providers : ['google', 'facebook'],
+    sso_providers: ['google', 'facebook'],
     stripe: {
         API_KEY: process.env.STRIPE_API_KEY,
     },
     google: {
         STATIC_API_KEY: process.env.GOOGLE_STATIC_API_KEY,
         sso: {
-            CLIENT_ID : process.env.GOOGLE_SSO_CLIENT_ID
+            CLIENT_ID: process.env.GOOGLE_SSO_CLIENT_ID,
         },
     },
     facebook: {

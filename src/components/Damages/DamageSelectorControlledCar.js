@@ -44,6 +44,7 @@ const DamageSelectorControlledCar = ({ name, control, defaultValues, selectorFul
             img: '/images/annotations-views/skeleton.png',
         },
     ];
+
     const tabsPrepared = tabs.map((tab, index) => ({
         ...tab,
         stages: defaultValues?.[index]?.stages ?? [],

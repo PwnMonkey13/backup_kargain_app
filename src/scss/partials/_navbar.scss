@@ -138,10 +138,6 @@ $navbar-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.035);
                 &:hover {
                     color: $navbar-link-hover;
                 }
-
-                @media (max-width: 768px) {
-                    border-bottom: 1px solid #EEE;
-                }
             }
 
             &.active {
@@ -307,6 +303,12 @@ header {
     nav {
         .navbar-nav {
             margin-top: 10px;
+
+            &.flex-row-nav{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
         }
 
         .navbar-brand {
@@ -334,5 +336,6 @@ header {
         }
     }
 }
+
 
 

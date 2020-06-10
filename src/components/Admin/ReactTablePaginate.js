@@ -8,9 +8,10 @@ import { useTable, usePagination, useSortBy, useFilters, useGlobalFilter } from 
 import NiceSelect from 'react-select'
 import { Col, Row } from 'reactstrap'
 import matchSorter from 'match-sorter'
-import { SelectOptionsUtils } from '../../libs/formFieldsUtils'
 import clsx from 'clsx'
-import { Edit, Delete} from 'react-feather'
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { SelectOptionsUtils } from '../../libs/formFieldsUtils'
 import Loader from '../Loader'
 
 // Define a default UI for filtering
@@ -151,10 +152,10 @@ const ReactTablePaginate = ({
                                     })}
                                     <TableCell>
                                         <button className="mx-1" onClick={() => handleItemClickEdit(i)}>
-                                            <Edit/>
+                                            <EditIcon/>
                                         </button>
                                         <button className="mx-1" onClick={() => handleItemClickDelete(i)}>
-                                            <Delete/>
+                                            <DeleteIcon/>
                                         </button>
                                     </TableCell>
                                 </TableRow>

@@ -29,17 +29,15 @@ const AvatarPreviewUpload = () => {
 
         UsersService.uploadAvatar(data)
             .then(doc => {
-                console.log(doc);
                 updateRawUser(doc);
                 dispatchModal({ msg: 'Upload Successful'});
             }).catch(err => {
-                dispatchModalError({ err });
+                dispatchModalError({ err, persist : true });
             },
         );
     };
 
     useEffect(() => {
-        console.log(authenticatedUser.getAvatar);
         setAvatarLocation(authenticatedUser.getAvatar);
     }, [authenticatedUser]);
 

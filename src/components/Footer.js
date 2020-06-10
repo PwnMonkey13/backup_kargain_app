@@ -1,15 +1,9 @@
-import React from 'react'
-import Link from 'next/link'
-import styled from 'styled-components'
+import React from 'react';
+import Link from 'next/link';
 
-const FixedFooter = styled.footer`
-    // position:fixed;
-    // bottom:0
-`
-
-const Footer = ({ t, ...props }) => {
+const Footer = () => {
     return (
-        <FixedFooter className="menu-footer">
+        <footer className="menu-footer">
             <ul>
                 <li>
                     <Link href="/static/about" prefetch={false}>
@@ -32,9 +26,8 @@ const Footer = ({ t, ...props }) => {
                     </Link>
                 </li>
             </ul>
-        </FixedFooter>
-    )
-}
+        </footer>
+    );
+};
 
-// export default withTranslation('common')(Footer);
-export default Footer
+export default Footer;
