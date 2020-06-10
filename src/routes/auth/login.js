@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import Link from 'next-translate/Link';
 import { useForm } from 'react-hook-form';
 import { Col, Row } from 'reactstrap';
-import cookies from 'next-cookies';
+import nextCookies from 'next-cookies';
 import useTranslation from 'next-translate/useTranslation';
 import { EmailInput, PasswordInput } from '../../components/Form/Inputs';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
@@ -133,10 +133,10 @@ export default ({ forceLogout }) => {
 }
 
 export async function getServerSideProps (ctx) {
-    const { token } = cookies(ctx);
+    const cookies = nextCookies(ctx);
     return {
         props: {
-            forceLogout: !!token,
+            forceLogout: !!cookies.token
         },
     };
-};
+}

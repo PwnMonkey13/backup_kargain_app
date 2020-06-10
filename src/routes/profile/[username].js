@@ -18,7 +18,7 @@ import Error from '../_error';
 
 const Profile = ({ profileRaw, username, err, ...props }) => {
 
-    if (profileRaw !== undefined || err) {
+    if (profileRaw === undefined || err) {
         return <Error statusCode={err?.statusCode}/>;
     }
 
@@ -164,20 +164,22 @@ const TabsContainer = ({ profile, isCurrentLoggedUser }) => {
                 </Row>
             </Tabs.Item>
 
-            {isCurrentLoggedUser && (
-                <Tabs.Item id="profile-tab" title="Location">
-                    <p>Content 2</p>
-                </Tabs.Item>
-            )}
+            {/*{isCurrentLoggedUser && (*/}
+            {/*    <Tabs.Item id="profile-tab" title="Location">*/}
+            {/*        <p>Content 2</p>*/}
+            {/*    </Tabs.Item>*/}
+            {/*)}*/}
 
             {isCurrentLoggedUser && (
                 <Tabs.Item id="favoris-tab" title={t('vehicles:favorites')}>
                     <Row className="my-2 d-flex justify-content-center">
-                        {profile.getFavorites.length && profile.getFavorites.map((announceRaw, index) => (
+                        {profile.getFavorites.length ? profile.getFavorites.map((announceRaw, index) => (
                             <Col key={index} sm={12} md={12} lg={6} xl={6} className="my-2">
                                 <AnnounceCard announceRaw={announceRaw}/>
                             </Col>
-                        ))}
+                        )) : (
+                            <p>No favorites</p>
+                        )}
                     </Row>
                 </Tabs.Item>
             )}
@@ -190,7 +192,6 @@ export async function getServerSideProps (ctx) {
     try {
         const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
         const profileRaw = await UsersService.getUserByUsernameSSR(username, additionalHeaders);
-
         return {
             props: {
                 username,

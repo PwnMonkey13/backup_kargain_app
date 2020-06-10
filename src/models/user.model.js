@@ -11,6 +11,10 @@ export default class UserModel {
         return this.raw?.id
     }
 
+    get getRole() {
+        return this.raw?.role
+    }
+
     get isAdmin () {
         return this.raw?.isAdmin ?? false
     }
@@ -32,11 +36,11 @@ export default class UserModel {
     }
 
     get getFirstname () {
-        return this.raw?.username
+        return this.raw?.firstname
     }
 
     get getLastname () {
-        return this.raw?.username
+        return this.raw?.lastname
     }
 
     get getUsername () {

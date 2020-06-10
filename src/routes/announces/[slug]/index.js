@@ -51,6 +51,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Announce = ({ slug, announceRaw, err }) => {
+
+    console.log(slug, err);
+    console.log(announceRaw);
+
     const refImg = useRef();
     const theme = useTheme();
     const classes = useStyles();
@@ -65,7 +69,7 @@ const Announce = ({ slug, announceRaw, err }) => {
         defaultMatches: true,
     });
 
-    if (announceRaw !== undefined || err) {
+    if (announceRaw === undefined || err) {
         return <Error message={err.message} statusCode={err.statusCode}/>;
     }
 
@@ -102,7 +106,7 @@ const Announce = ({ slug, announceRaw, err }) => {
             <div className="objava-wrapper">
                 <NextSeo
                     title={`${announce.getTitle} - Kargain`}
-                    description={announce.getTheExcerpt}
+                    description={announce.getTheExcerpt()}
                 />
 
                 {!announce.getIsActivated && (
@@ -224,7 +228,7 @@ const Announce = ({ slug, announceRaw, err }) => {
                 </section>
 
                 <section className="my-2">
-                    <Typography component="h3" variant="h3">{t('vehciles:vehicle-informations')}</Typography>
+                    <Typography component="h3" variant="h3">{t('vehicles:vehicle-informations')}</Typography>
                     <CarInfos
                         announce={announce}
                         enableThirdColumn

@@ -27,13 +27,14 @@ const ResetPassword = () => {
         }
         AuthService.resetPassword(token, form.password)
             .then(() => {
-                dispatchModal({ msg: 'password reinitialized' });
+                dispatchModal({ msg: 'Password successfully reinitialized' });
                 if (redirect) return router.push(`/auth/callback?redirect=${redirect}`);
                 router.push('/auth/callback?redirect=/auth/login');
             }).catch(err => {
-            dispatchModalError({ err });
-            if (redirect) return router.push(`/auth/callback?redirect=${redirect}`);
-        });
+                dispatchModalError({ err });
+                if (redirect) return router.push(`/auth/callback?redirect=${redirect}`);
+            },
+        );
     };
 
     return (
@@ -74,7 +75,7 @@ const ResetPassword = () => {
                 </form>
             </Col>
         </div>
-    )
-}
+    );
+};
 
-export default ResetPassword
+export default ResetPassword;

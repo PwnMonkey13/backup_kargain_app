@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import Router, { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
+import withGA from 'next-ga';
 import { DefaultSeo } from 'next-seo';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import { ModalDialogContextProvider } from '../context/ModalDialogContext';
@@ -20,29 +21,12 @@ import i18nConfig from '../../i18n.json';
 
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;
+
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles && jssStyles.parentNode) {
             jssStyles.parentNode.removeChild(jssStyles);
         }
-
-        Router.events.on('routeChangeStart', () => {
-            console.log('route start changed');
-        });
-
-        Router.events.on('routeChangeComplete', () => {
-            console.log('route end changed');
-        });
-
-        Router.events.on('routeChangeError', () => {
-            console.log('route error changed');
-        });
-
-        return () => {
-            Router.events.off('routeChangeStart', () => {
-                console.log('unscribe route change');
-            });
-        };
     }, []);
 
     return (
@@ -54,7 +38,7 @@ const MyApp = ({ Component, pageProps }) => {
                         <DefaultSeo {...SEO} />
                         <PopupAlert/>
                         <ProtectedRouter pageProps={pageProps}>
-                            <Component/>
+                            <Component {...pageProps}/>
                         </ProtectedRouter>
                     </FormContextProvider>
                 </AuthProvider>
@@ -70,10 +54,16 @@ const ProtectedRouter = ({ children, pageProps }) => {
     const { stateReady, isLoading, forceLoginModal, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
     const showLoginModal = (pageProps.requiredAuth && !isAuthenticated) || forceLoginModal;
 
-    if (!stateReady || isLoading) return <Loader/>;
-    if (stateReady && !isLoading && isAdminRoute && !isAuthenticatedUserAdmin) return <Forbidden403Page/>;
+    if (!stateReady || isLoading) {
+        return <Loader/>;
+    }
 
     if (isAdminRoute) {
+        if (stateReady && !isLoading) {
+            if (!isAuthenticatedUserAdmin) {
+                return <Forbidden403Page/>;
+            }
+        }
         return (
             <AdminLayout>
                 {children}
@@ -91,5 +81,4 @@ const ProtectedRouter = ({ children, pageProps }) => {
     );
 };
 
-// export default MyApp
-export default appWithI18n(MyApp, i18nConfig);
+export default withGA('UA-229369587', Router)(appWithI18n(MyApp, i18nConfig));
