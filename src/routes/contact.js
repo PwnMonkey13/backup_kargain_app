@@ -1,0 +1,104 @@
+import React, { useContext } from 'react'
+import FieldWrapper from '../components/Form/FieldWrapper'
+import { EmailInput } from '../components/Form/Inputs'
+import CTAButton from '../components/CTAButton'
+import useTranslation from 'next-translate/useTranslation'
+import { useForm } from 'react-hook-form'
+import { ModalDialogContext } from '../context/ModalDialogContext'
+import UsersService from '../services/UsersService'
+import SelectInput from '../components/Form/Inputs/SelectInput'
+import TextareaInput from '../components/Form/Inputs/TextareaInput'
+
+const ContactPage = () => {
+    const { t } = useTranslation()
+    const { control, errors, handleSubmit } = useForm()
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext)
+
+    const onSubmit = (form) => {
+        const { email, message, subject } = form
+        console.log(form)
+        UsersService.contact({
+            email,
+            message,
+            subject: subject?.value,
+        })
+            .then(data => {
+                console.log(data)
+                dispatchModal({ msg: 'Your message have successufully been sent' })
+            }).catch(err => {
+                console.log(err)
+                dispatchModalError({ err })
+            },
+        )
+    }
+
+    return (
+        <div className="container mt-4">
+            <style jsx>{`
+                        form{
+                            border-radius : 5px;
+                            border : 1px solid gainsboro;
+                            max-width : 500px
+                        }
+                    `}
+            </style>
+            <form className="p-3 mt-3 mx-auto"
+                  onSubmit={handleSubmit(onSubmit)}>
+
+                <FieldWrapper label="Email">
+                    <EmailInput
+                        name="email"
+                        inline
+                        errors={errors}
+                        control={control}
+                        rules={{ required: 'Required' }}
+                    />
+                </FieldWrapper>
+
+                <FieldWrapper label="Sujet">
+                    <SelectInput
+                        name="subject"
+                        options={[
+                            {
+                                label: 'Demande d\informations',
+                                value: 'informations',
+                            },
+                            {
+                                label: 'Partenariat',
+                                value: 'partnership',
+                            },
+                            {
+                                label: 'Bug',
+                                value: 'bug',
+                            },
+                        ]}
+                        selected={['informations']}
+                        rules={{ required: 'Required' }}
+                        control={control}
+                        errors={errors}
+                    />
+                </FieldWrapper>
+
+                <FieldWrapper label="Message">
+                    <TextareaInput
+                        name="message"
+                        rows={5}
+                        cols={13}
+                        control={control}
+                        errors={errors}
+                        className="form-control editor"
+                    />
+                </FieldWrapper>
+
+                <div className="submit">
+                    <CTAButton
+                        title={t('vehicles:send')}
+                        submit
+                    />
+                </div>
+            </form>
+        </div>
+    )
+}
+
+export default ContactPage
