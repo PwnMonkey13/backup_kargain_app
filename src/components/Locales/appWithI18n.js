@@ -1,8 +1,10 @@
 import React from 'react';
-import I18nProvider from 'next-translate/I18nProvider';
+import I18nProvider from './I18nProvider';
 import getDefaultLang from 'next-translate/_helpers/getDefaultLang';
 import getPageNamespaces from 'next-translate/_helpers/getPageNamespaces';
 import startsWithLang from 'next-translate/_helpers/startsWithLang';
+// import ns0 from '../../locales/en/layout.json'
+// import ns1 from '../../locales/fr/layout.json'
 
 function getLang (ctx, config) {
     const { req, asPath = '' } = ctx;
@@ -16,10 +18,21 @@ function removeTrailingSlash (path = '') {
     return path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path;
 }
 
+function readLocalNs (localesPath, lang, ns) {
+    // console.log(`../../locales/${lang}/${ns}.json`);
+    return require(`../../locales/${lang}/${ns}.json`);
+}
+
 export default function appWithI18n (AppToTranslate, config = {}) {
     function AppWithTranslations (props) {
         const { lang, namespaces, defaultLanguage } = props;
         const { defaultLangRedirect } = config;
+        console.log("namespaces");
+        console.log(namespaces);
+        console.log("defaultLanguage");
+        console.log(defaultLanguage);
+        console.log("lang");
+        console.log(lang);
 
         return (
             <I18nProvider
@@ -36,7 +49,7 @@ export default function appWithI18n (AppToTranslate, config = {}) {
     }
 
     AppWithTranslations.getInitialProps = async ({ Component, ctx }) => {
-        const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx): {}
+        const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
 
         const defaultLanguage = ctx.req
             ? getDefaultLang(ctx.req, config)
@@ -54,7 +67,7 @@ export default function appWithI18n (AppToTranslate, config = {}) {
                 namespaces.map((ns) =>
                     typeof config.loadLocaleFrom === 'function'
                         ? config.loadLocaleFrom(lang, ns)
-                        : Promise.resolve([]),
+                        : Promise.resolve(readLocalNs(config.localesPath, lang, ns)),
                 ),
             ).catch(() => {
             })) || [];
@@ -62,7 +75,10 @@ export default function appWithI18n (AppToTranslate, config = {}) {
         return {
             lang,
             defaultLanguage,
-            pageProps : {...pageProps, lang},
+            pageProps: {
+                ...pageProps,
+                lang,
+            },
             namespaces: namespaces.reduce((obj, ns, i) => ({
                 ...obj,
                 [ns]: pageNamespaces[i],

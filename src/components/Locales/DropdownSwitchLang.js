@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import Link from 'next-translate/Link';
-import useTranslation from 'next-translate/useTranslation';
 import i18nConfig from '../../../i18n.json';
+import useTranslation from 'next-translate/useTranslation';
 import startsWithLang from 'next-translate/_helpers/startsWithLang';
+import clientSideLang from 'next-translate/clientSideLang';
 
 const DropdownSwitchLang = () => {
         const router = useRouter();
         const { allLanguages } = i18nConfig;
-        const { lang } = useTranslation();
+        const { lang } = useTranslation()
+        const ClientLang = clientSideLang()
+
+        console.log(ClientLang, lang);
         const [open, setOpen] = useState(false);
         const replaceLang = href => startsWithLang(href, allLanguages)
             ? href.split('/').filter(part => part !== lang).join('/') || '/'

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import Link from 'next-translate/Link';
 import clsx from 'clsx';
+import Link from 'next-translate/Link';
+import useTranslation from 'next-translate/useTranslation';
+import clientSideLang from 'next-translate/clientSideLang';
 import { Collapse, FormGroup, Input, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import FaceIcon from '@material-ui/icons/Face';
@@ -11,7 +13,6 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/styles';
-import useTranslation from 'next-translate/useTranslation';
 import { getLogo } from '../libs/utils';
 import { useAuth } from '../context/AuthProvider';
 import DropdownSwitchLang from './Locales/DropdownSwitchLang';
@@ -20,13 +21,6 @@ import CTALink from './CTALink';
 const NavbarClient = () => {
     const { isAuthenticated } = useAuth();
     const [collapsed, setCollapsed] = useState(false);
-    const theme = useTheme();
-    const { t, lang } = useTranslation();
-    const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
-        defaultMatches: true,
-    });
-    console.log('lang in navbar');
-    console.log(lang);
     const toggleNavbar = () => setCollapsed(!collapsed);
 
     return (
@@ -35,12 +29,6 @@ const NavbarClient = () => {
                 <NavbarBrand href="/">
                     <img src={getLogo()} width="150" alt="logo"/>
                 </NavbarBrand>
-
-                { !isDesktop && (
-                    <div style={{ display : 'contents'}}>
-                        <NewAdButtonCTA/>
-                    </div>
-                )}
 
                 <div className="d-flex navbar-menu" id="open-navbar1">
                     <Collapse isOpen={collapsed} navbar>
@@ -68,25 +56,16 @@ const NavbarClient = () => {
 };
 
 const NewAdButtonCTA = () => {
-    const { t, lang } = useTranslation();
-    return(
-        <>
-            {lang === 'fr' ? (
-                <CTALink
-                    title="Ajouter une annonce"
-                    href="/deposer-une-annonce"
-                    className="cta_nav_link"
-                />
-            ) : (
-                <CTALink
-                    title="Create an announce"
-                    href="/deposer-une-annonce"
-                    className="cta_nav_link"
-                />
-            )}
-        </>
-    )
-}
+    const { t } = useTranslation();
+    return (
+        <CTALink
+            title={t('layout:create-announce')}
+            href="/deposer-une-annonce"
+            className="cta_nav_link"
+        />
+    );
+};
+
 const NavbarAction = () => {
     const theme = useTheme();
     const { t, lang } = useTranslation();
@@ -94,7 +73,7 @@ const NavbarAction = () => {
         defaultMatches: true,
     });
 
-    return(
+    return (
         <Nav navbar style={{ flex: 1 }}>
             {isDesktop && (
                 <NavItem className="p-2">
@@ -110,7 +89,7 @@ const NavbarAction = () => {
                             type="search"
                             name="query"
                             id="search"
-                            placeholder={lang === 'fr' ? 'Rechercher' : 'Search'}/>
+                            placeholder={t('layout:search')}/>
                         <input
                             type="submit"
                             tabIndex="-1"
@@ -126,8 +105,8 @@ const NavbarAction = () => {
 
             </NavItem>
         </Nav>
-    )
-}
+    );
+};
 
 const DropdownNotifs = ({ isOpen, keyName, toggle }) => {
     return (
@@ -183,7 +162,8 @@ const DropdownNotifs = ({ isOpen, keyName, toggle }) => {
 
 const DropdownUser = ({ isOpen, keyName, toggle }) => {
     const { authenticatedUser } = useAuth();
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
+
     return (
         <li className="nav-item navbar-dropdown p-2" data-dropdown="dropdownUser">
             {authenticatedUser.getAvatar &&
@@ -207,7 +187,7 @@ const DropdownUser = ({ isOpen, keyName, toggle }) => {
                     <Link href={`/profile/${authenticatedUser.getUsername}`} prefetch={false}>
                         <a className="nav-link text-left"><FaceIcon/>
                             <span className="m-1">
-                                {lang === 'fr' ? 'Mon profil' : 'My profile'}
+                                {t('layout:my-profile')}
                             </span>
                         </a>
                     </Link>
@@ -216,7 +196,7 @@ const DropdownUser = ({ isOpen, keyName, toggle }) => {
                     <Link href="/profile/edit" prefetch={false}>
                         <a className="nav-link text-left"><SettingsIcon/>
                             <span className="m-1">
-                                 {lang === 'fr' ? 'Paramétres' : 'Settings'}
+                                 {t('layout:settings')}
                             </span>
                         </a>
                     </Link>
@@ -225,7 +205,7 @@ const DropdownUser = ({ isOpen, keyName, toggle }) => {
                     <Link href="/auth/logout" prefetch={false}>
                         <a className="nav-link text-left"><ExitToAppIcon/>
                             <span className="m-1">
-                                  {lang === 'fr' ? 'Déconnexion' : 'Logout'}
+                                  {t('layout:logout')}
                             </span>
                         </a>
                     </Link>
@@ -263,17 +243,24 @@ const LoggedInUserNav = () => {
 };
 
 const VisitorNav = () => {
+    const lang = clientSideLang();
+    const { t } = useTranslation();
+
     return (
         <Nav navbar className="flex-row-nav">
             <DropdownSwitchLang/>
             <NavItem className="p-2">
                 <Link href="/auth/login" prefetch={false}>
-                    <a className="nav-link">Connexion</a>
+                    <a className="nav-link">
+                        {t('layout:login')}
+                    </a>
                 </Link>
             </NavItem>
             <NavItem className="p-2">
                 <Link href="/auth/register" prefetch={false}>
-                    <a className="nav-link">S'enregistrer</a>
+                    <a className="nav-link">
+                        {t('layout:register')}
+                    </a>
                 </Link>
             </NavItem>
         </Nav>

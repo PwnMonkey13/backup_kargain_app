@@ -13,7 +13,7 @@ import AuthService from '../services/AuthService';
 import { useAuth } from '../context/AuthProvider';
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import { CheckBoxInput, EmailInput, PasswordInput } from './Form/Inputs';
-import SSOProvidersSSR from './SSOProvidersSSR';
+import SSOProviders from './SSOProviders';
 import { themeColors } from '../theme/palette';
 import Divider from './Divider';
 import TitleMUI from './TitleMUI';
@@ -132,7 +132,7 @@ export default ({lang}) => {
                 <Col sm={12} md={isMobile ? 12 : 6}>
                     <div className={classes.wrapperForm}>
                         <div className="d-flex flex-column">
-                            <SSOProvidersSSR lang={lang}/>
+                            <SSOProviders/>
                         </div>
                         <Divider className="m-3"/>
                         <div className="auth_form m-auto">
