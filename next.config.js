@@ -1,18 +1,16 @@
-const withPlugins = require('next-compose-plugins');
-const withSourceMaps = require('@zeit/next-source-maps')();
-const withImages = require('next-images');
-const path = require('path');
-const packageJson = require('./package');
-const date = new Date();
+const withPlugins = require('next-compose-plugins')
+const withImages = require('next-images')
+const path = require('path')
+require('dotenv').config()
 
 const nextBundleAnalyzer = ({ enabled = true }) => (nextConfig = {}) => ({
     ...nextConfig,
     webpack (config, options) {
-        const { isServer } = options;
-        const { bundleAnalyzer: bundleAnalyzerOptions = {} } = nextConfig;
+        const { isServer } = options
+        const { bundleAnalyzer: bundleAnalyzerOptions = {} } = nextConfig
 
         if (enabled) {
-            const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+            const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
             config.plugins.push(
                 new BundleAnalyzerPlugin({
@@ -22,16 +20,16 @@ const nextBundleAnalyzer = ({ enabled = true }) => (nextConfig = {}) => ({
                         : './analyze/client.html',
                     ...bundleAnalyzerOptions,
                 }),
-            );
+            )
         }
 
         if (typeof nextConfig.webpack === 'function') {
-            return nextConfig.webpack(config, options);
+            return nextConfig.webpack(config, options)
         }
 
-        return config;
+        return config
     },
-});
+})
 
 const nextConfig = {
     distDir: 'dist/client',
@@ -41,28 +39,8 @@ const nextConfig = {
         GOOGLE_SSO_CLIENT_ID: process.env.GOOGLE_SSO_CLIENT_ID,
         FACEBOOK_SSO_APP_ID: process.env.FACEBOOK_SSO_APP_ID,
         SENTRY_DSN: process.env.SENTRY_DSN,
-        BUILD_TIME: date.toString(),
-        BUILD_TIMESTAMP: +date,
-        APP_STAGE: process.env.APP_STAGE,
-        APP_NAME: packageJson.name,
-        APP_VERSION: packageJson.version,
     },
-    webpack: (config, { isServer, buildId }) => {
-        const APP_VERSION_RELEASE = `${packageJson.version}_${buildId}`;
-
-        // Dynamically add some "env" variables that will be replaced during the build
-        config.plugins[0].definitions['process.env.APP_RELEASE'] = JSON.stringify(buildId);
-        config.plugins[0].definitions['process.env.APP_VERSION_RELEASE'] = JSON.stringify(APP_VERSION_RELEASE);
-
-        if (isServer) { // Trick to only log once
-            console.debug(`[webpack] Building release "${APP_VERSION_RELEASE}"`);
-        }
-
-        // Fixes npm packages that depend on `fs` module
-        config.node = {
-            fs: 'empty',
-        };
-
+    webpack: (config) => {
         // XXX See https://github.com/zeit/next.js/blob/canary/examples/with-sentry-simple/next.config.js
         // In `pages/_app.js`, Sentry is imported from @sentry/node. While
         // @sentry/browser will run in a Node.js environment, @sentry/node will use
@@ -79,7 +57,7 @@ const nextConfig = {
         // So ask Webpack to replace @sentry/node imports with @sentry/browser when
         // building the browser's bundle
 
-        config.resolve.mainFields = ['main', 'browser', 'module'];
+        config.resolve.mainFields = ['main', 'browser', 'module']
         config.module.rules.push(
             {
                 test: /\.tsx?$/,
@@ -99,16 +77,12 @@ const nextConfig = {
                     },
                 ],
             },
-        );
+        )
 
-        return config;
+        return config
     },
-    poweredByHeader: 'NRN - With love',
-};
-
-console.debug(`Building Next with NODE_ENV="${process.env.NODE_ENV}" APP_STAGE="${process.env.APP_STAGE}" for CUSTOMER_REF="${process.env.CUSTOMER_REF}"`);
+}
 
 module.exports = withPlugins([
-    [withSourceMaps],
     [withImages, { exclude: path.resolve(__dirname, 'public/images/svg') }],
-], nextConfig);
+], nextConfig)

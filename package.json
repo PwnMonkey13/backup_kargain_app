@@ -23,10 +23,10 @@
     "start": "next start",
     "build:client": "next build",
     "build:server": "babel index.js --out-dir dist",
-    "prebuild": "yarn clean && next-translate && yarn ignore-engine",
-    "build": "yarn build:client && yarn build:server",
+    "build": "rimraf dist && next-translate && yarn ignore-engine && yarn build:client && yarn build:server",
     "ignore-engine": "yarn config set ignore-engines true",
     "deploy": "firebase deploy --only functions,hosting",
+    "push" : "yarn build && yarn deploy",
     "build:a": "cross-env ANALYZE=true next build",
     "analyse": "cat dist/build/stats.txt"
   },

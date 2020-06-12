@@ -15,7 +15,10 @@
       "firebase.json",
       ".firebaserc",
       "**/node_modules/**",
-      "**/.*"
+      "**/.*",
+      "**",
+      "!public",
+      "!i18.json"
     ]
   }
 }
