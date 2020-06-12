@@ -109,7 +109,7 @@ const RegisterPage = () => {
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label={t('vehicles:"password-confirm')}>
+                        <FieldWrapper label={t('vehicles:password-confirm')}>
                             <PasswordInput
                                 name="confirmPwd"
                                 errors={errors}
