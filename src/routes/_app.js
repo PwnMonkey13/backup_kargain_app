@@ -15,9 +15,9 @@ import SEO from '../../next-seo.config';
 import Forbidden403Page from './403';
 import theme from '../theme';
 import '../scss/theme.scss';
+import i18nConfig from '../../i18n.json';
 import Loader from '../components/Loader';
 import appWithI18n from '../components/Locales/appWithI18n';
-import i18nConfig from '../../i18n.json';
 
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;
@@ -54,9 +54,9 @@ const ProtectedRouter = ({ children, pageProps }) => {
     const { stateReady, isLoading, forceLoginModal, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
     const showLoginModal = (pageProps.requiredAuth && !isAuthenticated) || forceLoginModal;
 
-    if (!stateReady || isLoading) {
-        return <Loader/>;
-    }
+    // if (!stateReady || isLoading) {
+    //     return <Loader/>;
+    // }
 
     if (isAdminRoute) {
         if (stateReady && !isLoading) {

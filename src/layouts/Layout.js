@@ -1,14 +1,9 @@
-import React from 'react';
-import Footer from '../components/Footer';
-import ScrollUpButton from 'react-scroll-up-button';
-import NavbarClient from '../components/NavbarClient';
-import useTranslation from 'next-translate/useTranslation';
+import React from 'react'
+import Footer from '../components/Footer'
+import ScrollUpButton from 'react-scroll-up-button'
+import NavbarClient from '../components/NavbarClient'
 
 const Layout = ({ children }) => {
-    const { t, lang } = useTranslation();
-    console.log('lang in layout');
-    console.log(lang);
-
     return (
         <>
             <NavbarClient/>
@@ -28,13 +23,13 @@ const Layout = ({ children }) => {
                 }}>
             </ScrollUpButton>
         </>
-    );
-};
+    )
+}
 
 const MainBody = ({ children }) => (
-    <main className="main" style={{ minHeight: '75vh' }}>
+    <main className="main" style={{ minHeight: '100vh' }}>
         {children}
     </main>
-);
+)
 
-export default Layout;
+export default Layout

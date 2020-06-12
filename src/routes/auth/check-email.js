@@ -1,11 +1,12 @@
-import React, { useContext } from 'react'
-import Link from 'next/link'
+import React from 'react'
+import Link from 'next-translate/Link'
 import { useAuth } from '../../context/AuthProvider'
 
 const CheckEmail = () => {
     const { authenticatedUser } = useAuth()
     const email = authenticatedUser ? authenticatedUser.getEmail : null
-    const text = email ? <span className="font-weight-bold">{authenticatedUser.getEmail}</span> : <span>your inbox</span>
+    const text = email ? <span className="font-weight-bold">{authenticatedUser.getEmail}</span> :
+        <span>your inbox</span>
 
     return (
         <main>
@@ -14,10 +15,14 @@ const CheckEmail = () => {
                 <p className="lead">We’ve sent a message to {text} with a link to activate your account.</p>
                 <p>If you don’t see an email from us within a few minutes, a few things could have happened: </p>
                 <ul>
-                    <li> The email is in your spam folder. (Sometimes things get lost in there.) </li>
+                    <li> The email is in your spam folder. (Sometimes things get lost in there.)</li>
                     <li> TThe email address you entered had a mistake or typo. (Happens to the best of us.)</li>
-                    <li> You accidentally gave us another email address. (Usually a work or personal one instead of the one you meant.)</li>
-                    <li>We can’t deliver the email to this address. (Usually because of corporate firewalls or filtering.)</li>
+                    <li> You accidentally gave us another email address. (Usually a work or personal one instead of the
+                        one you meant.)
+                    </li>
+                    <li>We can’t deliver the email to this address. (Usually because of corporate firewalls or
+                        filtering.)
+                    </li>
                 </ul>
 
                 <p>
