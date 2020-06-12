@@ -3,9 +3,11 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../../context/AuthProvider';
 import AuthService from '../../services/AuthService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
+import useIsMounted from '../../hooks/useIsMounted';
 
 const Logout = () => {
     const router = useRouter();
+    const isMounted = useIsMounted();
     const { dispatchModalError } = useContext(ModalDialogContext);
     const { isAuthenticated, updateRawUser, setIsAuthenticated } = useAuth();
 
@@ -27,9 +29,11 @@ const Logout = () => {
         }, 1000);
     }, []);
 
-    useEffect(()=>{
-        if (!isAuthenticated) router.push('/auth/callback?redirect=/auth/login');
-    })
+    useEffect(() => {
+        if (isMounted && !isAuthenticated) {
+            router.push('/auth/callback?redirect=/auth/login');
+        }
+    }, [isMounted, isAuthenticated]);
 
     return (
         <div className="text-center pt-5 pb-5">
