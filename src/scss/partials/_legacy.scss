@@ -63,25 +63,7 @@
 .search-header-wrapper{
   flex-grow: 1;
 }
-.mobile-footer-menu{
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 9;
-}
-.mobile-footer-menu .container{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.mobile-footer-menu{
-  background-color: #fff;
-  width: 100%;
-  height: 70px;
-  align-items: center;
-  justify-content: center;
-}
+
 .navbar-icons-wrapper-notifications:focus{
   outline: none;
   box-shadow: none;
@@ -157,12 +139,7 @@
 .mod-sup-wrapper span{
   margin: 0 5px;
 }
-.car-profile-footer{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-}
+
 .cars-profile-wrapper{
   display: flex;
   justify-content: flex-start;

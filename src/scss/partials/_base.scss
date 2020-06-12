@@ -34,15 +34,11 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: $default-font-color;
-    font-size: $font-size-base;
-    //font-family: $default-font-family, 'valeraRound', sans-serif;
-    font-family : "-apple-system";
-    font-family : "Quicksand";
-    font-family : "valeraRound";
-    font-family: "Helvetica Neue";
-
+    font-family: $default-font-family;
+    //font-family : "Quicksand";
+    //font-family : "valeraRound";
+    //font-family: "Helvetica Neue";
     position: relative;
-    //min-height: 100vh;
     overflow-x: hidden;
 }
 
@@ -138,10 +134,6 @@ main {
     margin: 0 auto;
     padding: 1rem;
     position: relative;
-
-    &:not(.--alt-margin) {
-        padding-bottom: 3.125rem;
-    }
 }
 
 .main_layout {

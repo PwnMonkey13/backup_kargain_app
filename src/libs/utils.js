@@ -10,6 +10,10 @@ export function getLogo () {
     return '/images/Kargain_logo.png';
 }
 
+export function getLogoWhite () {
+    return '/images/kargain-logo-white.png';
+}
+
 const dirMap = {
     // greater-than
     gt: {
