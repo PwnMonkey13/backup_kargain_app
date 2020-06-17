@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { DefaultSeo } from 'next-seo';
+import withGA from 'next-ga'
+import DynamicNamespaces from 'next-translate/DynamicNamespaces';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import { ModalDialogContextProvider } from '../context/ModalDialogContext';
 import { AuthProvider, useAuth } from '../context/AuthProvider';
 import { FormContextProvider } from '../context/FormContext';
-// import AdminLayout from '../components/Admin/Layout/AdminLayout';
+import AdminLayout from '../components/Admin/Layout/AdminLayout';
 import NextProgress from '../components/NextProgress';
 import PopupAlert from '../components/PopupAlert';
 import PopupLogin from '../components/PopupLogin';
@@ -16,8 +18,6 @@ import theme from '../theme';
 import '../scss/theme.scss';
 import i18nConfig from '../../i18n.json';
 import appWithI18n from '../components/Locales/appWithI18n';
-import DynamicNamespaces from 'next-translate/DynamicNamespaces';
-import AdminLayout from '../components/Admin/Layout/AdminLayout';
 
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;
