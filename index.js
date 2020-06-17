@@ -14,9 +14,10 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({
     dev,
     conf: {
-        distDir: 'dist/client',
+        distDir: 'dist',
     },
 });
+
 const handle = app.getRequestHandler();
 
 exports.next = functions

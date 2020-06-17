@@ -1,6 +1,13 @@
 {
   "functions": {
-    "source": "."
+    "source": ".",
+    "ignore": [
+      "node_modules",
+      ".git",
+      ".gitignore",
+      ".nyc_output",
+      "firebase-debug.log"
+    ]
   },
   "hosting": {
     "public": "public",

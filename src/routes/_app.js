@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-import { Router, useRouter } from 'next/router';
-import withGA from 'next-ga';
+import { useRouter } from 'next/router';
 import { DefaultSeo } from 'next-seo';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import { ModalDialogContextProvider } from '../context/ModalDialogContext';
 import { AuthProvider, useAuth } from '../context/AuthProvider';
 import { FormContextProvider } from '../context/FormContext';
-import AdminLayout from '../components/Admin/Layout/AdminLayout';
+// import AdminLayout from '../components/Admin/Layout/AdminLayout';
 import NextProgress from '../components/NextProgress';
 import PopupAlert from '../components/PopupAlert';
 import PopupLogin from '../components/PopupLogin';
@@ -16,11 +15,13 @@ import Forbidden403Page from './403';
 import theme from '../theme';
 import '../scss/theme.scss';
 import i18nConfig from '../../i18n.json';
-import Loader from '../components/Loader';
 import appWithI18n from '../components/Locales/appWithI18n';
+import DynamicNamespaces from 'next-translate/DynamicNamespaces';
+import AdminLayout from '../components/Admin/Layout/AdminLayout';
 
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;
+    console.log(pageProps);
 
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
@@ -49,14 +50,9 @@ const MyApp = ({ Component, pageProps }) => {
 
 const ProtectedRouter = ({ children, pageProps }) => {
     const router = useRouter();
-    const { lang } = pageProps;
     const isAdminRoute = router.route.split('/').includes('admin');
     const { stateReady, isLoading, forceLoginModal, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
     const showLoginModal = (pageProps.requiredAuth && !isAuthenticated) || forceLoginModal;
-
-    // if (!stateReady || isLoading) {
-    //     return <Loader/>;
-    // }
 
     if (isAdminRoute) {
         if (stateReady && !isLoading) {
@@ -72,12 +68,15 @@ const ProtectedRouter = ({ children, pageProps }) => {
     }
 
     return (
-        <>
-            {showLoginModal && <PopupLogin lang={lang}/>}
+        <DynamicNamespaces
+            dynamic={(lang, ns) => import(`../locales/${lang}/${ns}.json`).then((m) => m.default)}
+            namespaces={['layout']}
+        >
+            {showLoginModal && <PopupLogin/>}
             <Layout>
                 {children}
             </Layout>
-        </>
+        </DynamicNamespaces>
     );
 };
 

@@ -1,16 +1,15 @@
 {
-  "allLanguages": [
-    "fr",
-    "en"
-  ],
-  "defaultLanguage": "fr",
-  "currentPagesDir": "src/routes",
-  "localesPath": "src/locales",
-  "finalPagesDir": "src/pages",
-  "pages": {
-    "*": [
-      "layout",
-      "vehicles"
-    ]
-  }
+    "allLanguages": [
+        "fr",
+        "en"
+    ],
+    "defaultLanguage": "fr",
+    "currentPagesDir": "src/routes",
+    "localesPath": "src/locales",
+    "finalPagesDir": "src/pages",
+    "pages": {
+        "*": [
+            "vehicles"
+        ]
+    }
 }
