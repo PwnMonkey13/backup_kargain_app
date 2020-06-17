@@ -9,7 +9,7 @@ const Sorters = ({ updateSorter }) => {
     const options = [
         {
             label: t('vehicles:most-recent'),
-            icon : ArrowUpwardIcon,
+            icon: ArrowUpwardIcon,
             value: {
                 key: 'DATE',
                 asc: false,
@@ -17,7 +17,7 @@ const Sorters = ({ updateSorter }) => {
         },
         {
             label: t('vehicles:less-recent'),
-            icon : ArrowDownwardIcon,
+            icon: ArrowDownwardIcon,
             value: {
                 key: 'DATE',
                 asc: true,
@@ -25,7 +25,7 @@ const Sorters = ({ updateSorter }) => {
         },
         {
             label: t('vehicles:most-recent'),
-            icon : ArrowUpwardIcon,
+            icon: ArrowUpwardIcon,
             value: {
                 key: 'PRICE',
                 asc: false,
@@ -33,7 +33,7 @@ const Sorters = ({ updateSorter }) => {
         },
         {
             label: t('vehicles:less-recent'),
-            icon : ArrowDownwardIcon,
+            icon: ArrowDownwardIcon,
             value: {
                 key: 'PRICE',
                 asc: true,
@@ -41,7 +41,7 @@ const Sorters = ({ updateSorter }) => {
         },
         {
             label: t('vehicles:most-mileage'),
-            icon : ArrowUpwardIcon,
+            icon: ArrowUpwardIcon,
             value: {
                 key: 'MILEAGE',
                 asc: false,
@@ -49,7 +49,7 @@ const Sorters = ({ updateSorter }) => {
         },
         {
             label: t('vehicles:less-mileage'),
-            icon : ArrowDownwardIcon,
+            icon: ArrowDownwardIcon,
             value: {
                 key: 'MILEAGE',
                 asc: true,
@@ -57,7 +57,7 @@ const Sorters = ({ updateSorter }) => {
         },
         {
             label: t('vehicles:closest'),
-            icon : ArrowUpwardIcon,
+            icon: ArrowUpwardIcon,
             value: {
                 key: 'RADIUS',
                 asc: true,
@@ -65,7 +65,7 @@ const Sorters = ({ updateSorter }) => {
         },
         {
             label: t('vehicles:farthest'),
-            icon : ArrowDownwardIcon,
+            icon: ArrowDownwardIcon,
             value: {
                 key: 'RADIUS',
                 asc: false,
@@ -80,11 +80,11 @@ const Sorters = ({ updateSorter }) => {
     };
 
     const customSingleValue = ({ data }) => (
-      <div className="input-select">
-          <div className="input-select__single-value">
-              <span>{ data.label }</span>
-          </div>
-      </div>
+        <div className="input-select">
+            <div className="input-select__single-value">
+                <span>{data.label}</span>
+            </div>
+        </div>
     );
 
     return (
@@ -94,16 +94,13 @@ const Sorters = ({ updateSorter }) => {
             justifyContent: 'flex-end',
         }}>
             <span>{t('vehicles:sort-by')}:</span>
-            <div style={{
-                margin: '1rem',
-                width: '15rem',
-            }}>
+            <div className="sorter">
                 <NiceSelect
                     name="sort"
                     value={sorter}
                     autosize={true}
                     onChange={onHandleChange}
-                    components={ {SingleValue: customSingleValue } }
+                    components={{ SingleValue: customSingleValue }}
                     classNames='w-100'
                     options={options}
                 />

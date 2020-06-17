@@ -1,9 +1,20 @@
-@import '~bourbon'; // http://bourbon.io/
+@import '~bourbon';
+// http://bourbon.io/
 @import "mixins";
 @import "variables";
 
 $primary-font: 'Open Sans', sans-serif;
 $tab-filter-height: 50px;
+
+.sorter {
+    margin: 1rem;
+}
+
+@media (max-width: 768px) {
+    .sorter {
+        margin: 1rem 5px;
+    }
+}
 
 .cd-main-content {
     position: relative;
@@ -89,7 +100,7 @@ xfilter
     @include transform(translateX(-100%));
     @include transition(transform .3s, box-shadow .3s);
 
-    .cd-filters-top{
+    .cd-filters-top {
         position: absolute;
         top: 0;
         left: 0;
@@ -125,7 +136,7 @@ xfilter
         z-index: 3;
         @include transition(opacity .3s);
 
-        &:hover{
+        &:hover {
             transform: scale(1.2);
         }
 
@@ -138,7 +149,7 @@ xfilter
         @include transform(translateX(0));
         box-shadow: 4px 4px 20px rgba($black, .2);
 
-        form.filters_form{
+        form.filters_form {
             display: flex;
         }
 
@@ -181,9 +192,9 @@ xfilter
         @include transition(transform .3s, box-shadow .3s);
     }
 
-    &:hover{
-        img{
-        transform: scale(1.2);
+    &:hover {
+        img {
+            transform: scale(1.2);
         }
     }
 
@@ -206,6 +217,12 @@ xfilter
     }
 }
 
+@media (max-width: 768px) {
+    .cd-filter-trigger, .cd-filter {
+        top: 70px
+    }
+}
+
 /* --------------------------------
 
 xgallery
@@ -223,7 +240,7 @@ xcustom form elements
 
 -------------------------------- */
 
-@-moz-document url-prefix(){
+@-moz-document url-prefix() {
     /* hide custom arrow on Firefox - select element */
     .cd-filter-block .cd-select::after {
         display: none;

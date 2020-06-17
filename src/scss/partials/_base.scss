@@ -136,6 +136,13 @@ main {
     position: relative;
 }
 
+
+@media (max-width: 768px) {
+    main{
+        padding: 5px;
+    }
+}
+
 .main_layout {
     padding: 3rem;
 }
