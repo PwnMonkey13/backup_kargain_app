@@ -1,8 +1,8 @@
 {
   "sort-by": "Trier par",
-  "filter-by": "Filter par",
-  "apply-filters": "Apply filters",
-  "reset-filters": "Reset filters",
+  "filter-by": "Filtrer par",
+  "apply-filters": "Appliquer les filtres",
+  "reset-filters": "Reinitialiser les filtres",
   "my-profile" : "Mon profil",
   "edit-my-profile" : "Editer mon profil",
   "payments-bills" : "Paiements & factures",

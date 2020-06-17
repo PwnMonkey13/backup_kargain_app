@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import { DefaultSeo } from 'next-seo';
 import withGA from 'next-ga'
 import DynamicNamespaces from 'next-translate/DynamicNamespaces';

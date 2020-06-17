@@ -139,7 +139,7 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
                     </Col>
                 </Row>
             </div>
-            <section className="content_tabs">
+            <div className="filters_container">
                 <div className={clsx('cd-filter-trigger', filtersOpened && 'filter-is-visible')}
                      onClick={() => toggleOpenFilters()}>
                     <img src="/images/svg/icon_filter_white.svg" alt=""/>
@@ -157,7 +157,7 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
                         isAuthenticated,
                     }}/>
                 </section>
-            </section>
+            </div>
         </>
     );
 };

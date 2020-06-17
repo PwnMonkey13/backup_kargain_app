@@ -75,11 +75,9 @@ const NavbarAction = () => {
 
     return (
         <Nav navbar style={{ flex: 1 }}>
-            {isDesktop && (
-                <NavItem className="p-2">
-                    <NewAdButtonCTA/>
-                </NavItem>
-            )}
+            <NavItem className="p-2">
+                <NewAdButtonCTA/>
+            </NavItem>
 
             <NavItem className="p-2">
                 <form method="GET" action="/search">

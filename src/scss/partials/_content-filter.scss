@@ -16,105 +16,70 @@ $tab-filter-height: 50px;
     }
 }
 
-.cd-main-content {
-    position: relative;
-    min-height: 100vh;
-    @include clearfix;
+.filters_container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 
-    &.is-fixed {
-        .cd-tab-filter-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+    .cd-tab-filter-wrapper {
+        background-color: $white;
+        box-shadow: 0 1px 1px rgba($black, .08);
+        z-index: 1;
+        @include clearfix;
+    }
+
+    .cd-filter-trigger {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        height: $tab-filter-height;
+        line-height: $tab-filter-height;
+        width: 60px;
+        display: flex;
+        justify-content: center;
+        /* image replacemelnt */
+        overflow: hidden;
+        color: transparent;
+        white-space: nowrap;
+        z-index: 3;
+        background: $blue;
+        @include transition(opacity .3s);
+
+        &.filter-is-visible {
+            pointer-events: none;
         }
 
-        .cd-gallery {
-            padding-top: 26px+$tab-filter-height;
+        &.filter-is-visible.filter_absolute_out {
+            display: none;
         }
 
-        .cd-filter {
-            position: fixed;
-            overflow: hidden;
-
-            form {
-                height: 100vh;
-                overflow: auto;
-                -webkit-overflow-scrolling: touch;
-            }
+        img {
+            @include transition(transform .3s, box-shadow .3s);
         }
 
-        .cd-filter-trigger {
-            position: fixed;
-        }
-
-        @include MQ(M) {
-            .cd-gallery {
-                padding-top: 40px+$tab-filter-height;
+        &:hover {
+            img {
+                transform: scale(1.2);
             }
         }
 
         @include MQ(L) {
-            .cd-gallery {
-                padding-top: 50px+$tab-filter-height;
+            text-indent: 0;
+            color: $grey;
+            text-transform: uppercase;
+            font-size: 1.3rem;
+            font-weight: 700;
+            @include transition(color .3s);
+
+            .no-touch &:hover {
+                color: $blue;
+            }
+
+            &.filter-is-visible,
+            &.filter-is-visible:hover {
+                color: $white;
             }
         }
-    }
-}
-
-/* --------------------------------
-
-xtab-filter
-
--------------------------------- */
-
-.cd-tab-filter-wrapper {
-    background-color: $white;
-    box-shadow: 0 1px 1px rgba($black, .08);
-    z-index: 1;
-    @include clearfix;
-}
-
-/* --------------------------------
-
-xfilter
-
--------------------------------- */
-
-.cd-filter {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 280px;
-    height: 50px;
-    padding-top: 50px;
-    background: #2C6BFC;
-    box-shadow: 4px 4px 20px rgba($black, 0);
-    z-index: 2;
-
-    /* Force Hardware Acceleration in WebKit */
-    @include transform(translateZ(0));
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-
-    @include transform(translateX(-100%));
-    @include transition(transform .3s, box-shadow .3s);
-
-    .cd-filters-top {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: $tab-filter-height;
-        width: 100%;
-        background-color: $blue;
-        z-index: 2;
-    }
-
-    form.filters_form {
-        background-color: $white;
-        flex-direction: column;
-        display: none;
-        padding: 0 1rem
     }
 
     .cd-close-trigger {
@@ -124,14 +89,11 @@ xfilter
         height: $tab-filter-height;
         line-height: $tab-filter-height;
         width: 60px;
-
         color: $white;
         font-size: 1.3rem;
         text-align: center;
-
         background: darken($blue, 5%);
         opacity: 0;
-
         background: transparent url('/images/svg/icon_close_white.svg') no-repeat center center;
         z-index: 3;
         @include transition(opacity .3s);
@@ -145,100 +107,86 @@ xfilter
         }
     }
 
-    &.filter-is-visible {
-        @include transform(translateX(0));
-        box-shadow: 4px 4px 20px rgba($black, .2);
-
-        form.filters_form {
-            display: flex;
-        }
-
-        .cd-close-trigger {
-            opacity: 1;
-        }
-    }
-
-    @include MQ(L) {
-        width: 20%;
-
-        form {
-            padding: $tab-filter-height+20px 10%;
-        }
-    }
-}
-
-.cd-filter-trigger {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    height: $tab-filter-height;
-    line-height: $tab-filter-height;
-    width: 60px;
-    display: flex;
-    justify-content: center;
-    /* image replacemelnt */
-    overflow: hidden;
-    color: transparent;
-    white-space: nowrap;
-    z-index: 3;
-    background: $blue;
-    @include transition(opacity .3s);
-
-    &.filter-is-visible {
-        pointer-events: none;
-    }
-
-    img {
+    .cd-filter {
+        top: 10px;
+        left: 10px;
+        max-width: 280px;
+        height: auto;
+        padding-top: 50px;
+        background: #2C6BFC;
+        box-shadow: 4px 4px 20px rgba($black, 0);
+        z-index: 2;
+        @include transform(translateZ(0));
+        @include transform(translateX(-100%));
         @include transition(transform .3s, box-shadow .3s);
-    }
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
 
-    &:hover {
-        img {
-            transform: scale(1.2);
+        .cd-filter-trigger {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            &.filter-is-visible {
+                display: flex;
+            }
+        }
+
+        &.filter-is-visible {
+            @include transform(translateX(0));
+            box-shadow: 4px 4px 20px rgba($black, .2);
+
+            form.filters_form {
+                display: flex;
+            }
+
+            .cd-close-trigger {
+                opacity: 1;
+            }
+        }
+
+        @include MQ(L) {
+            width: 20%;
+
+            form {
+                padding: $tab-filter-height+20px 10%;
+            }
         }
     }
 
-    @include MQ(L) {
-        text-indent: 0;
-        color: $grey;
-        text-transform: uppercase;
-        font-size: 1.3rem;
-        font-weight: 700;
-        @include transition(color .3s);
-
-        .no-touch &:hover {
-            color: $blue;
-        }
-
-        &.filter-is-visible,
-        &.filter-is-visible:hover {
-            color: $white;
-        }
+    .cd-filters-top {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: $tab-filter-height;
+        width: 100%;
+        background-color: $blue;
+        z-index: 2;
     }
+
+    form.filters_form {
+        background-color: $white;
+        border: 1px solid $black;
+        flex-direction: column;
+        display: none;
+        padding: 0 1rem
+    }
+
 }
 
 @media (max-width: 768px) {
-    .cd-filter-trigger, .cd-filter {
-        top: 70px
+    .filters_container {
+        .cd-filter-trigger, .cd-filter {
+            top: 70px
+        }
     }
 }
-
-/* --------------------------------
-
-xgallery
-
--------------------------------- */
 
 .cd-gallery {
     padding: 26px 5%;
     width: 100%;
 }
-
-/* --------------------------------
-
-xcustom form elements
-
--------------------------------- */
 
 @-moz-document url-prefix() {
     /* hide custom arrow on Firefox - select element */

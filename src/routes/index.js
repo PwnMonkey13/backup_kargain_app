@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Col, Row } from 'reactstrap';
 import clsx from 'clsx';
+import { NextSeo } from 'next-seo';
 import useTranslation from 'next-translate/useTranslation';
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import PaginateResultsSituation from '../components/PaginateResultsSituation';
@@ -10,7 +11,6 @@ import Sorters from '../components/HomeFilters/Sorters';
 import AnnounceCard from '../components/AnnounceCard';
 import { useAuth } from '../context/AuthProvider';
 import Filters from '../components/HomeFilters/Filters';
-import { NextSeo } from 'next-seo';
 
 const Index = (props) => {
     const { dispatchModalError } = useContext(ModalDialogContext);
@@ -101,56 +101,65 @@ const Index = (props) => {
     };
 
     return (
-        <div className="home">
+        <>
+            <NextSeo
+                title="Kargain"
+                description="Vos meilleurs annonces automobiles"
+            />
 
-            <section className="cd-tab-filter-wrapper">
-                <div className={clsx('cd-tab-filter', filtersOpened && 'filter-is-visible')}>
-                    <Sorters updateSorter={updateSorter}/>
+            <div className="filters_container">
+                <section className="cd-tab-filter-wrapper">
+                    <div className={clsx('cd-tab-filter', filtersOpened && 'filter-is-visible')}>
+                        <Sorters updateSorter={updateSorter}/>
+                    </div>
+                </section>
+
+                <div className={clsx('cd-filter-trigger', 'filter_absolute_out', filtersOpened && 'filter-is-visible')}
+                     onClick={() => toggleOpenFilters()}>
+                    <img src="/images/svg/icon_filter_white.svg" alt=""/>
                 </div>
-            </section>
 
-            <div className={clsx('cd-filter-trigger', filtersOpened && 'filter-is-visible')}
-                 onClick={() => toggleOpenFilters()}>
-                <img src="/images/svg/icon_filter_white.svg" alt=""/>
-            </div>
-
-            <div className={clsx('cd-filter', filtersOpened && 'filter-is-visible')}>
-                <div className="cd-filters-top" onClick={() => toggleOpenFilters()}>
-                    <span className="cd-close-trigger"/>
+                <div className={clsx('cd-filter', filtersOpened && 'filter-is-visible')}>
+                    <div className="cd-filters-top" onClick={() => toggleOpenFilters()}>
+                        <div className={clsx('cd-filter-trigger', filtersOpened && 'filter-is-visible')}>
+                            <img src="/images/svg/icon_filter_white.svg" alt=""/>
+                        </div>
+                        <span className="cd-close-trigger"/>
+                    </div>
+                    <Filters updateFilters={updateFilters}/>
                 </div>
-                <Filters updateFilters={updateFilters}/>
+
+                <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
+
+                    <Row className="my-2 d-flex justify-content-center">
+                        {state.announces ? state.announces.map((announceRaw, index) => (
+                            <Col key={index} sm={12} md={6} lg={6} xl={6} className="my-2">
+                                <AnnounceCard {...{
+                                    announceRaw,
+                                    isAuthenticated,
+                                    detailsFontSize: '13px',
+                                }}/>
+                            </Col>
+                        )) : (
+                            <p>{(t('vehicles:no-ads-found'))}</p>
+                        )}
+                    </Row>
+
+                    <PaginateResultsSituation
+                        count={state.announces.length}
+                        page={state.page}
+                    />
+
+                    <PaginateResults
+                        total={state.total}
+                        limit={props.size}
+                        pageCount={props.paginate}
+                        currentPage={state.page}
+                        handlePageChange={handlePageChange}
+                    />
+                </section>
             </div>
-
-            <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
-
-                <Row className="my-2 d-flex justify-content-center">
-                    {state.announces ? state.announces.map((announceRaw, index) => (
-                        <Col key={index} sm={12} md={6} lg={6} xl={6} className="my-2">
-                            <AnnounceCard {...{
-                                announceRaw,
-                                isAuthenticated,
-                                detailsFontSize : "13px"
-                            }}/>
-                        </Col>
-                    )) : (
-                        <p>{(t('vehicles:no-ads-found'))}</p>
-                    )}
-                </Row>
-
-                <PaginateResultsSituation
-                    count={state.announces.length}
-                    page={state.page}
-                />
-
-                <PaginateResults
-                    total={state.total}
-                    limit={props.size}
-                    pageCount={props.paginate}
-                    currentPage={state.page}
-                    handlePageChange={handlePageChange}
-                />
-            </section>
-        </div>
+        </>
     );
 };
 
