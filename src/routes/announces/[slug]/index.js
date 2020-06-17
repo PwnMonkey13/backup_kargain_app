@@ -51,10 +51,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Announce = ({ slug, announceRaw, err }) => {
-
-    console.log(slug, err);
-    console.log(announceRaw);
-
     const refImg = useRef();
     const theme = useTheme();
     const classes = useStyles();

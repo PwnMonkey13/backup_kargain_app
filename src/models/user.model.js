@@ -63,6 +63,10 @@ export default class UserModel {
         return this.raw?.favorites ?? []
     }
 
+    get getFollowers () {
+        return this.raw?.followers ?? [];
+    }
+
     get getCountFollowers () {
         return this.raw?.followers?.length ?? 0;
     }

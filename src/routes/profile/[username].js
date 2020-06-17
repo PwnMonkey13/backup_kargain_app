@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Col, Row } from 'reactstrap';
 import Link from 'next-translate/Link';
 import clsx from 'clsx';
-import Button from '@material-ui/core/Button';
-import ChatIcon from '@material-ui/icons/Chat';
 import Typography from '@material-ui/core/Typography';
 import useTranslation from 'next-translate/useTranslation';
 import { useAuth } from '../../context/AuthProvider';
@@ -15,6 +13,9 @@ import CTALink from '../../components/CTALink';
 import Tabs from '../../components/Tabs/Tabs';
 import UserModel from '../../models/user.model';
 import Error from '../_error';
+import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { ReactComponent as StarSVGYellow } from '../../../public/images/svg/star-yellow.svg';
+import { ReactComponent as StarSVG } from '../../../public/images/svg/star.svg';
 
 const Profile = ({ profileRaw, username, err, ...props }) => {
 
@@ -22,10 +23,13 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
         return <Error statusCode={err?.statusCode}/>;
     }
 
-    const { authenticatedUser, isAuthenticated } = useAuth();
-    const [isModalOpen, toggleModalOpen] = useState(false);
+    const { authenticatedUser, isAuthenticated, setForceLoginModal } = useAuth();
+    // const [isModalOpen, toggleModalOpen] = useState(false);
     const profile = new UserModel(profileRaw);
     const { t, lang } = useTranslation();
+    const { dispatchModalError } = useContext(ModalDialogContext);
+    const [followerCounter, setFollowersCounter] = useState(profile.getCountFollowers);
+    const [alreadyFollowProfile, setAlreadyFollowProfile] = useState(!!profile.getFollowers.find(follower => follower.user === authenticatedUser.getID));
     const isCurrentLoggedUser = isAuthenticated && authenticatedUser.getUsername === profile.getUsername;
     const [filtersOpened, toggleFilters] = useState(false);
     const [state, setState] = useState({
@@ -34,6 +38,23 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
         filters: {},
         total: 0,
     });
+
+    const handleFollowProfile = async () => {
+        if (!isAuthenticated) return setForceLoginModal(true);
+        try {
+            if (alreadyFollowProfile) {
+                await UsersService.unFollowUser(profile.getID);
+                setFollowersCounter(followerCounter => followerCounter - 1);
+                setAlreadyFollowProfile(false);
+            } else {
+                await UsersService.followUser(profile.getID);
+                setFollowersCounter(followerCounter => followerCounter + 1);
+                setAlreadyFollowProfile(true);
+            }
+        } catch (err) {
+            dispatchModalError({ err });
+        }
+    };
 
     const toggleOpenFilters = () => {
         toggleFilters(open => !open);
@@ -73,16 +94,16 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
                                 </div>
                             ) : (
                                 <div className="mx-2">
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        startIcon={<ChatIcon/>}
-                                        onClick={() => {
-                                            toggleModalOpen(true);
-                                        }}
-                                    >
-                                        {t('vehicles:contact')}
-                                    </Button>
+                                    {/*<Button*/}
+                                    {/*    variant="contained"*/}
+                                    {/*    color="primary"*/}
+                                    {/*    startIcon={<ChatIcon/>}*/}
+                                    {/*    onClick={() => {*/}
+                                    {/*        toggleModalOpen(true);*/}
+                                    {/*    }}*/}
+                                    {/*>*/}
+                                    {/*    {t('vehicles:contact')}*/}
+                                    {/*</Button>*/}
                                 </div>
                             )}
                         </div>
@@ -99,8 +120,9 @@ const Profile = ({ profileRaw, username, err, ...props }) => {
                                 </Col>
                             )}
                             <Col>
-                                <span className="top-profile-abonnes">
-                                    {profile.getCountFollowers} {t('vehicles:followers')}
+                                <span className="top-profile-abonnes" onClick={handleFollowProfile}>
+                                    {alreadyFollowProfile ? <StarSVGYellow/> : <StarSVG/>}
+                                    {followerCounter} {t('vehicles:followers')}
                                 </span>
                             </Col>
                             <Col>

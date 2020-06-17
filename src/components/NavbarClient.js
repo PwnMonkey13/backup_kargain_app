@@ -118,7 +118,7 @@ const DropdownNotifs = ({ isOpen, keyName, toggle }) => {
                             aria-expanded="true"
                             id="dropdownMenu2"
                             onClick={() => toggle(keyName)}>
-                    <Badge badgeContent={17} color="secondary">
+                    <Badge badgeContent={1} color="secondary">
                         <NotificationsIcon/>
                     </Badge>
                 </IconButton>
@@ -126,31 +126,8 @@ const DropdownNotifs = ({ isOpen, keyName, toggle }) => {
                      aria-labelledby="dropdownMenu2">
                     <div className="notf-wrapper">
                         <div>
-                            <img
-                                src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
-                                alt=""/>
-                            <div className="text-podpiska"><span>kaleriya_volk</span> подписался(-ась) на вас.
-                            </div>
-                        </div>
-                        <a className="btn btn-primary subscribe-btn" href="#">Subscribe</a>
-                    </div>
-                    <div className="notf-wrapper">
-                        <div>
-                            <img
-                                src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
-                                alt=""/>
-                            <div className="text-podpiska"><span>kaleriya_volk</span> поставил лайк Вашему
-                                объявлению
-                            </div>
-                        </div>
-                    </div>
-                    <div className="notf-wrapper">
-                        <div>
-                            <img
-                                src="https://scontent-frt3-2.cdninstagram.com/vp/b38b4e6ec980b4e0d975ae00438a9990/5CAE7F88/t51.2885-19/s150x150/27580324_1961241000859897_4541351977585475584_n.jpg?_nc_ht=scontent-frt3-2.cdninstagram.com"
-                                alt=""/>
-                            <div className="text-podpiska"><span>kaleriya_volk</span> оставил комментарий Вашему
-                                объявлению с каким-то названием
+                            <div className="text-podpiska">
+                                <span>You are welcome on Kargain</span>
                             </div>
                         </div>
                     </div>
