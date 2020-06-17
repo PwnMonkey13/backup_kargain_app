@@ -2,9 +2,9 @@ import React, { memo, useContext, useState } from 'react';
 import clsx from 'clsx';
 import Link from 'next-translate/Link';
 import { useRouter } from 'next/router';
-import { Row, Col } from 'reactstrap'
+import { Col, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
-import {useTheme, makeStyles} from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import TrackChangesIcon from '@material-ui/icons/TrackChanges';
 import ExploreIcon from '@material-ui/icons/Explore';
@@ -19,7 +19,7 @@ import Divider from './Divider';
 import TitleMUI from './TitleMUI';
 import CTAButton from './CTAButton';
 import CTALink from './CTALink';
-
+import useTranslation from 'next-translate/useTranslation';
 
 const formConfig = {
     mode: 'onChange',
@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
         background: 'rgba(0, 0, 0,0.5)',
         display: 'flex',
         zIndex: 999,
-        paddingTop : '3rem'
+        paddingTop: '3rem',
     },
 
     popupContent: {
@@ -85,7 +85,7 @@ const useStyles = makeStyles(() => ({
 
 }));
 
-export default ({lang}) => {
+export default () => {
     const theme = useTheme();
     const classes = useStyles();
     const router = useRouter();
@@ -207,6 +207,8 @@ export default ({lang}) => {
 
 const LeftBlock = memo(() => {
     const classes = useStyles();
+    const { t, lang } = useTranslation();
+    console.log(lang);
     return (
         <>
             <div style={{ flex: 1 }}>

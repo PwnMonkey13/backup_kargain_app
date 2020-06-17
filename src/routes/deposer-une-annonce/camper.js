@@ -1,45 +1,50 @@
-import React, { useContext } from 'react'
-import { useRouter } from 'next/router'
+import React, { useContext } from 'react';
+import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import FormWizard from '../../components/Form/FormWizard'
-import AnnounceService from '../../services/AnnounceService'
-import { ModalDialogContext } from '../../context/ModalDialogContext'
-import Step0_CamperManufacturer from '../../components/Vehicles/camper/Step0_CamperManufacturer'
-import Step1CamperDetails from '../../components/Vehicles/camper/Step1_CamperDetails'
-import Step2CamperStatus from '../../components/Vehicles/camper/Step2_CamperStatus'
-import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner'
-import Step0CarManufacturer from '../../components/Vehicles/car/Step0_CarManufacturer';
-import Step2CarStatus from '../../components/Vehicles/car/Step2_CarStatus';
+import FormWizard from '../../components/Form/FormWizard';
+import AnnounceService from '../../services/AnnounceService';
+import { ModalDialogContext } from '../../context/ModalDialogContext';
+import Step0_CamperManufacturer from '../../components/Vehicles/camper/Step0_CamperManufacturer';
+import Step1CamperDetails from '../../components/Vehicles/camper/Step1_CamperDetails';
+import Step2CamperStatus from '../../components/Vehicles/camper/Step2_CamperStatus';
+import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner';
 
 const CarForm = (props) => {
-    const { dispatchModal } = useContext(ModalDialogContext)
-    const router = useRouter()
+    const { dispatchModal } = useContext(ModalDialogContext);
+    const router = useRouter();
     const { t, lang } = useTranslation();
 
     const onFinalSubmit = data => {
         AnnounceService.createAnnounce(data, props.token)
             .then(doc => {
-                const link = `/announces/${doc.slug}`
-                dispatchModal({ type: 'success', msg: 'Announce created successufully', link })
-                router.push(link)
+                const link = `/announces/${doc.slug}`;
+                dispatchModal({
+                    type: 'success',
+                    msg: 'Announce created successufully',
+                    link,
+                });
+                router.push(link);
             }).catch(err => {
-                dispatchModal({ type: 'error', err })
-            }
-            )
-    }
+                dispatchModal({
+                    type: 'error',
+                    err,
+                });
+            },
+        );
+    };
 
     const resumeModel = [
         {
-            vehicleType: 'Type de véhicule'
+            vehicleType: 'Type de véhicule',
         },
         {
             vin: 'Immat. VIN',
             'manufacturer.make': t('vehicles:make'),
             'manufacturer.model': 'Modele',
             'manufacturer.generation': 'Version',
-            'manufacturer.year': 'Année'
-        }
-    ]
+            'manufacturer.year': 'Année',
+        },
+    ];
 
     return (
         <FormWizard
@@ -52,14 +57,14 @@ const CarForm = (props) => {
             <Step2CamperStatus title={t('vehicles:vehicle-state')}/>
             <Step3CarOwner title={t('vehicles:your-announce')}/>
         </FormWizard>
-    )
-}
+    );
+};
 
 CarForm.getInitialProps = () => {
     return {
         formKey: 'camper',
         requiredAuth: true,
-    }
-}
+    };
+};
 
-export default CarForm
+export default CarForm;

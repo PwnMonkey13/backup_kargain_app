@@ -1,14 +1,13 @@
 import React, { useContext } from 'react';
-import FormWizard from '../../components/Form/FormWizard';
 import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
+import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import Step0MotosManufacturer from '../../components/Vehicles/moto/Step0_MotosManufacturer';
 import Step1MotoDetails from '../../components/Vehicles/moto/Step1_MotoDetails';
 import Step2MotoStatus from '../../components/Vehicles/moto/Step2_MotoStatus';
 import Step3MotoOwner from '../../components/Vehicles/moto/Step3_MotoOwner';
-import Step2CarStatus from '../../components/Vehicles/car/Step2_CarStatus';
-import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner';
 
 const MotorCyclesForm = (props) => {
     const router = useRouter();

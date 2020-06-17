@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
 import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
@@ -7,7 +8,6 @@ import Step0CarManufacturer from '../../components/Vehicles/car/Step0_CarManufac
 import Step1CarDetails from '../../components/Vehicles/car/Step1_CarDetails';
 import Step2CarStatus from '../../components/Vehicles/car/Step2_CarStatus';
 import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner';
-import useTranslation from 'next-translate/useTranslation';
 
 const CarForm = (props) => {
     const router = useRouter();
