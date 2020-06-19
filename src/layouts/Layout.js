@@ -1,7 +1,7 @@
-import React from 'react'
-import Footer from '../components/Footer'
-import ScrollUpButton from 'react-scroll-up-button'
-import NavbarClient from '../components/NavbarClient'
+import React from 'react';
+import FooterLight from '../components/FooterLight';
+import ScrollUpButton from 'react-scroll-up-button';
+import NavbarClient from '../components/NavbarClient';
 
 const Layout = ({ children }) => {
     return (
@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
             <MainBody>
                 {children}
             </MainBody>
-            <Footer/>
+            <FooterLight/>
             <ScrollUpButton
                 ShowAtPosition={150}
                 EasingType='easeOutCubic'
@@ -23,13 +23,13 @@ const Layout = ({ children }) => {
                 }}>
             </ScrollUpButton>
         </>
-    )
-}
+    );
+};
 
 const MainBody = ({ children }) => (
     <main className="main" style={{ minHeight: '100vh' }}>
         {children}
     </main>
-)
+);
 
-export default Layout
+export default Layout;

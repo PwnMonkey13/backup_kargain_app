@@ -278,7 +278,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 control={control}
             />
 
-            <Typography component="span">{t('seats:doors-quantity')}</Typography>
+            <Typography component="span">{t('vehicles:doors-quantity')}</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="seats"

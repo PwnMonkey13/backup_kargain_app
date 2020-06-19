@@ -1,19 +1,22 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import querystring from 'querystring';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Container } from 'reactstrap';
+import useTranslation from 'next-translate/useTranslation';
 import AuthService from '../../services/AuthService';
 import FieldWrapper from '../../components/Form/FieldWrapper';
 import { EmailInput } from '../../components/Form/Inputs';
-
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import Loader from '../../components/Loader';
+import CTALink from '../../components/CTALink';
 
 const ConfirmAccount = () => {
     const router = useRouter();
     const { token } = router.query;
+    const { t } = useTranslation()
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const [activated, setActivated] = useState(false);
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
@@ -30,11 +33,16 @@ const ConfirmAccount = () => {
         );
     };
 
+    console.log(token);
+    console.log(activated);
+
     useEffect(() => {
         if (!token) return;
         AuthService.confirmAccount(token)
-            .then(() => {
-                router.push('/auth/callback?redirect=/auth/login');
+            .then(doc => {
+                console.log(doc);
+                dispatchModal({ msg: 'Account successfully activated' });
+                setActivated(true);
             })
             .catch(err => {
                 const action = err.name === 'AlreadyActivatedError' ? 'already-activated' : 'activation-invalid';
@@ -66,9 +74,18 @@ const ConfirmAccount = () => {
                 </Row>
             </>
         );
-    } else {
-        return <Loader/>;
+    } else if (activated) {
+        return (
+            <Container>
+                <CTALink
+                    title={t('layout:login')}
+                    href="/auth/login'"
+                    className="cta_nav_link"
+                />
+            </Container>
+        );
     }
+    return <Loader/>;
 };
 
 export default ConfirmAccount;

@@ -18,9 +18,9 @@ const Footer = () => {
         UsersService.subscribeNewsletter(data)
             .then(() => {
                 if (data?.active) {
-                    dispatchModal({ msg: 'You succcessufully suscribed to our newsletter' })
+                    dispatchModal({ msg: 'You successfully suscribed to our newsletter' })
                 } else {
-                    dispatchModal({ msg: 'You succcessufully unsuscribed from our newsletter' })
+                    dispatchModal({ msg: 'You successfully unsuscribed from our newsletter' })
                 }
             })
             .catch(err => {

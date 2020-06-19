@@ -21,8 +21,6 @@ import appWithI18n from '../components/Locales/appWithI18n';
 
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;
-    console.log(pageProps);
-
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles && jssStyles.parentNode) {

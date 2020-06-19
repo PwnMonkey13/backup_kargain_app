@@ -40,7 +40,7 @@ const Comments = ({ announceRaw }) => {
                 message,
             });
             setDoneSubmitting(true);
-            dispatchModal({ msg: 'comment added successufully' });
+            dispatchModal({ msg: 'comment added successfully' });
             setComments(comments => [
                 ...comments,
                 comment,
@@ -61,7 +61,7 @@ const Comments = ({ announceRaw }) => {
                 message,
             });
             setDoneSubmitting(true);
-            dispatchModal({ msg: 'response added successufully' });
+            dispatchModal({ msg: 'response added successfully' });
             setComments(comments => [
                 ...comments.slice(0, indexComment),
                 updatedComment,

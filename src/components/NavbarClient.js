@@ -67,18 +67,12 @@ const NewAdButtonCTA = () => {
 };
 
 const NavbarAction = () => {
-    const theme = useTheme();
-    const { t, lang } = useTranslation();
-    const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
-        defaultMatches: true,
-    });
-
+    const { t } = useTranslation();
     return (
-        <Nav navbar style={{ flex: 1 }}>
+        <Nav navbar className="flex-row-nav my-2" style={{ flex: 1 }}>
             <NavItem className="p-2">
                 <NewAdButtonCTA/>
             </NavItem>
-
             <NavItem className="p-2">
                 <form method="GET" action="/search">
                     <FormGroup className='form-inline search-header-wrapper m-auto'>
@@ -209,7 +203,7 @@ const LoggedInUserNav = () => {
     };
 
     return (
-        <Nav navbar className="flex-row-nav">
+        <Nav navbar className="flex-row-nav my-2">
             <DropdownSwitchLang/>
             <DropdownNotifs isOpen={state.isOpen1} keyName="isOpen1" toggle={toggle}/>
             <DropdownUser isOpen={state.isOpen2} keyName="isOpen2" toggle={toggle}/>

@@ -6,11 +6,14 @@ const handleResponse = response => {
                 return json;
             })
             .catch(err => {
-                const error = new Error();
-                error.statusCode = err.code || response.status;
-                error.name = err.name || 'UnknownError';
-                error.message = err.message || 'Unknown Error';
-                throw error;
+                if(Object.keys(err)){
+                    const error = new Error();
+                    error.statusCode = err.code || response.status;
+                    error.name = err.name || 'UnknownError';
+                    error.message = err.message || 'Unknown Error';
+                    throw error;
+                }
+                throw 'Something failed on the server'
             });
     } else {
         let msg = null;

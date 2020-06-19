@@ -3,6 +3,7 @@ import { Col, Row } from 'reactstrap';
 import clsx from 'clsx';
 import { NextSeo } from 'next-seo';
 import useTranslation from 'next-translate/useTranslation';
+import config from '../config/config'
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import PaginateResultsSituation from '../components/PaginateResultsSituation';
 import PaginateResults from '../components/PaginateResults';
@@ -107,13 +108,13 @@ const Index = (props) => {
                 description="Vos meilleurs annonces automobiles"
             />
 
-            <div className="filters_container">
-                <section className="cd-tab-filter-wrapper">
-                    <div className={clsx('cd-tab-filter', filtersOpened && 'filter-is-visible')}>
-                        <Sorters updateSorter={updateSorter}/>
-                    </div>
-                </section>
+            <section className="cd-tab-filter-wrapper">
+                <div className={clsx('cd-tab-filter', filtersOpened && 'filter-is-visible')}>
+                    <Sorters updateSorter={updateSorter}/>
+                </div>
+            </section>
 
+            <div className="filters_container">
                 <div className={clsx('cd-filter-trigger', 'filter_absolute_out', filtersOpened && 'filter-is-visible')}
                      onClick={() => toggleOpenFilters()}>
                     <img src="/images/svg/icon_filter_white.svg" alt=""/>

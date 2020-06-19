@@ -149,7 +149,7 @@ const Edit = () => {
                 setUser(updatedUser);
                 updateRawUser(updatedUser);
                 dispatchModal({
-                    msg: 'User successufully updated',
+                    msg: 'User successfully updated',
                 });
             }).catch(err => {
                 dispatchModalError({ err });

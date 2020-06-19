@@ -19,7 +19,6 @@ $tab-filter-height: 50px;
 .filters_container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
 
     .cd-tab-filter-wrapper {
         background-color: $white;
@@ -143,14 +142,6 @@ $tab-filter-height: 50px;
 
             .cd-close-trigger {
                 opacity: 1;
-            }
-        }
-
-        @include MQ(L) {
-            width: 20%;
-
-            form {
-                padding: $tab-filter-height+20px 10%;
             }
         }
     }

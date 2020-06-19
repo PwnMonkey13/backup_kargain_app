@@ -20,7 +20,7 @@ const UtilityForm = (props) => {
                 const link = `/announces/${doc.slug}`;
                 dispatchModal({
                     type: 'success',
-                    msg: 'Announce created successufully',
+                    msg: 'Announce created successfully',
                     link,
                 });
                 router.push(link);

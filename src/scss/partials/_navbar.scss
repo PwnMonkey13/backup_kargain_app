@@ -281,8 +281,7 @@ header {
 #dropdown-notifications{
     position: absolute;
     right: 0;
-    top: 160%;
-    width: 500px;
+    width: 300px;
     z-index: 1000;
     min-width: 10rem;
     margin: .125rem 0 0;
@@ -321,9 +320,8 @@ header {
             }
         }
 
-        .navbar-icons-wrapper-notifications {
-            margin: 0 12px;
-            position: relative;
+        #dropdown-notifications{
+            left: 0;
         }
 
         li.cta_nav_link {

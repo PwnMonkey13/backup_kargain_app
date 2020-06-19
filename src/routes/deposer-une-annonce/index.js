@@ -6,6 +6,7 @@ import VehicleTypeSelectorStep from '../../components/Vehicles/VehicleTypeSelect
 import AdTypeSelectorStep from '../../components/Vehicles/AdTypeSelectorStep';
 import clsx from 'clsx';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import useTranslation from 'next-translate/useTranslation';
 
 const path = require('path');
 
@@ -27,6 +28,7 @@ const useStyles = makeStyles(() => ({
 const Page = () => {
     const router = useRouter();
     const classes = useStyles();
+    const { t } = useTranslation();
     const [adType, setAdType] = useState(null);
     const [vehicleType, setVehicleType] = useState(null);
 

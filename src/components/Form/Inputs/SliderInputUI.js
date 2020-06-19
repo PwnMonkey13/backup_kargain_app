@@ -25,9 +25,9 @@ const RangeSlider = ({ name, rules, control, errors, ...props }) => {
                         min={props.min}
                         max={props.max}
                         valueLabelDisplay="on"
-                        ValueLabelComponent={(innerProps) => <ValueLabelComponent
-                            suffix={props.suffix} {...innerProps}
-                        />}
+                        // ValueLabelComponent={(innerProps) => <ValueLabelComponent
+                        //     suffix={props.suffix} {...innerProps}
+                        // />}
                     />}
                 />
             </div>

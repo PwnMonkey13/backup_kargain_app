@@ -1,10 +1,9 @@
 const isProd = process.env.NODE_ENV === 'production';
-const env = isProd ? 'prod' : 'dev';
 const api = isProd ? 'https://kargain-api.now.sh/api' : 'http://localhost:8080/api';
 
 module.exports = {
+    env : process.env.NODE_ENV,
     isProd,
-    env,
     api,
     sso_providers: ['google', 'facebook'],
     stripe: {

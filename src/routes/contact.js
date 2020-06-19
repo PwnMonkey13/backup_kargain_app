@@ -16,7 +16,6 @@ const ContactPage = () => {
 
     const onSubmit = (form) => {
         const { email, message, subject } = form
-        console.log(form)
         UsersService.contact({
             email,
             message,
@@ -24,7 +23,7 @@ const ContactPage = () => {
         })
             .then(data => {
                 console.log(data)
-                dispatchModal({ msg: 'Your message have successufully been sent' })
+                dispatchModal({ msg: 'Your message have successfully been sent' })
             }).catch(err => {
                 console.log(err)
                 dispatchModalError({ err })
@@ -42,6 +41,7 @@ const ContactPage = () => {
                         }
                     `}
             </style>
+            <h1>{t('vehicles:contact-form')} </h1>
             <form className="p-3 mt-3 mx-auto"
                   onSubmit={handleSubmit(onSubmit)}>
 

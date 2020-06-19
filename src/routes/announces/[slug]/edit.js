@@ -242,7 +242,7 @@ const AnnounceEdit = ({ announceRaw, err }) => {
         AnnounceService.updateAnnounce(announce.getSlug, updates)
             .then((updatedAd) => {
                 dispatchModal({
-                    msg: 'Ad successufully updated',
+                    msg: 'Ad successfully updated',
                 });
             }).catch(err => {
                 dispatchModalError({ err });
