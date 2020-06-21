@@ -5,7 +5,6 @@
   "author": "Girauo Nicolas",
   "private": true,
   "repository": "https://github.com/rayconnection/kargain_app",
-  "main": "index.js",
   "prettier": {
     "singleQuote": true,
     "trailingComma": "es5",
