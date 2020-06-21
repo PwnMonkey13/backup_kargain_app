@@ -38,7 +38,6 @@ const nextConfig = {
         GOOGLE_STATIC_API_KEY: process.env.GOOGLE_STATIC_API_KEY,
         GOOGLE_SSO_CLIENT_ID: process.env.GOOGLE_SSO_CLIENT_ID,
         FACEBOOK_SSO_APP_ID: process.env.FACEBOOK_SSO_APP_ID,
-        SENTRY_DSN: process.env.SENTRY_DSN,
     },
     webpack: (config) => {
         // XXX See https://github.com/zeit/next.js/blob/canary/examples/with-sentry-simple/next.config.js

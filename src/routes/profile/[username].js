@@ -55,7 +55,7 @@ const Profile = ({ profileRaw, ...props }) => {
                     <AvatarPreview src={profile.getAvatar}/>
                 </Col>
                 <Col md={10}>
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between mt-2">
                         <div className="d-flex">
                             <h2>{profile.getFullName}</h2>
                             <div className="mx-2 float-left">

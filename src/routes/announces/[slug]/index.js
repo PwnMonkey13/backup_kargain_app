@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { NextSeo } from 'next-seo';
 import { Col, Container, Row } from 'reactstrap';
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Announce = ({ slug, announceRaw, err }) => {
+const Announce = ({ slug, announceRaw, err, ...props }) => {
     const refImg = useRef();
     const theme = useTheme();
     const classes = useStyles();
@@ -58,7 +58,6 @@ const Announce = ({ slug, announceRaw, err }) => {
     const { dispatchModalError } = useContext(ModalDialogContext);
     const announce = new AnnounceClass(announceRaw);
     const { t, lang } = useTranslation();
-
     const [likesCounter, setLikesCounter] = useState(announce.getLikesLength);
     const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
@@ -272,8 +271,8 @@ const Announce = ({ slug, announceRaw, err }) => {
 
 export async function getServerSideProps (ctx) {
     const { slug } = ctx.query;
+    const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
     try {
-        const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
         const announceRaw = await AnnounceService.getAnnounceBySlugSSR(slug, additionalHeaders);
         return {
             props: {
@@ -284,6 +283,7 @@ export async function getServerSideProps (ctx) {
     } catch (err) {
         return {
             props: {
+                slug,
                 err: {
                     message: err?.message ?? null,
                     statusCode: err?.statusCode ?? 404,

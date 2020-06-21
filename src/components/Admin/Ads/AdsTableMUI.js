@@ -53,12 +53,20 @@ const AdsTable = () => {
             }
         },
         {
+            title: 'Activated',
+            filtering: false,
+            grouping: false,
+            searchable: true,
+            sorting: true,
+            render: row => StatusBullet(row?.activated),
+        },
+        {
             title: 'Status',
             filtering: false,
             grouping: false,
             searchable: true,
             sorting: true,
-            render: row => StatusBullet(row.status),
+            render: row => StatusBullet(row?.status),
         },
         {
             title: 'Avatar',
