@@ -10,17 +10,12 @@
     "trailingComma": "es5",
     "printWidth": 120
   },
-  "engines": {
-    "node": "10"
-  },
   "scripts": {
     "clean": "rimraf dist",
     "dev": "yarn clean && yarn next-translate && next",
     "start": "next start",
     "build": "rimraf dist && next-translate && next build",
-    "deploy": "yarn build && yarn push",
-    "ignore-engine": "yarn config set ignore-engines true",
-    "push": "yarn ignore-engine && firebase deploy --only functions,hosting --debug",
+    "deploy": "vercel --prod",
     "build:a": "cross-env ANALYZE=true next build",
     "analyse": "cat dist/build/stats.txt"
   },
@@ -151,6 +146,6 @@
     "tslint-config-airbnb": "^5.11.2",
     "typescript": "^3.8.3",
     "url-loader": "^4.1.0",
-    "webpack-bundle-analyzer": "latest"
+    "webpack-bundle-analyzer": "^3.8.0"
   }
 }

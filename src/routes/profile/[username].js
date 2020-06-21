@@ -199,18 +199,21 @@ const TabsContainer = ({ profile, isCurrentLoggedUser }) => {
 
 export async function getServerSideProps (ctx) {
     const { username } = ctx.query;
+    const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
     try {
-        const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
         const profileRaw = await UsersService.getUserByUsernameSSR(username, additionalHeaders);
         return {
             props: {
                 username,
+                additionalHeaders,
                 profileRaw,
             },
         };
     } catch (err) {
         return {
             props: {
+                additionalHeaders,
+                username,
                 err: {
                     message: err?.message ?? null,
                     statusCode: err?.statusCode ?? 404,

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { NextSeo } from 'next-seo';
 import { Col, Container, Row } from 'reactstrap';
@@ -277,6 +277,7 @@ export async function getServerSideProps (ctx) {
         return {
             props: {
                 slug,
+                additionalHeaders,
                 announceRaw,
             },
         };
@@ -284,6 +285,7 @@ export async function getServerSideProps (ctx) {
         return {
             props: {
                 slug,
+                additionalHeaders,
                 err: {
                     message: err?.message ?? null,
                     statusCode: err?.statusCode ?? 404,
