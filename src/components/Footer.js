@@ -109,7 +109,7 @@ const Footer = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/static/privacy" prefetch={false}>
+                                        <Link href="/static/confidentiality" prefetch={false}>
                                             <a>{t('layout:privacy')}</a>
                                         </Link>
                                     </li>
@@ -175,7 +175,7 @@ const Footer = () => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/static/privacy" prefetch={false}>
+                                        <Link href="/static/confidentiality" prefetch={false}>
                                             <a>{t('layout:privacy')}</a>
                                         </Link>
                                     </li>

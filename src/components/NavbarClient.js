@@ -2,21 +2,40 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import Link from 'next-translate/Link';
 import useTranslation from 'next-translate/useTranslation';
-import clientSideLang from 'next-translate/clientSideLang';
-import { Collapse, FormGroup, Input, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
+import { Collapse, FormGroup, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
+import { useTheme } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import ChatIcon from '@material-ui/icons/Chat';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import SearchIcon from '@material-ui/icons/Search';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import FaceIcon from '@material-ui/icons/Face';
 import Badge from '@material-ui/core/Badge';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/styles';
 import { getLogo } from '../libs/utils';
 import { useAuth } from '../context/AuthProvider';
 import DropdownSwitchLang from './Locales/DropdownSwitchLang';
 import CTALink from './CTALink';
+
+const useStyles = makeStyles(theme => ({
+    navBarClient: {
+        display: 'flex',
+        flex: 1,
+        width: 'min-content',
+    },
+
+    inputSearch: {
+        width: '300px',
+
+        [theme.breakpoints.down('md')]: {
+            width: 'unset',
+        },
+    },
+}));
 
 const NavbarClient = () => {
     const { isAuthenticated } = useAuth();
@@ -24,24 +43,23 @@ const NavbarClient = () => {
     const toggleNavbar = () => setCollapsed(!collapsed);
 
     return (
-        <header className="header bg-light">
+        <header className="header">
             <Navbar light expand="md" className="navbar p-2 position-relative">
                 <NavbarBrand href="/">
                     <img src={getLogo()} width="150" alt="logo"/>
                 </NavbarBrand>
-
+                <NavbarAction/>
                 <div className="d-flex navbar-menu" id="open-navbar1">
+
                     <Collapse isOpen={collapsed} navbar>
-                        <NavbarAction/>
                         {isAuthenticated ?
                             <LoggedInUserNav/> :
                             <VisitorNav/>
                         }
-
                     </Collapse>
 
                     <NavbarToggler
-                        className="mr-2"
+                        className="m-2"
                         style={{
                             position: 'absolute',
                             top: '10px',
@@ -68,20 +86,36 @@ const NewAdButtonCTA = () => {
 
 const NavbarAction = () => {
     const { t } = useTranslation();
+    const classes = useStyles();
+    const theme = useTheme();
+    const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
+        defaultMatches: true,
+    });
+
     return (
-        <Nav navbar className="flex-row-nav my-2" style={{ flex: 1 }}>
-            <NavItem className="p-2">
-                <NewAdButtonCTA/>
-            </NavItem>
+        <Nav className={clsx(!isDesktop && 'd-inline-block', 'my-2')}>
+            {isDesktop && (
+                <NavItem className="p-2">
+                    <NewAdButtonCTA/>
+                </NavItem>
+            )}
+
             <NavItem className="p-2">
                 <form method="GET" action="/search">
-                    <FormGroup className='form-inline search-header-wrapper m-auto'>
-                        <Input
-                            className="form-control"
-                            type="search"
+
+                    <FormGroup className="form-inline search-header-wrapper m-auto position-relative">
+                        <input
                             name="query"
-                            id="search"
-                            placeholder={t('layout:search')}/>
+                            type="search"
+                            placeholder={t('layout:search')}
+                            className={clsx('form-control', classes.inputSearch)}
+                            id="search_input"
+                        />
+
+                        <div className="feedback-icon">
+                            <SearchIcon/>
+                        </div>
+
                         <input
                             type="submit"
                             tabIndex="-1"
@@ -94,7 +128,6 @@ const NavbarAction = () => {
                         />
                     </FormGroup>
                 </form>
-
             </NavItem>
         </Nav>
     );
@@ -130,19 +163,14 @@ const DropdownNotifs = ({ isOpen, keyName, toggle }) => {
 };
 
 const DropdownUser = ({ isOpen, keyName, toggle }) => {
-    const { authenticatedUser } = useAuth();
+    const { authenticatedUser, logout } = useAuth();
     const { t } = useTranslation();
 
     return (
         <li className="nav-item navbar-dropdown p-2" data-dropdown="dropdownUser">
-            {authenticatedUser.getAvatar &&
-            <img className="dropdown-toggler rounded-circle"
-                 width="40"
-                 height="40"
-                 src={authenticatedUser.getAvatar}
-                 alt="avatar"
-                 onClick={() => toggle(keyName)}
-            />}
+            <span className="dropdown-toggler rounded-circle" onClick={() => toggle(keyName)}>
+                <PermIdentityIcon/>
+            </span>
 
             <ul className={clsx('dropdown', isOpen && 'show')} id="dropdownUser">
                 {authenticatedUser.isAdmin && (
@@ -153,7 +181,7 @@ const DropdownUser = ({ isOpen, keyName, toggle }) => {
                     </li>
                 )}
                 <li className="px-0 dropdown-item">
-                    <Link href={`/profile/${authenticatedUser.getUsername}`} prefetch={false}>
+                    <Link href={authenticatedUser.getProfileLink} prefetch={false}>
                         <a className="nav-link text-left"><FaceIcon/>
                             <span className="m-1">
                                 {t('layout:my-profile')}
@@ -162,7 +190,16 @@ const DropdownUser = ({ isOpen, keyName, toggle }) => {
                     </Link>
                 </li>
                 <li className="px-0 dropdown-item">
-                    <Link href="/profile/edit" prefetch={false}>
+                    <Link href="/profile/messages" prefetch={false}>
+                        <a className="nav-link text-left"><ChatIcon/>
+                            <span className="m-1">
+                                 {t('layout:messaging')}
+                            </span>
+                        </a>
+                    </Link>
+                </li>
+                <li className="px-0 dropdown-item">
+                    <Link href={authenticatedUser.getProfileEditLink} prefetch={false}>
                         <a className="nav-link text-left"><SettingsIcon/>
                             <span className="m-1">
                                  {t('layout:settings')}
@@ -171,11 +208,12 @@ const DropdownUser = ({ isOpen, keyName, toggle }) => {
                     </Link>
                 </li>
                 <li className="px-0 dropdown-item">
-                    <Link href="/auth/logout" prefetch={false}>
-                        <a className="nav-link text-left"><ExitToAppIcon/>
+                    <Link href="" prefetch={false}>
+                        <a className="nav-link text-left" onClick={() => logout()}>
+                            <ExitToAppIcon/>
                             <span className="m-1">
-                                  {t('layout:logout')}
-                            </span>
+                          {t('layout:logout')}
+                        </span>
                         </a>
                     </Link>
                 </li>
@@ -212,7 +250,6 @@ const LoggedInUserNav = () => {
 };
 
 const VisitorNav = () => {
-    const lang = clientSideLang();
     const { t } = useTranslation();
 
     return (

@@ -1,23 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Col, Row } from 'reactstrap';
+import { Col, Container, Row } from 'reactstrap';
 import clsx from 'clsx';
 import { NextSeo } from 'next-seo';
+import Typography from '@material-ui/core/Typography';
+import FindInPageIcon from '@material-ui/icons/FindInPage';
 import useTranslation from 'next-translate/useTranslation';
-import config from '../config/config'
-import { ModalDialogContext } from '../context/ModalDialogContext';
 import PaginateResultsSituation from '../components/PaginateResultsSituation';
 import PaginateResults from '../components/PaginateResults';
-import AnnounceService from '../services/AnnounceService';
 import Sorters from '../components/HomeFilters/Sorters';
 import AnnounceCard from '../components/AnnounceCard';
-import { useAuth } from '../context/AuthProvider';
 import Filters from '../components/HomeFilters/Filters';
+import AnnounceService from '../services/AnnounceService';
+import { useAuth } from '../context/AuthProvider';
+import { ModalDialogContext } from '../context/ModalDialogContext';
 
 const Index = (props) => {
     const { dispatchModalError } = useContext(ModalDialogContext);
     const { isAuthenticated } = useAuth();
-    const [filtersOpened, toggleFilters] = useState(false);
-    const { t } = useTranslation();
+    const [filtersOpened ] = useState(false);
     const [state, setState] = useState({
         loading: false,
         sorter: {},
@@ -26,10 +26,6 @@ const Index = (props) => {
         announces: [],
         total: 0,
     });
-
-    const toggleOpenFilters = () => {
-        toggleFilters(open => !open);
-    };
 
     const fetchAnnounces = async () => {
         console.log('fetchAnnounces');
@@ -102,7 +98,7 @@ const Index = (props) => {
     };
 
     return (
-        <>
+        <Container fluid>
             <NextSeo
                 title="Kargain"
                 description="Vos meilleurs annonces automobiles"
@@ -114,53 +110,54 @@ const Index = (props) => {
                 </div>
             </section>
 
-            <div className="filters_container">
-                <div className={clsx('cd-filter-trigger', 'filter_absolute_out', filtersOpened && 'filter-is-visible')}
-                     onClick={() => toggleOpenFilters()}>
-                    <img src="/images/svg/icon_filter_white.svg" alt=""/>
-                </div>
-
-                <div className={clsx('cd-filter', filtersOpened && 'filter-is-visible')}>
-                    <div className="cd-filters-top" onClick={() => toggleOpenFilters()}>
-                        <div className={clsx('cd-filter-trigger', filtersOpened && 'filter-is-visible')}>
-                            <img src="/images/svg/icon_filter_white.svg" alt=""/>
-                        </div>
-                        <span className="cd-close-trigger"/>
-                    </div>
+            <Row>
+                <Col sm={12} md={4}>
+                    <Typography component="p" variant="h2">{state.announces.length} résultats de recherche</Typography>
                     <Filters updateFilters={updateFilters}/>
-                </div>
+                </Col>
 
-                <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
-
-                    <Row className="my-2 d-flex justify-content-center">
-                        {state.announces ? state.announces.map((announceRaw, index) => (
-                            <Col key={index} sm={12} md={6} lg={6} xl={6} className="my-2">
-                                <AnnounceCard {...{
-                                    announceRaw,
-                                    isAuthenticated,
-                                    detailsFontSize: '13px',
-                                }}/>
-                            </Col>
-                        )) : (
-                            <p>{(t('vehicles:no-ads-found'))}</p>
+                <Col sm={12} md={8}>
+                    <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
+                        {state.announces.length ? (
+                            <Row className="my-2 d-flex justify-content-center">
+                                {state.announces.map((announceRaw, index) => (
+                                    <Col key={index} sm={12} md={12} className="my-2">
+                                        <AnnounceCard {...{
+                                            announceRaw,
+                                            isAuthenticated,
+                                            detailsFontSize: '13px',
+                                        }}/>
+                                    </Col>
+                                ))}
+                            </Row>
+                        ) : (
+                            <div className="d-flex flex-column my-2 mx-auto">
+                                <FindInPageIcon fontSize="large"/>
+                                <Typography variant="h3">
+                                    No result found
+                                </Typography>
+                                <p>
+                                    Try to change filters
+                                </p>
+                            </div>
                         )}
-                    </Row>
 
-                    <PaginateResultsSituation
-                        count={state.announces.length}
-                        page={state.page}
-                    />
+                        <PaginateResultsSituation
+                            count={state.announces.length}
+                            page={state.page}
+                        />
 
-                    <PaginateResults
-                        total={state.total}
-                        limit={props.size}
-                        pageCount={props.paginate}
-                        currentPage={state.page}
-                        handlePageChange={handlePageChange}
-                    />
-                </section>
-            </div>
-        </>
+                        <PaginateResults
+                            total={state.total}
+                            limit={props.size}
+                            pageCount={props.paginate}
+                            currentPage={state.page}
+                            handlePageChange={handlePageChange}
+                        />
+                    </section>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 

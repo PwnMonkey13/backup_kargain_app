@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { Col, Row } from 'reactstrap';
+import { Col, Container, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import useTranslation from 'next-translate/useTranslation';
 import AuthService from '../../services/AuthService';
-import Divider from '../../components/Divider';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../components/Form/Inputs';
 import FieldWrapper from '../../components/Form/FieldWrapper';
@@ -11,7 +10,6 @@ import GeoStreetsInput from '../../components/Form/Inputs/GeoAddressSearchInput'
 import Typography from '@material-ui/core/Typography';
 import SelectCountryFlags from '../../components/Form/Inputs/SelectCountryFlags';
 import Spacer from '../../components/Spacer';
-import CTALink from '../../components/CTALink';
 import SSOProviders from '../../components/SSOProviders';
 import useAddress from '../../hooks/useAddress';
 
@@ -21,10 +19,10 @@ const formConfig = {
 };
 
 const RegisterPro = () => {
-    const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig);
+    const { control, errors, getValues, watch, handleSubmit } = useForm(formConfig);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [, , coordinates] = useAddress();
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
 
     const onSubmit = (form) => {
         const { confirm, confirmPwd, ...data } = form;
@@ -42,36 +40,15 @@ const RegisterPro = () => {
     const countrySelect = watch('countrySelect');
 
     return (
-        <>
+        <Container>
             <h1>{t('vehicles:register-pro')}</h1>
             <Row>
-                <Col sm="12" md="5">
-                    <div className="d-flex flex-column mx-auto" style={{ maxWidth : '400px'}}>
-                        <SSOProviders/>
-                        <Divider text="ou"/>
-                        <CTALink
-                            className="my-2"
-                            title={t('vehicles:login')}
-                            href="/auth/login"
-                        />
-                        <CTALink
-                            className="my-2"
-                            title={t('vehicles:register')}
-                            href="/auth/register"
-                        />
-                    </div>
-                </Col>
-
-                <Col className="m-auto" sm="12" md="7">
-                    <style jsx>{`
-                        form{
-                            border-radius : 5px; 
-                            border : 1px solid gainsboro;
-                            max-width : 500px
-                        }
-                    `}
-                    </style>
-                    <form className="p-3 mt-3 mx-auto" onSubmit={handleSubmit(onSubmit)}>
+                <Col className="m-auto" sm="12" md="6">
+                    <SSOProviders/>
+                    <form className="p-3 mx-auto" style={{
+                        borderRadius: '5px',
+                        maxWidth: '500px',
+                    }}>
 
                         <Typography component="h3" variant="h3">Votre société</Typography>
                         <FieldWrapper label="Raison sociale">
@@ -216,7 +193,7 @@ const RegisterPro = () => {
                     </form>
                 </Col>
             </Row>
-        </>
+        </Container>
     );
 };
 

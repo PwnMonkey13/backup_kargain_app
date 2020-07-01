@@ -27,7 +27,7 @@ const Layout = ({ children }) => {
 };
 
 const MainBody = ({ children }) => (
-    <main className="main" style={{ minHeight: '100vh' }}>
+    <main className="main">
         {children}
     </main>
 );

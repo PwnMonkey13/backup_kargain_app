@@ -8,8 +8,8 @@ import startsWithLang from 'next-translate/_helpers/startsWithLang';
 
 const DropdownSwitchLang = () => {
         const router = useRouter();
-        const { allLanguages } = i18nConfig;
-        const { lang } = useTranslation()
+        const { allLanguages, allLanguagesLabel } = i18nConfig;
+        const { lang } = useTranslation();
         const [open, setOpen] = useState(false);
         const replaceLang = href => startsWithLang(href, allLanguages)
             ? href.split('/').filter(part => part !== lang).join('/') || '/'
@@ -38,13 +38,15 @@ const DropdownSwitchLang = () => {
                                     prefetch={false}
                                     lang={lng}>
                                     <a className="nav-link text-left">
-                                        <img className="dropdown-toggler rounded-circle"
-                                             width="30"
-                                             height="30"
-                                             src={`/images/flags/${lng}.svg`}
-                                             alt={lng}
-                                             onClick={() => setOpen(open => !open)}
-                                        />
+                                        <div className="dropdown-toggler" onClick={() => setOpen(open => !open)}>
+                                            <img className="rounded-circle"
+                                                 width="30"
+                                                 height="30"
+                                                 src={`/images/flags/${lng}.svg`}
+                                                 alt={lng}
+                                            />
+                                            <span> {allLanguagesLabel[lng]} </span>
+                                        </div>
                                     </a>
                                 </Link>
                             </li>

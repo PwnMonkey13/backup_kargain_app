@@ -11,7 +11,7 @@ import config from '../config/config';
 const SSOProviders = memo(() => {
     const router = useRouter();
     const { redirect } = router.query;
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const { dispatchModalError } = useContext(ModalDialogContext);
 
@@ -23,7 +23,7 @@ const SSOProviders = memo(() => {
                 if (redirect) {
                     router.push(redirect);
                 } else {
-                    router.push(`/auth/callback?redirect=/profile/${user.username}`);
+                    router.push(`/auth/callback?redirect=/profile/${user?.username}`);
                 }
             }).catch(err => {
             setIsLoading(false);
@@ -71,10 +71,15 @@ const SSOProviders = memo(() => {
 
             <GoogleLogin
                 clientId={config.google.sso.CLIENT_ID}
-                buttonText={t('vehicles:login-google')}
                 onSuccess={responseGoogle}
                 onFailure={badResponseGoogle}
                 cookiePolicy={'single_host_origin'}
+                render={renderProps => (
+                    <button className="register-g" onClick={renderProps.onClick}>
+                        <img src="/images/fb.png" alt=""/>
+                        {t('layout:login-google')}
+                    </button>
+                )}
             />
 
             <FacebookLogin
@@ -85,7 +90,7 @@ const SSOProviders = memo(() => {
                 render={renderProps => (
                     <button className="register-fb" onClick={renderProps.onClick}>
                         <img src="/images/fb.png" alt=""/>
-                        {t('vehicles:login-facebook')}
+                        {t('layout:login-facebook')}
                     </button>
                 )}
             />

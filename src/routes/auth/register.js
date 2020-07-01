@@ -1,15 +1,14 @@
 import React, { useContext } from 'react';
-import { Col, Row } from 'reactstrap';
+import { Col, Container, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import useTranslation from 'next-translate/useTranslation';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import Divider from '../../components/Divider';
 import AuthService from '../../services/AuthService';
 import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../components/Form/Inputs';
 import FieldWrapper from '../../components/Form/FieldWrapper';
-import CTALink from '../../components/CTALink';
 import CTAButton from '../../components/CTAButton';
 import SSOProviders from '../../components/SSOProviders';
+import Divider from '../../components/Divider';
 
 const formConfig = {
     mode: 'onChange',
@@ -36,35 +35,15 @@ const RegisterPage = () => {
     };
 
     return (
-        <>
+        <Container>
             <h1>{t('vehicles:register')}</h1>
             <Row>
-                <Col sm="12" md="5">
-                    <div className="d-flex flex-column mx-auto" style={{ maxWidth: '400px' }}>
-                        <SSOProviders/>
-                        <Divider text="ou"/>
-                        <CTALink
-                            className="my-2"
-                            title={t('vehicles:login')}
-                            href="/auth/login"
-                        />
-                        <CTALink
-                            className="my-2"
-                            title={t('vehicles:register-pro')}
-                            href="/auth/register-pro"
-                        />
-                    </div>
-                </Col>
-                <Col className="m-auto" sm="12" md="6" lg="7">
-                    <style jsx>{`
-                        form{
-                            border-radius : 5px; 
-                            border : 1px solid gainsboro;
-                            max-width : 500px
-                        }
-                    `}
-                    </style>
-                    <form className="p-3 mt-3 mx-auto"
+                <Col className="m-auto" sm="12" md="6">
+                    <SSOProviders/>
+                    <form className="p-3 mx-auto" style={{
+                        borderRadius: '5px',
+                        maxWidth: '500px',
+                    }}
                           onSubmit={handleSubmit(onSubmit)}>
                         <FieldWrapper label={t('vehicles:firstname')}>
                             <TextInput
@@ -149,7 +128,7 @@ const RegisterPage = () => {
                     </form>
                 </Col>
             </Row>
-        </>
+        </Container>
     );
 };
 

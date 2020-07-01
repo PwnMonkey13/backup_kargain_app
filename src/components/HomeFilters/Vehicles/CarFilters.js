@@ -1,14 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import RoomIcon from '@material-ui/icons/Room';
 import Typography from '@material-ui/core/Typography';
 import useTranslation from 'next-translate/useTranslation';
+import { Col } from 'reactstrap';
 import { GeoCitiesInput, SelectInput, SliderInput, TextInput } from '../../Form/Inputs';
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
 import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
 import FieldWrapper from '../../Form/FieldWrapper';
 import useAddress from '../../../hooks/useAddress';
-import Header from '../../Header';
 
 import {
     CheckboxOptionsEquipments,
@@ -20,6 +18,7 @@ import {
     RadioTypeFunction,
     RadioVehicleGeneralState,
 } from '../../Vehicles/car/form.data';
+import NumberInputMUI from '../../Form/Inputs/NumberInputMUI';
 
 const CarFilters = ({ control, watch, errors }) => {
     const [, address, coordinates] = useAddress();
@@ -100,7 +99,7 @@ const CarFilters = ({ control, watch, errors }) => {
             <SliderInput
                 classNames="my-4 mt-2"
                 name="price"
-                defaultValue={[0, 200000]}
+                // defaultValue={[0, 200000]}
                 min={0}
                 max={200000}
                 step={1000}
@@ -147,7 +146,6 @@ const CarFilters = ({ control, watch, errors }) => {
                 <SliderInput
                     classNames="my-4 mt-2"
                     name="vehicleEngine.cylinder"
-                    defaultValue={[1, 20]}
                     min={1}
                     max={20}
                     step={1}
@@ -160,7 +158,6 @@ const CarFilters = ({ control, watch, errors }) => {
             <SliderInput
                 classNames="my-4 mt-2"
                 name="mileage"
-                defaultValue={[0, 200000]}
                 min={0}
                 max={200000}
                 step={1000}
@@ -173,7 +170,6 @@ const CarFilters = ({ control, watch, errors }) => {
             <SliderInput
                 classNames="my-4 mt-2"
                 name="power.kw"
-                defaultValue={[0, 200]}
                 min={0}
                 max={200}
                 step={1}
@@ -188,15 +184,6 @@ const CarFilters = ({ control, watch, errors }) => {
                 errors={errors}
                 control={control}
             />
-
-            {address && (
-                <>
-                    <Typography component="span" gutterBottom>{t('vehicles:approximate-address')}</Typography>
-                    <Header p strong className="my-2">
-                        <RoomIcon/> : {address}
-                    </Header>
-                </>
-            )}
 
             <Typography component="span" gutterBottom>{t('vehicles:city')}</Typography>
             {countrySelect && countrySelect.value === 'FR' ? (
@@ -216,7 +203,6 @@ const CarFilters = ({ control, watch, errors }) => {
                             name="address.city"
                             errors={errors}
                             control={control}
-                            rules={{ required: 'Required' }}
                         />
                     </FieldWrapper>
                 </>
@@ -226,7 +212,6 @@ const CarFilters = ({ control, watch, errors }) => {
             <SliderInput
                 name="radius"
                 classNames="mb-2 my-4"
-                defaultValue={0}
                 min={0}
                 max={500}
                 step={5}
@@ -257,7 +242,6 @@ const CarFilters = ({ control, watch, errors }) => {
             <SliderInput
                 classNames="my-4 mt-2"
                 name="consumption.gkm"
-                defaultValue={[0, 200]}
                 min={0}
                 max={200}
                 step={1}
@@ -270,7 +254,6 @@ const CarFilters = ({ control, watch, errors }) => {
             <SliderInput
                 classNames="my-4 mt-2"
                 name="doors"
-                defaultValue={[1, 10]}
                 min={1}
                 max={10}
                 step={1}
@@ -282,7 +265,6 @@ const CarFilters = ({ control, watch, errors }) => {
             <SliderInput
                 classNames="my-4 mt-2"
                 name="seats"
-                defaultValue={[1, 10]}
                 min={1}
                 max={10}
                 step={1}
@@ -293,8 +275,9 @@ const CarFilters = ({ control, watch, errors }) => {
             <Typography component="span">{t('vehicles:paint')}</Typography>
             <SelectInput
                 name="paint"
-                options={RadioChoicesPaints}
                 control={control}
+                options={RadioChoicesPaints}
+                citycontrol={control}
                 errors={errors}
             />
 
