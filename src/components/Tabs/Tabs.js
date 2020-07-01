@@ -46,7 +46,7 @@ const Tabs = ({ defaultActive, children, id }) => {
                 })}
             </ul>
 
-            <div className="tab-content tab-content-profile">
+            <div className="tab-content">
                 {tabs && tabs.map((item, index) => {
                     return <TabsItem
                         key={index}

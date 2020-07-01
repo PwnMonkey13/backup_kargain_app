@@ -20,7 +20,7 @@ function removeTrailingSlash (path = '') {
 
 export default function appWithI18n (AppToTranslate, config = {}) {
     function AppWithTranslations (props) {
-        const { lang, namespaces, defaultLanguage } = props;
+        const { lang, defaultLanguage } = props;
         const { defaultLangRedirect } = config;
         // console.log('props');
         // console.log(props);
@@ -28,7 +28,6 @@ export default function appWithI18n (AppToTranslate, config = {}) {
         return (
             <I18nProvider
                 lang={lang}
-                // namespaces={namespaces}
                 internals={{
                     defaultLangRedirect,
                     defaultLanguage,

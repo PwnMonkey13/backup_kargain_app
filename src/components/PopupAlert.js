@@ -67,10 +67,6 @@ const PopupAlert = () => {
                    contentClassName={state.err ? classes.modalWarning : classes.modalSuccess}
                    isOpen={state.active}
                    toggle={toggleModal}>
-                <button type="button" onClick={toggleModal} className={clsx('svgHoverScale', classes.modalClose)}
-                        aria-label="close-modal">
-                    <CloseIcon/>
-                </button>
                 <div className="modal-body">
                     <p> {getMessage()} </p>
                     {state.link && (

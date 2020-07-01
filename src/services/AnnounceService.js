@@ -3,13 +3,15 @@ import handleResponse from '../libs/handleResponse'
 import config from '../config/config'
 import queryString from 'query-string'
 
+const baseRoute = `${config.api}/announces`
+
 function getAnnounces (params = {}) {
     const qs = queryString.stringify(params, {
         arrayFormat: 'comma',
         skipNull: true,
         skipEmptyString: true,
     })
-    const url = `${config.api}/ads?${qs}`
+    const url = `${baseRoute}?${qs}`
     const requestOptions = {
         method: 'GET',
     }
@@ -24,7 +26,7 @@ function getAnnounces (params = {}) {
 }
 
 function getAnnouncesAll () {
-    const url = `${config.api}/ads/all`
+    const url = `${baseRoute}/all`
     const requestOptions = {
         method: 'GET',
         credentials: 'include',
@@ -45,7 +47,7 @@ function getAnnounceBySlug (slug) {
         credentials: 'include',
     }
 
-    const url = `${config.api}/ads/slug/${slug}`
+    const url = `${baseRoute}/slug/${slug}`
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => {
@@ -63,7 +65,7 @@ function getAnnounceBySlugSSR (slug, headers) {
         headers,
     }
 
-    const url = `${config.api}/ads/slug/${slug}`
+    const url = `${baseRoute}/slug/${slug}`
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
@@ -80,7 +82,7 @@ function createAnnounce (data) {
         body: JSON.stringify(data),
     }
 
-    const url = `${config.api}/ads`
+    const url = `${baseRoute}`
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
@@ -95,7 +97,7 @@ const confirmAnnounce = (token) => {
         credentials: 'include',
     }
 
-    const url = `${config.api}/ads/confirm/${token}`
+    const url = `${baseRoute}/confirm/${token}`
 
     return fetch(url, requestOptions)
         .then(handleResponse)
@@ -115,7 +117,7 @@ function updateAnnounce (slug, data) {
         body: JSON.stringify(data),
     }
 
-    const url = `${config.api}/ads/update/${slug}`
+    const url = `${baseRoute}/update/${slug}`
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
@@ -130,7 +132,7 @@ function removeAnnounce (slug) {
         credentials: 'include',
     }
 
-    const url = `${config.api}/ads/remove/${slug}`
+    const url = `${baseRoute}/remove/${slug}`
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
@@ -146,7 +148,7 @@ function uploadImages (slug, formData) {
         body: formData,
     }
 
-    const url = `${config.api}/ads/upload/${slug}`
+    const url = `${baseRoute}/upload/${slug}`
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
@@ -161,7 +163,7 @@ const addLikeLoggedInUser = (announceId) => {
         credentials: 'include',
     }
 
-    const url = `${config.api}/ads/addLike/${announceId}`
+    const url = `${baseRoute}/addLike/${announceId}`
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
@@ -176,7 +178,7 @@ const removeLikeLoggedInUser = (announceId) => {
         credentials: 'include',
     }
 
-    const url = `${config.api}/ads/removeLike/${announceId}`
+    const url = `${baseRoute}/removeLike/${announceId}`
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)

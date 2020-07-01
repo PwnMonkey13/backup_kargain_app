@@ -46,7 +46,7 @@ export default ({
     CD: 'Democratic Republic of the Congo',
     CK: 'Cook Islands',
     CR: 'Costa Rica',
-    CI: "Côte d'Ivoire",
+    CI: 'Côte d\'Ivoire',
     HR: 'Croatia',
     CU: 'Cuba',
     CW: 'Curaçao',
@@ -107,7 +107,7 @@ export default ({
     KR: 'South Korea',
     KW: 'Kuwait',
     KG: 'Kyrgyzstan',
-    LA: "Lao People's Democratic Republic",
+    LA: 'Lao People\'s Democratic Republic',
     LV: 'Latvia',
     LB: 'Lebanon',
     LS: 'Lesotho',
@@ -218,5 +218,5 @@ export default ({
     VI: 'Virgin Islands',
     YE: 'Yemen',
     ZM: 'Zambia',
-    ZW: 'Zimbabwe'
-})
+    ZW: 'Zimbabwe',
+});

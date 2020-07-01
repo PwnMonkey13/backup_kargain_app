@@ -17,8 +17,8 @@ const useStyles = makeStyles(() => ({
         listStyle: 'none',
         margin: '2px',
         padding: '5px',
-        backgroundColor: 'gainsboro',
         borderRadius: '10px',
+        fontWeight : 'bold'
     },
 }));
 

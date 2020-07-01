@@ -11,7 +11,7 @@ import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner';
 
 const CarForm = (props) => {
     const router = useRouter();
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
 
     const onFinalSubmit = form => {
@@ -57,8 +57,6 @@ const CarForm = (props) => {
             'manufacturer.year': 'Année',
         },
     ];
-
-    console.log('render car form');
 
     return (
         <FormWizard

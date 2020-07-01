@@ -89,13 +89,16 @@ export default () => {
     const theme = useTheme();
     const classes = useStyles();
     const router = useRouter();
+    const { t } = useTranslation();
     const { isAuthenticated } = useAuth();
     const { control, errors, handleSubmit } = useForm(formConfig);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [openLoginModal, toggleLoginModal] = useState(!isAuthenticated);
-    const isMobile = useMediaQuery(theme.breakpoints.up('sm'), {
+    const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true,
     });
+
+    console.log(isDesktop);
 
     const onSubmit = (form) => {
         const { email, password } = form;
@@ -121,7 +124,7 @@ export default () => {
     return (
         <div className={classes.popupOverlay}>
             <Row className={classes.popupContent}>
-                {!isMobile && (
+                {isDesktop && (
                     <Col sm={12} md={6}>
                         <div className={classes.wrapperLeft}>
                             <LeftBlock/>
@@ -129,7 +132,7 @@ export default () => {
                     </Col>
                 )}
 
-                <Col sm={12} md={isMobile ? 12 : 6}>
+                <Col sm={12} md={isDesktop ? 6 : 12}>
                     <div className={classes.wrapperForm}>
                         <div className="d-flex flex-column">
                             <SSOProviders/>
@@ -164,7 +167,7 @@ export default () => {
                                 <div className="mt-2 form-group">
                                     <CheckBoxInput
                                         name="confirm"
-                                        label="Se souvenir de moi"
+                                        label={t('layout:remember-me')}
                                         errors={errors}
                                         control={control}
                                     />
@@ -173,7 +176,7 @@ export default () => {
 
                                 <div className="submit">
                                     <CTAButton
-                                        title="Se connecter"
+                                        title={t('layout:login')}
                                         submit
                                     />
                                 </div>
@@ -181,7 +184,7 @@ export default () => {
 
                             <div className="d-block text-center">
                                 <Link href="/auth/reset-password">
-                                    <a>Mot de passe oublié</a>
+                                    <a>{t('layout:password-forgotten')}</a>
                                 </Link>
 
                             </div>
@@ -189,12 +192,12 @@ export default () => {
                             <Divider className="m-3"/>
                             <CTALink
                                 className="submit"
-                                title="Créer un compte"
+                                title={t('layout:register')}
                                 href="/auth/register"
                             />
                             <CTALink
                                 className="submit"
-                                title="S'enregistrer en tant que Pro"
+                                title={t('layout:register-pro')}
                                 href="/auth/register-pro"
                             />
                         </div>
