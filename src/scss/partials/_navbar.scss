@@ -9,6 +9,31 @@ $navbar-link-hover: $base-color;
 $navbar-dropdown-separator-color: #eee;
 $navbar-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.035);
 
+header {
+    z-index: 100;
+
+    .logo {
+        display: inline-block;
+        max-width: 14.375rem;
+        vertical-align: middle;
+    }
+
+    @media screen and (max-width: 49.9375em) {
+        .header .logo {
+            width: 10rem;
+        }
+    }
+}
+
+@media (min-width: 50em) {
+    header {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+    }
+}
+
 // Start navbar
 
 .navbar,
@@ -208,52 +233,50 @@ $navbar-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.035);
     }
 }
 
-header {
-    nav.navbar {
-        margin: auto;
-        padding: 0 1rem;
+nav.navbar {
+    margin: auto;
+    padding: 0 1rem;
 
-        .navbar-nav {
-            align-items: center;
-        }
+    .navbar-nav {
+        align-items: center;
+    }
 
-        .nav-item {
-            .nav-link {
-                &:hover {
-                    color: $blue;
-                    font-weight: bold;
-                }
-            }
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            right: 0;
-            left: unset;
-            margin: 0;
-            border-radius: 5px;
-            box-shadow: 0 0 23px 0 rgba(0, 0, 0, 0.11);
-            border: none;
-            outline: none;
-            transition: all .3s ease-in-out;
-        }
-
-        .btn-outline-primary {
-            padding: .5rem !important;
-
+    .nav-item {
+        .nav-link {
             &:hover {
-                color: white !important;
+                color: $blue;
+                font-weight: bold;
             }
         }
     }
 
-    .form-control[type=search] {
+    .dropdown-menu {
+        position: absolute;
+        right: 0;
+        left: unset;
+        margin: 0;
+        border-radius: 5px;
+        box-shadow: 0 0 23px 0 rgba(0, 0, 0, 0.11);
         border: none;
-        border-radius: 25px;
-        background: #eae9e9 no-repeat right 15px center;
-        box-shadow: none;
-        margin: 0 auto;
+        outline: none;
+        transition: all .3s ease-in-out;
     }
+
+    .btn-outline-primary {
+        padding: .5rem !important;
+
+        &:hover {
+            color: white !important;
+        }
+    }
+}
+
+.form-control[type=search] {
+    border: none;
+    border-radius: 25px;
+    background: #eae9e9 no-repeat right 15px center;
+    box-shadow: none;
+    margin: 0 auto;
 }
 
 .navbar-icon-notifications {
@@ -274,8 +297,10 @@ header {
 
 #dropdownUser{
     position: absolute;
-    left: -6rem;
+    left: -12rem;
     top: 160%;
+    width: 211px;
+    border: 1px solid gainsboro;
 }
 
 #dropdown-notifications{

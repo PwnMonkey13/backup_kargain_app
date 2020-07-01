@@ -1,5 +1,10 @@
 .comments {
-    padding : 0 .5rem;
+    padding: 0 .5rem;
+
+    .commentsCardList {
+        list-style-type: none;
+        margin: 1rem;
+    }
 
     textarea {
         margin-left: unset;

@@ -1,4 +1,4 @@
-$default-font-family: "Raleway", "Droid Sans", sans-serif;
+$default-font-family: "Quicksand", "Raleway", "Droid Sans", sans-serif;
 $default-font-color: #263238;
 
 //colors
@@ -22,7 +22,7 @@ $font-weight-bold: 600;
 $container-max-widths: (
         xs: 500px,
         sm: 650px,
-        md: 900px, //overrides
-        lg: 992px,
-        xl: 1200px
+        md: 850px, //overrides
+        lg: 960px,
+        xl: 1140px
 );

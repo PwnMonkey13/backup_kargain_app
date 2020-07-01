@@ -423,6 +423,7 @@ h1.annonce{
   color: #a5a0a0;
   font: 500 16px Quicksand;
   margin-right: 30px;
+  cursor: pointer;
 }
 .icons-star-prof img{
   width: 26px;
@@ -434,10 +435,10 @@ h1.annonce{
 }
 .icons-profile-wrapper{
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: flex-start;
   padding: .5rem 0;
-  border-bottom: 1px solid #a5a0a0;
 }
 .qusetion-wrapper{
   color: #000;
@@ -488,9 +489,7 @@ h1.annonce{
   margin-top: 50px;
   margin-bottom: 20px;
 }
-.icons-star-current{
-  cursor: pointer;
-}
+
 .share img{
   cursor: pointer;
 }
@@ -584,6 +583,7 @@ p.des-a:hover{
 .righ-filter-wrapper{
   padding-left: 60px;
 }
+
 .objava-wrapper .top-profile-wrapper .img-profile-wrapper{
   width: 70px;
   height: 70px;

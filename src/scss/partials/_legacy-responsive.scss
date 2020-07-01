@@ -337,7 +337,7 @@
   }
 
   .top-profile-name-btn{
-    align-items: center;
+    align-items: flex-start;
   }
   .profile-phone{
     text-align: left;
@@ -384,7 +384,6 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin: 15px 0;
   }
   .objava-wrapper .top-profile-wrapper .img-profile-wrapper {
     width: 55px;

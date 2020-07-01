@@ -119,6 +119,15 @@ p.error {
     }
 }
 
+.form-group{
+    .feedback-icon{
+        position: absolute;
+        width: auto;
+        bottom: 7px;
+        right: 10px;
+        margin-top: 0;
+    }
+}
 
 .invalid {
     border-color: red;
