@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
-import CheckIcon from '@material-ui/icons/Check';
 import UsersService from '../../../services/UsersService';
 import TableMUI from '../TableMUI';
 import BulletPoint from '../../BulletPoint';
@@ -17,30 +16,29 @@ const BooleanBullet = (value) => {
 
 const UsersTable = () => {
     const router = useRouter();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModalError } = useContext(ModalDialogContext);
     const [loading, setLoading] = useState(false);
     const [pageIndex, setPageIndex] = useState(0);
     const [rowsLength, setRowsLength] = useState(60);
-    const [resultFetch, setResultsFetch] = React.useState({
+    const [resultFetch, setResultsFetch] = useState({
         rows: [],
         total: 0,
     });
 
     const columns = React.useMemo(() => [
-        {
-            title: 'ID',
-            render: rowData => rowData.tableData.id + 1,
-        },
+        // {
+        //     title: 'ID',
+        //     render: rowData => rowData.tableData.id + 1,
+        // },
         {
             title: 'Avatar',
             field: 'avatar',
             filtering: false,
             grouping: false,
             searchable: false,
-            render: rowData => {
-                const user = new UserModel(rowData);
+            render: userModel => {
                 return (
-                    <img src={user.getAvatar} style={{
+                    <img src={userModel.getAvatar} style={{
                         width: 40,
                         borderRadius: '50%',
                     }} alt=""/>
@@ -49,50 +47,47 @@ const UsersTable = () => {
         },
         {
             title: 'Role',
-            field: 'role',
             filtering: true,
             grouping: true,
             searchable: true,
-        },
-        {
-            title: 'Pro',
-            field: 'isPro',
-            type: 'boolean',
-            filtering: true,
-            grouping: true,
-            searchable: true,
+            render: userModel => userModel.getRole,
+
         },
         {
             title: 'First Name',
-            field: 'firstname',
             filtering: false,
             grouping: false,
             searchable: false,
             sorting: true,
+            render: userModel => userModel.getFirstname,
+
         },
         {
             title: 'Last Name',
-            field: 'lastname',
             filtering: false,
             grouping: false,
             searchable: false,
             sorting: true,
+            render: userModel => userModel.getLastname,
+
         },
         {
             title: 'Username',
-            field: 'username',
             filtering: false,
             grouping: false,
             searchable: false,
             sorting: true,
+            render: userModel => userModel.getUsername,
+
         },
         {
             title: 'Email',
-            field: 'email',
             filtering: false,
             grouping: false,
             searchable: false,
             sorting: true,
+            render: userModel => userModel.getEmail,
+
         },
         {
             title: 'validé',
@@ -101,7 +96,7 @@ const UsersTable = () => {
             grouping: false,
             searchable: true,
             sorting: true,
-            render: row => BooleanBullet(row.activated),
+            render: userModel => BooleanBullet(userModel.getIsActivated),
         },
         {
             title: 'Activé',
@@ -111,18 +106,16 @@ const UsersTable = () => {
             grouping: false,
             searchable: true,
             sorting: true,
-            render: row => BooleanBullet(row.email_validated),
+            render: userModel => BooleanBullet(userModel.getIsEmailValidated),
         },
         {
             title: 'Pro',
             type: 'boolean',
-            field: 'pro',
-            emptyValue: 'false',
-            filtering: false,
-            grouping: false,
-            searchable: false,
+            filtering: true,
+            grouping: true,
             sorting: true,
-            render: rowData => rowData.pro && <CheckIcon/>,
+            searchable: true,
+            render: userModel => BooleanBullet(userModel.isPro),
         },
         {
             title: 'Nombre d`\'annnonces',
@@ -130,12 +123,12 @@ const UsersTable = () => {
             grouping: false,
             searchable: false,
             sorting: true,
-            render: rowData => rowData.garage.length,
+            render: userModel => userModel.getGarage.length,
         },
     ], []);
 
-    const handleItemClick = (e, user) => {
-        if (user) router.push(`/profile/${user.username}`);
+    const handleItemClick = (e, userModel) => {
+        if (userModel) router.push(userModel.getProfileEditLink);
     };
 
     const handleChangePageIndex = (pageIndex) => {
@@ -150,7 +143,12 @@ const UsersTable = () => {
             page: pageIndex,
         })
             .then(data => {
-                setResultsFetch(data);
+                const { rows } = data;
+                const rowsModel = rows.map(row => new UserModel(row));
+                setResultsFetch({
+                    ...data,
+                    rows: rowsModel,
+                });
                 setLoading(false);
             }).catch(err => {
             dispatchModalError({ err });
@@ -179,7 +177,7 @@ const UsersTable = () => {
                     {
                         icon: EditIcon,
                         tooltip: 'Modifier',
-                        onClick: (e, data) => handleItemClick(e, data),
+                        onClick: (e, userModel) => handleItemClick(e, userModel),
                     },
                 ]}
             />
