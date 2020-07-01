@@ -7,7 +7,6 @@ export default () => {
             <style global jsx>{`
 body{
   background-color: #1C2127;
-  padding : 0 2rem
 }
 .root{
     display:flex

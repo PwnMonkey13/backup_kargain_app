@@ -35,7 +35,6 @@ const MyApp = ({ Component, pageProps }) => {
                     <FormContextProvider formKey={formKey}>
                         <NextProgress/>
                         <DefaultSeo {...SEO} />
-                        <PopupAlert/>
                         <ProtectedRouter pageProps={pageProps}>
                             <Component {...pageProps}/>
                         </ProtectedRouter>
@@ -49,11 +48,11 @@ const MyApp = ({ Component, pageProps }) => {
 const ProtectedRouter = ({ children, pageProps }) => {
     const router = useRouter();
     const isAdminRoute = router.route.split('/').includes('admin');
-    const { stateReady, isLoading, forceLoginModal, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
+    const { isAuthReady, forceLoginModal, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
     const showLoginModal = (pageProps.requiredAuth && !isAuthenticated) || forceLoginModal;
 
     if (isAdminRoute) {
-        if (stateReady && !isLoading) {
+        if (isAuthReady) {
             if (!isAuthenticatedUserAdmin) {
                 return <Forbidden403Page/>;
             }
@@ -72,6 +71,7 @@ const ProtectedRouter = ({ children, pageProps }) => {
         >
             {showLoginModal && <PopupLogin/>}
             <Layout>
+                <PopupAlert/>
                 {children}
             </Layout>
         </DynamicNamespaces>
