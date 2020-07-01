@@ -35,9 +35,11 @@ const nextConfig = {
     distDir: 'dist',
     // Have to list all the environment variables used here to make it available to the client side code
     env: {
-        GOOGLE_STATIC_API_KEY: process.env.GOOGLE_STATIC_API_KEY,
+        GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
         GOOGLE_SSO_CLIENT_ID: process.env.GOOGLE_SSO_CLIENT_ID,
         FACEBOOK_SSO_APP_ID: process.env.FACEBOOK_SSO_APP_ID,
+        CONTENTFUL_ACCESS_TOKEN : '1FLg_Swv-LqFXKNENZ_IqzEw4ajYAbMcKUJCNg1YnTw',
+        CONTENTFUL_SPACE : "15r3jjrdfhc7"
     },
     webpack: (config) => {
         // XXX See https://github.com/zeit/next.js/blob/canary/examples/with-sentry-simple/next.config.js
@@ -57,6 +59,9 @@ const nextConfig = {
         // building the browser's bundle
 
         config.resolve.mainFields = ['main', 'browser', 'module']
+        // config.resolve.alias = {
+        //     'sass-to-js': 'sass-vars-to-js-loader',
+        // }
         config.module.rules.push(
             {
                 test: /\.tsx?$/,

@@ -1,21 +1,30 @@
 import React from 'react';
 import { Container } from 'reactstrap';
+import ContentfulHOC from '../../components/ContenFulHOC';
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
-const About = () => {
+let entriesId = {
+    'fr': '527HfMlV3wSsMd7DPiyB7z',
+    'en': '2no7Rb2tmUdYhsWTyVcXiR',
+};
+
+const About = (props) => {
+    const { richTextDocument, options } = props;
+    const article = documentToReactComponents(richTextDocument, options);
+
     return (
         <Container>
-            <h1>À propos de Kargain</h1>
-            <h2>Bienvenue dans le monde Kargain, le réseau international de l'automobile ouvert à l'usage public.</h2>
-
-            <h2>Vision</h2>
-            <p>Créer une plateforme globale accessible à tous les types de consommateurs, éliminer les barrières et
-                rendre le marché de l’automobile plus transparent et plus ouvert. </p>
-
-            <h2>Mission</h2>
-            <p>La mission de Kargain : contribution à la modernisation marché de l’automobile, basée sur un contenu
-                convivial et fiable.</p>
+            {article ? (
+                <div className="article-wrapper">
+                    <div className="rich-text-content">
+                        {article}
+                    </div>
+                </div>
+            ) : (
+                <p> Translation is missing</p>
+            )}
         </Container>
     );
 };
 
-export default About;
+export default ContentfulHOC(About, entriesId);

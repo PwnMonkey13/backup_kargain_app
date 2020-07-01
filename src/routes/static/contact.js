@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
-import FieldWrapper from '../components/Form/FieldWrapper'
-import { EmailInput } from '../components/Form/Inputs'
-import CTAButton from '../components/CTAButton'
+import FieldWrapper from '../../components/Form/FieldWrapper'
+import { EmailInput } from '../../components/Form/Inputs'
+import CTAButton from '../../components/CTAButton'
 import useTranslation from 'next-translate/useTranslation'
 import { useForm } from 'react-hook-form'
-import { ModalDialogContext } from '../context/ModalDialogContext'
-import UsersService from '../services/UsersService'
-import SelectInput from '../components/Form/Inputs/SelectInput'
-import TextareaInput from '../components/Form/Inputs/TextareaInput'
+import { ModalDialogContext } from '../../context/ModalDialogContext'
+import UsersService from '../../services/UsersService'
+import SelectInput from '../../components/Form/Inputs/SelectInput'
+import TextareaInput from '../../components/Form/Inputs/TextareaInput'
 
 const ContactPage = () => {
     const { t } = useTranslation()
