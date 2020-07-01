@@ -7,7 +7,12 @@
   "my-profile" : "My profile",
   "logout" : "Logout",
   "login" : "Login",
+  "login-facebook" : "Connect with Facebook",
+  "login-google" : "Connect with Google",
+  "remember-me" : "Remember me",
+  "password-forgotten" : "Password forgotten",
   "register" : "Register",
+  "register-pro" : "Pro register",
   "footer-text" : "Kargain is the new online sales application for BtoB and BtoC vehicles",
   "mail-us" : "Mail us",
   "call-us" : "Call us",
@@ -20,5 +25,6 @@
   "email-address" : "Email address",
   "newsletter": "Newsletter",
   "subscribe" : "Subscribe",
-  "newsletter-text" : "Don’t miss to subscribe to our new feeds, kindly fill the form below."
+  "newsletter-text" : "Don’t miss to subscribe to our new feeds, kindly fill the form below.",
+  "messaging" : "Messaging"
 }

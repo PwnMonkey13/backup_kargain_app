@@ -35,7 +35,7 @@ const StepNavigation = ({ prev, prevLabel, next, nextLabel, submit, submitLabel 
 
             {!next && submit && (
                 <button className={clsx(classes.button, 'btn btn-primary')} type="submit">
-                    {t('vehicles:following')}
+                    {submitLabel}
                 </button>
             )}
 

@@ -1,0 +1,26 @@
+{
+    "price": "Price",
+    "adType": "Announce type",
+    "vehicleType": "Vehicle type",
+    "manufacturer": {
+        "make": "Make"
+    },
+    "vehicleFunctionUse": "Vehicle function",
+    "vehicleGeneralState": "Vehicle general state",
+    "vehicleEngine.type": "Engine type",
+    "vehicleEngine.gas": "Gas",
+    "vehicleEngine.cylinder": "Cylinders",
+    "mileage": "Mileage",
+    "power.kw": "Power",
+    "countrySelect": "Country",
+    "address.city": "City",
+    "radius": "Radius",
+    "equipments": "Equipments",
+    "emission": "Emission",
+    "consumption.gkm": "Consumption",
+    "doors": "Doors",
+    "seats": "Seats",
+    "paint": "Paint",
+    "externalColor": "External color",
+    "internalColor": "Internal color"
+}
