@@ -1,55 +1,140 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from '@material-ui/core/Modal';
+import Fade from '@material-ui/core/Fade';
+import parseISO from 'date-fns/parseISO';
+import { format } from 'date-fns';
+import { ModalDialogContext } from '../context/ModalDialogContext';
+import { useAuth } from '../context/AuthProvider';
+import useStyles from './Conversations/conversation.styles';
+import Link from 'next-translate/Link';
+import { useForm } from 'react-hook-form';
+import ValidationError from './Form/Validations/ValidationError';
+import ConversationsService from '../services/ConversationsService';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        height: 300,
-        flexGrow: 1,
-        minWidth: 300,
-        transform: 'translateZ(0)',
-        // The position fixed scoping doesn't work in IE 11.
-        // Disable this demo to preserve the others.
-        '@media all and (-ms-high-contrast: none)': {
-            display: 'none',
-        },
-    },
-    modal: {
-        display: 'flex',
-        padding: theme.spacing(1),
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    paper: {
-        width: 400,
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
-}));
-
-export default function ServerModal() {
+export default function ModalContact ({ recipient, handleClose, open }) {
     const classes = useStyles();
-    const rootRef = React.useRef(null);
+    const [conversation, setConversation] = useState(null);
+    const { authenticatedUser } = useAuth();
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+
+    const { register, errors, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all',
+    });
+
+    const loadConversation = async () => {
+        try {
+            let conversation = await ConversationsService.getConversationWithProfile(recipient.getID);
+            setConversation(conversation);
+        } catch (err) {
+            dispatchModalError({ err });
+        }
+    };
+
+    const onSubmitMessage = async (form) => {
+        const { message } = form;
+        try {
+            const conversation = await ConversationsService.postConversationMessage(message, recipient.getID);
+            setConversation(conversation);
+            dispatchModal({ msg: 'Message posted' });
+        } catch (err) {
+            dispatchModalError({
+                err,
+                persist: true,
+            });
+        }
+    };
+
+    useEffect(() => {
+        if (recipient) loadConversation();
+    }, []);
 
     return (
-        <div className={classes.root} ref={rootRef}>
-            <Modal
-                disablePortal
-                disableEnforceFocus
-                disableAutoFocus
-                open
-                aria-labelledby="server-modal-title"
-                aria-describedby="server-modal-description"
-                className={classes.modal}
-                container={() => rootRef.current}
-            >
+        <Modal className={classes.modal} open={open} onClose={handleClose}>
+            <Fade in={open}>
                 <div className={classes.paper}>
-                    <h2 id="server-modal-title">Server-side modal</h2>
-                    <p id="server-modal-description">If you disable JavaScript, you will still see me.</p>
+                    {recipient && (
+                        <>
+                            <div className={classes.conversationHeader}>
+                                <div className={classes.headerUsername}>
+                                    <div style={{ maxWidth: '70%' }}>
+                                        <Link href={recipient.getProfileLink} prefetch={false}>
+                                            <a>
+                                                <img className="rounded-circle"
+                                                     src={recipient.getAvatar}
+                                                     alt={recipient.getUsername}
+                                                     width={50}
+                                                />
+                                                <span className="mx-2">{recipient.getFullName}</span>
+                                            </a>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="layout" style={{
+                                overflowY: 'scroll',
+                                height: '80vh',
+                            }}>
+                                <div style={{
+                                    height: '467px',
+                                    backgroundColor: 'gainsboro',
+                                }}>
+                                    <div className={classes.messageContainer}>
+                                        {conversation?.createdAt && format(parseISO(conversation.createdAt), 'MM/dd/yyyy')}
+                                        {conversation?.messages.map((message, index) => {
+                                            if (authenticatedUser.getID === message?.from) {
+                                                return (
+                                                    <div key={index} className={classes.textJustifiedEnd}>
+                                                        <div className={classes.basicMessage}>
+                                                            <div className={classes.messageBubble}>
+                                                                {message?.content}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            } else {
+                                                return (
+                                                    <div key={index} className={classes.textJustifiedStart}>
+                                                        <div className={classes.basicMessage}>
+                                                            <div className={classes.messageBubbleLeft}>
+                                                                {message?.content}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            }
+                                        })}
+                                    </div>
+                                </div>
+
+                                <div className={classes.conversationInput}>
+                                    <div className="layout" style={{
+                                        display: 'flex',
+                                        position: 'relative',
+                                        width: '100%',
+                                    }}>
+                                        <form className={classes.conversationContainer}
+                                              onSubmit={handleSubmit(onSubmitMessage)}>
+                                        <textarea
+                                            className={classes.conversationTextarea}
+                                            name="message"
+                                            ref={register({ required: 'required' })}
+                                            placeholder="Écrivez votre message"
+                                            maxLength="30000"
+                                            rows="5"
+                                        />
+                                            {errors && <ValidationError errors={errors} name={name}/>}
+                                            <button className={classes.conversationInputButton} type="submit">
+                                                Envoyer
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
-            </Modal>
-        </div>
+            </Fade>
+        </Modal>
     );
 }

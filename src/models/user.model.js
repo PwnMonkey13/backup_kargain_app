@@ -1,66 +1,84 @@
 export default class UserModel {
     constructor (raw) {
-        this.raw = raw
+        this.raw = raw;
     }
 
     get getRaw () {
-        return this.raw
+        return this.raw;
     }
 
     get getID () {
-        return this.raw?.id
+        return this.raw?.id;
     }
 
-    get getRole() {
-        return this.raw?.role
+    get getRole () {
+        return this.raw?.role;
     }
 
     get isAdmin () {
-        return this.raw?.isAdmin ?? false
+        return this.raw?.isAdmin ?? false;
     }
 
     get isPro () {
-        return this.raw?.isPro ?? false
+        return this.raw?.isPro ?? false;
+    }
+
+    get getIsActivated () {
+        return this.raw?.activated ?? false;
+    }
+
+    get getIsEmailValidated () {
+        return this.raw?.email_validated ?? false;
     }
 
     get getFullName () {
-        return this.raw?.fullname
+        return this.raw?.fullname;
     }
 
     get getAvatar () {
-        return this.raw?.avatar?.location ?? this.raw?.avatarUrl ?? '/images/profile.png'
+        return this.raw?.avatar?.location ?? this.raw?.avatarUrl ?? '/images/profile.png';
     }
 
     get getProfileLink () {
-        return this.getUsername ? `/profile/${this.getUsername}` : ""
+        return this.getUsername ? `/profile/${this.getUsername}` : '/';
+    }
+
+    get getProfileEditLink () {
+        return this.getUsername ? `/profile/${this.getUsername}/edit` : '/';
     }
 
     get getFirstname () {
-        return this.raw?.firstname
+        return this.raw?.firstname;
     }
 
     get getLastname () {
-        return this.raw?.lastname
+        return this.raw?.lastname;
     }
 
     get getUsername () {
-        return this.raw?.username
+        return this.raw?.username;
     }
 
     get getEmail () {
-        return this.raw?.email
+        return this.raw?.email;
     }
 
     get getPhone () {
-        return this.raw?.phone
+        return this.raw?.phone;
     }
 
     get getGarage () {
-        return this.raw?.garage ?? []
+        const garage = this.raw?.garage ?? [];
+        return garage.filter(announce => announce.visible);
+    }
+
+    get getHiddenGarage () {
+        const garage = this.raw?.garage ?? [];
+        return garage.filter(announce => !announce.visible);
     }
 
     get getFavorites () {
-        return this.raw?.favorites ?? []
+        return this.raw?.favorites ?? [];
     }
 
     get getFollowers () {
@@ -76,19 +94,19 @@ export default class UserModel {
     }
 
     get getDescription () {
-        return this.raw?.about
+        return this.raw?.about;
     }
 
-    get getCountryLabel() {
-        return this.raw?.countrySelect?.value
+    get getCountryLabel () {
+        return this.raw?.countrySelect?.value;
     }
 
     get getAddressParts () {
-        const houseNumber = this.raw?.address?.housenumber
+        const houseNumber = this.raw?.address?.housenumber;
         const street = this.raw?.address?.street;
         const city = this.raw?.address?.city?.name;
         const postCode = this.raw?.address?.city?.postcode;
-        const fullAddress = this.raw?.address?.fullAddress
+        const fullAddress = this.raw?.address?.fullAddress;
         return {
             fullAddress,
             houseNumber,

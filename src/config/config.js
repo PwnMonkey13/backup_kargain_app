@@ -10,7 +10,7 @@ module.exports = {
         API_KEY: process.env.STRIPE_API_KEY,
     },
     google: {
-        STATIC_API_KEY: process.env.GOOGLE_STATIC_API_KEY,
+        STATIC_API_KEY: process.env.GOOGLE_API_KEY,
         sso: {
             CLIENT_ID: process.env.GOOGLE_SSO_CLIENT_ID,
         },

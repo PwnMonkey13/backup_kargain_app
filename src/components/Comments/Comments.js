@@ -7,6 +7,7 @@ import { ModalDialogContext } from '../../context/ModalDialogContext';
 import commentsService from '../../services/commentsService';
 import Comment from '../../models/comment.model';
 import CommentBlock from './CommentBlock';
+import Typography from '@material-ui/core/Typography';
 
 const Comments = ({ announceRaw }) => {
     const router = useRouter();
@@ -76,17 +77,10 @@ const Comments = ({ announceRaw }) => {
     return (
         <div id="comments" className="comments m-t-60 m-b-60">
             <div className="comments-header">
-                <h4>{t('vehicles:comment')}</h4>
-                <div className="comments-mode">
-                    <a href="https://benzin.fr/auctions/show/m50360e34019920sans0reserve-5eac26fe1b710?order=recents"
-                       className="active">{t('vehicles:recent')}
-                    </a>
-                    <a href="https://benzin.fr/auctions/show/m50360e34019920sans0reserve-5eac26fe1b710?order=populars">
-                        {t('vehicles:popular')}
-                    </a>
-                </div>
+                <Typography component="h3" variant="h3">
+                    {t('vehicles:comment_plural')}
+                </Typography>
             </div>
-
             <CommentForm {...{
                 onSubmitComment,
                 textareaCommentRef,
@@ -99,6 +93,7 @@ const Comments = ({ announceRaw }) => {
                     return <CommentBlock
                         key={indexComment}
                         comment={comment}
+                        disableReply
                         indexComment={indexComment}
                         onSubmitResponse={onSubmitResponse}
                     />;

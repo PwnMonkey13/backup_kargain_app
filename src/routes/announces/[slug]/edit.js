@@ -1,11 +1,10 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { inflate } from 'flattenjs';
 import { useForm } from 'react-hook-form';
 import { Col, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import PageViewIcon from '@material-ui/icons/Pageview';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -31,7 +30,6 @@ import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy';
 import NumberInputMUI from '../../../components/Form/Inputs/NumberInputMUI';
 import CheckboxGroup from '../../../components/Form/Inputs/CheckboxGroup';
 import CheckboxMUI from '../../../components/Form/Inputs/CheckboxMUI';
-import ButtonLink from '../../../components/ButtonLink';
 import Error from '../../_error';
 import {
     CheckboxOptionsEquipments,
@@ -48,6 +46,8 @@ import {
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
+import CTALink from '../../../components/CTALink';
+import ValidationErrors from '../../../components/Form/Validations/ValidationErrors';
 
 const useStyles = makeStyles(() => ({
 
@@ -173,16 +173,16 @@ const allowedFields = {
     'address.value.city': 'address.city',
 };
 
-const AnnounceEdit = ({ announceRaw, err }) => {
+const AnnounceEdit = ({ announceRaw, isAdmin, isSelf, err }) => {
     const refImg = useRef();
     const formRef = useRef();
     const theme = useTheme();
-    const { isAuthenticated, authenticatedUser } = useAuth();
+    const { isAuthReady } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const [activeTab, setActiveTab] = useState(4);
+    const [stateReady, setStateReady] = useState(false);
+    const [activeTab, setActiveTab] = useState(0);
     const { t } = useTranslation();
-    const [announce, setAnnounce] = useState(new AnnounceClass(announceRaw));
-    const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
+    const [announce] = useState(new AnnounceClass(announceRaw));
     const { control, register, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
@@ -192,12 +192,6 @@ const AnnounceEdit = ({ announceRaw, err }) => {
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true,
     });
-
-    if (!isAuthenticated) return <Error statusCode="403"/>;
-    if (!isAuthor) return <Error statusCode="403"/>;
-    if (announceRaw === undefined || err) {
-        return <Error message={err.message} statusCode={err.statusCode}/>;
-    }
 
     const handleCLickImg = (index) => {
         if (refImg.current) {
@@ -212,10 +206,6 @@ const AnnounceEdit = ({ announceRaw, err }) => {
         }
     };
 
-    const triggerSubmit = () => {
-        formRef.current.dispatchEvent(new Event('submit'));
-    };
-
     const handleRemove = () => {
         AnnounceService.removeAnnounce(announce.getSlug)
             .then(() => {
@@ -224,6 +214,11 @@ const AnnounceEdit = ({ announceRaw, err }) => {
                 dispatchModalError({ err });
             },
         );
+    };
+
+    const triggerSubmit = () => {
+        formRef.current.dispatchEvent(new Event('submit'));
+        window.scrollTo(0, 0);
     };
 
     const onSubmit = (form) => {
@@ -240,15 +235,23 @@ const AnnounceEdit = ({ announceRaw, err }) => {
         }, {}));
 
         AnnounceService.updateAnnounce(announce.getSlug, updates)
-            .then((updatedAd) => {
+            .then(() => {
                 dispatchModal({
-                    msg: 'Ad successfully updated',
+                    msg: 'Ad successfully updated', persist : true
                 });
             }).catch(err => {
                 dispatchModalError({ err });
             },
         );
     };
+
+    useEffect(() => {
+        if (isAuthReady) setStateReady(true);
+    }, [isAuthReady]);
+
+    if (!stateReady) return null;
+    if (!isSelf && !isAdmin) return <Error statusCode={404}/>;
+    if (announceRaw === undefined || err) return <Error message={err.message} statusCode={err.statusCode}/>;
 
     return (
         <>
@@ -277,6 +280,8 @@ const AnnounceEdit = ({ announceRaw, err }) => {
 
                 <Col sm="12" md="9" lg="9">
                     <form className="p-3 mx-auto" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+                        {errors && <ValidationErrors errors={errors}/>}
+
                         <TabContent activeTab={activeTab}>
                             <TabPane tabId={0}>
                                 <VehicleInfosPartialForm {...{
@@ -349,10 +354,8 @@ const AnnounceEdit = ({ announceRaw, err }) => {
 
             {!isDesktop && (
                 <Buttons
+                    triggerSubmit={triggerSubmit}
                     announcePageLink={`/announces/${announce.getSlug}`}
-                    {...{
-                        triggerSubmit,
-                    }}
                 />
             )}
         </>
@@ -389,7 +392,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 </Col>
 
                 <Col sm={12} md={6} lg={3}>
-                    <FieldWrapper label={t('vehicles:manufacturer-generation')}>
+                    <FieldWrapper label={t('vehicles:generation')}>
                         <TextInput
                             name={'manufacturer.generation.label'}
                             control={control}
@@ -587,7 +590,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label={t('vehicles:"class-emission')}>
+                    <FieldWrapper label={t('vehicles:class-emission')}>
                         <SelectInput
                             name="emission"
                             options={RadioChoicesEmission}
@@ -751,14 +754,14 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
                 name="status"
                 value="active"
                 label={t('vehicles:archive-announce')}
-                color="warning"
+                color="secondary"
                 control={control}
                 errors={errors}
             />
 
             <Button
                 variant="contained"
-                color="warning"
+                color="secondary"
                 className={classes.button}
                 startIcon={<DeleteIcon/>}
                 onClick={handleOpenDialogRemove}>
@@ -797,7 +800,7 @@ const Buttons = ({ triggerSubmit, announcePageLink }) => {
     const { t } = useTranslation();
 
     return (
-        <div className="d-flex flex-column my-3">
+        <div className="d-flex flex-column mx-auto my-3" style={{ maxWidth : '300px'}}>
             <Button
                 variant="contained"
                 color="primary"
@@ -811,16 +814,7 @@ const Buttons = ({ triggerSubmit, announcePageLink }) => {
                 {t('vehicles:save-announce')}
             </Button>
 
-            <Button
-                color="secondary"
-                size="medium"
-                className={classes.button}
-                startIcon={<PageViewIcon/>}
-                component={ButtonLink}
-                href={announcePageLink}
-            >
-                {t('vehicles:see-announce')}
-            </Button>
+            <CTALink title={t('vehicles:see-announce')} href={announcePageLink}/>
         </div>
     );
 };
@@ -869,6 +863,7 @@ const NavDesktop = ({ activeTab, toggleTab, triggerSubmit, slug }) => {
 };
 
 const NavMobile = ({ activeTab, toggleTab }) => {
+    const { t } = useTranslation();
     const classes = useStyles();
     const tabs = [
         {
@@ -905,8 +900,14 @@ export async function getServerSideProps (ctx) {
     const { slug } = ctx.query;
     try {
         const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
-        const announceRaw = await AnnounceService.getAnnounceBySlugSSR(slug, additionalHeaders);
-        return { props: { announceRaw } };
+        const { announce, isAdmin, isSelf } = await AnnounceService.getAnnounceBySlugSSR(slug, additionalHeaders);
+        return {
+            props: {
+                announceRaw: announce,
+                isAdmin: isAdmin ?? false,
+                isSelf: isSelf ?? false,
+            },
+        };
     } catch (err) {
         return {
             props: {

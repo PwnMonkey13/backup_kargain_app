@@ -1,0 +1,226 @@
+import { makeStyles } from '@material-ui/styles';
+
+export default makeStyles(theme => ({
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+    },
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: '.5rem',
+        width: '500px',
+
+        [theme.breakpoints.down('xs')]: {
+            width: '350px',
+
+        },
+
+    },
+
+    conversations: {
+        flexWrap: 'wrap',
+        display: 'flex',
+        height: '100%',
+    },
+
+    conversationsList: {
+        margin: 0,
+        position: 'relative',
+        height: '100%',
+        overflow: 'hidden',
+        width: '100%',
+        borderRight: '1px solid',
+        border: '1px solid gainsboro',
+
+        [theme.breakpoints.up('md')]: {
+            width: '30%',
+            borderRight: '1px solid #e6ebef',
+        },
+    },
+
+    styleScroller: {
+        height: '100%',
+        position: 'relative',
+    },
+
+    scrollerContainer: {
+        position: 'relative',
+        maxHeight: '100vh',
+        overflow: 'auto',
+        willChange: 'transform',
+    },
+
+    conversationListItem: {
+        padding: '1rem',
+        cursor: 'pointer',
+        flexDirection: 'row',
+        overflow: 'hidden',
+        borderTop: '1px solid gainsboro',
+
+        '&:hover': {
+            backgroundColor: '#d9e6f7',
+            color: '#369',
+        },
+    },
+
+    itemDetails: {
+        verticalAlign: 'top',
+        overflow: 'hidden',
+        width: '50%',
+    },
+
+    itemDetailsPreview: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        width: '100%',
+        display: 'block',
+        overflow: 'hidden',
+    },
+
+    conversation: {
+        position: 'relative',
+        zIndex: '2',
+        top: 0,
+        left: 0,
+        height: '100%',
+        overflow: 'hidden',
+        width: '70%',
+        border: '1px solid gainsboro',
+        padding: '.5rem',
+        background: '#fff',
+
+        [theme.breakpoints.down('sm')]: {
+            position: 'absolute',
+            width: '100%',
+            zIndex: 1,
+        },
+    },
+
+    conversationCloseMobile: {
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
+    },
+
+    conversationHeader: {
+        position: 'relative',
+        width: '100%',
+        display: 'flex',
+        height: '5rem',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        background: '#fff',
+        zIndex: 1,
+        marginBottom: '1rem',
+        boxShadow: '0 0.2rem 0.2rem 0 rgba(0,0,0,.1)',
+        borderBottom: '1px solid #cad1d9',
+
+        [theme.breakpoints.down('md')]: {},
+    },
+
+    headerUsername: {
+        display: 'flex',
+        alignItems: 'center',
+        alignSelf: 'center',
+        width: '100%',
+        height: '5.6rem',
+        padding: '0 2.4rem',
+        justifyContent: 'space-between',
+
+        '& a': {
+            whiteSpace: 'nowrap',
+            maxWidth: '100%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: 'block',
+
+            '&:hover': {
+                color: '#ff5e14',
+            },
+        },
+    },
+
+    pointerClose: {
+        display: 'flex',
+        cursor: 'pointer',
+    },
+
+    messageContainer: {
+        display: 'block',
+        wordWrap: 'break-word',
+        margin: '0 1.6rem',
+    },
+
+    textJustifiedStart: {
+        display: 'flex',
+        justifyContent: 'flex-start',
+    },
+
+    textJustifiedEnd: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+    },
+
+    basicMessage: {
+        maxWidth: '70%',
+        display: 'block',
+    },
+
+    messageBubble: {
+        borderRadius: '10px',
+        textAlign: 'left',
+        whiteSpace: 'pre-line',
+        padding: '.5rem',
+        margin: '.5rem',
+        backgroundColor: '#d9e6f7',
+        color: '#369',
+        fontWeight: 400,
+    },
+
+    messageBubbleLeft: {
+        borderRadius: '10px',
+        textAlign: 'left',
+        whiteSpace: 'pre-line',
+        padding: '.5rem',
+        margin: '.5rem',
+        fontWeight: 400,
+    },
+
+    conversationContainer: {
+        display: 'flex',
+        width: '100%',
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+        },
+    },
+
+    conversationInput: {
+        background: '#fff',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+        borderTop: '1px solid #e6ebef',
+        padding: '.5rem',
+    },
+
+    conversationTextarea: {
+        margin: 0,
+        minWidth: 'unset',
+        width: '100%',
+    },
+
+    conversationInputButton: {
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 'auto',
+        padding: '1rem',
+        textDecoration: 'none',
+    },
+}));

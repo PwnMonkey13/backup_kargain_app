@@ -1,7 +1,6 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Link from 'next-translate/Link';
 import clsx from 'clsx';
-import { inflate } from 'flattenjs';
 import { useForm } from 'react-hook-form';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -10,21 +9,27 @@ import SaveIcon from '@material-ui/icons/Save';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Col, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
 import useTranslation from 'next-translate/useTranslation';
-import { useAuth } from '../../context/AuthProvider';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
-import { themeColors } from '../../theme/palette';
-import FieldWrapper from '../../components/Form/FieldWrapper';
-import { EmailInput, TelInput, TextareaInput, TextInput } from '../../components/Form/Inputs';
-import GeoStreetsInput from '../../components/Form/Inputs/GeoAddressSearchInput';
-import resolveObjectKey from '../../libs/resolveObjectKey';
-import UsersService from '../../services/UsersService';
-import AvatarPreviewUpload from '../../components/Avatar/AvatarPreviewUpload';
-import Error from '../_error';
+import { useAuth } from '../../../context/AuthProvider';
+import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import { themeColors } from '../../../theme/palette';
+import FieldWrapper from '../../../components/Form/FieldWrapper';
+import { EmailInput, SelectCountryFlags, TelInput, TextareaInput, TextInput } from '../../../components/Form/Inputs';
+import UsersService from '../../../services/UsersService';
+import AvatarPreviewUpload from '../../../components/Avatar/AvatarPreviewUpload';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import UserModel from '../../../models/user.model';
+import Error from '../../_error';
+import Alert from '@material-ui/lab/Alert';
+import SearchLocationInput from '../../../components/Form/Inputs/SearchLocationInput';
+import ValidationErrors from '../../../components/Form/Validations/ValidationErrors';
+import CTALink from '../../../components/CTALink';
 
 const useStyles = makeStyles(() => ({
     stickyNav: {
         position: 'fixed',
-        top: '5rem',
     },
 
     nav: {
@@ -80,44 +85,27 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const dataMapper = {
-    firstname: 'firstname',
-    email: 'email',
-    lastname: 'lastname',
-    about: 'about',
-    phone: 'phone',
-    'address.label': 'address.fullAddress',
-    'address.value.housenumber': 'address.housenumber',
-    'address.value.name': 'address.street',
-    'address.value.postcode': 'address.postalcode',
-    'address.value.country': 'address.country',
-    'address.value.city': 'address.city',
-};
-
-const Edit = () => {
+const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
     const theme = useTheme();
     const formRef = useRef();
     const classes = useStyles();
-    const { t, lang } = useTranslation();
-    const { authenticatedUser, updateRawUser, isAuthenticated } = useAuth();
+    const { t } = useTranslation();
+    const { isAuthReady, updateAuthenticatedRawUser } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const [stateReady, setStateReady] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
-    const [user, setUser] = useState(authenticatedUser.getRaw);
+    const [profile, setProfile] = useState(new UserModel(profileRaw));
+    const [openDialogRemove, setOpenDialogRemove] = useState(false);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true,
     });
 
-    if (!isAuthenticated) return <Error statusCode="403"/>;
-
-    const { control, watch, errors, handleSubmit } = useForm({
+    const { register, control, watch, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: {
-            ...user,
-            address: {
-                label: user?.address?.fullAddress,
-                value: user?.address,
-            },
+            ...profile.getRaw,
+            address: profile.getAddressParts,
         },
     });
 
@@ -131,23 +119,29 @@ const Edit = () => {
         formRef.current.dispatchEvent(new Event('submit'));
     };
 
-    const onSubmit = (form) => {
-        const data = inflate(Object.keys(dataMapper).reduce((carry, key) => {
-            const value = resolveObjectKey(form, key);
-            if (value) {
-                return {
-                    ...carry,
-                    [dataMapper[key]]: value,
-                };
-            } else {
-                return carry;
-            }
-        }, {}));
+    const handleOpenDialogRemove = () => {
+        setOpenDialogRemove(true);
+    };
 
-        UsersService.updateUser(data)
-            .then((updatedUser) => {
-                setUser(updatedUser);
-                updateRawUser(updatedUser);
+    const handleCloseDialogRemove = () => {
+        setOpenDialogRemove(false);
+    };
+
+    const handleRemove = () => {
+        UsersService.removeUser(profile.getUsername)
+            .then(() => {
+                dispatchModal({ msg: 'User successfully removed (disabled)' });
+            }).catch(err => {
+                dispatchModalError({ err });
+            },
+        );
+    };
+
+    const onSubmit = (form) => {
+        UsersService.updateUser(form)
+            .then(updatedUser => {
+                setProfile(new UserModel(updatedUser));
+                if (isSelf) updateAuthenticatedRawUser(updatedUser);
                 dispatchModal({
                     msg: 'User successfully updated',
                 });
@@ -157,8 +151,47 @@ const Edit = () => {
         );
     };
 
+    useEffect(() => {
+        if (isAuthReady) setStateReady(true);
+    }, [isAuthReady]);
+
+    if (!stateReady) return null;
+    if (!isSelf && !isAdmin) return <Error statusCode={404}/>;
+    if (err) return <Error message={err.message} statusCode={err.statusCode}/>;
+
     return (
         <>
+            <Dialog
+                open={openDialogRemove}
+                onClose={handleCloseDialogRemove}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title" disableTypography>
+                    {t('vehicles:confirm-suppression')}
+                </DialogTitle>
+
+                <DialogActions>
+                    <Button onClick={handleCloseDialogRemove} color="primary" autoFocus>
+                        {t('vehicles:cancel')}
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="warning"
+                        className={classes.button}
+                        startIcon={<DeleteIcon/>}
+                        onClick={() => handleRemove}>
+                        {t('vehicles:remove-announce')}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            {isAdmin && (
+                <Alert severity="info" className="mb-2">
+                    Connected as Admin
+                </Alert>
+            )}
+
             <Typography component="h2" variant="h2" className="text-center" gutterBottom>
                 {t('vehicles:edit-my-profile')}
             </Typography>
@@ -178,16 +211,19 @@ const Edit = () => {
                             activeTab,
                             toggleTab,
                             triggerSubmit,
+                            profilePageLink: profile.getProfileLink,
                         }}/>
                     </Col>
                 )}
 
                 <Col xs="12" md="9" lg="9">
                     <form className="p-3 mx-auto" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+                        {errors && <ValidationErrors errors={errors}/>}
                         <TabContent activeTab={activeTab}>
                             <TabPane tabId={0}>
                                 <ProfilePartialForm {...{
                                     control,
+                                    watch,
                                     errors,
                                 }}/>
                             </TabPane>
@@ -201,10 +237,28 @@ const Edit = () => {
                                     {t('vehicles:payments-bills')}
                                 </Typography>
                             </TabPane>
+                            <TabPane tabId={3}>
+                                <Typography component="h2" variant="h2">
+                                    todo notifs
+                                </Typography>
+                            </TabPane>
+                            <TabPane tabId={4}>
+                                <Typography component="h2" variant="h2">
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        className={classes.button}
+                                        startIcon={<DeleteIcon/>}
+                                        onClick={handleOpenDialogRemove}>
+                                        {t('vehicles:remove-announce')}
+                                    </Button>
+                                </Typography>
+                            </TabPane>
                         </TabContent>
 
                         {!isDesktop && (
                             <Buttons {...{
+                                profilePageLink: profile.getProfileLink,
                                 triggerSubmit,
                             }}/>
                         )}
@@ -215,9 +269,10 @@ const Edit = () => {
     );
 };
 
-const ProfilePartialForm = ({ control, errors }) => {
+const ProfilePartialForm = ({ control, watch, errors }) => {
     const classes = useStyles();
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
+    const countrySelect = watch('countrySelect');
     return (
         <>
             <AvatarPreviewUpload/>
@@ -259,19 +314,21 @@ const ProfilePartialForm = ({ control, errors }) => {
                 </Link>
             </FieldWrapper>
 
-            <FieldWrapper label={t('vehicles:address')}>
-                <GeoStreetsInput
-                    name="address"
-                    // enableGeoloc
-                    // long={coordinates?.[0]}
-                    // lat={coordinates?.[1]}
-                    control={control}
+            <FieldWrapper label={t('vehicles:country')}>
+                <SelectCountryFlags
+                    name="countrySelect"
                     errors={errors}
-                    rules={{ required: 'Required' }}
-                    inputProps={{
-                        placeholder: '10 avenue du Prado, 13007 Marseille',
-                    }}
+                    control={control}
                 />
+            </FieldWrapper>
+
+            <FieldWrapper label={t('vehicles:address')}>
+                <SearchLocationInput
+                    name="address"
+                    country={countrySelect?.value}
+                    control={control}
+                    rules={{ required: 'Required' }}>
+                </SearchLocationInput>
             </FieldWrapper>
 
             <FieldWrapper label={t('vehicles:phone')}>
@@ -297,9 +354,9 @@ const ProfilePartialForm = ({ control, errors }) => {
     );
 };
 
-const NavDesktop = ({ activeTab, toggleTab, triggerSubmit }) => {
+const NavDesktop = ({ activeTab, toggleTab, triggerSubmit, profilePageLink }) => {
     const classes = useStyles();
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
     const tabs = [
         {
             title: t('vehicles:my-profile'),
@@ -309,6 +366,12 @@ const NavDesktop = ({ activeTab, toggleTab, triggerSubmit }) => {
         },
         {
             title: t('vehicles:payments-bills'),
+        },
+        {
+            title: t('vehicles:notifications'),
+        },
+        {
+            title: t('vehicles:confidentiality-security'),
         },
     ];
     return (
@@ -326,14 +389,17 @@ const NavDesktop = ({ activeTab, toggleTab, triggerSubmit }) => {
                 </Nav>
             </div>
 
-            <Buttons triggerSubmit={triggerSubmit}/>
+            <Buttons
+                triggerSubmit={triggerSubmit}
+                profilePageLink={profilePageLink}
+            />
         </div>
     );
 };
 
-const NavMobile = ({ activeTab, toggleTab, buttonText, triggerSubmit }) => {
+const NavMobile = ({ activeTab, toggleTab }) => {
     const classes = useStyles();
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
     const tabs = [
         {
             title: t('vehicles:my-profile'),
@@ -343,6 +409,12 @@ const NavMobile = ({ activeTab, toggleTab, buttonText, triggerSubmit }) => {
         },
         {
             title: t('vehicles:payments-bills'),
+        },
+        {
+            title: t('vehicles:notifications'),
+        },
+        {
+            title: t('vehicles:confidentiality-security'),
         },
     ];
     return (
@@ -359,11 +431,11 @@ const NavMobile = ({ activeTab, toggleTab, buttonText, triggerSubmit }) => {
     );
 };
 
-const Buttons = ({ triggerSubmit }) => {
+const Buttons = ({ triggerSubmit, profilePageLink }) => {
     const classes = useStyles();
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
     return (
-        <div className="d-flex flex-column my-3">
+        <div className="d-flex flex-column mx-auto my-3" style={{ maxWidth: '300px' }}>
             <Button
                 variant="contained"
                 color="primary"
@@ -371,13 +443,39 @@ const Buttons = ({ triggerSubmit }) => {
                 className={classes.button}
                 startIcon={<SaveIcon/>}
                 type="submit"
-                onClick={(e) => {
+                onClick={() => {
                     triggerSubmit();
                 }}>
                 {t('vehicles:save')}
             </Button>
+
+            <CTALink title="back to profile" href={profilePageLink}/>
         </div>
     );
 };
+
+export async function getServerSideProps (ctx) {
+    const { username } = ctx.query;
+    try {
+        const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
+        const { user, isAdmin, isSelf } = await UsersService.getUserByUsernameSSR(username, additionalHeaders);
+        return {
+            props: {
+                profileRaw: user,
+                isAdmin: isAdmin ?? false,
+                isSelf: isSelf ?? false,
+            },
+        };
+    } catch (err) {
+        return {
+            props: {
+                err: {
+                    message: err?.message ?? null,
+                    statusCode: err?.statusCode ?? 404,
+                },
+            },
+        };
+    }
+}
 
 export default Edit;

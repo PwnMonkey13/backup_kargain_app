@@ -1,22 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Comment from '../../models/comment.model';
-import CommentsBlockLight from './CommentBlockLight';
+import Typography from '@material-ui/core/Typography';
 
 const CommentsList = ({ comments }) => {
-
     return (
         <div className="comments">
-            <div className="comments-list-preview">
+            <ul className="commentsCardList">
                 {comments && comments.map((item, index) => {
                     const comment = new Comment(item);
-                    return <CommentsBlockLight
-                        key={index}
-                        comment={comment}
-                        index={index}
-                    />;
+                    return (
+                        <li key={index} className="my-2">
+                            <Typography as="p" gutterBottom>
+                                <strong>{comment.getAuthor.getFullName}</strong> {comment.getMessage}
+                            </Typography>
+                        </li>
+                    );
                 })}
-            </div>
+            </ul>
         </div>
     );
 };

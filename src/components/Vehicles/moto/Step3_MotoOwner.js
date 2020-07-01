@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { Col, Row } from 'reactstrap';
 import useTranslation from 'next-translate/useTranslation';
-import Typography from '@material-ui/core/Typography';
-import { GeoStreetsInput, NumberInput, TextInput } from '../../Form/Inputs';
+import { CheckboxMUI, GeoStreetsInput, NumberInput, TextInput } from '../../Form/Inputs';
 import StepNavigation from '../../Form/StepNavigation';
 import FieldWrapper from '../../Form/FieldWrapper';
 import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
@@ -11,12 +10,13 @@ import useAddress from '../../../hooks/useAddress';
 import UploadDropZone from '../../Uploads/UploadDropZone';
 import { FormContext } from '../../../context/FormContext';
 import Header from '../../Header';
+import SearchLocationInput from '../../Form/Inputs/SearchLocationInput';
 
-const Step = ({ onSubmitStep, prevStep, nextStep }) => {
+const Step = ({ onSubmitStep, prevStep }) => {
     const { formDataContext } = useContext(FormContext);
-    const [addressParts, addressString, coordinates] = useAddress();
+    const [, , coordinates] = useAddress();
     const { t } = useTranslation();
-    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
+    const { watch, control, errors, setValue, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: formDataContext,
@@ -30,10 +30,10 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
 
     return (
         <form className="form_wizard" onSubmit={handleSubmit(data => onSubmitStep(data, true))}>
-            <Header text="Publier votre annonce maintenant"/>
+            <Header text={t('vehicles:publish-my-ad-now')}/>
             <Row>
                 <Col>
-                    <FieldWrapper label="Titre de l'annonce">
+                    <FieldWrapper label={t('vehicles:announce-title')}>
                         <TextInput
                             name="title"
                             placeholder="Z1000 R Edition MY 2020"
@@ -52,7 +52,7 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                 </Col>
 
                 <Col>
-                    <FieldWrapper label="Prix de l'annonce">
+                    <FieldWrapper label={t('vehicles:ad-price')}>
                         <NumberInput
                             name="price"
                             placeholder="15000€"
@@ -71,7 +71,16 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                 </Col>
             </Row>
 
-            <FieldWrapper label="Pays">
+            <FieldWrapper label={t('vehicles:show-cell-phone')}>
+                <CheckboxMUI
+                    name="showCellPhone"
+                    label={t('vehicles:show-cell-phone')}
+                    control={control}
+                    errors={errors}
+                />
+            </FieldWrapper>
+
+            <FieldWrapper label={t('vehicles:country')}>
                 <SelectCountryFlags
                     name="countrySelect"
                     errors={errors}
@@ -79,51 +88,33 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                 />
             </FieldWrapper>
 
-            {countrySelect && countrySelect.value === 'FR' ? (
-                <FieldWrapper label="Adresse">
-                    <GeoStreetsInput
-                        name="address"
-                        enableGeoloc
-                        long={coordinates?.[0]}
-                        lat={coordinates?.[1]}
-                        control={control}
-                        errors={errors}
-                    />
-                </FieldWrapper>
-            ) : (
-                <>
-                    <FieldWrapper label="Ville">
-                        <TextInput
-                            name="address.city"
-                            errors={errors}
-                            control={control}
-                            rules={{ required: 'Required' }}
-                        />
-                    </FieldWrapper>
+            <FieldWrapper label={t('vehicles:address')}>
+                <SearchLocationInput
+                    name="address"
+                    country={countrySelect?.value}
+                    control={control}
+                    rules={{ required: 'Required' }}>
+                </SearchLocationInput>
+            </FieldWrapper>
 
-                    <FieldWrapper label="Adresse">
-                        <TextInput
-                            name="address.street"
-                            errors={errors}
-                            control={control}
-                            rules={{ required: 'Required' }}
-                        />
-                    </FieldWrapper>
-                </>
-            )}
-
+            <Header text={t('vehicles:pictures')}/>
             <UploadDropZone
-                maxFiles={10}
+                maxFiles={15}
                 getFiles={getFiles}
                 hideSubmit
-                dragLabel="Uploader max 3 autres photos"
+                dragLabel={t('vehicles:upload-{max}-pictures', { max: 15 })}
             />
 
-            <Typography component="p" variant="body1" color="primary">
-                Vous pourrez ajouter d'autres photos plus tard
-            </Typography>
+            <FieldWrapper>
+                <CheckboxMUI
+                    name="visible"
+                    label={t('vehicles:create-and-publish')}
+                    control={control}
+                    errors={errors}
+                />
+            </FieldWrapper>
 
-            <StepNavigation prev={prevStep} submitLabel="Créer mon annonce" submit/>;
+            <StepNavigation prev={prevStep} submitLabel={t('vehicles:create-my-ad')} submit/>;
         </form>
     );
 };

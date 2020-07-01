@@ -1,7 +1,6 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import RoomIcon from '@material-ui/icons/Room';
 import useTranslation from 'next-translate/useTranslation';
 
 import {
@@ -11,12 +10,9 @@ import {
     RadioTypeFunction,
 } from '../../Vehicles/moto/form.data';
 import { GeoCitiesInput, SelectInput, SliderInput, TextInput } from '../../Form/Inputs';
-import MotorsBikesApiService from '../../../services/vehicles/InternalVehiclesApiService';
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
 import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
 import useAddress from '../../../hooks/useAddress';
 import FieldWrapper from '../../Form/FieldWrapper';
-import Header from '../../Header';
 import { RadioVehicleGeneralState } from '../../Vehicles/car/form.data';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 
@@ -131,15 +127,6 @@ const MotoFilters = memo(({ control, watch, errors, ...props }) => {
                 errors={errors}
                 control={control}
             />
-
-            {address && (
-                <>
-                    <Typography component="span" gutterBottom>{t('vehicles:approximate-address')}</Typography>
-                    <Header p strong className="my-2">
-                        <RoomIcon/> : {address}
-                    </Header>
-                </>
-            )}
 
             <Typography component="span" gutterBottom>{t('vehicles:city')}</Typography>
             {countrySelect && countrySelect.value === 'FR' ? (

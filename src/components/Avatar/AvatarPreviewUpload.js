@@ -18,7 +18,7 @@ const FileInput = ({ value, onChange = noop, ...rest }) => (
 );
 
 const AvatarPreviewUpload = () => {
-    const { authenticatedUser, updateRawUser, isAuthenticated } = useAuth();
+    const { authenticatedUser, updateAuthenticatedRawUser, isAuthenticated } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [avatarLocation, setAvatarLocation] = useState(authenticatedUser.getAvatar);
 
@@ -29,7 +29,7 @@ const AvatarPreviewUpload = () => {
 
         UsersService.uploadAvatar(data)
             .then(doc => {
-                updateRawUser(doc);
+                updateAuthenticatedRawUser(doc);
                 dispatchModal({ msg: 'Upload Successful'});
             }).catch(err => {
                 dispatchModalError({ err, persist : true });

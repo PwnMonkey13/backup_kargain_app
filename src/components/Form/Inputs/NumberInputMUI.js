@@ -16,6 +16,7 @@ const NumberInputMUI = memo(({ name, rules, control, errors, ...props }) => {
                     rules={rules}
                     as={<Input
                         id="standard-adornment-amount"
+                        type="number"
                         startAdornment={<InputAdornment position="start">€</InputAdornment>}
                     />}
                 />

@@ -2,7 +2,7 @@ import UserModel from './user.model';
 import parseISO from 'date-fns/parseISO';
 import ImageModel from './ImageModel';
 
-export default class Announce {
+export default class AnnounceModel{
     constructor (ad) {
         this.raw = ad;
     }
@@ -22,6 +22,14 @@ export default class Announce {
 
     get getSlug () {
         return this.raw?.slug;
+    }
+
+    get getAnnounceLink() {
+        return this.getSlug ? `/announces/${this.getSlug}` : '/';
+    }
+
+    get getAnnounceEditLink () {
+        return this.getSlug ? `/announces/${this.getSlug}/edit` : '/';
     }
 
     get getTitle () {
