@@ -1,13 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import RoomIcon from '@material-ui/icons/Room';
 import useTranslation from 'next-translate/useTranslation';
 import { GeoCitiesInput, SelectInput, SliderInput, TextInput } from '../../Form/Inputs';
-import CarApiService from '../../../services/vehicles/CarApiService';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
 import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
 import useAddress from '../../../hooks/useAddress';
-import Header from '../../Header';
 import {
     CheckboxOptionsEquipments,
     RadioChoicesEmission,
@@ -137,15 +134,6 @@ const UtilityFilters = ({ control, watch, errors }) => {
                 errors={errors}
                 control={control}
             />
-
-            {address && (
-                <>
-                    <Typography component="span" gutterBottom>{t('vehicles:approximate-address')}</Typography>
-                    <Header p strong className="my-2">
-                        <RoomIcon/> : {address}
-                    </Header>
-                </>
-            )}
 
             <Typography component="span" gutterBottom>{t('vehicles:city')}</Typography>
             {countrySelect && countrySelect.value === 'FR' ? (

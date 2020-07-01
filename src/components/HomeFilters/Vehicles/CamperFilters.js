@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import RoomIcon from '@material-ui/icons/Room';
 import useTranslation from 'next-translate/useTranslation';
 import { GeoCitiesInput, SelectInput, SliderInput, TextInput } from '../../Form/Inputs';
 import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import useAddress from '../../../hooks/useAddress';
 import FieldWrapper from '../../Form/FieldWrapper';
-import Header from '../../Header';
 import {
     CheckboxOptionsEquipments,
     RadioChoicesEmission,
@@ -125,15 +123,6 @@ const CamperFilters = ({ control, watch, errors }) => {
                 errors={errors}
                 control={control}
             />
-
-            {address && (
-                <>
-                    <Typography component="span" gutterBottom>{t('vehicles:approximate-address')}</Typography>
-                    <Header p strong className="my-2">
-                        <RoomIcon/> : {address}
-                    </Header>
-                </>
-            )}
 
             <Typography component="span" gutterBottom>{t('vehicles:city')}</Typography>
             {countrySelect && countrySelect.value === 'FR' ? (
