@@ -14,11 +14,9 @@
     "localesPath": "src/locales",
     "finalPagesDir": "src/pages",
     "pages": {
-        "/": [
-            "filters"
-        ],
         "*": [
-            "vehicles"
+            "vehicles",
+            "filters"
         ]
     }
 }

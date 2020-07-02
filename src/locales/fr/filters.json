@@ -1,4 +1,5 @@
 {
+    "select-filters" : "Sélectionner les filtres",
     "price": "Prix",
     "adType": "Type d'annonce",
     "vehicleType": "Type de véhicule",

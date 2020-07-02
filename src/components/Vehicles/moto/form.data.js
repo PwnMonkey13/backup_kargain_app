@@ -22,12 +22,8 @@ export const RadioTypeFunction = [
         value: 'snowmobile'
     },
     {
-        label: 'Sportbike',
-        value: 'sportbike'
-    },
-    {
-        label: 'Moto legere',
-        value: 'light-motorcycle'
+        label: 'Moto-sport',
+        value: 'moto-sport'
     },
     {
         label: 'Mini bike',
@@ -39,7 +35,7 @@ export const RadioTypeFunction = [
     },
     {
         label: 'Sportive',
-        value: 'Sportive'
+        value: 'sport-bike,'
     },
     {
         label: 'Autre',
@@ -87,73 +83,73 @@ export const CheckboxOptionsEquipments = SelectOptionsUtils([
 export const RadioChoicesExternalColor = [
     {
         value: 'noir',
-        label: 'Noir'
-    },
-    {
-        value: 'blanc',
-        label: 'Blanc'
-    },
-    {
-        value: 'vert',
-        label: 'Vert'
-    },
-    {
-        value: 'belge',
-        label: 'Belge'
-    },
-    {
-        value: 'doré',
-        label: 'Doré'
-    },
-    {
-        value: 'marron',
-        label: 'Marron'
-    },
-    {
-        value: 'orange',
-        label: 'Orange'
-    },
-    {
-        value: 'bronze',
-        label: 'Bronze'
-    },
-    {
-        value: 'violet',
-        label: 'Violet'
-    },
-    {
-        value: 'bleu',
-        label: 'Bleu'
-    },
-    {
-        value: 'rouge',
-        label: 'Rouge'
-    },
-    {
-        value: 'argent',
-        label: 'Argent'
+        label: 'Noir',
     },
     {
         value: 'gris',
-        label: 'Gris'
+        label: 'Gris',
+    },
+    {
+        value: 'blanc',
+        label: 'Blanc',
+    },
+    {
+        value: 'vert',
+        label: 'Vert',
+    },
+    {
+        value: 'beige',
+        label: 'Beige',
+    },
+    {
+        value: 'doré',
+        label: 'Doré',
+    },
+    {
+        value: 'marron',
+        label: 'Marron',
+    },
+    {
+        value: 'orange',
+        label: 'Orange',
+    },
+    {
+        value: 'bronze',
+        label: 'Bronze',
+    },
+    {
+        value: 'violet',
+        label: 'Violet',
+    },
+    {
+        value: 'bleu',
+        label: 'Bleu',
+    },
+    {
+        value: 'rouge',
+        label: 'Rouge',
+    },
+    {
+        value: 'argent',
+        label: 'Argent',
     },
     {
         value: 'jaune',
-        label: 'Jaune'
+        label: 'Jaune',
     },
     {
         value: 'autre',
-        label: 'Autre'
-    }
+        label: 'Autre',
+    },
 ]
 
 export const RadioChoicesPaints = [
     {
-        value: 'metalique',
+        value: 'metallic',
         label: 'Métalique'
     },
     {
-        value: 'autre',
+        value: 'other',
         label: 'Autre'
     }
 ]

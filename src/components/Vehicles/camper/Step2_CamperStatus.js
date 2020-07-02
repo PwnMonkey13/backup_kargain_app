@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import useTranslation from 'next-translate/useTranslation';
 import Header from '../../Header';
 import StepNavigation from '../../Form/StepNavigation';
 import FieldWrapper from '../../Form/FieldWrapper';
@@ -10,20 +11,33 @@ import TagsControlled from '../../Tags/TagsControlled';
 import { FormContext } from '../../../context/FormContext';
 import DamageSelectorControlledCar from '../../Damages/DamageSelectorControlledCar';
 
-const Step = ({ onSubmitStep, prevStep, nextStep }) => {
+const Step = ({ onSubmitStep, prevStep }) => {
     const { formDataContext } = useContext(FormContext);
-    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
+    const { t, lang } = useTranslation();
+    const [formData, setFormData] = useState({
+        RadioVehicleGeneralState: [],
+        CheckboxOptionsEquipments: [],
+    });
+    const { control, errors, getValues, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: formDataContext,
     });
 
+    const getData = async () => {
+        const data = lang === 'fr' ? await import('./form.data.js') : await import('./form.data_en.js');
+        setFormData(data);
+    };
+
+    useEffect(() => {
+        getData();
+    }, []);
+
     return (
         <form className="form_wizard" onSubmit={handleSubmit(onSubmitStep)}>
-            <button type="button" onClick={() => console.log(getValues())}>CLICK</button>
-            <Header text="Etat du véhicule"/>
+            <Header text={t('vehicles:vehicle-state')}/>
 
-            <FieldWrapper label="Etat général">
+            <FieldWrapper label={t('vehicles:vehicle-general-state')}>
                 <SelectInput
                     name="vehicleGeneralState"
                     options={RadioVehicleGeneralState}
@@ -32,7 +46,7 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label="Nombre de propriétaires">
+            <FieldWrapper label={t('vehicles:owners-quantity')}>
                 <SelectInput
                     name="ownersCount"
                     options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -42,7 +56,18 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label="Description">
+            <FieldWrapper label={t('vehicles:equipments')}>
+                <SelectInput
+                    name="equipments"
+                    isMulti
+                    options={formData.CheckboxOptionsEquipments}
+                    defaultChecked={['ABS', 'ESP']}
+                    control={control}
+                    errors={errors}
+                />
+            </FieldWrapper>
+
+            <FieldWrapper label={t('vehicles:description')}>
                 <TextareaInput
                     name="description"
                     control={control}

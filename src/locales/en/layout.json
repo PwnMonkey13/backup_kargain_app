@@ -26,5 +26,6 @@
   "newsletter": "Newsletter",
   "subscribe" : "Subscribe",
   "newsletter-text" : "Don’t miss to subscribe to our new feeds, kindly fill the form below.",
-  "messaging" : "Messaging"
+  "messaging" : "Messaging",
+  "close" : "Close"
 }

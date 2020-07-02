@@ -11,11 +11,11 @@ export const RadioTypeFunction = [
     },
     {
         label: 'Caravane',
-        value: 'caravane'
+        value: 'caravan'
     },
     {
         label: 'Cabine',
-        value: 'cabine'
+        value: 'cabin'
     },
     {
         label: 'Mobile home/Pick-up',
@@ -75,7 +75,9 @@ export const RadioChoicesEngine = [
     }
 ]
 export const RadioChoicesEmission = SelectOptionsUtils(['EURO1', 'EURO2', 'EURO3', 'EURO4', 'EURO5', 'EURO6'])
+
 export const SelectChoicesBrandsAPI = SelectOptionsUtils(['Audi', 'BMW', 'Mercedes', 'Peugeot', 'Renault', 'Fiat'])
+
 export const CheckboxOptionsEquipments = SelectOptionsUtils([
     'ABS',
     'ESP',
@@ -109,75 +111,66 @@ export const CheckboxOptionsEquipments = SelectOptionsUtils([
 export const RadioChoicesExternalColor = [
     {
         value: 'noir',
-        label: 'Noir'
-    },
-    {
-        value: 'blanc',
-        label: 'Blanc'
-    },
-    {
-        value: 'vert',
-        label: 'Vert'
-    },
-    {
-        value: 'belge',
-        label: 'Belge'
-    },
-    {
-        value: 'doré',
-        label: 'Doré'
-    },
-    {
-        value: 'marron',
-        label: 'Marron'
-    },
-    {
-        value: 'orange',
-        label: 'Orange'
-    },
-    {
-        value: 'bronze',
-        label: 'Bronze'
-    },
-    {
-        value: 'violet',
-        label: 'Violet'
-    },
-    {
-        value: 'bleu',
-        label: 'Bleu'
-    },
-    {
-        value: 'rouge',
-        label: 'Rouge'
-    },
-    {
-        value: 'argent',
-        label: 'Argent'
+        label: 'Noir',
     },
     {
         value: 'gris',
-        label: 'Gris'
+        label: 'Gris',
+    },
+    {
+        value: 'blanc',
+        label: 'Blanc',
+    },
+    {
+        value: 'vert',
+        label: 'Vert',
+    },
+    {
+        value: 'beige',
+        label: 'Beige',
+    },
+    {
+        value: 'doré',
+        label: 'Doré',
+    },
+    {
+        value: 'marron',
+        label: 'Marron',
+    },
+    {
+        value: 'orange',
+        label: 'Orange',
+    },
+    {
+        value: 'bronze',
+        label: 'Bronze',
+    },
+    {
+        value: 'violet',
+        label: 'Violet',
+    },
+    {
+        value: 'bleu',
+        label: 'Bleu',
+    },
+    {
+        value: 'rouge',
+        label: 'Rouge',
+    },
+    {
+        value: 'argent',
+        label: 'Argent',
     },
     {
         value: 'jaune',
-        label: 'Jaune'
+        label: 'Jaune',
     },
     {
         value: 'autre',
-        label: 'Autre'
-    }
-]
-export const RadioChoicesPaints = [
-    {
-        value: 'metalique',
-        label: 'Métalique'
+        label: 'Autre',
     },
-    {
-        value: 'autre',
-        label: 'Autre'
-    }
 ]
+
 export const RadioChoicesMaterials = [
     {
         value: 'Alcantre',

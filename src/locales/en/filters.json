@@ -1,4 +1,5 @@
 {
+    "select-filters" : "Select filters",
     "price": "Price",
     "adType": "Announce type",
     "vehicleType": "Vehicle type",

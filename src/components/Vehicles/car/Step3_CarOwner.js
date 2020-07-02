@@ -44,7 +44,7 @@ const Step = ({ handleSubmitForm, prevStep }) => {
         <form className="form_wizard" onSubmit={handleSubmit(handleSubmitForm)}>
             <Header text={t('vehicles:publish-my-ad-now')}/>
             <Row>
-                <Col sm={12}>
+                <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:announce-title')}>
                         <TextInput
                             name="title"
@@ -62,7 +62,7 @@ const Step = ({ handleSubmitForm, prevStep }) => {
                         />
                     </FieldWrapper>
                 </Col>
-                <Col sm={12}>
+                <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:ad-price')}>
                         <NumberInput
                             name="price"

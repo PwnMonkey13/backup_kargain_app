@@ -2,15 +2,15 @@ import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 
 export const RadioTypeFunction = [
     {
-        label: 'Citadine',
+        label: 'Compact,',
         value: 'compact',
     },
     {
-        label: 'Cabriolet',
+        label: 'Convertible',
         value: 'convertible',
     },
     {
-        label: 'Coupé',
+        label: 'Cupcar',
         value: 'cupcar',
     },
     {
@@ -18,7 +18,7 @@ export const RadioTypeFunction = [
         value: 'suv',
     },
     {
-        label: 'Berline',
+        label: 'Sedan',
         value: 'sedan',
     },
     {
@@ -26,11 +26,11 @@ export const RadioTypeFunction = [
         value: 'break',
     },
     {
-        label: 'Monospace',
+        label: 'Minivan',
         value: 'minivan',
     },
     {
-        label: 'Autre',
+        label: 'Other',
         value: 'other',
     },
 ];
@@ -66,11 +66,10 @@ export const RadioFunctionVehicle = [
     },
 ];
 
-
 export const RadioVehicleGeneralState = [
     {
         value: 'nine',
-        label: 'Neuf',
+        label: 'New',
     },
     {
         value: 'occasion',
@@ -82,11 +81,11 @@ export const RadioVehicleGeneralState = [
     },
     {
         value: 'school-driving-car',
-        label: 'Véhicule auto-école',
+        label: 'Automobile Driving School',
     },
     {
         value: 'after-rent',
-        label: 'Après location',
+        label: 'After Rent',
     },
     {
         value: 'taxi',
@@ -94,11 +93,11 @@ export const RadioVehicleGeneralState = [
     },
     {
         value: 'company-car',
-        label: 'Véhicule de société',
+        label: 'Employee’s Vehicle',
     },
     {
         value: 'demo-car',
-        label: 'Véhicule de démonstration',
+        label: 'Demonstration Vehicle',
     },
 ];
 
@@ -108,85 +107,78 @@ export const RadioChoicesGas = [
         value: 'diesel',
     },
     {
-        label: 'Essence',
+        label: 'Gas',
         value: 'gas',
     },
     {
-        label: 'Éthanol',
+        label: 'Ethanol',
         value: 'ethanol',
     },
     {
-        label: 'Electrique',
+        label: 'Electric',
         value: 'electric',
     },
     {
-        label: 'Hybride diesel',
+        label: 'Hybrid / gasoline',
         value: 'hybrid-gas',
     },
     {
-        label: 'Hydrogène',
+        label: 'Hydrogen',
         value: 'hydrogen',
     },
     {
-        label: 'Gaz compressé (GPL)',
+        label: 'Liquified petroleum gas (LPG),',
         value: 'gpl',
     },
 ];
 
 export const RadioChoicesEngine = [
     {
-        label: 'Automatique',
+        label: 'Automatic',
         value: 'automatic',
     },
     {
-        label: 'Manuelle',
+        label: 'Manual',
         value: 'manual',
     },
     {
-        label: 'Semi-automatique',
+        label: 'Semi-automatic',
         value: 'semi-auto',
     },
 ];
+
 export const RadioChoicesEmission = SelectOptionsUtils(['EURO1', 'EURO2', 'EURO3', 'EURO4', 'EURO5', 'EURO6']);
 
 export const CheckboxOptionsEquipments = SelectOptionsUtils([
-    'ABS', 'ESP', 'Régulateur de vitesse adaptatif', 'Soundsystem', 'Bluetooth', 'Hayon arrière électrique',
-    'CD', 'MP3', 'Start/Stop automatique', 'USB', 'Anti-patinage', 'Porte-bagages', 'Verrouillage centralisé sans clé',
-    'Rétroviseurs latéraux électriques', 'Airbags latéraux', 'Ordinateur de bord', 'Sieges ventilés', 'Direction assistée',
-    'Détecteur de pluie', 'Phares de jour', 'Vitres électriques', 'Anti-démarrage', 'Affichage tête haute', 'Jantes alliages',
-    'Toit ouvrant', 'Climatisation automatique', 'Phares au xénon', 'Volant en cuir', 'Kit mains libres', 'Régulateur de vitesses',
-    'Climatisation', 'Tappe de ski', 'Sièges massants', 'Volant multifonctions', 'Système de navigation', 'Sieges chauffants',
-    'Equipement handicapé', 'Sièges à réglage lombaire', 'Toit panoramique', 'Camera d’aide au stationnement',
-    'Radar de stationnement arrière', 'Pare-brise chauffant', 'Radar de stationnement avant', 'Suspension pneumatique',
-    'Airbag conducteur', 'Attache remorque', 'Phares directionnels', 'Airbag passager', 'Accoudoir', 'Chauffage auxiliaire',
-    'Pétales de changement de vitesse', 'Volant chauffant', '4x4', 'Feux antibrouillard', 'Radio', 'Détecteur de lumière',
-    'LED phare de jour', 'Phares au LED', 'Porte coulissante', 'Écran tactile', 'Alarme',
-    'Le système d’appel d’urgence',
+    'ABS', 'Bluetooth', 'CD player', 'ESP', 'MP3', 'USB', 'Start / Stop system',
+    'Electric tailgate', 'Adaptive Cruise Control', 'Traction control', 'Soundsystem',
+    'Roof rack', 'Keyless central locking', 'Electric side mirrors', 'Side airbag', 'On- board computer',
+    'Seat ventilation', 'Power steering', 'Rain sensor', 'Daylights running lights',
+    'Immobilizer', 'Heads-up display', 'Automatic climate control', 'Leather steering wheel', 'Handsfree', 'Air conditioning',
+    'Cruise control', 'Xenon headlights', 'Alloy wheels', 'Ski bag', 'Sunroof', 'Massage seats', 'Multifunction steering wheel',
+    'Navigation system', 'Seat heating', 'Handicapped enabled', 'Lumbar support', 'Panorama roof',
+    'Parking assist system camera', 'Parking assist system rear', 'Parking assist system front', 'Air suspension',
+    'Adaptive headlights', 'Armrest', 'Auxiliary heating', 'Heated steering wheel', 'Shift paddles', 'Passenger-side airbag',
+    'Driver-side airbag', '4WD', 'Trailer hitch', 'Fog lights', 'Radio', 'Light detector', 'LED daylight running lights',
+    'LED headlights', 'Sliding door', 'Touchscreen', 'Alarm', 'Emergency system', 'Parking assist system self-steering',
+    'Tire pressure monitoring system', 'Blind spot monitor', 'Driver drowsiness detection', 'Isofix', 'Night view assist',
+    'Hill holder', 'Traffic sign recognition', 'Lane departure warning system', 'Emergency brake assistant', 'Sport suspension',
+    'Sports seats', 'Sport Pack', 'Television', 'Voice control', 'Central door lock', 'Digital radio', 'Electrically adjustable seats',
+    'Power windows', 'Electrically heated windshield',
 ]);
-
-export const RadioChoicesPaints = [
-    {
-        value: 'metalique',
-        label: 'Métalique',
-    },
-    {
-        value: 'autre',
-        label: 'Autre',
-    },
-];
 
 export const RadioChoicesExternalColor = [
     {
-        value: 'noir',
-        label: 'Noir',
+        value: 'black',
+        label: 'Black',
     },
     {
-        value: 'gris',
-        label: 'Gris',
+        value: 'gray',
+        label: 'Gray',
     },
     {
-        value: 'blanc',
-        label: 'Blanc',
+        value: 'white',
+        label: 'White',
     },
     {
         value: 'vert',
@@ -197,12 +189,12 @@ export const RadioChoicesExternalColor = [
         label: 'Beige',
     },
     {
-        value: 'doré',
-        label: 'Doré',
+        value: 'gold',
+        label: 'Gold',
     },
     {
-        value: 'marron',
-        label: 'Marron',
+        value: 'brown',
+        label: 'Brown',
     },
     {
         value: 'orange',
@@ -213,28 +205,28 @@ export const RadioChoicesExternalColor = [
         label: 'Bronze',
     },
     {
-        value: 'violet',
-        label: 'Violet',
+        value: 'purple',
+        label: 'Purple',
     },
     {
-        value: 'bleu',
-        label: 'Bleu',
+        value: 'blue',
+        label: 'Blue',
     },
     {
-        value: 'rouge',
-        label: 'Rouge',
+        value: 'red',
+        label: 'Red',
     },
     {
-        value: 'argent',
-        label: 'Argent',
+        value: 'silver',
+        label: 'Silver',
     },
     {
-        value: 'jaune',
-        label: 'Jaune',
+        value: 'yellow',
+        label: 'Yellow',
     },
     {
-        value: 'autre',
-        label: 'Autre',
+        value: 'other',
+        label: 'Other',
     },
 ];
 
@@ -260,7 +252,17 @@ export const RadioChoicesMaterials = [
         label: 'velours',
     },
     {
-        value: 'other',
+        value: 'Autre',
+        label: 'autre',
+    },
+];
+
+export const RadioChoicesPaints = [{
+    value: 'metalique',
+    label: 'Métalique',
+},
+    {
+        value: 'autre',
         label: 'Autre',
     },
 ];
