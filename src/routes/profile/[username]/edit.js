@@ -94,13 +94,13 @@ const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [stateReady, setStateReady] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
-    const [profile, setProfile] = useState(new UserModel(profileRaw));
+    const [profile,] = useState(new UserModel(profileRaw));
     const [openDialogRemove, setOpenDialogRemove] = useState(false);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true,
     });
 
-    const { register, control, watch, errors, handleSubmit } = useForm({
+    const { control, watch, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: {
@@ -139,9 +139,7 @@ const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
 
     const onSubmit = (form) => {
         UsersService.updateUser(form)
-            .then(updatedUser => {
-                setProfile(new UserModel(updatedUser));
-                if (isSelf) updateAuthenticatedRawUser(updatedUser);
+            .then(() => {
                 dispatchModal({
                     msg: 'User successfully updated',
                 });

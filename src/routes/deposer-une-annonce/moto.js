@@ -12,7 +12,7 @@ import Step3MotoOwner from '../../components/Vehicles/moto/Step3_MotoOwner';
 const MotorCyclesForm = (props) => {
     const router = useRouter();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
 
     const onFinalSubmit = data => {
         AnnounceService.createAnnounce(data, props.token)

@@ -12,7 +12,7 @@ import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner';
 const CarForm = (props) => {
     const { dispatchModal } = useContext(ModalDialogContext);
     const router = useRouter();
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
 
     const onFinalSubmit = data => {
         AnnounceService.createAnnounce(data, props.token)

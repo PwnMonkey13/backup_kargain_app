@@ -1,14 +1,12 @@
-import React, { memo, useRef } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { Col, Row } from 'reactstrap';
 import Typography from '@material-ui/core/Typography';
-import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const useStyles = makeStyles(() => ({
     root: {
-        flex : 1,
+        flex: 1,
     },
 
     spec: {
@@ -25,12 +23,12 @@ const useStyles = makeStyles(() => ({
 
 const CarInfos = memo(({ announce, enableThirdColumn }) => {
     const classes = useStyles();
-    const cols = enableThirdColumn ? 4 : 6
+    const cols = enableThirdColumn ? 4 : 6;
 
     return (
         <Row className="specs my-2 p-2">
             <Col sm={12} md={cols}>
-                 <div className={classes.spec}>
+                <div className={classes.spec}>
                     <Typography>
                         <span>Marque: </span>{announce.getManufacturer.make}
                     </Typography>
@@ -94,7 +92,7 @@ const CarInfos = memo(({ announce, enableThirdColumn }) => {
                 </div>
             </Col>
 
-            { enableThirdColumn && (
+            {enableThirdColumn && (
                 <Col sm={12} md={cols}>
                     <div className={classes.spec}>
                         <Typography>
@@ -150,6 +148,6 @@ const CarInfos = memo(({ announce, enableThirdColumn }) => {
 CarInfos.propTypes = {
     announce: PropTypes.object.isRequired,
     responsiveCols: PropTypes.bool,
-    enableThirdColumn : PropTypes.bool
+    enableThirdColumn: PropTypes.bool,
 };
 export default CarInfos;

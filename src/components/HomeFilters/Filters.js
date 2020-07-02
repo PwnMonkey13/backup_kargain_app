@@ -1,10 +1,14 @@
 import React, { memo, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { flatten } from 'flattenjs';
+import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import Typography from '@material-ui/core/Typography';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import useTranslation from 'next-translate/useTranslation';
 import announcesFiltersMapper from '../../libs/announcesFiltersMapper';
 import resolveObjectKey from '../../libs/resolveObjectKey';
@@ -13,10 +17,6 @@ import RadioGroupInput from '../Form/Inputs/RadioGroupInput';
 import getFiltersVehicleComponent from './Vehicles';
 import VehicleTypeFilterSelector from './VehicleTypeFilterSelector';
 import Header from '../Header';
-import Typography from '@material-ui/core/Typography';
-import clsx from 'clsx';
-import { useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
     filtersContainer: {
@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     },
 
     filtersTop: {
-        padding: '1rem',
         display: 'flex',
         alignItems: 'center',
         borderBottom: '1px solid gainsboro',
@@ -123,7 +122,7 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
         <div className={classes.filtersContainer}>
             <div className={classes.filtersTop} onClick={() => toggleFilters()}>
                 <Typography variant="h4">
-                    Sélectionner les filtres
+                    {t('filters:select-filters')}
                     <i className={clsx('ml-2', 'arrow_nav', hiddenForm ? 'is-top' : 'is-bottom')}/>
                 </Typography>
             </div>

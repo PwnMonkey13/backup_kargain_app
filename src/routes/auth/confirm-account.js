@@ -33,16 +33,13 @@ const ConfirmAccount = () => {
         );
     };
 
-    console.log(token);
-    console.log(activated);
-
     useEffect(() => {
         if (!token) return;
         AuthService.confirmAccount(token)
             .then(doc => {
-                console.log(doc);
                 dispatchModal({ msg: 'Account successfully activated' });
                 setActivated(true);
+                router.push('/auth/login')
             })
             .catch(err => {
                 const action = err.name === 'AlreadyActivatedError' ? 'already-activated' : 'activation-invalid';

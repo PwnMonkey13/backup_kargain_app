@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Container } from 'reactstrap';
+import clsx from 'clsx';
+import useTranslation from 'next-translate/useTranslation';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import { useRouter, withRouter } from 'next/router';
 import Header from '../../components/Header';
 import VehicleTypeSelectorStep from '../../components/Vehicles/VehicleTypeSelectorStep';
 import AdTypeSelectorStep from '../../components/Vehicles/AdTypeSelectorStep';
-import clsx from 'clsx';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import useTranslation from 'next-translate/useTranslation';
 
 const path = require('path');
 

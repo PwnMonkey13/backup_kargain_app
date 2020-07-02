@@ -21,7 +21,7 @@ import { ReactComponent as StarSVG } from '../../../../public/images/svg/star.sv
 import ModalContact from '../../../components/ModalContact';
 import Alert from '@material-ui/lab/Alert';
 
-const Profile = ({ profileRaw, isAdmin, isSelf, ...props }) => {
+const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
     const { t } = useTranslation();
     const { isAuthReady, authenticatedUser, isAuthenticated, setForceLoginModal } = useAuth();
     const { dispatchModalError } = useContext(ModalDialogContext);
@@ -61,7 +61,7 @@ const Profile = ({ profileRaw, isAdmin, isSelf, ...props }) => {
     }, [isAuthReady]);
 
     if (!stateReady) return null;
-    if (profileRaw === undefined || props.err) return <Error statusCode={props.err?.statusCode}/>;
+    if (profileRaw === undefined || err) return <Error statusCode={err?.statusCode}/>;
 
     return (
         <>
@@ -155,7 +155,7 @@ const Profile = ({ profileRaw, isAdmin, isSelf, ...props }) => {
 
 const TabsContainer = ({ profile, isSelf }) => {
     const { t } = useTranslation();
-    console.log(profile);
+
     const [filtersOpened] = useState(false);
     const [, setFilters] = useState({});
 
@@ -238,8 +238,8 @@ export async function getServerSideProps (ctx) {
         return {
             props: {
                 profileRaw: user,
-                isAdmin : isAdmin ?? false,
-                isSelf : isSelf ?? false,
+                isAdmin: isAdmin ?? false,
+                isSelf: isSelf ?? false,
             },
         };
     } catch (err) {
