@@ -1,3 +1,5 @@
+@import 'variables';
+
 @media (max-width: 1200px){
   .nav-tabs-profile .nav-link{
     width: 210px;
@@ -102,18 +104,11 @@
     width: 112px;
   }
 
-  .tva-checkbox{
+  .tva-checkbox {
     height: 100%;
     display: flex;
     align-items: flex-end;
     margin-bottom: 17px;
-  }
-  .top-profile-wrapper,.top-profile-name-btn{
-    flex-direction: column;
-  }
-
-  .top-profile-name-btn > div,.top-profile-name{
-    margin-top: 10px;
   }
   .top-profile-wrapper{
     margin-bottom: 30px;
@@ -150,7 +145,7 @@
     margin-right: auto;
   }
 
-  .top-profile-location {
+  .top-profile-location, .top-profile-followers {
     flex-basis: 100%;
     justify-content: center;
   }
@@ -336,9 +331,6 @@
     justify-content: flex-start;
   }
 
-  .top-profile-name-btn{
-    align-items: flex-start;
-  }
   .profile-phone{
     text-align: left;
     margin-top: 5px;

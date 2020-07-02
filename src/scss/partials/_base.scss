@@ -40,6 +40,7 @@ body {
     //font-family: "Helvetica Neue";
     position: relative;
     overflow-x: hidden;
+    font-weight: 700;
 }
 
 @media print, screen and (min-width: 50em) {
@@ -96,7 +97,7 @@ a {
 
 main {
     display: block;
-    margin: 0 auto;
+    margin: 1rem auto;
     padding: 1rem;
     position: relative;
     min-height: 75vh;
@@ -194,7 +195,7 @@ main {
 }
 
 .react-bs-table-sizePerPage-dropdown button {
-    background: #fff;
+    background: $white;
     color: #000;
 }
 
@@ -242,6 +243,15 @@ main {
     }
 }
 
+.breadcrumb-item.active{
+    a{
+        background-color: $grey;
+        padding: 0 1rem;
+        border-radius: 10px;
+        //text-decoration: underline;
+        color: $white
+    }
+}
 .dropdown-item.active, .dropdown-item:active {
     background: unset;
 }

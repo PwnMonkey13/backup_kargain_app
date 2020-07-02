@@ -7,6 +7,7 @@
     border-radius: 100%;
     border: 3px solid $grey;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+
     > div {
         width: 100%;
         height: 100%;
@@ -22,12 +23,6 @@
     }
 }
 
-@media (max-width: 992px){
-    .avatar-preview{
-        width: 80px;
-        height: 80px;
-    }
-}
 .avatar-upload {
     position: relative;
     max-width: 200px;
@@ -62,5 +57,16 @@
                 }
             }
         }
+    }
+}
+
+@media (max-width: 767px) {
+    .avatar-upload {
+        margin: 0 auto;
+    }
+
+    .avatar-preview {
+        width: 150px;
+        height: 150px;
     }
 }

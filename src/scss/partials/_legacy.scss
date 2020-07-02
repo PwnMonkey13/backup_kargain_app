@@ -280,7 +280,7 @@ h2{
   height: auto;
 }
 .modal-content .btn-primary{
-  color: #fff;
+  color: $white;
   border-color: #569ffc;
   background-color: #569ffc;
   border-radius: 20px;
@@ -506,10 +506,6 @@ h1.annonce{
 .top-profile-name:hover{
   text-decoration: none;
   color: #3d4248;
-}
-.top-profile-location:hover{
-  color: #569ffc;
-  text-decoration: none;
 }
 .add-comment{
   width: 100%;
