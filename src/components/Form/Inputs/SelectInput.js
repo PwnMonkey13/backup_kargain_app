@@ -56,7 +56,7 @@ const SelectInput = memo(({ name, control, rules, errors, ...props }) => {
 
     return (
         <>
-            <div className={clsx('select-field', 'my-2', props.className)}>
+            <div className={clsx('select-field', 'my-1', props.className)}>
                 <Controller
                     instanceId={name}
                     name={name}

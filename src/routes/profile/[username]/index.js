@@ -64,7 +64,7 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
     if (profileRaw === undefined || err) return <Error statusCode={err?.statusCode}/>;
 
     return (
-        <>
+        <Container>
             <ModalContact
                 recipient={profile}
                 handleClose={handleCloseModalContact}
@@ -82,14 +82,8 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
                     <AvatarPreview src={profile.getAvatar}/>
                 </Col>
                 <Col md={10}>
-                    <div className="d-flex justify-content-between mt-2">
-                        <div className="d-flex">
-                            <h2>{profile.getFullName}</h2>
-                            <div className="mx-2 float-left">
-                                <img src="/images/star.png" alt=""/>
-                            </div>
-
-                        </div>
+                    <div className="top-profile-name-btn">
+                        <h2>{profile.getFullName} <img className="mx-2" src="/images/star.png" alt=""/></h2>
 
                         {isSelf ? (
                             <div className="mx-2">
@@ -115,25 +109,27 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
                         )}
                     </div>
 
-                    <Typography>{profile.getUsername}</Typography>
+                    <p className="top-profile-login">
+                        @{profile.getUsername}
+                    </p>
 
                     <Row>
                         {profile.getAddressParts.fullAddress && (
-                            <Col sm={12}>
+                            <Col xs={12} sm={4} md={4}>
                                 <span className="top-profile-location">
                                     <img src="/images/location.png" alt=""/>
                                     {profile.addressBuilder(['city', 'postalCode', 'country'])}
                                 </span>
                             </Col>
                         )}
-                        <Col>
-                            <span className="top-profile-abonnes" onClick={handleFollowProfile}>
+                        <Col xs={12} sm={4} md={4}>
+                            <span className="top-profile-followers" onClick={handleFollowProfile}>
                                 {alreadyFollowProfile ? <StarSVGYellow/> : <StarSVG/>}
                                 {followerCounter} {t('vehicles:followers')}
                             </span>
                         </Col>
-                        <Col>
-                              <span className="top-profile-abonnes">
+                        <Col xs={12} sm={4} md={4}>
+                              <span className="top-profile-followers">
                                 {profile.getCountFollowing} {t('vehicles:subscriptions')}
                             </span>
                         </Col>
@@ -149,7 +145,7 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
                 profile,
                 isSelf,
             }}/>
-        </>
+        </Container>
     );
 };
 

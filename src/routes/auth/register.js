@@ -38,7 +38,7 @@ const RegisterPage = () => {
         <Container>
             <h1>{t('vehicles:register')}</h1>
             <Row>
-                <Col className="m-auto" sm="12" md="6">
+                <Col className="m-auto" sm="12" md="10">
                     <SSOProviders/>
                     <form className="p-3 mx-auto" style={{
                         borderRadius: '5px',

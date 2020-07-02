@@ -98,7 +98,7 @@ const Index = (props) => {
     };
 
     return (
-        <Container fluid>
+        <Container>
             <NextSeo
                 title="Kargain"
                 description="Vos meilleurs annonces automobiles"

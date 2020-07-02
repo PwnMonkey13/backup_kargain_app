@@ -5,9 +5,8 @@ import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import Step1CamperDetails from '../../components/Vehicles/utility/Step1_UtiilityDetails';
-import Step2CarStatus from '../../components/Vehicles/car/Step2_CarStatus';
+import Step2UtilityStatus from '../../components/Vehicles/utility/Step2_UtiliyStatus';
 import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner';
-import Step1MotoDetails from '../../components/Vehicles/moto/Step1_MotoDetails';
 
 const UtilityForm = (props) => {
     const router = useRouter();
@@ -53,7 +52,7 @@ const UtilityForm = (props) => {
             onFinalSubmit={onFinalSubmit}
         >
             <Step1CamperDetails title={t('vehicles:vehicle-description')}/>
-            <Step2CarStatus title={t('vehicles:vehicle-state')}/>
+            <Step2UtilityStatus title={t('vehicles:vehicle-state')}/>
             <Step3CarOwner title={t('vehicles:your-announce')}/>
         </FormWizard>
     );

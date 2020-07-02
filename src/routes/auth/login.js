@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import Link from 'next-translate/Link';
 import { useForm } from 'react-hook-form';
-import { Col, Row } from 'reactstrap';
+import { Container, Col, Row } from 'reactstrap';
 import nextCookies from 'next-cookies';
 import useTranslation from 'next-translate/useTranslation';
 import { EmailInput, PasswordInput } from '../../components/Form/Inputs';
@@ -53,10 +53,10 @@ export default ({ forceLogout }) => {
     };
 
     return (
-        <>
+        <Container>
             <h1>{t('vehicles:login')}</h1>
             <Row>
-                <Col className="m-auto" sm="12" md="6">
+                <Col className="m-auto" sm="12" md="10">
                     <SSOProviders/>
                     <form className="p-3 mx-auto"
                           onSubmit={handleSubmit(onSubmit)}
@@ -107,7 +107,7 @@ export default ({ forceLogout }) => {
                     </form>
                 </Col>
             </Row>
-        </>
+        </Container>
     );
 }
 

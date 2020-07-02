@@ -17,13 +17,16 @@ const DropdownSwitchLang = () => {
 
         return (
             <li className="nav-item navbar-dropdown p-2" data-dropdown="dropdownLocale">
-                <img className="dropdown-toggler rounded-circle"
-                     width="30"
-                     height="30"
-                     src={`/images/flags/${lang}.svg`}
-                     alt={lang}
-                     onClick={() => setOpen(open => !open)}
-                />
+                <span className="dropdown-toggler rounded-circle" onClick={() => setOpen(open => !open)}
+                      style={{ width: '30px' }}> {allLanguagesLabel[lang]}
+                </span>
+                {/*<img className="dropdown-toggler rounded-circle"*/}
+                {/*     width="30"*/}
+                {/*     height="30"*/}
+                {/*     src={`/images/flags/${lang}.svg`}*/}
+                {/*     alt={lang}*/}
+                {/*     onClick={() => setOpen(open => !open)}*/}
+                {/*/>*/}
 
                 <ul
                     id="dropdownLocale"
@@ -39,12 +42,12 @@ const DropdownSwitchLang = () => {
                                     lang={lng}>
                                     <a className="nav-link text-left">
                                         <div className="dropdown-toggler" onClick={() => setOpen(open => !open)}>
-                                            <img className="rounded-circle"
-                                                 width="30"
-                                                 height="30"
-                                                 src={`/images/flags/${lng}.svg`}
-                                                 alt={lng}
-                                            />
+                                            {/*<img className="rounded-circle"*/}
+                                            {/*     width="30"*/}
+                                            {/*     height="30"*/}
+                                            {/*     src={`/images/flags/${lng}.svg`}*/}
+                                            {/*     alt={lng}*/}
+                                            {/*/>*/}
                                             <span> {allLanguagesLabel[lng]} </span>
                                         </div>
                                     </a>

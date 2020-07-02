@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import Link from 'next-translate/Link';
 import useTranslation from 'next-translate/useTranslation';
-import { Collapse, FormGroup, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
+import { Collapse, Container, FormGroup, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
 import { useTheme } from '@material-ui/core/styles';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -44,31 +44,33 @@ const NavbarClient = () => {
 
     return (
         <header className="header">
-            <Navbar light expand="md" className="navbar p-2 position-relative">
-                <NavbarBrand href="/">
-                    <img src={getLogo()} width="150" alt="logo"/>
-                </NavbarBrand>
-                <NavbarAction/>
-                <div className="d-flex navbar-menu" id="open-navbar1">
+            <Container>
+                <Navbar light expand="sm" className="navbar p-2 position-relative">
+                    <NavbarBrand href="/">
+                        <img src={getLogo()} width="150" alt="logo"/>
+                    </NavbarBrand>
+                    <NavbarAction/>
+                    <div className="d-flex navbar-menu" id="open-navbar1">
 
-                    <Collapse isOpen={collapsed} navbar>
-                        {isAuthenticated ?
-                            <LoggedInUserNav/> :
-                            <VisitorNav/>
-                        }
-                    </Collapse>
+                        <Collapse isOpen={collapsed} navbar>
+                            {isAuthenticated ?
+                                <LoggedInUserNav/> :
+                                <VisitorNav/>
+                            }
+                        </Collapse>
 
-                    <NavbarToggler
-                        className="m-2"
-                        style={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: 0,
-                        }}
-                        onClick={toggleNavbar}
-                    />
-                </div>
-            </Navbar>
+                        <NavbarToggler
+                            className="m-2"
+                            style={{
+                                position: 'absolute',
+                                top: '10px',
+                                right: 0,
+                            }}
+                            onClick={toggleNavbar}
+                        />
+                    </div>
+                </Navbar>
+            </Container>
         </header>
     );
 };

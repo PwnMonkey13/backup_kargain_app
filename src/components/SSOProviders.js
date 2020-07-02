@@ -1,14 +1,16 @@
 import React, { memo, useContext, useState } from 'react';
-import AuthService from '../services/AuthService';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import GoogleLogin from 'react-google-login';
 import useTranslation from 'next-translate/useTranslation';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { ModalDialogContext } from '../context/ModalDialogContext';
+import AuthService from '../services/AuthService';
 import Loader from './Loader';
 import config from '../config/config';
 
-const SSOProviders = memo(() => {
+const SSOProviders = memo(({ col }) => {
     const router = useRouter();
     const { redirect } = router.query;
     const { t } = useTranslation();
@@ -66,7 +68,7 @@ const SSOProviders = memo(() => {
     };
 
     return (
-        <>
+        <div className={clsx('sso d-flex', col && 'flex-column', 'justify-content-center mx-auto my-2')}>
             {isLoading && <Loader fullscreen/>}
 
             <GoogleLogin
@@ -94,8 +96,12 @@ const SSOProviders = memo(() => {
                     </button>
                 )}
             />
-        </>
+        </div>
     );
 });
+
+SSOProviders.propTypes = {
+    col: PropTypes.bool,
+};
 
 export default SSOProviders;

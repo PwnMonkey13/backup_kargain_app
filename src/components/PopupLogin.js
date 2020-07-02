@@ -20,6 +20,7 @@ import TitleMUI from './TitleMUI';
 import CTAButton from './CTAButton';
 import CTALink from './CTALink';
 import useTranslation from 'next-translate/useTranslation';
+import CloseIcon from '@material-ui/icons/Close';
 
 const formConfig = {
     mode: 'onChange',
@@ -38,7 +39,6 @@ const useStyles = makeStyles(() => ({
         background: 'rgba(0, 0, 0,0.5)',
         display: 'flex',
         zIndex: 999,
-        paddingTop: '3rem',
     },
 
     popupContent: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles(() => ({
         position: 'relative',
         overflow: 'hidden',
         width: '800px',
-        height: '80vh',
+        height: '90vh',
         margin: 'auto',
         zIndex: 5,
     },
@@ -56,7 +56,6 @@ const useStyles = makeStyles(() => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        // width: '450px',
         height: '100%',
         textAlign: 'center',
         borderRadius: '10px',
@@ -75,7 +74,7 @@ const useStyles = makeStyles(() => ({
         backgroundColor: '#fff',
         maxWidth: '300px',
         height: '100%',
-        padding: '1rem',
+        padding: '0 1rem 1rem',
         margin: 'auto',
         position: 'relative',
         zIndex: 10,
@@ -98,8 +97,6 @@ export default () => {
         defaultMatches: true,
     });
 
-    console.log(isDesktop);
-
     const onSubmit = (form) => {
         const { email, password } = form;
         AuthService.login({
@@ -114,7 +111,7 @@ export default () => {
                 });
             }).catch(err => {
                 dispatchModalError({ err });
-                close();
+                toggleLoginModal(false);
             },
         );
     };
@@ -134,8 +131,13 @@ export default () => {
 
                 <Col sm={12} md={isDesktop ? 6 : 12}>
                     <div className={classes.wrapperForm}>
+                        <div className="d-flex justify-content-end">
+                            <button type="button" onClick={() => toggleLoginModal(false)}>
+                                <CloseIcon/>
+                            </button>
+                        </div>
                         <div className="d-flex flex-column">
-                            <SSOProviders/>
+                            <SSOProviders col/>
                         </div>
                         <Divider className="m-3"/>
                         <div className="auth_form m-auto">
@@ -178,6 +180,7 @@ export default () => {
                                     <CTAButton
                                         title={t('layout:login')}
                                         submit
+                                        className="width-100"
                                     />
                                 </div>
                             </form>
@@ -210,8 +213,6 @@ export default () => {
 
 const LeftBlock = memo(() => {
     const classes = useStyles();
-    const { t, lang } = useTranslation();
-    console.log(lang);
     return (
         <>
             <div style={{ flex: 1 }}>
