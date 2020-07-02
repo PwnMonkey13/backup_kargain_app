@@ -104,15 +104,26 @@ export default class UserModel {
     get getAddressParts () {
         const houseNumber = this.raw?.address?.housenumber;
         const street = this.raw?.address?.street;
-        const city = this.raw?.address?.city?.name;
-        const postCode = this.raw?.address?.city?.postcode;
+        const city = this.raw?.address?.city;
+        const postalCode = this.raw?.address?.postalcode;
+        const country = this.raw?.address?.country;
         const fullAddress = this.raw?.address?.fullAddress;
+
         return {
             fullAddress,
             houseNumber,
             street,
             city,
-            postCode,
+            postalCode,
+            country,
         };
+    }
+
+    addressBuilder (parts) {
+        const keys = !Array.isArray(parts) ? [parts] : parts;
+        return keys
+            .filter(key => this.getAddressParts[key] != null)
+            .map(key => this.getAddressParts[key])
+            .join(', ');
     }
 };

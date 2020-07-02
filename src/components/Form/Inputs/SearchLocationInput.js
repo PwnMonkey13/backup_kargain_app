@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import ValidationError from '../Validations/ValidationError';
 import PropTypes from 'prop-types';
@@ -8,7 +8,6 @@ let autoComplete;
 
 const Internal = forwardRef((props, ref) => {
     const { value } = props;
-    console.log(props);
     return (
         <input ref={ref} {...props} value={value?.fullAddress}/>
     );
@@ -42,12 +41,13 @@ const SearchLocationInput = ({ name, control, rules, errors, country, types, ...
                 const address_components = addressObject?.address_components;
                 const formatted_address = addressObject?.formatted_address;
                 if (Array.isArray(address_components)) {
-                    const [houseNumberObj, streetObj, cityObj, , , postalCodeObj] = address_components;
+                    const [houseNumberObj, streetObj, cityObj, districtObj, regionObj, countryObj, postalCodeObj] = address_components;
                     const values = {
                         housenumber: houseNumberObj?.long_name,
                         street: streetObj?.long_name,
                         city: cityObj?.long_name,
                         postalCode: postalCodeObj?.long_name,
+                        country: countryObj?.long_name,
                         fullAddress: formatted_address,
                     };
                     control.setValue(name, values);
@@ -59,7 +59,6 @@ const SearchLocationInput = ({ name, control, rules, errors, country, types, ...
     return (
         <>
             <div className={clsx('input-field', props.fullwidth && 'w-100')}>
-                <button onClick={() => control.getValues()}>CLICK</button>
                 <Controller
                     name={name}
                     control={control}

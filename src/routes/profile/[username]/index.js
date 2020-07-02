@@ -122,7 +122,7 @@ const Profile = ({ profileRaw, isAdmin, isSelf, ...props }) => {
                             <Col sm={12}>
                                 <span className="top-profile-location">
                                     <img src="/images/location.png" alt=""/>
-                                    {profile.getAddressParts.fullAddress}
+                                    {profile.addressBuilder(['city', 'postalCode', 'country'])}
                                 </span>
                             </Col>
                         )}
