@@ -14,7 +14,7 @@ import ConversationsService from '../services/ConversationsService';
 export default function ModalContact ({ recipient, handleClose, open }) {
     const classes = useStyles();
     const [conversation, setConversation] = useState(null);
-    const { authenticatedUser } = useAuth();
+    const { isAuthReady, isAuthenticated, authenticatedUser } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
 
     const { register, errors, handleSubmit } = useForm({
@@ -46,8 +46,11 @@ export default function ModalContact ({ recipient, handleClose, open }) {
     };
 
     useEffect(() => {
-        if (recipient) loadConversation();
-    }, []);
+        if(isAuthReady && isAuthenticated){
+            if (recipient) loadConversation();
+        }
+        console.log('not connected')
+    }, [isAuthReady, isAuthenticated]);
 
     return (
         <Modal className={classes.modal} open={open} onClose={handleClose}>

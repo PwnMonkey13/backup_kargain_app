@@ -32,7 +32,11 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
     const [openModalContact, setOpenModalContact] = useState(false);
 
     const handleOpenModalContact = () => {
-        setOpenModalContact(true);
+        if (!isAuthenticated) {
+            return setForceLoginModal(true);
+        } else {
+            setOpenModalContact(true);
+        }
     };
 
     const handleCloseModalContact = () => {
