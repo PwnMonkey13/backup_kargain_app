@@ -140,7 +140,7 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                 <div className="price-stars-wrapper">
                     <div className="icons-profile-wrapper">
                         <div style={{
-                            flex: 2,
+                            flex: 1,
                             display: 'flex',
                         }}>
                             <div className="icons-star-prof icons-star-current"

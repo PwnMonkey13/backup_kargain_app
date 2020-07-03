@@ -19,6 +19,7 @@ const DropdownSwitchLang = () => {
             <li className="nav-item navbar-dropdown p-2" data-dropdown="dropdownLocale">
                 <span className="dropdown-toggler rounded-circle" onClick={() => setOpen(open => !open)}
                       style={{ width: '30px' }}> {allLanguagesLabel[lang]}
+                        <i className={clsx('ml-2', 'arrow_nav', open ? 'is-top' : 'is-bottom')}/>
                 </span>
                 {/*<img className="dropdown-toggler rounded-circle"*/}
                 {/*     width="30"*/}

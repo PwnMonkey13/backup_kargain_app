@@ -45,7 +45,7 @@ const NavbarClient = () => {
     return (
         <header className="header">
             <Container>
-                <Navbar light expand="sm" className="navbar p-2 position-relative">
+                <Navbar light expand="md" className="navbar p-2 position-relative">
                     <NavbarBrand href="/">
                         <img src={getLogo()} width="150" alt="logo"/>
                     </NavbarBrand>
