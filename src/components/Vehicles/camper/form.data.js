@@ -231,3 +231,14 @@ export const RadioVehicleGeneralState = [
         label: 'Véhicule de démonstration'
     }
 ]
+
+export const RadioChoicesPaints = [
+    {
+        value: 'metalique',
+        label: 'Métalique',
+    },
+    {
+        value: 'autre',
+        label: 'Autre',
+    },
+];

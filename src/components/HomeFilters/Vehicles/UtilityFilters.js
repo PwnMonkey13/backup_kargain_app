@@ -5,6 +5,8 @@ import { GeoCitiesInput, SelectInput, SliderInput, TextInput } from '../../Form/
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
 import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
 import useAddress from '../../../hooks/useAddress';
+import Typography from '@material-ui/core/Typography';
+import FieldWrapper from '../../Form/FieldWrapper';
 import {
     CheckboxOptionsEquipments,
     RadioChoicesEmission,
@@ -16,13 +18,10 @@ import {
     RadioTypeFunction,
     RadioVehicleGeneralState,
 } from '../../Vehicles/utility/form.data';
-import Typography from '@material-ui/core/Typography';
-import FieldWrapper from '../../Form/FieldWrapper';
 
 const UtilityFilters = ({ control, watch, errors }) => {
-    const [, address, coordinates] = useAddress();
+    const [, , coordinates] = useAddress();
     const [makes, setMakes] = useState([]);
-    const { dispatchModalError } = useContext(ModalDialogContext);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -31,6 +30,8 @@ const UtilityFilters = ({ control, watch, errors }) => {
     }, [coordinates]);
 
     const countrySelect = watch('country');
+
+    console.log('render utility filters');
 
     return (
         <>

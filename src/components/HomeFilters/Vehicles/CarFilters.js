@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import useTranslation from 'next-translate/useTranslation';
-import { Col } from 'reactstrap';
 import { GeoCitiesInput, SelectInput, SliderInput, TextInput } from '../../Form/Inputs';
 import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
 import FieldWrapper from '../../Form/FieldWrapper';
@@ -18,10 +17,9 @@ import {
     RadioTypeFunction,
     RadioVehicleGeneralState,
 } from '../../Vehicles/car/form.data';
-import NumberInputMUI from '../../Form/Inputs/NumberInputMUI';
 
 const CarFilters = ({ control, watch, errors }) => {
-    const [, address, coordinates] = useAddress();
+    const [, , coordinates] = useAddress();
     const { t } = useTranslation();
     const popularMakesOptions = [
         {
@@ -84,6 +82,8 @@ const CarFilters = ({ control, watch, errors }) => {
     }, [coordinates]);
 
     const countrySelect = watch('countrySelect');
+
+    console.log('render car filters');
 
     return (
         <>

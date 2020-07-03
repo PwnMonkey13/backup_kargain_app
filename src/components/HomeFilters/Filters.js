@@ -14,8 +14,8 @@ import announcesFiltersMapper from '../../libs/announcesFiltersMapper';
 import resolveObjectKey from '../../libs/resolveObjectKey';
 import useIsMounted from '../../hooks/useIsMounted';
 import RadioGroupInput from '../Form/Inputs/RadioGroupInput';
-import getFiltersVehicleComponent from './Vehicles';
 import VehicleTypeFilterSelector from './VehicleTypeFilterSelector';
+import getFiltersVehicleComponent from './Vehicles';
 import Header from '../Header';
 
 const useStyles = makeStyles((theme) => ({
@@ -53,9 +53,14 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
     const { touched } = formState;
     const [filters, setFilters] = useState(defaultFilters);
     const [hiddenForm, hideForm] = useState(false);
+    const [vehicleType, setVehicleType] = useState('car');
     const [changes, setChanges] = useState({});
+    const DynamicFiltersComponent = getFiltersVehicleComponent(vehicleType);
 
-    const DynamicFiltersComponent = getFiltersVehicleComponent(filters.vehicleType);
+    const handleSelectVehicleType = (type) => {
+        console.log(type);
+        setVehicleType(type);
+    };
 
     const filterProps = formData => {
         return Object.keys(announcesFiltersMapper).reduce((carry, key) => {
@@ -172,6 +177,7 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
 
                     <Header p strong className="my-2" text={t('vehicles:vehicle-type')}/>
                     <VehicleTypeFilterSelector
+                        handleSelectVehicleType={handleSelectVehicleType}
                         name="vehicleType"
                         control={control}
                     />

@@ -2,22 +2,21 @@ import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import useTranslation from 'next-translate/useTranslation';
-
-import {
-    CheckboxOptionsEquipments,
-    RadioChoicesExternalColor,
-    RadioChoicesPaints,
-    RadioTypeFunction,
-} from '../../Vehicles/moto/form.data';
 import { GeoCitiesInput, SelectInput, SliderInput, TextInput } from '../../Form/Inputs';
 import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
 import useAddress from '../../../hooks/useAddress';
 import FieldWrapper from '../../Form/FieldWrapper';
 import { RadioVehicleGeneralState } from '../../Vehicles/car/form.data';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import {
+    CheckboxOptionsEquipments,
+    RadioChoicesExternalColor,
+    RadioChoicesPaints,
+    RadioTypeFunction,
+} from '../../Vehicles/moto/form.data';
 
 const MotoFilters = memo(({ control, watch, errors, ...props }) => {
-    const [, address, coordinates] = useAddress();
+    const [,, coordinates] = useAddress();
     const { t } = useTranslation();
 
     const popularMakes = [
@@ -41,6 +40,8 @@ const MotoFilters = memo(({ control, watch, errors, ...props }) => {
     }, [coordinates]);
 
     const countrySelect = watch('country');
+
+    console.log('render moto filters');
 
     return (
         <>
