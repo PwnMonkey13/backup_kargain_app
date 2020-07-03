@@ -241,14 +241,14 @@ select[type=radio] {
         border-radius: unset;
     }
 
-    input:checked + label {
-        background-color: #bfb;
-        border-color: #4c4;
-    }
+    //input:checked + label {
+    //    background-color: #bfb;
+    //    border-color: #4c4;
+    //}
 
-    input:focus + label {
-        border: 2px dashed #444;
-    }
+    //input:focus + label {
+    //    border: 2px dashed #444;
+    //}
 }
 
 .form-check-vehicle {
