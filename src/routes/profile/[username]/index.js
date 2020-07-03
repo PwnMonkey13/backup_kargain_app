@@ -31,6 +31,8 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
     const [alreadyFollowProfile, setAlreadyFollowProfile] = useState(!!profile.getFollowers.find(follower => follower.user === authenticatedUser.getID));
     const [openModalContact, setOpenModalContact] = useState(false);
 
+    console.log(profileRaw);
+
     const handleOpenModalContact = () => {
         if (!isAuthenticated) {
             return setForceLoginModal(true);

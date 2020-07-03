@@ -56,7 +56,6 @@ const Page = () => {
                     </button>
                 )}
             </div>
-
         </Container>
     );
 };

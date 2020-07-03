@@ -69,9 +69,6 @@ const Announce = ({ data, announceRaw, isAdmin, isSelf, err }) => {
         defaultMatches: true,
     });
 
-    console.log(err);
-    console.log(announceRaw);
-
     const handleOpenModalContact = () => {
         setOpenModalContact(true);
     };
