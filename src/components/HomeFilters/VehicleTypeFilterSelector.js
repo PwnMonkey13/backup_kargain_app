@@ -1,67 +1,65 @@
-import React from 'react'
-import { Col, Row } from 'reactstrap'
-import Header from '../Header'
-import { SelectInput } from '../Form/Inputs'
-import Divider from '../Divider'
+import React, { useState } from 'react';
+import { Col, Row } from 'reactstrap';
+import { SelectInput } from '../Form/Inputs';
+import Divider from '../Divider';
+import Header from '../Header';
 
 const tabsRadio = [
     {
         value: 'car',
         label: 'Voiture',
-        img: 'tab-car.png'
+        img: 'tab-car.png',
+        imgSelected: 'tab-car-blue.png',
     },
     {
         value: 'moto',
         label: 'Moto',
-        img: 'tab-moto.png'
-    },
-    {
-        value: 'scooter',
-        label: 'Scooter',
-        img: 'motor_scooter.png'
+        img: 'tab-moto.png',
+        imgSelected: 'tab-moto-blue.png',
     },
     {
         value: 'utility',
         label: 'Utilitaire',
-        img: 'tab-gruz.png'
+        img: 'tab-gruz.png',
+        imgSelected: 'tab-gruz-blue.png',
+
     },
     {
         value: 'camper',
         label: 'Camping car',
-        img: 'tab-camper.png'
+        img: 'tab-camper.png',
+        imgSelected: 'tab-camper-blue.png',
     },
-    {
-        value: 'truck',
-        label: 'Camion',
-        img: 'tab-gruz.png'
-    },
-    {
-        value: 'bus',
-        label: 'Bus',
-        img: 'tab-bus.png'
-    }
-]
+];
 
-const othersFormOptions = []
+const othersFormOptions = [];
 
-const VehicleTypeFilterSelector = ({ name, control, rules }) => {
+const VehicleTypeFilterSelector = ({ handleSelectVehicleType, name, control, rules }) => {
+    const [type, setType] = useState(null);
+
+    const handleSelect = (index) => {
+        const type = tabsRadio[index].value
+        setType(type);
+        handleSelectVehicleType(type);
+    };
     return (
         <section>
             <Row className="justify-content-center">
-                { tabsRadio && tabsRadio.map((tab, index) => {
+                {tabsRadio && tabsRadio.map((tab, index) => {
                     return (
                         <Col key={index} xs={6} sm={4} lg={6}>
                             <div className="form-check no-input form-check-vehicle m-1">
                                 <input id={`name_${index}`}
-                                    ref={control.register(rules)}
-                                    type="radio"
-                                    name={name}
-                                    value={tab.value}
-                                    defaultChecked={tab.checked}
+                                       ref={control.register(rules)}
+                                       type="radio"
+                                       name={name}
+                                       value={tab.value}
+                                       defaultChecked={tab.checked}
+                                       onClick={() => handleSelect(index)}
                                 />
                                 <label className="p-2" htmlFor={`name_${index}`}>
                                     <img
-                                        src={`/images/${tab.img}`}
+                                        src={type === tab.value ? `/images/${tab.imgSelected}` : `/images/${tab.img}`}
                                         height="30"
                                         width="40"
                                         alt={tab.label}
@@ -70,11 +68,11 @@ const VehicleTypeFilterSelector = ({ name, control, rules }) => {
                                 </label>
                             </div>
                         </Col>
-                    )
+                    );
                 })}
             </Row>
 
-            { othersFormOptions && othersFormOptions.length > 0 && (
+            {othersFormOptions && othersFormOptions.length > 0 && (
                 <>
                     <Divider/>
                     <Header p text="Autres types de véhicules"/>
@@ -84,14 +82,14 @@ const VehicleTypeFilterSelector = ({ name, control, rules }) => {
                         control={control}
                         rules={rules}
                         onChange={([selected]) => {
-                            control.setValue(name, null)
-                            return selected
+                            control.setValue(name, null);
+                            return selected;
                         }}
                     />
                 </>
             )}
         </section>
-    )
-}
+    );
+};
 
-export default VehicleTypeFilterSelector
+export default VehicleTypeFilterSelector;
