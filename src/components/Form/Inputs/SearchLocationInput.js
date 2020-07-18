@@ -1,11 +1,12 @@
-import React, { forwardRef, useEffect, useRef } from 'react';
+import React, {  useEffect, useRef, forwardRef } from 'react';
 import clsx from 'clsx';
-import ValidationError from '../Validations/ValidationError';
 import PropTypes from 'prop-types';
 import { Controller } from 'react-hook-form';
+import ValidationError from '../Validations/ValidationError';
 
 let autoComplete;
 
+// eslint-disable-next-line react/display-name
 const Internal = forwardRef((props, ref) => {
     const { value } = props;
     return (
@@ -23,7 +24,7 @@ const SearchLocationInput = ({ name, control, rules, errors, country, types, ...
     useEffect(() => {
         let options = {
             types: ['address'], //(cities), (regions), address
-            componentRestrictions: {},
+            componentRestrictions: {}
         };
 
         if (country) options.componentRestrictions.country = country.toLowerCase();
@@ -33,7 +34,7 @@ const SearchLocationInput = ({ name, control, rules, errors, country, types, ...
         } else {
             autoComplete = new window.google.maps.places.Autocomplete(
                 autoCompleteRef.current,
-                options,
+                options
             );
 
             autoComplete.addListener('place_changed', () => {
@@ -48,7 +49,7 @@ const SearchLocationInput = ({ name, control, rules, errors, country, types, ...
                         city: cityObj?.long_name,
                         postalCode: postalCodeObj?.long_name,
                         country: countryObj?.long_name,
-                        fullAddress: formatted_address,
+                        fullAddress: formatted_address
                     };
                     control.setValue(name, values);
                 }
@@ -58,7 +59,7 @@ const SearchLocationInput = ({ name, control, rules, errors, country, types, ...
 
     return (
         <>
-            <div className={clsx('input-field', props.fullwidth && 'w-100')}>
+            <div className={clsx('input-field', props.fullwidth && 'w-100', 'my-2')}>
                 <Controller
                     name={name}
                     control={control}
@@ -75,13 +76,13 @@ SearchLocationInput.propTypes = {
     country: PropTypes.string,
     name: PropTypes.string,
     disabled: PropTypes.bool,
-    types: PropTypes.arrayOf(PropTypes.string),
+    types: PropTypes.arrayOf(PropTypes.string)
 };
 
 SearchLocationInput.defaultProps = {
     rules: {},
     country: 'fr',
-    types: ['address'],
+    types: ['address']
 };
 
 export default SearchLocationInput;

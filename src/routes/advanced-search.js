@@ -1,20 +1,17 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import PropTypes from 'prop-types';
 import { NextSeo } from 'next-seo';
-import { Container } from 'reactstrap'
+import PropTypes from 'prop-types';
 import { useRouter} from 'next/router'
-import clsx from 'clsx'
-import useTranslation from 'next-translate/useTranslation'
-import { makeStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
-import Chip from '@material-ui/core/Chip'
+import { Container } from 'reactstrap'
+import { makeStyles } from '@material-ui/core/styles';
+import Chip from '@material-ui/core/Chip';
+import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import useIsMounted from '../hooks/useIsMounted';
+import SearchFiltersAdvanced from '../components/Filters/SearchFiltersAdvanced';
 import AnnounceService from '../services/AnnounceService';
-import { ModalDialogContext } from '../context/ModalDialogContext'
 import SearchResults from '../components/Search/SearchResults'
-import SearchFiltersLight from '../components/Filters/SearchFiltersLight';
+import useIsMounted from '../hooks/useIsMounted';
+import { ModalDialogContext } from '../context/ModalDialogContext'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,29 +24,14 @@ const useStyles = makeStyles((theme) => ({
     },
     chip: {
         margin: theme.spacing(0.5)
-    },
-
-    filtersContainer: {
-        padding: '.5rem'
-    },
-
-    filtersTop: {
-        display: 'flex',
-        alignItems: 'center',
-        borderBottom: '1px solid gainsboro'
-    },
-
-    filtersHidden: {
-        display: 'none'
     }
 }));
 
-const SearchPage = ( ) => {
+const SearchPage = () => {
     const router = useRouter()
-    const classes = useStyles()
     const { query } = router.query;
     const isMounted = useIsMounted()
-    const {t} = useTranslation()
+    const classes = useStyles()
     const { dispatchModalError } = useContext(ModalDialogContext);
     const [state, setState] = useState({
         loading: false,
@@ -60,6 +42,15 @@ const SearchPage = ( ) => {
         announces: [],
         total: 0
     });
+
+    const handleDeleteFilter = (key) => () => {
+        const { [key] : del , ...rest } = state.filters
+
+        setState(state => ({
+            ...state,
+            filters: rest
+        }))
+    };
 
     const fetchSearch = useCallback(async () => {
         try{
@@ -79,26 +70,8 @@ const SearchPage = ( ) => {
         }
     },[state.filters])
 
-    const handleDeleteFilter = (key) => () => {
-        const { [key] : del , ...rest } = state.filters
-
-        setState(state => ({
-            ...state,
-            filters: rest
-        }))
-    };
-
-    const toggleFilters = () => {
-        setState(state => ({
-            ...state,
-            hideFilters: !state.hideFilters
-        }))
-    };
-
     useEffect(()=> {
-        if (isMounted) {
-            fetchSearch()
-        }
+        if (isMounted) fetchSearch()
     },[fetchSearch, isMounted])
 
     return (
@@ -137,27 +110,17 @@ const SearchPage = ( ) => {
                         </Paper>
                         <SearchResults results={state}/>
                     </>
-                ) : (
-                    <div className={classes.filtersContainer}>
-                        <div className={classes.filtersTop} onClick={() => toggleFilters()}>
-                            <Typography variant="h4">
-                                {t('filters:select-filters')}
-                                <i className={clsx('ml-2', 'arrow_nav', state.hideFilters ? 'is-top' : 'is-bottom')}/>
-                            </Typography>
-                        </div>
-                        <div className={clsx(state.hideFilters && classes.filtersHidden)}>
-                            <SearchFiltersLight
-                                query={query}
-                                updateFilters={filters =>{
-                                    setState(state => ({
-                                        ...state,
-                                        filters,
-                                        hideFilters: true
-                                    }))}
-                                }
-                            />
-                        </div>
-                    </div>
+                ): (
+                    <SearchFiltersAdvanced
+                        query={query}
+                        updateFilters={filters => {
+                            setState(state => ({
+                                ...state,
+                                filters,
+                                hideFilters: true
+                            }))
+                        }}
+                    />
                 )}
             </div>
         </Container>
@@ -174,4 +137,5 @@ SearchPage.propTypes = {
 SearchPage.defaultProps = {
     featuredImgHeight: 500
 };
+
 export default SearchPage;
