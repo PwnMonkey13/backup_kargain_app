@@ -4,10 +4,10 @@ import useTranslation from 'next-translate/useTranslation';
 import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import Step0CarManufacturer from '../../components/Vehicles/car/Step0_CarManufacturer';
-import Step1CarDetails from '../../components/Vehicles/car/Step1_CarDetails';
-import Step2CarStatus from '../../components/Vehicles/car/Step2_CarStatus';
-import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner';
+import Step0CarManufacturer from '../../components/Products/car/Step0_CarManufacturer';
+import Step1CarDetails from '../../components/Products/car/Step1_CarDetails';
+import Step2CarStatus from '../../components/Products/car/Step2_CarStatus';
+import Step3CarOwner from '../../components/Products/car/Step3_CarOwner';
 
 const CarForm = (props) => {
     const router = useRouter();
@@ -38,7 +38,7 @@ const CarForm = (props) => {
             router.push(link);
             dispatchModal({
                 type: 'success',
-                msg: 'Announce created successfully',
+                msg: 'Announce created successfully'
             });
         } catch (err) {
             dispatchModalError({ err });
@@ -47,15 +47,15 @@ const CarForm = (props) => {
 
     const resumeModel = [
         {
-            vehicleType: 'Type de véhicule',
+            vehicleType: 'Type de véhicule'
         },
         {
             vin: 'Immat. VIN',
             'manufacturer.make': 'Marque',
             'manufacturer.model': 'Modele',
             'manufacturer.generation': 'Version',
-            'manufacturer.year': 'Année',
-        },
+            'manufacturer.year': 'Année'
+        }
     ];
 
     return (
@@ -76,7 +76,7 @@ const CarForm = (props) => {
 CarForm.getInitialProps = () => {
     return {
         requiredAuth: true,
-        formKey: 'car',
+        formKey: 'car'
     };
 };
 

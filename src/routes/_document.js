@@ -1,6 +1,7 @@
 import React from 'react';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 import documentLang from '../components/Locales/documentLang';
+import config from '../config/config'
 
 class MyDocument extends Document {
     render () {
@@ -13,13 +14,13 @@ class MyDocument extends Document {
                     <meta name="viewport" content="width=device-width, initial-scale=1"/>
                     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
                     <script type="text/javascript"
-                            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"/>
+                        src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"/>
                     <script type="text/javascript"
-                            src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}&libraries=places`}/>
+                        src={`https://maps.googleapis.com/maps/api/js?key=${config.google.STATIC_API_KEY}&libraries=places`}/>
                 </Head>
                 <body>
-                <Main/>
-                <NextScript/>
+                    <Main/>
+                    <NextScript/>
                 </body>
             </Html>
         );

@@ -4,37 +4,37 @@ import clsx from 'clsx';
 import { NextSeo } from 'next-seo';
 import Typography from '@material-ui/core/Typography';
 import FindInPageIcon from '@material-ui/icons/FindInPage';
-import useTranslation from 'next-translate/useTranslation';
+import useIsMounted from '../hooks/useIsMounted';
 import PaginateResultsSituation from '../components/PaginateResultsSituation';
 import PaginateResults from '../components/PaginateResults';
-import Sorters from '../components/HomeFilters/Sorters';
+import Sorters from '../components/Filters/Sorters';
 import AnnounceCard from '../components/AnnounceCard';
-import Filters from '../components/HomeFilters/Filters';
 import AnnounceService from '../services/AnnounceService';
-import { useAuth } from '../context/AuthProvider';
 import { ModalDialogContext } from '../context/ModalDialogContext';
+import { useAuth } from '../context/AuthProvider';
+import HomeFilters from '../components/Filters/HomeFilter'
 
 const Index = (props) => {
     const { dispatchModalError } = useContext(ModalDialogContext);
     const { isAuthenticated } = useAuth();
-    const [filtersOpened ] = useState(false);
+    const isMounted = useIsMounted();
+    const [filtersOpened] = useState(false);
     const [state, setState] = useState({
         loading: false,
         sorter: {},
         filters: {},
         page: 1,
         announces: [],
-        total: 0,
+        total: 0
     });
 
     const fetchAnnounces = async () => {
-        console.log('fetchAnnounces');
         const { sorter, filters, page } = state;
         const { size } = props;
 
         setState(state => ({
             ...state,
-            loading: true,
+            loading: true
         }));
 
         try {
@@ -43,21 +43,25 @@ const Index = (props) => {
                 sort_by: sorter.key,
                 sort_ord: sorter.asc ? 'ASC' : null,
                 page,
-                size,
+                size
             };
 
-            const result = await AnnounceService.getAnnounces(params);
+            const result = isAuthenticated ?
+                await AnnounceService.getFeedAnnounces(params) :
+                await AnnounceService.getSearchAnnounces(params);
+
+            console.log(result)
 
             setState(state => ({
                 ...state,
-                announces: result.rows ?? [],
-                total: result.total ?? 0,
-                loading: false,
+                announces: result.rows || [],
+                total: result.total || 0,
+                loading: false
             }));
         } catch (err) {
             setState(state => ({
                 ...state,
-                loading: false,
+                loading: false
             }));
             dispatchModalError({ err });
         }
@@ -68,32 +72,30 @@ const Index = (props) => {
             await fetchAnnounces();
             window.scrollTo(0, 0);
         };
-        process();
 
-        return function cleanup () {
-            console.log('cleanup index');
-        };
-
-    }, [state.sorter, state.filters, state.page]);
+        if (isMounted) {
+            process();
+        }
+    }, [isMounted, state.sorter, state.filters, state.page]);
 
     const handlePageChange = (page, e) => {
         setState(state => ({
             ...state,
-            page,
+            page
         }));
     };
 
     const updateFilters = (filters) => {
         setState(state => ({
             ...state,
-            filters,
+            filters
         }));
     };
 
     const updateSorter = (sorter) => {
         setState(state => ({
             ...state,
-            sorter,
+            sorter
         }));
     };
 
@@ -104,19 +106,19 @@ const Index = (props) => {
                 description="Vos meilleurs annonces automobiles"
             />
 
-            <section className="cd-tab-filter-wrapper">
-                <div className={clsx('cd-tab-filter', filtersOpened && 'filter-is-visible')}>
-                    <Sorters updateSorter={updateSorter}/>
-                </div>
-            </section>
-
             <Row>
                 <Col sm={12} md={4}>
                     <Typography component="p" variant="h2">{state.announces.length} résultats de recherche</Typography>
-                    <Filters updateFilters={updateFilters}/>
+                    <HomeFilters updateFilters={updateFilters}/>
                 </Col>
 
                 <Col sm={12} md={8}>
+                    <section className="cd-tab-filter-wrapper">
+                        <div className={clsx('cd-tab-filter', filtersOpened && 'filter-is-visible')}>
+                            <Sorters updateSorter={updateSorter}/>
+                        </div>
+                    </section>
+
                     <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
                         {state.announces.length ? (
                             <Row className="my-2 d-flex justify-content-center">
@@ -125,7 +127,7 @@ const Index = (props) => {
                                         <AnnounceCard {...{
                                             announceRaw,
                                             isAuthenticated,
-                                            detailsFontSize: '13px',
+                                            detailsFontSize: '13px'
                                         }}/>
                                     </Col>
                                 ))}
@@ -163,7 +165,7 @@ const Index = (props) => {
 
 Index.defaultProps = {
     paginate: 3,
-    size: 5,
+    size: 5
 };
 
 export default Index;

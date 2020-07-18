@@ -10,7 +10,7 @@ import { useAuth } from '../../../context/AuthProvider';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
 import UsersService from '../../../services/UsersService';
 import AvatarPreview from '../../../components/Avatar/AvatarPreview';
-import Filters from '../../../components/HomeFilters/Filters';
+import Filters from '../../../components/Filters/Advanced/AdvancedFilters';
 import AnnounceCard from '../../../components/AnnounceCard';
 import CTALink from '../../../components/CTALink';
 import Tabs from '../../../components/Tabs/Tabs';
@@ -20,6 +20,8 @@ import { ReactComponent as StarSVGYellow } from '../../../../public/images/svg/s
 import { ReactComponent as StarSVG } from '../../../../public/images/svg/star.svg';
 import ModalContact from '../../../components/ModalContact';
 import Alert from '@material-ui/lab/Alert';
+import ModalFollowers from '../../../components/ModalFollowers'
+import MoreIcon from '@material-ui/icons/More'
 
 const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
     const { t } = useTranslation();
@@ -30,8 +32,8 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
     const [followerCounter, setFollowersCounter] = useState(profile.getCountFollowers);
     const [alreadyFollowProfile, setAlreadyFollowProfile] = useState(!!profile.getFollowers.find(follower => follower.user === authenticatedUser.getID));
     const [openModalContact, setOpenModalContact] = useState(false);
-
-    console.log(profileRaw);
+    const [openModalFollowers, setOpenModalFollowers] = useState(false);
+    const [openModalFollowings, setOpenModalFollowings] = useState(false);
 
     const handleOpenModalContact = () => {
         if (!isAuthenticated) {
@@ -69,12 +71,44 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
     if (!stateReady) return null;
     if (profileRaw === undefined || err) return <Error statusCode={err?.statusCode}/>;
 
+    const handleOpenModalFollowers = () => {
+        setOpenModalFollowers(true);
+    };
+
+    const handleCloseModalFollowers = () => {
+        setOpenModalFollowers(false);
+    };
+
+    const handleOpenModalFollowings = () => {
+        setOpenModalFollowings(true);
+    };
+
+    const handleCloseModalFollowings = () => {
+        setOpenModalFolloings(false);
+    };
+
     return (
         <Container>
             <ModalContact
                 recipient={profile}
                 handleClose={handleCloseModalContact}
                 open={openModalContact}
+            />
+
+            <ModalFollowers
+              likes={profile.getFollowers}
+              handleClose={handleCloseModalFollowers}
+              open={openModalFollowers}
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+            />
+
+            <ModalFollowers
+              likes={profile.getFollowings}
+              handleClose={handleCloseModalFollowings}
+              open={openModalFollowers}
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
             />
 
             {isAdmin && (
@@ -123,7 +157,7 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
                         {profile.getAddressParts.fullAddress && (
                             <Col xs={12} sm={4} md={4}>
                                 <span className="top-profile-location">
-                                    <img src="/images/location.png" alt=""/>
+                                    <img className="mx-1" src="/images/location.png" alt=""/>
                                     {profile.addressBuilder(['city', 'postalCode', 'country'])}
                                 </span>
                             </Col>
@@ -131,13 +165,71 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
                         <Col xs={12} sm={4} md={4}>
                             <span className="top-profile-followers" onClick={handleFollowProfile}>
                                 {alreadyFollowProfile ? <StarSVGYellow/> : <StarSVG/>}
-                                {followerCounter} {t('vehicles:followers')}
+                                {followerCounter} {t('vehicles:followers_plural', {count : followerCounter})}
                             </span>
+
+                            {profile.getCountFollowers && (
+                              <div className="my-2">
+                                  <ul className="d-flex align-items-center list-style-none">
+                                      {profile.getFollowers.slice(0, 3).map((userLike, index) => {
+                                          const user = new UserModel(userLike?.user);
+                                          return (
+                                            <li key={index} className="nav-item navbar-dropdown p-1">
+                                                <img className="dropdown-toggler rounded-circle"
+                                                     width="30"
+                                                     height="30"
+                                                     src={user.getAvatar}
+                                                     title={user.getFullName}
+                                                     alt={user.getUsername}
+                                                />
+                                            </li>
+                                          );
+                                      })}
+                                      <li>
+                                          <Button
+                                            type="button"
+                                            onClick={() => handleOpenModalFollowers()}
+                                            startIcon={<MoreIcon/>}>
+                                          </Button>
+                                      </li>
+                                  </ul>
+                              </div>
+                            )}
+
                         </Col>
                         <Col xs={12} sm={4} md={4}>
                               <span className="top-profile-followers">
                                 {profile.getCountFollowing} {t('vehicles:subscriptions')}
                             </span>
+
+                            {profile.getCountFollowing && (
+                              <div className="my-2">
+                                  <ul className="d-flex align-items-center list-style-none">
+                                      {profile.getFollowings.slice(0, 3).map((userLike, index) => {
+                                          const user = new UserModel(userLike?.user);
+                                          return (
+                                            <li key={index} className="nav-item navbar-dropdown p-1">
+                                                <img className="dropdown-toggler rounded-circle"
+                                                     width="30"
+                                                     height="30"
+                                                     src={user.getAvatar}
+                                                     title={user.getFullName}
+                                                     alt={user.getUsername}
+                                                />
+                                            </li>
+                                          );
+                                      })}
+                                      <li>
+                                          <Button
+                                            type="button"
+                                            onClick={() => handleOpenModalFollowings()}
+                                            startIcon={<MoreIcon/>}>
+                                          </Button>
+                                      </li>
+                                  </ul>
+                              </div>
+                            )}
+
                         </Col>
                     </Row>
 

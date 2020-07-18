@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Container } from 'reactstrap';
 import clsx from 'clsx';
+import { Container } from 'reactstrap';
+import { useRouter, withRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { useRouter, withRouter } from 'next/router';
-import Header from '../../components/Header';
-import VehicleTypeSelectorStep from '../../components/Vehicles/VehicleTypeSelectorStep';
-import AdTypeSelectorStep from '../../components/Vehicles/AdTypeSelectorStep';
+import VehicleTypeSelectorStep from '../../components/Products/VehicleTypeSelectorStep';
+import AdTypeSelectorStep from '../../components/Products/AdTypeSelectorStep';
+import Typography from '@material-ui/core/Typography'
 
 const path = require('path');
 
@@ -15,14 +15,14 @@ const useStyles = makeStyles(() => ({
         margin: '1rem',
         padding: '1rem',
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     button: {
         padding: '1rem',
         margin: '10px',
         marginTop: '40px',
-        border: '1px solid',
-    },
+        border: '1px solid'
+    }
 }));
 
 const Page = () => {
@@ -42,12 +42,12 @@ const Page = () => {
     };
 
     return (
-        <Container fluid className="annonce1-wrapper-container">
-            <Header as="h2">{t('vehicles:what-do-you-want-to-do')} </Header>
-            <AdTypeSelectorStep handleSelectAdType={handleSelectAdType}/>
-
-            <Header as="h2">{t('vehicles:choose-vehicle-type')}</Header>
+        <Container className="annonce1-wrapper-container">
+            <Typography component="h3" variant="h3" gutterBottom className="text-center">{t('vehicles:choose-vehicle-type')}</Typography>
             <VehicleTypeSelectorStep handleSelectVehicleType={handleSelectVehicleType}/>
+
+            <Typography component="h3" variant="h3" gutterBottom className="text-center">{t('vehicles:announce-type')}</Typography>
+            <AdTypeSelectorStep handleSelectAdType={handleSelectAdType}/>
 
             <div className={classes.controls}>
                 {adType && vehicleType && (

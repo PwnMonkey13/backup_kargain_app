@@ -15,7 +15,7 @@ import { ReactComponent as StarSVGYellow } from '../../../../public/images/svg/s
 import GalleryViewer from '../../../components/Gallery/GalleryViewer';
 import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy';
 import DamageViewerTabs from '../../../components/Damages/DamageViewerTabs';
-import CarInfos from '../../../components/Vehicles/car/CarInfos';
+import CarInfos from '../../../components/Products/car/CarInfos';
 import Comments from '../../../components/Comments/Comments';
 import TitleMUI from '../../../components/TitleMUI';
 import TagsList from '../../../components/Tags/TagsList';
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Announce = ({ data, announceRaw, isAdmin, isSelf, err }) => {
+const Announce = ({ announceRaw, isAdmin, isSelf, err }) => {
     const refImg = useRef();
     const theme = useTheme();
     const classes = useStyles();
@@ -84,7 +84,6 @@ const Announce = ({ data, announceRaw, isAdmin, isSelf, err }) => {
 
     const handleCloseModalFollowers = () => {
         setOpenModalFollowers(false);
-
     };
 
     const handleCLickImg = (index) => {
@@ -228,7 +227,7 @@ const Announce = ({ data, announceRaw, isAdmin, isSelf, err }) => {
                                 {announce.getAdOrAuthorCustomAddress(['city', 'postCode']) && (
                                     <div className="top-profile-data-wrapper">
                                         <div className="top-profile-location">
-                                            <img src="/images/location.png" alt=""/>
+                                            <img className="mx-1" src="/images/location.png" alt=""/>
                                             {announce.getAdOrAuthorCustomAddress(['city', 'postCode'])}
                                         </div>
                                     </div>
@@ -236,7 +235,6 @@ const Announce = ({ data, announceRaw, isAdmin, isSelf, err }) => {
 
                                 {announce.showCellPhone && (
                                     <p>
-                                        {/*<PhoneIcon/>*/}
                                         <small>{announce.getAuthor.getPhone}</small>
                                     </p>
                                 )}
@@ -309,7 +307,6 @@ const Announce = ({ data, announceRaw, isAdmin, isSelf, err }) => {
                                 </ul>
                             </div>
                         )}
-
                     </Col>
                 </Row>
 
@@ -343,21 +340,10 @@ const Announce = ({ data, announceRaw, isAdmin, isSelf, err }) => {
                     </div>
                 </section>
 
-                {/*<section className="my-2">*/}
-                {/*    <TitleMUI as="h3" variant="h3">{t('vehicles:localiastion')}</TitleMUI>*/}
-                {/*    {announce.getLocation.latitude && announce.getLocation.longitude && (*/}
-                {/*        <GoogleMapStatic*/}
-                {/*            width={600}*/}
-                {/*            height={300}*/}
-                {/*            markers={[*/}
-                {/*                [announce.getLocation.latitude, announce.getLocation.longitude].join(' ')]*/}
-                {/*            }*/}
-                {/*        />*/}
-                {/*    )}*/}
-                {/*</section>*/}
-
                 <section className="my-2">
-                    <TitleMUI as="h3" variant="h3">{t('vehicles:data-sheet')} ({announce.getCountDamages})</TitleMUI>
+                    <Typography component="h3" variant="h3">
+                        {t('vehicles:data-sheet')} ({announce.getCountDamages})
+                    </Typography>
                     <DamageViewerTabs tabs={announce.getDamagesTabs}/>
                 </section>
 

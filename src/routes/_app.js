@@ -21,6 +21,7 @@ import appWithI18n from '../components/Locales/appWithI18n';
 
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;
+
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles && jssStyles.parentNode) {
@@ -59,6 +60,7 @@ const ProtectedRouter = ({ children, pageProps }) => {
         }
         return (
             <AdminLayout>
+                <PopupAlert/>
                 {children}
             </AdminLayout>
         );
@@ -77,5 +79,11 @@ const ProtectedRouter = ({ children, pageProps }) => {
         </DynamicNamespaces>
     );
 };
+
+// Will be called once for every metric that has to be reported.
+export function reportWebVitals(metric) {
+    // These metrics can be sent to any analytics service
+    // console.log(metric)
+}
 
 export default withGA('UA-229369587', Router)(appWithI18n(MyApp, i18nConfig));

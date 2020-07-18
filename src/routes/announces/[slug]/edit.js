@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { inflate } from 'flattenjs';
 import { useForm } from 'react-hook-form';
-import { Col, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
+import { Col, Container, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
@@ -42,12 +42,13 @@ import {
     RadioFunctionVehicle,
     RadioTypeFunction,
     RadioVehicleGeneralState,
-} from '../../../components/Vehicles/car/form.data';
+} from '../../../components/Products/car/form.data';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import CTALink from '../../../components/CTALink';
 import ValidationErrors from '../../../components/Form/Validations/ValidationErrors';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles(() => ({
 
@@ -255,10 +256,6 @@ const AnnounceEdit = ({ announceRaw, isAdmin, isSelf, err }) => {
 
     return (
         <>
-            <Typography component="h2" variant="h2" className="text-center" gutterBottom>
-                {t('vehicles:edit-announce')}
-            </Typography>
-
             {!isDesktop && (
                 <NavMobile {...{
                     activeTab,
@@ -279,6 +276,17 @@ const AnnounceEdit = ({ announceRaw, isAdmin, isSelf, err }) => {
                 )}
 
                 <Col sm="12" md="9" lg="9">
+
+                    {isAdmin && (
+                        <Alert severity="info" className="mb-2">
+                            Connected as Admin
+                        </Alert>
+                    )}
+
+                    <Typography component="h2" variant="h2" className="text-center" gutterBottom>
+                        {t('vehicles:edit-announce')}
+                    </Typography>
+
                     <form className="p-3 mx-auto" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
                         {errors && <ValidationErrors errors={errors}/>}
 

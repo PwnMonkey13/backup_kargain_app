@@ -4,9 +4,9 @@ import useTranslation from 'next-translate/useTranslation';
 import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import Step1CamperDetails from '../../components/Vehicles/utility/Step1_UtiilityDetails';
-import Step2UtilityStatus from '../../components/Vehicles/utility/Step2_UtiliyStatus';
-import Step3CarOwner from '../../components/Vehicles/car/Step3_CarOwner';
+import Step1CamperDetails from '../../components/Products/utility/Step1_UtiilityDetails';
+import Step2UtilityStatus from '../../components/Products/utility/Step2_UtiliyStatus';
+import Step3CarOwner from '../../components/Products/car/Step3_CarOwner';
 
 const UtilityForm = (props) => {
     const router = useRouter();
@@ -20,28 +20,28 @@ const UtilityForm = (props) => {
                 dispatchModal({
                     type: 'success',
                     msg: 'Announce created successfully',
-                    link,
+                    link
                 });
                 router.push(link);
             }).catch(err => {
-            dispatchModal({
-                type: 'error',
-                err,
+                dispatchModal({
+                    type: 'error',
+                    err
+                });
             });
-        });
     };
 
     const resumeModel = [
         {
-            vehicleType: 'Type de véhicule',
+            vehicleType: 'Type de véhicule'
         },
         {
             vin: 'Immat. VIN',
             'manufacturer.make': 'Marque',
             'manufacturer.model': 'Modele',
             'manufacturer.generation': 'Version',
-            'manufacturer.year': 'Année',
-        },
+            'manufacturer.year': 'Année'
+        }
     ];
 
     return (
@@ -61,7 +61,7 @@ const UtilityForm = (props) => {
 UtilityForm.getInitialProps = () => {
     return {
         formKey: 'utility',
-        requiredAuth: true,
+        requiredAuth: true
     };
 };
 

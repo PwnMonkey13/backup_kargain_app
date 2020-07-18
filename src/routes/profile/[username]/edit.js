@@ -1,31 +1,33 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import Link from 'next-translate/Link';
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import Link from 'next-translate/Link';
 import { useForm } from 'react-hook-form';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Alert from '@material-ui/lab/Alert';
 import Typography from '@material-ui/core/Typography';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { Col, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
-import useTranslation from 'next-translate/useTranslation';
-import { useAuth } from '../../../context/AuthProvider';
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
-import { themeColors } from '../../../theme/palette';
-import FieldWrapper from '../../../components/Form/FieldWrapper';
-import { EmailInput, SelectCountryFlags, TelInput, TextareaInput, TextInput } from '../../../components/Form/Inputs';
-import UsersService from '../../../services/UsersService';
-import AvatarPreviewUpload from '../../../components/Avatar/AvatarPreviewUpload';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Dialog from '@material-ui/core/Dialog';
+import DeleteIcon from '@material-ui/icons/Delete';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
-import UserModel from '../../../models/user.model';
-import Error from '../../_error';
-import Alert from '@material-ui/lab/Alert';
+import useTranslation from 'next-translate/useTranslation';
+import { Col, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
+import { EmailInput, SelectCountryFlags, TelInput, TextareaInput, TextInput } from '../../../components/Form/Inputs';
 import SearchLocationInput from '../../../components/Form/Inputs/SearchLocationInput';
 import ValidationErrors from '../../../components/Form/Validations/ValidationErrors';
+import AvatarPreviewUpload from '../../../components/Avatar/AvatarPreviewUpload';
+import OffersPurchaseForm from '../../../components/Stripe/OffersPurchaseForm';
+import FieldWrapper from '../../../components/Form/FieldWrapper';
 import CTALink from '../../../components/CTALink';
+import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import { useAuth } from '../../../context/AuthProvider';
+import UsersService from '../../../services/UsersService';
+import { themeColors } from '../../../theme/palette';
+import UserModel from '../../../models/user.model';
+import Error from '../../_error';
 
 const useStyles = makeStyles(() => ({
     stickyNav: {
@@ -88,13 +90,14 @@ const useStyles = makeStyles(() => ({
 const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
     const theme = useTheme();
     const formRef = useRef();
-    const classes = useStyles();
+    const router = useRouter();
+    const { isAuthReady } = useAuth();
+    const { offer } = router.query;
     const { t } = useTranslation();
-    const { isAuthReady, updateAuthenticatedRawUser } = useAuth();
+    const classes = useStyles();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const [stateReady, setStateReady] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
-    const [profile,] = useState(new UserModel(profileRaw));
+    const [profile] = useState(new UserModel(profileRaw));
     const [openDialogRemove, setOpenDialogRemove] = useState(false);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true,
@@ -108,6 +111,24 @@ const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
             address: profile.getAddressParts,
         },
     });
+
+    const tabs = [
+        {
+            title: t('vehicles:my-profile'),
+        },
+        {
+            title: t('vehicles:subscriptions'),
+        },
+        {
+            title: t('vehicles:payments-bills'),
+        },
+        {
+            title: t('vehicles:notifications'),
+        },
+        {
+            title: t('vehicles:confidentiality-security'),
+        },
+    ];
 
     const toggleTab = (tabIndex) => {
         if (activeTab !== tabIndex) {
@@ -150,10 +171,9 @@ const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
     };
 
     useEffect(() => {
-        if (isAuthReady) setStateReady(true);
+        if (offer) setActiveTab(2);
     }, [isAuthReady]);
 
-    if (!stateReady) return null;
     if (!isSelf && !isAdmin) return <Error statusCode={404}/>;
     if (err) return <Error message={err.message} statusCode={err.statusCode}/>;
 
@@ -190,12 +210,9 @@ const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
                 </Alert>
             )}
 
-            <Typography component="h2" variant="h2" className="text-center" gutterBottom>
-                {t('vehicles:edit-my-profile')}
-            </Typography>
-
             {!isDesktop && (
                 <NavMobile {...{
+                    tabs,
                     activeTab,
                     toggleTab,
                 }}/>
@@ -205,6 +222,7 @@ const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
                 {isDesktop && (
                     <Col sm="12" md="3" lg="3">
                         <NavDesktop {...{
+                            tabs,
                             classes,
                             activeTab,
                             toggleTab,
@@ -226,31 +244,33 @@ const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
                                 }}/>
                             </TabPane>
                             <TabPane tabId={1}>
-                                <Typography component="h2" variant="h2">
+                                <Typography component="h2" variant="h2" className="text-center" gutterBottom>
                                     {t('vehicles:subscriptions')}
                                 </Typography>
                             </TabPane>
                             <TabPane tabId={2}>
-                                <Typography component="h2" variant="h2">
+                                <Typography component="h2" variant="h2" className="text-center" gutterBottom>
                                     {t('vehicles:payments-bills')}
                                 </Typography>
+                                <OffersPurchaseForm offer={offer}/>
                             </TabPane>
                             <TabPane tabId={3}>
-                                <Typography component="h2" variant="h2">
-                                    todo notifs
+                                <Typography component="h2" variant="h2" className="text-center" gutterBottom>
+                                    {t('vehicles:notifications')}
                                 </Typography>
                             </TabPane>
                             <TabPane tabId={4}>
-                                <Typography component="h2" variant="h2">
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        className={classes.button}
-                                        startIcon={<DeleteIcon/>}
-                                        onClick={handleOpenDialogRemove}>
-                                        {t('vehicles:remove-announce')}
-                                    </Button>
+                                <Typography component="h2" variant="h2" className="text-center" gutterBottom>
+                                    {t('vehicles:confidentiality-security')}
                                 </Typography>
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    className={classes.button}
+                                    startIcon={<DeleteIcon/>}
+                                    onClick={handleOpenDialogRemove}>
+                                    {t('vehicles:remove-profile')}
+                                </Button>
                             </TabPane>
                         </TabContent>
 
@@ -273,6 +293,9 @@ const ProfilePartialForm = ({ control, watch, errors }) => {
     const countrySelect = watch('countrySelect');
     return (
         <>
+            <Typography component="h2" variant="h2" className="text-center" gutterBottom>
+                {t('vehicles:edit-my-profile')}
+            </Typography>
             <AvatarPreviewUpload/>
             <div className={classes.formRow}>
                 <FieldWrapper label={t('vehicles:firstname')}>
@@ -325,6 +348,7 @@ const ProfilePartialForm = ({ control, watch, errors }) => {
                     name="address"
                     country={countrySelect?.value}
                     control={control}
+                    errors={errors}
                     rules={{ required: 'Required' }}>
                 </SearchLocationInput>
             </FieldWrapper>
@@ -352,26 +376,8 @@ const ProfilePartialForm = ({ control, watch, errors }) => {
     );
 };
 
-const NavDesktop = ({ activeTab, toggleTab, triggerSubmit, profilePageLink }) => {
+const NavDesktop = ({ tabs, activeTab, toggleTab, triggerSubmit, profilePageLink }) => {
     const classes = useStyles();
-    const { t } = useTranslation();
-    const tabs = [
-        {
-            title: t('vehicles:my-profile'),
-        },
-        {
-            title: t('vehicles:subscriptions'),
-        },
-        {
-            title: t('vehicles:payments-bills'),
-        },
-        {
-            title: t('vehicles:notifications'),
-        },
-        {
-            title: t('vehicles:confidentiality-security'),
-        },
-    ];
     return (
         <div className={clsx(classes.nav, classes.stickyNav)}>
             <div className="my-2">
@@ -395,26 +401,9 @@ const NavDesktop = ({ activeTab, toggleTab, triggerSubmit, profilePageLink }) =>
     );
 };
 
-const NavMobile = ({ activeTab, toggleTab }) => {
+const NavMobile = ({ tabs, activeTab, toggleTab }) => {
     const classes = useStyles();
-    const { t } = useTranslation();
-    const tabs = [
-        {
-            title: t('vehicles:my-profile'),
-        },
-        {
-            title: t('vehicles:subscriptions'),
-        },
-        {
-            title: t('vehicles:payments-bills'),
-        },
-        {
-            title: t('vehicles:notifications'),
-        },
-        {
-            title: t('vehicles:confidentiality-security'),
-        },
-    ];
+
     return (
         <Nav className={clsx(classes.navList, classes.navMobile)}>
             {tabs && tabs.map((tab, index) => (
@@ -456,12 +445,14 @@ export async function getServerSideProps (ctx) {
     const { username } = ctx.query;
     try {
         const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
-        const { user, isAdmin, isSelf } = await UsersService.getUserByUsernameSSR(username, additionalHeaders);
+        const data = await UsersService.getUserByUsernameSSR(username, additionalHeaders);
+        const { user: profileRaw, isAdmin, isSelf } = data;
+
         return {
             props: {
-                profileRaw: user,
-                isAdmin: isAdmin ?? false,
-                isSelf: isSelf ?? false,
+                profileRaw,
+                isAdmin : isAdmin ?? false,
+                isSelf : isSelf ?? false,
             },
         };
     } catch (err) {
