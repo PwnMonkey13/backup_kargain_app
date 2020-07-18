@@ -1,8 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import TagsList from './TagsList';
-
-const { useEffect } = require('react');
 
 const Tags = ({ defaultTags, onChange: fireTags }) => {
     const tagInput = useRef();
@@ -65,11 +63,11 @@ const Tags = ({ defaultTags, onChange: fireTags }) => {
 Tags.propTypes = {
     onChange: PropTypes.func.isRequired,
     defaultTags: PropTypes.arrayOf(PropTypes.string),
-    maxTags: PropTypes.number,
+    maxTags: PropTypes.number
 };
 
 Tags.defaultProps = {
     // fireTags: () => {},
-    defaultTags: [],
+    defaultTags: []
 };
 export default Tags;

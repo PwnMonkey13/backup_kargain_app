@@ -1,13 +1,16 @@
 import React from 'react';
 import { Col } from 'reactstrap';
-import TitleMUI from '../TitleMUI';
+import Typography from '@material-ui/core/Typography';
 import CardMediaMUI from '../CardMediaMUI';
 import UploadedImage from '../../models/ImageModel';
 
 const GalleryImgsCardMUI = ({ images }) => {
     return (
         <>
-            <TitleMUI>Images</TitleMUI>
+            <Typography component="h4" variant="h3">
+                Images
+            </Typography>
+
             {images && (
                 <div className="m-2 m-auto p-2">
                     <div className="row">
@@ -23,8 +26,8 @@ const GalleryImgsCardMUI = ({ images }) => {
                                                     maxWidth: '100%',
                                                     margin: '0 auto',
                                                     maxHeight: '400px',
-                                                    objectFit: 'contain',
-                                                },
+                                                    objectFit: 'contain'
+                                                }
                                             }}/>
                                     </div>
                                 </Col>

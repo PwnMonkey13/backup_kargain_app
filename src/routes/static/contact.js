@@ -1,35 +1,35 @@
-import React, { useContext } from 'react'
-import FieldWrapper from '../../components/Form/FieldWrapper'
-import { EmailInput } from '../../components/Form/Inputs'
-import CTAButton from '../../components/CTAButton'
-import useTranslation from 'next-translate/useTranslation'
-import { useForm } from 'react-hook-form'
-import { ModalDialogContext } from '../../context/ModalDialogContext'
-import UsersService from '../../services/UsersService'
-import SelectInput from '../../components/Form/Inputs/SelectInput'
-import TextareaInput from '../../components/Form/Inputs/TextareaInput'
+import React, { useContext } from 'react';
+import useTranslation from 'next-translate/useTranslation';
+import { useForm } from 'react-hook-form';
+import UsersService from '../../services/UsersService';
+import CTAButton from '../../components/CTAButton';
+import { EmailInput } from '../../components/Form/Inputs';
+import FieldWrapper from '../../components/Form/FieldWrapper';
+import SelectInput from '../../components/Form/Inputs/SelectInput';
+import TextareaInput from '../../components/Form/Inputs/TextareaInput';
+import { ModalDialogContext } from '../../context/ModalDialogContext';
 
 const ContactPage = () => {
-    const { t } = useTranslation()
-    const { control, errors, handleSubmit } = useForm()
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext)
+    const { t } = useTranslation();
+    const { control, errors, handleSubmit } = useForm();
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
 
     const onSubmit = (form) => {
-        const { email, message, subject } = form
+        const { email, message, subject } = form;
         UsersService.contact({
             email,
             message,
             subject: subject?.value,
         })
             .then(data => {
-                console.log(data)
-                dispatchModal({ msg: 'Your message have successfully been sent' })
+                console.log(data);
+                dispatchModal({ msg: 'Your message have successfully been sent' });
             }).catch(err => {
-                console.log(err)
-                dispatchModalError({ err })
+                console.log(err);
+                dispatchModalError({ err });
             },
-        )
-    }
+        );
+    };
 
     return (
         <div className="container mt-4">
@@ -98,7 +98,7 @@ const ContactPage = () => {
                 </div>
             </form>
         </div>
-    )
-}
+    );
+};
 
-export default ContactPage
+export default ContactPage;

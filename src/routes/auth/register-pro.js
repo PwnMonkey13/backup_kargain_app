@@ -2,20 +2,21 @@ import React, { useContext } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import useTranslation from 'next-translate/useTranslation';
+import Typography from '@material-ui/core/Typography';
 import AuthService from '../../services/AuthService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../components/Form/Inputs';
 import FieldWrapper from '../../components/Form/FieldWrapper';
-import GeoStreetsInput from '../../components/Form/Inputs/GeoAddressSearchInput';
-import Typography from '@material-ui/core/Typography';
+
 import SelectCountryFlags from '../../components/Form/Inputs/SelectCountryFlags';
 import Spacer from '../../components/Spacer';
 import SSOProviders from '../../components/SSOProviders';
 import useAddress from '../../hooks/useAddress';
+import SearchLocationInput from '../../components/Form/Inputs/SearchLocationInput'
 
 const formConfig = {
     mode: 'onChange',
-    validateCriteriaMode: 'all',
+    validateCriteriaMode: 'all'
 };
 
 const RegisterPro = () => {
@@ -30,11 +31,11 @@ const RegisterPro = () => {
             .then(() => {
                 dispatchModal({
                     persist: true,
-                    msg: 'Account created. Please check your email box to validate your account',
+                    msg: 'Account created. Please check your email box to validate your account'
                 });
             }).catch(err => {
-            dispatchModalError({ err });
-        });
+                dispatchModalError({ err });
+            });
     };
 
     const countrySelect = watch('countrySelect');
@@ -47,7 +48,7 @@ const RegisterPro = () => {
                     <SSOProviders/>
                     <form className="p-3 mx-auto" style={{
                         borderRadius: '5px',
-                        maxWidth: '500px',
+                        maxWidth: '500px'
                     }}>
 
                         <Typography component="h3" variant="h3">Votre société</Typography>
@@ -77,42 +78,15 @@ const RegisterPro = () => {
                             />
                         </FieldWrapper>
 
-                        {countrySelect && countrySelect.value === 'FR' ? (
-                            <FieldWrapper label={t('vehicles:address')}>
-                                <GeoStreetsInput
-                                    name="address"
-                                    enableGeoloc
-                                    long={coordinates?.[0]}
-                                    lat={coordinates?.[1]}
-                                    control={control}
-                                    errors={errors}
-                                    rules={{ required: 'Required' }}
-                                    inputProps={{
-                                        placeholder: '10 avenue du Prado, 13008 Marseille',
-                                    }}
-                                />
-                            </FieldWrapper>
-                        ) : (
-                            <>
-                                <FieldWrapper label={t('vehicles:city')}>
-                                    <TextInput
-                                        name="address.city"
-                                        errors={errors}
-                                        control={control}
-                                        rules={{ required: 'Required' }}
-                                    />
-                                </FieldWrapper>
-
-                                <FieldWrapper label={t('vehicles:address')}>
-                                    <TextInput
-                                        name="address.street"
-                                        errors={errors}
-                                        control={control}
-                                        rules={{ required: 'Required' }}
-                                    />
-                                </FieldWrapper>
-                            </>
-                        )}
+                        <FieldWrapper label={t('vehicles:address')}>
+                            <SearchLocationInput
+                                name="address"
+                                country={countrySelect?.value}
+                                control={control}
+                                errors={errors}
+                                rules={{ required: 'Required' }}>
+                            </SearchLocationInput>
+                        </FieldWrapper>
 
                         <Spacer bottom="30"/>
                         <Typography component="h3" variant="h3">Vous </Typography>
@@ -153,8 +127,8 @@ const RegisterPro = () => {
                                     required: 'Required',
                                     minLength: {
                                         value: 6,
-                                        message: 'Min 6 chars',
-                                    },
+                                        message: 'Min 6 chars'
+                                    }
                                     // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
                                 }}
                             />
@@ -169,14 +143,14 @@ const RegisterPro = () => {
                                     required: 'Required',
                                     minLength: {
                                         value: 6,
-                                        message: 'Min 6 chars',
+                                        message: 'Min 6 chars'
                                     },
                                     validate: {
                                         matchesPreviousPassword: (value) => {
                                             const { password } = getValues();
                                             return password === value || 'Passwords should match!';
-                                        },
-                                    },
+                                        }
+                                    }
                                 }}
                             />
                         </FieldWrapper>

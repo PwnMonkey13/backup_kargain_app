@@ -3,6 +3,7 @@ import Link from 'next-translate/Link';
 import { useForm } from 'react-hook-form';
 import { Container, Col, Row } from 'reactstrap';
 import nextCookies from 'next-cookies';
+import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { EmailInput, PasswordInput } from '../../components/Form/Inputs';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
@@ -10,7 +11,6 @@ import FieldWrapper from '../../components/Form/FieldWrapper';
 import SSOProviders from '../../components/SSOProviders';
 import CTAButton from '../../components/CTAButton';
 import AuthService from '../../services/AuthService';
-import { useRouter } from 'next/router';
 import { useAuth } from '../../context/AuthProvider';
 
 export default ({ forceLogout }) => {
@@ -21,7 +21,7 @@ export default ({ forceLogout }) => {
     const { t } = useTranslation();
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
-        validateCriteriaMode: 'all',
+        validateCriteriaMode: 'all'
     });
 
     useEffect(() => {
@@ -32,7 +32,7 @@ export default ({ forceLogout }) => {
         const { email, password } = form;
         AuthService.login({
             email,
-            password,
+            password
         })
             .then(user => {
                 if (redirect) {
@@ -48,8 +48,8 @@ export default ({ forceLogout }) => {
             }).catch(err => {
                 dispatchModalError({ err });
                 if (redirect) router.push({ pathname: redirect });
-            },
-        );
+            }
+            );
     };
 
     return (
@@ -59,11 +59,11 @@ export default ({ forceLogout }) => {
                 <Col className="m-auto" sm="12" md="10">
                     <SSOProviders/>
                     <form className="p-3 mx-auto"
-                          onSubmit={handleSubmit(onSubmit)}
-                          style={{
-                              borderRadius: '5px',
-                              maxWidth: '500px',
-                          }}
+                        onSubmit={handleSubmit(onSubmit)}
+                        style={{
+                            borderRadius: '5px',
+                            maxWidth: '500px'
+                        }}
                     >
 
                         <FieldWrapper label="Email">
@@ -85,8 +85,8 @@ export default ({ forceLogout }) => {
                                     required: 'Required',
                                     minLength: {
                                         value: 6,
-                                        message: 'Min 6 chars',
-                                    },
+                                        message: 'Min 6 chars'
+                                    }
                                     // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
                                 }}
                             />
@@ -115,7 +115,7 @@ export async function getServerSideProps (ctx) {
     const cookies = nextCookies(ctx);
     return {
         props: {
-            forceLogout: !!cookies.token,
-        },
+            forceLogout: !!cookies.token
+        }
     };
 }

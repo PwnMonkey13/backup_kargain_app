@@ -13,7 +13,7 @@ const calculatePourcent = (current, length) => {
     return ((current + 1) / (length + 1)) * 100;
 };
 
-const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prevRoute, ...props }) => {
+const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, ...props }) => {
     const isMounted = useIsMounted();
     const steps = Array.isArray(children) ? children.filter(child => child.props.hidden !== true) : children ? [children] : [];
     const { formDataContext, dispatchFormUpdate } = useContext(FormContext);
@@ -40,9 +40,8 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
 
     useEffect(() => {
         if (isMounted && endForm) {
-            const { currentStep, ...formData } = formDataContext;
             console.log('end form reached');
-            onFinalSubmit(formData);
+            onFinalSubmit(formDataContext);
             setEndForm(false);
         }
     }, [endForm]);
@@ -50,7 +49,7 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
     const collectStepChanges = useCallback(item => {
         setStepChanges(stepChanges => ({
             ...stepChanges,
-            [item.name]: item.label,
+            [item.name]: item.label
         }));
     }, []);
 
@@ -70,24 +69,22 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
         dispatchFormUpdate(data);
     };
 
-    const onSubmitStep = useCallback((data, event) => {
+    const onSubmitStep = useCallback((data) => {
         triggerDispatchFormData(data);
         nextStep();
     }, []);
 
-    const handleSubmitForm = (data, event) => {
+    const handleSubmitForm = (data) => {
         triggerDispatchFormData(data);
         setEndForm(true);
     };
 
-    console.log('render form wizard');
-
     return (
         <div className="formWizardContainer">
             <BreadcrumbSteps activeStepIndex={activeStep}
-                             steps={steps}
-                             setStep={setStep}
-                             maxActiveStep={maxActiveStep}
+                steps={steps}
+                setStep={setStep}
+                maxActiveStep={maxActiveStep}
             />
             <ProgressBar percent={pourcent} filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"/>
             {props.enableResume ? (
@@ -141,13 +138,13 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, prev
 FormWizard.propTypes = {
     formKey: PropTypes.string.isRequired,
     debug: PropTypes.bool,
-    enableResume: PropTypes.bool,
+    enableResume: PropTypes.bool
 };
 
 FormWizard.defaultProps = {
     formKey: '',
     debug: false,
-    enableResume: false,
+    enableResume: false
 };
 
 export default FormWizard;

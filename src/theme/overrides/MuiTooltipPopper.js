@@ -1,5 +1,5 @@
 export default {
-  root: {
-    zIndex: 3
-  }
+    root: {
+        zIndex: 3
+    }
 };

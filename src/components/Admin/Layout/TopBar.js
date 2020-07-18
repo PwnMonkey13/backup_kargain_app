@@ -20,40 +20,40 @@ const useStyles = makeStyles((theme) => ({
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
+            duration: theme.transitions.duration.leavingScreen
+        })
     },
     appBarShift: {
         marginLeft: drawerWidth,
         width: `calc(100% - ${drawerWidth}px)`,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
+            duration: theme.transitions.duration.enteringScreen
+        })
     },
     menuButton: {
-        marginRight: 36,
+        marginRight: 36
     },
     hide: {
-        display: 'none',
+        display: 'none'
     },
     grow: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
         backgroundColor: fade(theme.palette.common.white, 0.15),
         '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
+            backgroundColor: fade(theme.palette.common.white, 0.25)
         },
         marginRight: theme.spacing(2),
         marginLeft: 0,
         width: '100%',
         [theme.breakpoints.up('sm')]: {
             marginLeft: theme.spacing(3),
-            width: 'auto',
-        },
+            width: 'auto'
+        }
     },
     searchIcon: {
         padding: theme.spacing(0, 2),
@@ -62,10 +62,10 @@ const useStyles = makeStyles((theme) => ({
         pointerEvents: 'none',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     inputRoot: {
-        color: 'inherit',
+        color: 'inherit'
     },
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
@@ -74,21 +74,21 @@ const useStyles = makeStyles((theme) => ({
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('md')]: {
-            width: '20ch',
-        },
+            width: '20ch'
+        }
     },
     sectionDesktop: {
         display: 'none',
         [theme.breakpoints.up('md')]: {
-            display: 'flex',
-        },
+            display: 'flex'
+        }
     },
     sectionMobile: {
         display: 'flex',
         [theme.breakpoints.up('md')]: {
-            display: 'none',
-        },
-    },
+            display: 'none'
+        }
+    }
 }));
 
 const TopBar = ({handleDrawerToggle, open, ...props}) => {
@@ -184,7 +184,7 @@ const TopBar = ({handleDrawerToggle, open, ...props}) => {
             <AppBar
                 position="fixed"
                 className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
+                    [classes.appBarShift]: open
                 })}
                 {...rest}>
                 <Toolbar>
@@ -195,8 +195,8 @@ const TopBar = ({handleDrawerToggle, open, ...props}) => {
                         edge="start"
                         className={clsx(
                             classes.menuButton, {
-                            [classes.hide]: open,
-                        })}>
+                                [classes.hide]: open
+                            })}>
                         <MenuIcon/>
                     </IconButton>
                     <Link href="/admin" passHref>
@@ -245,8 +245,8 @@ const TopBar = ({handleDrawerToggle, open, ...props}) => {
                     </div>
                 </Toolbar>
             </AppBar>
-        {renderMobileMenu}
-        {renderMenu}
+            {renderMobileMenu}
+            {renderMenu}
         </>
     );
 };

@@ -7,8 +7,11 @@ import { useForm } from 'react-hook-form';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import TrackChangesIcon from '@material-ui/icons/TrackChanges';
+import Typography from '@material-ui/core/Typography';
 import ExploreIcon from '@material-ui/icons/Explore';
 import ForumIcon from '@material-ui/icons/Forum';
+import CloseIcon from '@material-ui/icons/Close';
+import useTranslation from 'next-translate/useTranslation';
 import AuthService from '../services/AuthService';
 import { useAuth } from '../context/AuthProvider';
 import { ModalDialogContext } from '../context/ModalDialogContext';
@@ -16,16 +19,14 @@ import { CheckBoxInput, EmailInput, PasswordInput } from './Form/Inputs';
 import SSOProviders from './SSOProviders';
 import { themeColors } from '../theme/palette';
 import Divider from './Divider';
-import TitleMUI from './TitleMUI';
+
 import CTAButton from './CTAButton';
 import CTALink from './CTALink';
-import useTranslation from 'next-translate/useTranslation';
-import CloseIcon from '@material-ui/icons/Close';
 
 const formConfig = {
     mode: 'onChange',
     reValidateMode: 'onChange',
-    validateCriteriaMode: 'all',
+    validateCriteriaMode: 'all'
 };
 
 const useStyles = makeStyles(() => ({
@@ -38,7 +39,7 @@ const useStyles = makeStyles(() => ({
         right: 0,
         background: 'rgba(0, 0, 0,0.5)',
         display: 'flex',
-        zIndex: 999,
+        zIndex: 999
     },
 
     popupContent: {
@@ -48,7 +49,7 @@ const useStyles = makeStyles(() => ({
         width: '800px',
         height: '90vh',
         margin: 'auto',
-        zIndex: 5,
+        zIndex: 5
     },
 
     wrapperLeft: {
@@ -61,12 +62,12 @@ const useStyles = makeStyles(() => ({
         borderRadius: '10px',
         color: themeColors.white,
         transition: 'all .5s',
-        backgroundColor: '#3D4348',
+        backgroundColor: '#3D4348'
     },
 
     contentLeft: {
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'column'
     },
 
     wrapperForm: {
@@ -79,8 +80,8 @@ const useStyles = makeStyles(() => ({
         position: 'relative',
         zIndex: 10,
         overflow: 'hidden',
-        transition: 'all .5s',
-    },
+        transition: 'all .5s'
+    }
 
 }));
 
@@ -94,26 +95,26 @@ export default () => {
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [openLoginModal, toggleLoginModal] = useState(!isAuthenticated);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
-        defaultMatches: true,
+        defaultMatches: true
     });
 
     const onSubmit = (form) => {
         const { email, password } = form;
         AuthService.login({
             email,
-            password,
+            password
         })
             .then(user => {
                 router.reload();
                 toggleLoginModal(false);
                 dispatchModal({
-                    msg: `Welcome back ${user.firstname}`,
+                    msg: `Welcome back ${user.firstname}`
                 });
             }).catch(err => {
                 dispatchModalError({ err });
                 toggleLoginModal(false);
-            },
-        );
+            }
+            );
     };
 
     if (!openLoginModal) return null;
@@ -149,7 +150,7 @@ export default () => {
                                         errors={errors}
                                         control={control}
                                         rules={{
-                                            required: 'field required',
+                                            required: 'field required'
                                         }}
                                     />
                                 </div>
@@ -161,7 +162,7 @@ export default () => {
                                         errors={errors}
                                         control={control}
                                         rules={{
-                                            required: 'field required',
+                                            required: 'field required'
                                         }}
                                     />
                                 </div>
@@ -211,7 +212,7 @@ export default () => {
     );
 }
 
-const LeftBlock = memo(() => {
+const Left = (() => {
     const classes = useStyles();
     return (
         <>
@@ -223,25 +224,28 @@ const LeftBlock = memo(() => {
             <div className={clsx(classes.contentleft, 'm-3')} style={{ flex: 3 }}>
                 <div className="p-2">
                     <TrackChangesIcon fontSize="large"/>
-                    <TitleMUI as="h4" variant="h3" color="white">
+                    <Typography component="h4" variant="h3" className="text-white">
                         Petites annonces automobiles
-                    </TitleMUI>
+                    </Typography>
                 </div>
 
                 <div className="p-2">
                     <ExploreIcon fontSize="large"/>
-                    <TitleMUI as="h4" variant="h3" color="white">
+                    <Typography component="h4" variant="h3" className="text-white">
                         Trouvez, vendez des véhicules prés de chez vous
-                    </TitleMUI>
+                    </Typography>
                 </div>
 
                 <div className="p-2">
                     <ForumIcon fontSize="large"/>
-                    <TitleMUI as="h4" variant="h3" color="white">
+                    <Typography component="h4" variant="h3" className="text-white">
                         Publiez et partagez du contenu avec la communauté
-                    </TitleMUI>
+                    </Typography>
                 </div>
             </div>
         </>
     );
 });
+
+
+const LeftBlock = memo(Left)

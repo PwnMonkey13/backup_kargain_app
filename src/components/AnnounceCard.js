@@ -18,7 +18,7 @@ import { getTimeAgo } from '../libs/utils';
 import TagsList from './Tags/TagsList';
 import CTALink from './CTALink';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     card: {
         background: '#FFF',
         position: 'relative',
@@ -28,20 +28,20 @@ const useStyles = makeStyles((theme) => ({
         //border-radius : 10px;
         //box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
         transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)',
-        fontSize: '13px',
+        fontSize: '13px'
     },
 
     cardTop: {
         display: 'flex',
-        margin: '1rem',
+        margin: '1rem'
     },
 
     cardTopInfos: {
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
-        margin: '0 1rem',
-    },
+        margin: '0 1rem'
+    }
 }));
 
 const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
@@ -81,9 +81,9 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                     <Link href={announce.getAuthor.getProfileLink} prefetch={false}>
                         <a className="decoration-none">
                             <img className="img-profile-wrapper rounded-circle"
-                                 src={announce.getAuthor.getAvatar}
-                                 alt={announce.getAuthor.getUsername}
-                                 width={70}
+                                src={announce.getAuthor.getAvatar}
+                                alt={announce.getAuthor.getUsername}
+                                width={70}
                             />
                         </a>
                     </Link>
@@ -102,7 +102,7 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                         <div className="top-profile-data-wrapper">
                             {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country']) && (
                                 <div className="top-profile-location">
-                                    <img src="/images/location.png" alt=""/>
+                                    <img className="mx-1" src="/images/location.png" alt=""/>
                                     {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country'])}
                                 </div>
                             )}
@@ -141,16 +141,16 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                     <div className="icons-profile-wrapper">
                         <div style={{
                             flex: 1,
-                            display: 'flex',
+                            display: 'flex'
                         }}>
                             <div className="icons-star-prof icons-star-current"
-                                 title={t('vehicles:i-like')}
-                                 onClick={handleClickLikeButton}>
+                                title={t('vehicles:i-like')}
+                                onClick={handleClickLikeButton}>
                                 {alreadyLikeCurrentUser() ? <StarSVGYellow/> : <StarSVG/>}
                                 <span>{likesCounter}</span>
                             </div>
                             <div className="icons-star-prof"
-                                 title={t('vehicles:comment_plural')}>
+                                title={t('vehicles:comment_plural')}>
                                 <img src="/images/svg/comment.svg" alt=""/>
                                 <span>{announce.getCountComments}</span>
                             </div>
@@ -203,10 +203,10 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
 
 AnnounceCard.propTypes = {
     announceRaw: PropTypes.any.isRequired,
-    featuredImgHeight: PropTypes.number,
+    featuredImgHeight: PropTypes.number
 };
 
 AnnounceService.defaultProps = {
-    featuredImgHeight: 500,
+    featuredImgHeight: 500
 };
 export default AnnounceCard;

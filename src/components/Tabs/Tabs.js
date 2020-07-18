@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 
-const useStyles = makeStyles(theme => ({}));
-
 const TabsItem = ({ activeTab, index, ...props }) => {
-    const classes = useStyles();
-
     return (
         <div id={props.id} className={clsx('tab-pane', 'fade',
             { show: index === activeTab },
@@ -17,12 +12,13 @@ const TabsItem = ({ activeTab, index, ...props }) => {
     );
 };
 
-const Tabs = ({ defaultActive, children, id }) => {
+const Tabs = ({ defaultActive, children, id, handleClickTab: fireClickTab}) => {
     const [activeTab, setActiveTab] = useState(defaultActive || 0);
     const tabs = !Array.isArray(children) ? [children] : children;
 
     const onClickTabItem = (index) => {
         setActiveTab(index);
+        fireClickTab(index)
     };
 
     return (
@@ -30,17 +26,17 @@ const Tabs = ({ defaultActive, children, id }) => {
             <ul className="nav nav-tabs m-2 justify-content-center" id={id}>
                 {tabs && tabs.map((item, index) => {
                     if (!item) return null;
-                    const { title, img } = item.props;
+                    const { title, img : ImgComponent, className } = item.props;
 
                     return (
                         <li key={index}
-                            className={clsx('nav-link', { active: index === activeTab })}
+                            className={clsx('nav-link', className, { active: index === activeTab })}
                             data-toggle="tab"
                             role="tab"
                             aria-selected={activeTab === index}
                             onClick={() => onClickTabItem(index)}>
-                            <label>{title}</label>
-                            {img && <img src={img} alt={title}/>}
+                            {title && <label>{title}</label> }
+                            {ImgComponent && ImgComponent }
                         </li>
                     );
                 })}

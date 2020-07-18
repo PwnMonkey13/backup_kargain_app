@@ -6,8 +6,8 @@ const useStyles = makeStyles(() => ({
         border: '1px solid #dce0e0',
         borderRadius: '.1875rem',
         backgroundColor: '#fff', //f7f8f9
-        padding: '1rem',
-    },
+        padding: '1rem'
+    }
 }));
 
 const Step = ({ step, ...stepProps }) => {
@@ -18,12 +18,10 @@ const Step = ({ step, ...stepProps }) => {
         nextStep();
     };
 
-    console.log('render step');
-
     return (
         <section className={classes.root}>
             {step ? React.cloneElement(step, {
-                triggerSkipStep, ...stepProps,
+                triggerSkipStep, ...stepProps
             }) : 'step not found'}
         </section>
     );

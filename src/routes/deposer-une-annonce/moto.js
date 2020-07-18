@@ -4,10 +4,10 @@ import useTranslation from 'next-translate/useTranslation';
 import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import Step0MotosManufacturer from '../../components/Vehicles/moto/Step0_MotosManufacturer';
-import Step1MotoDetails from '../../components/Vehicles/moto/Step1_MotoDetails';
-import Step2MotoStatus from '../../components/Vehicles/moto/Step2_MotoStatus';
-import Step3MotoOwner from '../../components/Vehicles/moto/Step3_MotoOwner';
+import Step0MotosManufacturer from '../../components/Products/moto/Step0_MotosManufacturer';
+import Step1MotoDetails from '../../components/Products/moto/Step1_MotoDetails';
+import Step2MotoStatus from '../../components/Products/moto/Step2_MotoStatus';
+import Step3MotoOwner from '../../components/Products/moto/Step3_MotoOwner';
 
 const MotorCyclesForm = (props) => {
     const router = useRouter();
@@ -21,12 +21,12 @@ const MotorCyclesForm = (props) => {
                 dispatchModal({
                     type: 'success',
                     msg: 'Announce created successfully',
-                    link,
+                    link
                 });
                 router.push(link);
             }).catch(err => {
-            dispatchModalError({ err });
-        });
+                dispatchModalError({ err });
+            });
     };
 
     return (
@@ -46,7 +46,7 @@ const MotorCyclesForm = (props) => {
 MotorCyclesForm.getInitialProps = () => {
     return {
         requiredAuth: true,
-        formKey: 'moto',
+        formKey: 'moto'
     };
 };
 

@@ -25,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
         userSelect: 'none',
 
         '&:hover': {
-            borderColor: blue,
-        },
+            borderColor: blue
+        }
     },
 
     previewContainer: {
@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
         padding: '1rem',
         zIndex: 'unset',
         '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
+            marginTop: theme.spacing(2)
+        }
     },
 
     labelInput: {
@@ -48,14 +48,14 @@ const useStyles = makeStyles((theme) => ({
         border: `2px solid ${blue}`,
         '&:hover': {
             backgroundColor: theme.palette.white,
-            color: blue,
-        },
+            color: blue
+        }
     },
     img: {
         objectFit: 'contain',
         maxHeight: '300px',
-        maxWidth: '300px',
-    },
+        maxWidth: '300px'
+    }
 }));
 
 const Layout = ({ input, previews, submitButton, dropzoneProps, files, extra: { maxFiles } }) => {
@@ -66,7 +66,7 @@ const Layout = ({ input, previews, submitButton, dropzoneProps, files, extra: { 
 
             <div {...dropzoneProps} style={{
                 overflow: 'hidden',
-                border: 'none',
+                border: 'none'
             }}>
                 {files.length < maxFiles && input}
             </div>
@@ -78,17 +78,12 @@ const Layout = ({ input, previews, submitButton, dropzoneProps, files, extra: { 
 
 const Preview = (props) => {
     const {
-        className,
-        imageClassName,
-        style,
-        imageStyle,
         fileWithMeta: { cancel, remove, restart },
-        meta: { name = '', percent = 0, size = 0, previewUrl, status, duration, validationError },
+        meta: { name = '', percent = 0, previewUrl, status },
         isUpload,
         canCancel,
         canRemove,
-        canRestart,
-        extra: { minSizeBytes },
+        canRestart
     } = props;
     const classes = useStyles();
 
@@ -96,14 +91,14 @@ const Preview = (props) => {
         <div className={clsx(classes.previewContainer, 'dzu-previewContainer')}>
             <div style={{
                 margin: '1rem',
-                flex: 1,
+                flex: 1
             }}>
                 <img className={clsx(classes.img, 'dzu-previewImage')} src={previewUrl} alt={name}/>
             </div>
             <div style={{
                 margin: '1rem',
                 display: 'flex',
-                flex: 2,
+                flex: 2
             }}>
                 <Alert severity="success">{name}</Alert>
             </div>
@@ -210,9 +205,9 @@ const UploadDropZone = ({ fireFiles, ...props }) => {
                 styles={{
                     dropzoneReject: {
                         borderColor: 'red',
-                        backgroundColor: '#DAA',
+                        backgroundColor: '#DAA'
                     },
-                    previewImage: { maxHeight: '100px' },
+                    previewImage: { maxHeight: '100px' }
                 }}
                 inputWithFilesContent={files => `${props.maxFiles - files.length} ${props.remainingLabel}`}
             />
@@ -226,7 +221,7 @@ UploadDropZone.PropsType = {
     accept: PropTypes.string,
     disableSubmit: PropTypes.bool,
     hideSubmit: PropTypes.bool,
-    submitLabel: PropTypes.string,
+    submitLabel: PropTypes.string
 };
 
 UploadDropZone.defaultProps = {
@@ -239,7 +234,7 @@ UploadDropZone.defaultProps = {
     canCancel: true,
     submitLabel: 'Uploader',
     getFiles: () => {
-    },
+    }
 };
 
 export default UploadDropZone;

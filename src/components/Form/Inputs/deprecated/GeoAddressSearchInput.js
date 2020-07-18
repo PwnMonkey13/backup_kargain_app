@@ -2,9 +2,9 @@ import React, { memo, useContext, useState } from 'react';
 import NiceSelect, { components } from 'react-select';
 import { Controller } from 'react-hook-form';
 import SearchIcon from '@material-ui/icons/Search';
-import PlacesServices from '../../../services/PlacesService';
-import ValidationError from '../Validations/ValidationError';
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import PlacesServices from '../../../../services/PlacesService';
+import ValidationError from '../../Validations/ValidationError';
+import { ModalDialogContext } from '../../../../context/ModalDialogContext';
 
 const DropdownIndicator = props => {
     return (
@@ -22,7 +22,7 @@ const GeoAddressSearchInput = memo(({ name, control, rules, errors, inputProps, 
     const { dispatchModalError } = useContext(ModalDialogContext)
     const [state, setState] = useState({
         suggestions: [],
-        selectOptions: [],
+        selectOptions: []
     });
 
     const onSelectChange = ([selected]) => {
@@ -41,7 +41,7 @@ const GeoAddressSearchInput = memo(({ name, control, rules, errors, inputProps, 
             'street',
             'name',
             'postcode',
-            'city',
+            'city'
         ];
 
         let params = { q: query };
@@ -49,7 +49,7 @@ const GeoAddressSearchInput = memo(({ name, control, rules, errors, inputProps, 
             params = {
                 ...params,
                 lat: props.lat,
-                lng: props.long,
+                lng: props.long
             };
         }
 
@@ -64,7 +64,7 @@ const GeoAddressSearchInput = memo(({ name, control, rules, errors, inputProps, 
                         if (properties[key]) {
                             return {
                                 ...carry,
-                                [key]: properties[key],
+                                [key]: properties[key]
                             };
                         }
                         return carry;
@@ -76,7 +76,7 @@ const GeoAddressSearchInput = memo(({ name, control, rules, errors, inputProps, 
                             ...addressParts,
                             fullAddress : label,
                             coordinates
-                        },
+                        }
                     };
                 })
             }));
@@ -100,7 +100,7 @@ const GeoAddressSearchInput = memo(({ name, control, rules, errors, inputProps, 
                         isSearchable={true}
                         components={{
                             DropdownIndicator,
-                            Menu,
+                            Menu
                         }}
                         options={state.selectOptions}
                         onInputChange={onInputSelectChange}

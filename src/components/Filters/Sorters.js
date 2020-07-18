@@ -12,65 +12,65 @@ const Sorters = ({ updateSorter }) => {
             icon: ArrowUpwardIcon,
             value: {
                 key: 'DATE',
-                asc: false,
-            },
+                asc: false
+            }
         },
         {
             label: t('vehicles:less-recent'),
             icon: ArrowDownwardIcon,
             value: {
                 key: 'DATE',
-                asc: true,
-            },
+                asc: true
+            }
         },
         {
             label: t('vehicles:most-recent'),
             icon: ArrowUpwardIcon,
             value: {
                 key: 'PRICE',
-                asc: false,
-            },
+                asc: false
+            }
         },
         {
             label: t('vehicles:less-recent'),
             icon: ArrowDownwardIcon,
             value: {
                 key: 'PRICE',
-                asc: true,
-            },
+                asc: true
+            }
         },
         {
             label: t('vehicles:most-mileage'),
             icon: ArrowUpwardIcon,
             value: {
                 key: 'MILEAGE',
-                asc: false,
-            },
+                asc: false
+            }
         },
         {
             label: t('vehicles:less-mileage'),
             icon: ArrowDownwardIcon,
             value: {
                 key: 'MILEAGE',
-                asc: true,
-            },
+                asc: true
+            }
         },
         {
             label: t('vehicles:closest'),
             icon: ArrowUpwardIcon,
             value: {
                 key: 'RADIUS',
-                asc: true,
-            },
+                asc: true
+            }
         },
         {
             label: t('vehicles:farthest'),
             icon: ArrowDownwardIcon,
             value: {
                 key: 'RADIUS',
-                asc: false,
-            },
-        },
+                asc: false
+            }
+        }
     ];
     const [sorter, setSorter] = useState(options[0]);
 
@@ -91,7 +91,7 @@ const Sorters = ({ updateSorter }) => {
         <section style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex-end'
         }}>
             <span>{t('vehicles:sort-by')}:</span>
             <div className="sorter">

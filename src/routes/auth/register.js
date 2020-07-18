@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useRouter } from 'next/router';
 import { Col, Container, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import useTranslation from 'next-translate/useTranslation';
@@ -8,7 +9,7 @@ import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../compo
 import FieldWrapper from '../../components/Form/FieldWrapper';
 import CTAButton from '../../components/CTAButton';
 import SSOProviders from '../../components/SSOProviders';
-import Divider from '../../components/Divider';
+import CTALink from '../../components/CTALink';
 
 const formConfig = {
     mode: 'onChange',
@@ -17,13 +18,16 @@ const formConfig = {
 
 const RegisterPage = () => {
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const { control, errors, setValue, getValues, formState, watch, register, handleSubmit } = useForm(formConfig);
-    const { t, lang } = useTranslation();
+    const { control, errors, getValues, handleSubmit } = useForm(formConfig);
+    const { t } = useTranslation();
+    const router = useRouter();
 
     const onSubmit = (form) => {
         const { confirm, confirmPwd, ...data } = form;
         AuthService.register(data)
             .then(() => {
+                router.push('/auth/login')
+
                 dispatchModal({
                     persist: true,
                     msg: 'Account created. Please check your email box to validate your account',
@@ -40,6 +44,14 @@ const RegisterPage = () => {
             <Row>
                 <Col className="m-auto" sm="12" md="10">
                     <SSOProviders/>
+
+                    <div className="mx-auto text-center">
+                        <CTALink
+                            title={t('vehicles:register-pro')}
+                            href="/auth/register-pro"
+                        />
+                    </div>
+
                     <form className="p-3 mx-auto" style={{
                         borderRadius: '5px',
                         maxWidth: '500px',

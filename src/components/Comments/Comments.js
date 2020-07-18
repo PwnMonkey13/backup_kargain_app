@@ -4,7 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 import AnnounceClass from '../../models/announce.model';
 import { useAuth } from '../../context/AuthProvider';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import commentsService from '../../services/commentsService';
+import commentsService from '../../services/CommentsService';
 import Comment from '../../models/comment.model';
 import CommentBlock from './CommentBlock';
 import Typography from '@material-ui/core/Typography';

@@ -17,5 +17,5 @@ export default {
     MuiPaper,
     MuiButton,
     MuiIconButton,
-    MuiTableHead,
+    MuiTableHead
 };

@@ -1,5 +1,5 @@
 export default {
-  paper: {
-    top : '5rem'
-  }
+    paper: {
+        top : '5rem'
+    }
 };
