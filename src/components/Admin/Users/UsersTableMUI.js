@@ -22,62 +22,40 @@ const UsersTable = () => {
     const [rowsLength, setRowsLength] = useState(60);
     const [resultFetch, setResultsFetch] = useState({
         rows: [],
-        total: 0,
+        total: 0
     });
 
     const columns = React.useMemo(() => [
-        // {
-        //     title: 'ID',
-        //     render: rowData => rowData.tableData.id + 1,
-        // },
         {
             title: 'Avatar',
             field: 'avatar',
             filtering: false,
             grouping: false,
             searchable: false,
-            render: userModel => {
+            render: function renderField(userModel){
                 return (
                     <img src={userModel.getAvatar} style={{
                         width: 40,
-                        borderRadius: '50%',
+                        borderRadius: '50%'
                     }} alt=""/>
                 );
-            },
+            }
         },
         {
             title: 'Role',
             filtering: true,
             grouping: true,
             searchable: true,
-            render: userModel => userModel.getRole,
+            render: userModel => userModel.getRole
 
         },
         {
-            title: 'First Name',
+            title: 'Nom Prénom',
             filtering: false,
             grouping: false,
             searchable: false,
             sorting: true,
-            render: userModel => userModel.getFirstname,
-
-        },
-        {
-            title: 'Last Name',
-            filtering: false,
-            grouping: false,
-            searchable: false,
-            sorting: true,
-            render: userModel => userModel.getLastname,
-
-        },
-        {
-            title: 'Username',
-            filtering: false,
-            grouping: false,
-            searchable: false,
-            sorting: true,
-            render: userModel => userModel.getUsername,
+            render: userModel => userModel.getFullName
 
         },
         {
@@ -86,17 +64,17 @@ const UsersTable = () => {
             grouping: false,
             searchable: false,
             sorting: true,
-            render: userModel => userModel.getEmail,
+            render: userModel => userModel.getEmail
 
         },
         {
-            title: 'validé',
+            title: 'Validé',
             type: 'boolean',
             filtering: false,
             grouping: false,
             searchable: true,
             sorting: true,
-            render: userModel => BooleanBullet(userModel.getIsActivated),
+            render: userModel => BooleanBullet(userModel.getIsActivated)
         },
         {
             title: 'Activé',
@@ -106,7 +84,7 @@ const UsersTable = () => {
             grouping: false,
             searchable: true,
             sorting: true,
-            render: userModel => BooleanBullet(userModel.getIsEmailValidated),
+            render: userModel => BooleanBullet(userModel.getIsEmailValidated)
         },
         {
             title: 'Pro',
@@ -115,7 +93,24 @@ const UsersTable = () => {
             grouping: true,
             sorting: true,
             searchable: true,
-            render: userModel => BooleanBullet(userModel.isPro),
+            render: userModel => BooleanBullet(userModel.isPro)
+        },
+        {
+            title: 'Premium',
+            type: 'boolean',
+            filtering: true,
+            grouping: true,
+            sorting: true,
+            searchable: true,
+            render: userModel => BooleanBullet(userModel.getHasProPlan)
+        },
+        {
+            title: 'Offre',
+            filtering: true,
+            grouping: true,
+            sorting: true,
+            searchable: true,
+            render: userModel => userModel.getSubscriptionOfferTitle
         },
         {
             title: 'Nombre d`\'annnonces',
@@ -123,8 +118,8 @@ const UsersTable = () => {
             grouping: false,
             searchable: false,
             sorting: true,
-            render: userModel => userModel.getGarage.length,
-        },
+            render: userModel => userModel.getGarage.length
+        }
     ], []);
 
     const handleItemClick = (e, userModel) => {
@@ -140,19 +135,19 @@ const UsersTable = () => {
 
         UsersService.getUsers({
             size: rowsLength,
-            page: pageIndex,
+            page: pageIndex
         })
             .then(data => {
                 const { rows } = data;
                 const rowsModel = rows.map(row => new UserModel(row));
                 setResultsFetch({
                     ...data,
-                    rows: rowsModel,
+                    rows: rowsModel
                 });
                 setLoading(false);
             }).catch(err => {
-            dispatchModalError({ err });
-        });
+                dispatchModalError({ err });
+            });
     }, [rowsLength, pageIndex]);
 
     useEffect(() => {
@@ -172,13 +167,13 @@ const UsersTable = () => {
                         icon: AddIcon,
                         tooltip: 'Ajouter un utilisateur',
                         isFreeAction: true,
-                        onClick: (event, rowData) => router.history.push('/admin/users/new'),
+                        onClick: (event, rowData) => router.history.push('/admin/users/new')
                     },
                     {
                         icon: EditIcon,
                         tooltip: 'Modifier',
-                        onClick: (e, userModel) => handleItemClick(e, userModel),
-                    },
+                        onClick: (e, userModel) => handleItemClick(e, userModel)
+                    }
                 ]}
             />
 

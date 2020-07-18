@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {makeStyles} from "@material-ui/styles";
-import {Divider, Drawer} from "@material-ui/core";
+import { Drawer} from "@material-ui/core";
 import BarChartIcon from '@material-ui/icons/BarChart';
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
@@ -27,19 +27,19 @@ const useStyles = makeStyles(theme => ({
         width: drawerWidth,
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
+            duration: theme.transitions.duration.enteringScreen
+        })
     },
     drawerClose: {
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
+            duration: theme.transitions.duration.leavingScreen
         }),
         overflowX: 'hidden',
         width: theme.spacing(7) + 1,
         [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9) + 1,
-        },
+            width: theme.spacing(9) + 1
+        }
     },
     sidebar: {
         display: 'flex',
@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'flex-end',
         padding: theme.spacing(2),
         ...theme.mixins.toolbar,
-        backgroundColor: theme.palette.white,
+        backgroundColor: theme.palette.white
     },
     nav: {
         marginBottom: theme.spacing(2)
@@ -88,13 +88,13 @@ const Sidebar = props => {
             variant="permanent"
             className={clsx(classes.drawer, {
                 [classes.drawerOpen]: open,
-                [classes.drawerClose]: !open,
+                [classes.drawerClose]: !open
             })}
             classes={{
                 paper: clsx({
                     [classes.drawerOpen]: open,
-                    [classes.drawerClose]: !open,
-                }),
+                    [classes.drawerClose]: !open
+                })
             }}
             open={open}
             onClose={onClose}>

@@ -1,31 +1,26 @@
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/styles';
-import { useMediaQuery } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     root: {
-        height: '100%',
+        height: '100%'
     },
     shiftContent: {
         // paddingLeft: 240
     },
     content: {
         width: '95%',
-        height: '100%',
-    },
+        height: '100%'
+    }
 }));
 
 const AdminLayout = ({ children }) => {
     const classes = useStyles();
-    const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
-        defaultMatches: true,
-    });
 
     const handleDrawerToggle = () => {
         setOpen(!open);
