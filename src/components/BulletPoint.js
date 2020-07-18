@@ -26,11 +26,11 @@ const switchColor = color => {
     }
 };
 
-const BulletPoint = ({width, bordered, color, tooltipHelper}) => {
+const BulletPoint = ({width, bordered, color, tooltipHelper, onClick}) => {
     const Color = switchColor(color);
 
     return (
-        <div title={tooltipHelper}>
+        <div title={tooltipHelper} onClick={onClick}>
             <svg height={width} width={width}>
                 <circle cx={Math.round(width/2)} cy={Math.round(width/2)} r={Math.round(width/4)} stroke={bordered ? 'black' : ''} strokeWidth="1" fill={Color} />
             </svg>
