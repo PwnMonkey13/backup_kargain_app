@@ -4,7 +4,7 @@ export default class UserModel {
     }
 
     get getRaw () {
-        return this.raw;
+        return this.raw ?? {};
     }
 
     get getID () {
@@ -33,6 +33,23 @@ export default class UserModel {
 
     get getFullName () {
         return this.raw?.fullname;
+    }
+
+    //stripe
+    get getHasProPlan () {
+        return this.raw?.hasProPlan ?? false;
+    }
+
+    get getSubscription () {
+        return this.raw?.subscription ?? null;
+    }
+
+    get getSubscriptionOfferName () {
+        return this.raw?.subscription?.offer?.name ?? null;
+    }
+
+    get getSubscriptionOfferTitle () {
+        return this.raw?.subscription?.offer?.title ?? null;
     }
 
     get getAvatar () {
@@ -83,6 +100,10 @@ export default class UserModel {
 
     get getFollowers () {
         return this.raw?.followers ?? [];
+    }
+
+    get getFollowings () {
+        return this.raw?.followings ?? [];
     }
 
     get getCountFollowers () {

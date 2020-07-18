@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import Router from 'next/router';
+import Router from 'next-translate/Router'
 import AuthService from '../services/AuthService';
 import UserModel from '../models/user.model';
 
@@ -7,19 +7,23 @@ const AuthContext = createContext({
     isLoading: false,
     authenticatedUser: null,
     isAuthenticated: false,
-    isAuthenticatedUserAdmin: false,
+    isAuthenticatedUserAdmin: false
 });
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthReady, setIsAuthReady] = useState(true);
-    const [isLoading, setLoading] = useState(false);
-    const [forceLoginModal, setForceLoginModal] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [authenticatedUser, setAuthenticatedUser] = useState(new UserModel());
-    const [isAuthenticatedUserAdmin, setIsAuthenticatedUserAdmin] = useState(false);
+    const [authState, setAuthState] = useState({
+        isAuthReady: false,
+        forceLoginModal: false,
+        isAuthenticated: false,
+        authenticatedUser: new UserModel(),
+        isAuthenticatedUserAdmin: false
+    });
 
     const updateAuthenticatedRawUser = (rawUser) => {
-        setAuthenticatedUser(new UserModel(rawUser));
+        setAuthState(authState => ({
+            ...authState,
+            authenticatedUser: new UserModel(rawUser)
+        }));
     };
 
     useEffect(() => {
@@ -31,16 +35,22 @@ export const AuthProvider = ({ children }) => {
     });
 
     const initializeAuth = async () => {
-        setIsAuthReady(false);
         try {
             const user = await AuthService.authorize();
             const User = new UserModel(user);
-            setIsAuthenticated(!!user);
-            setAuthenticatedUser(User);
-            setIsAuthenticatedUserAdmin(User.isAdmin);
-            setIsAuthReady(true);
+
+            setAuthState(authState => ({
+                ...authState,
+                isAuthReady: true,
+                isAuthenticated: !!user,
+                isAuthenticatedUserAdmin: User.isAdmin,
+                authenticatedUser: User
+            }));
         } catch (err) {
-            setIsAuthReady(true);
+            setAuthState(authState => ({
+                ...authState,
+                isAuthReady: true
+            }));
         }
     };
 
@@ -48,23 +58,39 @@ export const AuthProvider = ({ children }) => {
         try {
             await AuthService.logout();
             updateAuthenticatedRawUser(null);
-            setIsAuthenticated(false);
+            setAuthState(authState => ({
+                ...authState,
+                isAuthenticated: false
+            }));
         } catch (err) {
             updateAuthenticatedRawUser(null);
-            setIsAuthenticated(false);
+            setAuthState(authState => ({
+                ...authState,
+                isAuthenticated: false
+            }));
         }
     };
     return (
         <AuthContext.Provider value={{
-            isAuthReady,
-            isAuthenticated,
-            isAuthenticatedUserAdmin,
-            authenticatedUser,
-            forceLoginModal,
-            setForceLoginModal,
-            setIsAuthenticated,
+            isAuthReady: authState.isAuthReady,
+            isAuthenticated: authState.isAuthenticated,
+            isAuthenticatedUserAdmin: authState.isAuthenticatedUserAdmin,
+            authenticatedUser: authState.authenticatedUser,
+            forceLoginModal: authState.forceLoginModal,
+            setForceLoginModal: () => {
+                setAuthState(authState => ({
+                    ...authState,
+                    forceLoginModal: true
+                }));
+            },
+            setIsAuthenticated: () => {
+                setAuthState(authState => ({
+                    ...authState,
+                    isAuthenticated: true
+                }));
+            },
             updateAuthenticatedRawUser,
-            logout: LogoutAction,
+            logout: LogoutAction
         }}>
             {children}
         </AuthContext.Provider>

@@ -1,7 +1,6 @@
 export default {
-    adType: 'ADTYPE',
-    vehicleType: 'VEHICLETYPE',
-    'vehicleFunctionUse.value': 'FN_USE',
+    adType: 'TYPE_AD',
+    vehicleType: 'VEHICLE_TYPE',
     'vehicleTypeSelect.value': 'TYPE',
     'manufacturer.make.value': 'MAKE',
     'vehicleEngine.type.value': 'ENGINE_TYPE',
@@ -21,12 +20,12 @@ export default {
     'equipments': {
         name: 'EQUIPMENTS',
         type: 'array',
-        selector: 'value',
+        selector: 'value'
     },
     'bedType.value': 'BED_TYPE',
     'materials.value': 'MATERIALS',
     'emission.value': 'EMISSION',
     'paint.value': 'PAINT',
     'externalColor.value': 'EXTERNAL_COLOR',
-    'internalColor.value': 'INTERNAL_COLOR',
+    'internalColor.value': 'INTERNAL_COLOR'
 };

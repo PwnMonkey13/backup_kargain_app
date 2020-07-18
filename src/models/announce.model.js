@@ -2,7 +2,7 @@ import UserModel from './user.model';
 import parseISO from 'date-fns/parseISO';
 import ImageModel from './ImageModel';
 
-export default class AnnounceModel{
+export default class AnnounceModel {
     constructor (ad) {
         this.raw = ad;
     }
@@ -24,7 +24,7 @@ export default class AnnounceModel{
         return this.raw?.slug;
     }
 
-    get getAnnounceLink() {
+    get getAnnounceLink () {
         return this.getSlug ? `/announces/${this.getSlug}` : '/';
     }
 
@@ -66,6 +66,14 @@ export default class AnnounceModel{
                 return carry;
             }, [])
             .join(' | ');
+    }
+
+    get getVehicleAdType () {
+        return this.raw?.adType;
+    }
+
+    get getVehicleType () {
+        return this.raw?.vehicleType;
     }
 
     get geVehicleEngine () {
@@ -257,7 +265,7 @@ export default class AnnounceModel{
         return this.raw?.activated;
     }
 
-    get getActiveStatus () {
+    get getStatus () {
         return this.raw?.status;
     }
 
