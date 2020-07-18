@@ -15,4 +15,4 @@ export default function getFiltersVehicleComponent (type) {
     case 'moto':
         return MotoFilters;
     }
-};
+}

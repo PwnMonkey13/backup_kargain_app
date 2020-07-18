@@ -29,7 +29,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
     const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
-        defaultValues: formDataContext,
+        defaultValues: formDataContext
     });
 
     const [vinDecoded, storeVinDecoded] = useState(null);
@@ -37,7 +37,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
         makes: [],
         models: [],
         generations: [],
-        years: [],
+        years: []
     });
 
     const popularMakesId = [
@@ -53,7 +53,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
         102, // Opel
         47, // Fiat
         140, // Toyota
-        133, // Susuki
+        133 // Susuki
     ];
 
     const triggerSubmit = () => {
@@ -70,7 +70,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                 } catch (err) {
                     dispatchModal({
                         type: 'error',
-                        err,
+                        err
                     });
                 }
             } else {
@@ -84,20 +84,20 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
             setValue('manufacturer', {
                 make: {
                     label: vinDecoded.Make,
-                    value: vinDecoded.Make,
-                },
+                    value: vinDecoded.Make
+                }
             });
             setValue('manufacturer', {
                 model: {
                     label: vinDecoded.Model,
-                    value: vinDecoded.Model,
-                },
+                    value: vinDecoded.Model
+                }
             });
             setValue('manufacturer', {
                 year: {
                     label: vinDecoded.ModelYear,
-                    value: vinDecoded.ModelYear,
-                },
+                    value: vinDecoded.ModelYear
+                }
             });
         }
     }, [vinDecoded]);
@@ -125,17 +125,17 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
             .then(cars => {
                 const makesOptions = cars.map(car => ({
                     value: car.make_id,
-                    label: car.make,
+                    label: car.make
                 }));
                 const defaultOption = {
                     value: 'other',
-                    label: 'Je ne sais pas/Autre',
+                    label: 'Je ne sais pas/Autre'
                 };
                 setManufacturersData(manufacturersData => (
                     {
                         ...manufacturersData,
-                        makes: [...makesOptions, defaultOption],
-                    }),
+                        makes: [...makesOptions, defaultOption]
+                    })
                 );
             })
             .catch(err => {
@@ -154,23 +154,23 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                     .then(models => {
                         const modelsOptions = models.map(model => ({
                             value: model.model_id,
-                            label: model.model,
+                            label: model.model
                         }));
                         const defaultOption = {
                             value: 'other',
-                            label: 'Je ne sais pas/Autre',
+                            label: 'Je ne sais pas/Autre'
                         };
                         setManufacturersData(manufacturersData => (
                             {
                                 ...manufacturersData,
-                                models: [...modelsOptions, defaultOption],
-                            }),
+                                models: [...modelsOptions, defaultOption]
+                            })
                         );
                     })
                     .catch(err => {
                         dispatchModalError({
                             err,
-                            persist: true,
+                            persist: true
                         });
                     });
             }
@@ -188,18 +188,18 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                             // eslint-disable-next-line camelcase
                             ({ generation_id, generation }) => ({
                                 value: generation_id,
-                                label: generation,
-                            }),
+                                label: generation
+                            })
                         );
                         const defaultOption = {
                             value: 'other',
-                            label: 'Je ne sais pas/Autre',
+                            label: 'Je ne sais pas/Autre'
                         };
                         setManufacturersData(manufacturersData => (
                             {
                                 ...manufacturersData,
-                                generations: [...generationsOptions, defaultOption],
-                            }),
+                                generations: [...generationsOptions, defaultOption]
+                            })
                         );
                     })
                     .catch(err => {
@@ -220,18 +220,18 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                     .then(years => {
                         const yearsOptions = years.map(year => ({
                             value: year.year,
-                            label: year.year,
+                            label: year.year
                         }));
                         setManufacturersData(manufacturersData => (
                             {
                                 ...manufacturersData,
-                                years: yearsOptions,
-                            }),
+                                years: yearsOptions
+                            })
                         );
                     })
                     .catch(err => {
-                            dispatchModalError({ err });
-                        },
+                        dispatchModalError({ err });
+                    }
                     );
             }
         }
@@ -245,7 +245,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                         <ToolTipWrapper
                             icon="?"
                             template="default">
-                            <p> {t('vehicles:vin-helper')}"></p>
+                            <p> {t('vehicles:vin-helper')} </p>
                         </ToolTipWrapper>
                     }>
                         <TextInput
@@ -255,8 +255,8 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                             control={control}
                             rules={{
                                 validate: {
-                                    isValidVIN: value => isValidVIN(value),
-                                },
+                                    isValidVIN: value => isValidVIN(value)
+                                }
                             }}
                         />
                     </FieldWrapper>
@@ -264,7 +264,6 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
             </Row>
 
             <Divider text={t('vehicles:or')}/>
-
             <Header text={t('vehicles:select-your-car')}/>
 
             <Row>
@@ -273,15 +272,14 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                     <FieldWrapper label={t('vehicles:make')} labelTop>
                         <SelectInput
                             name="manufacturer.make"
-                            placeholder="Select a car make"
+                            placeholder={t('vehicles:select-vehicle-make')}
                             control={control}
                             errors={errors}
-                            rules={{ required: 'Title is required!' }}
                             options={manufacturersData.makes}
                             onChange={([selected, option]) => {
                                 collectStepChanges({
                                     name: option.name,
-                                    label: selected.label,
+                                    label: selected.label
                                 });
                                 return selected;
                             }}
@@ -300,7 +298,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                             onChange={([selected, option]) => {
                                 collectStepChanges({
                                     name: option.name,
-                                    label: selected.label,
+                                    label: selected.label
                                 });
                                 return selected;
                             }}
@@ -319,7 +317,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                             onChange={([selected, option]) => {
                                 collectStepChanges({
                                     name: option.name,
-                                    label: selected.label,
+                                    label: selected.label
                                 });
                                 return selected;
                             }}
@@ -338,7 +336,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                             onChange={([selected, option]) => {
                                 collectStepChanges({
                                     name: option.name,
-                                    label: selected.label,
+                                    label: selected.label
                                 });
                                 return selected;
                             }}
