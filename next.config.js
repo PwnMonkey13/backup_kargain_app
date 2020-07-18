@@ -18,8 +18,8 @@ const nextBundleAnalyzer = ({ enabled = true }) => (nextConfig = {}) => ({
                     reportFilename: isServer
                         ? '../analyze/server.html'
                         : './analyze/client.html',
-                    ...bundleAnalyzerOptions,
-                }),
+                    ...bundleAnalyzerOptions
+                })
             )
         }
 
@@ -28,45 +28,15 @@ const nextBundleAnalyzer = ({ enabled = true }) => (nextConfig = {}) => ({
         }
 
         return config
-    },
+    }
 })
 
 const nextConfig = {
     distDir: 'dist',
     // Have to list all the environment variables used here to make it available to the client side code
-    env: {
-        GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-        GOOGLE_SSO_CLIENT_ID: process.env.GOOGLE_SSO_CLIENT_ID,
-        FACEBOOK_SSO_APP_ID: process.env.FACEBOOK_SSO_APP_ID,
-        CONTENTFUL_ACCESS_TOKEN : '1FLg_Swv-LqFXKNENZ_IqzEw4ajYAbMcKUJCNg1YnTw',
-        CONTENTFUL_SPACE : "15r3jjrdfhc7"
-    },
     webpack: (config) => {
-        // XXX See https://github.com/zeit/next.js/blob/canary/examples/with-sentry-simple/next.config.js
-        // In `pages/_app.js`, Sentry is imported from @sentry/node. While
-        // @sentry/browser will run in a Node.js environment, @sentry/node will use
-        // Node.js-only APIs to catch even more unhandled exceptions.
-        //
-        // This works well when Next.js is SSRing your page on a server with
-        // Node.js, but it is not what we want when your client-side bundle is being
-        // executed by a browser.
-        //
-        // Luckily, Next.js will call this webpack function twice, once for the
-        // server and once for the client. Read more:
-        // https://nextjs.org/docs#customizing-webpack-config
-        //
-        // So ask Webpack to replace @sentry/node imports with @sentry/browser when
-        // building the browser's bundle
-
         config.resolve.mainFields = ['main', 'browser', 'module']
-        // config.resolve.alias = {
-        //     'sass-to-js': 'sass-vars-to-js-loader',
-        // }
         config.module.rules.push(
-            {
-                test: /\.tsx?$/,
-                loader: 'ts-loader',
-            },
             {
                 test: /\.(ico|svg|png|jpe?g|gif|eot|ttf|woff|woff2)$/,
                 use: [
@@ -76,17 +46,17 @@ const nextConfig = {
                         loader: 'url-loader',
                         options: {
                             name: 'images/[hash]-[name].[ext]',
-                            limit: 100000,
-                        },
-                    },
-                ],
-            },
+                            limit: 100000
+                        }
+                    }
+                ]
+            }
         )
 
         return config
-    },
+    }
 }
 
 module.exports = withPlugins([
-    [withImages, { exclude: path.resolve(__dirname, 'public/images/svg') }],
+    [withImages, { exclude: path.resolve(__dirname, 'public/images/svg') }]
 ], nextConfig)

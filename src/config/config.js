@@ -6,19 +6,23 @@ module.exports = {
     isProd,
     api,
     sso_providers: ['google', 'facebook'],
+    contentful : {
+        CONTENTFUL_ACCESS_TOKEN : process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
+        CONTENTFUL_SPACE : process.env.NEXT_PUBLIC_CONTENFUL_SPACE
+    },
     stripe: {
-        API_KEY: process.env.STRIPE_API_KEY,
+        API_KEY: process.env.NEXT_PUBLIC_STRIPE_API_KEY
     },
     google: {
-        STATIC_API_KEY: process.env.GOOGLE_API_KEY,
+        STATIC_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
         sso: {
-            CLIENT_ID: process.env.GOOGLE_SSO_CLIENT_ID,
-        },
+            CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_SSO_CLIENT_ID
+        }
     },
     facebook: {
         sso: {
-            APP_ID: process.env.FACEBOOK_SSO_APP_ID,
-            profileFields: ['id', 'emails', 'name', 'picture.width(250)'],
-        },
-    },
+            APP_ID: process.env.NEXT_PUBLIC_FACEBOOK_SSO_APP_ID,
+            profileFields: ['id', 'emails', 'name', 'picture.width(250)']
+        }
+    }
 };

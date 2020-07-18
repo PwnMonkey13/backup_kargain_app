@@ -10,6 +10,7 @@ dist
 
 # dotenv environment variables file
 .env
+.env.*
 
 # Dependency directories
 node_modules/
