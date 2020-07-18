@@ -119,8 +119,8 @@ p.error {
     }
 }
 
-.form-group{
-    .feedback-icon{
+.form-group {
+    .feedback-icon {
         position: absolute;
         width: auto;
         bottom: 7px;
@@ -183,7 +183,6 @@ select[type=radio] {
     }
 
     label {
-        flex: 1;
         display: inline-block;
         background-color: #ddd;
         padding: 10px 20px;
@@ -208,25 +207,25 @@ select[type=radio] {
         }
 
         input + label:before {
+            --width: 14px;
             content: " ";
             position: absolute;
-            top: 50%;
-            margin-top: -10px;
+            top: calc(50% - var(--width)/2);
             left: 10px;
-            height: 14px;
-            width: 14px;
+            height: var(--width);
+            width: var(--width);
             background: $white;
             border-radius: 10px;
         }
 
         input:checked + label:after {
+            --width: 10px;
             content: " ";
             position: absolute;
-            top: 50%;
-            margin-top: -8px;
+            top: calc(50% - var(--width)/2);
             left: 12px;
-            height: 10px;
-            width: 10px;
+            height: var(--width);
+            width: var(--width);
             border-radius: 50%;
             background: #307edd;
         }
@@ -240,15 +239,41 @@ select[type=radio] {
     input[type="checkbox"]:checked + label:after {
         border-radius: unset;
     }
+}
 
-    //input:checked + label {
-    //    background-color: #bfb;
-    //    border-color: #4c4;
-    //}
+.form-check-transparent {
+    @extend .form-check;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    //input:focus + label {
-    //    border: 2px dashed #444;
-    //}
+    label {
+        background: unset;
+        border: unset;
+    }
+
+    input + label {
+        background: unset;
+        border: unset;
+    }
+
+    &:not(.no-input) {
+        input + label:before {
+            background: gainsboro;
+        }
+
+        input:checked + label:after {
+            --width: 10px;
+            content: " ";
+            position: absolute;
+            top: calc(50% - var(--width)/2);
+            left: 12px;
+            height: var(--width);
+            width: var(--width);
+            border-radius: 50%;
+            background: #307edd;
+        }
+    }
 }
 
 .form-check-vehicle {
