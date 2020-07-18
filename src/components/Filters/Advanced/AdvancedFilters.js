@@ -1,66 +1,64 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect,  useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { flatten } from 'flattenjs';
 import clsx from 'clsx';
+import useDimensions from 'react-use-dimensions';
 import Button from '@material-ui/core/Button';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from '@material-ui/core/Typography';
-import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import useTranslation from 'next-translate/useTranslation';
-import announcesFiltersMapper from '../../libs/announcesFiltersMapper';
-import resolveObjectKey from '../../libs/resolveObjectKey';
-import useIsMounted from '../../hooks/useIsMounted';
-import RadioGroupInput from '../Form/Inputs/RadioGroupInput';
-import VehicleTypeFilterSelector from './VehicleTypeFilterSelector';
-import getFiltersVehicleComponent from './Vehicles';
-import Header from '../Header';
+import announcesFiltersMapper from '../../../libs/announcesFiltersMapper';
+import resolveObjectKey from '../../../libs/resolveObjectKey';
+import getFiltersVehicleComponent from './index';
+import { Col, Row } from 'reactstrap'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     filtersContainer: {
-        padding: '.5rem',
+        padding: '.5rem'
     },
 
     filtersTop: {
         display: 'flex',
         alignItems: 'center',
-        borderBottom: '1px solid gainsboro',
+        borderBottom: '1px solid gainsboro'
     },
 
     filtersHidden: {
-        display: 'none',
-    },
+        display: 'none'
+    }
 }));
 
-const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
-    const isMounted = useIsMounted();
-    const formRef = useRef(null);
+const AnnounceTypes = [
+    {
+        value: 'sale',
+        label: 'Vente'
+    },
+    {
+        value: 'sale-pro',
+        label: 'Vente pro'
+    },
+    {
+        value: 'rent',
+        label: 'Location'
+    }
+]
+
+const AdvancedFilters = ({ vehicleType, defaultFilters, updateFilters }) => {
     const classes = useStyles();
     const { t } = useTranslation();
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'), {
-        defaultMatches: true,
-    });
-
-    const { watch, control, setValue, formState, errors, handleSubmit } = useForm({
+    const isMobile = useMediaQuery('(max-width:768px)');
+    const [hiddenForm, hideForm] = useState(isMobile);
+    const [changes, setChanges] = useState({});
+    const [ref, { width }] = useDimensions();
+    const DynamicFiltersComponent = getFiltersVehicleComponent(vehicleType);
+    const { watch, register, control, setValue, formState, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
-        defaultValues: defaultFilters,
+        defaultValues: defaultFilters
     });
-
-    const { touched } = formState;
-    const [filters, setFilters] = useState(defaultFilters);
-    const [hiddenForm, hideForm] = useState(false);
-    const [vehicleType, setVehicleType] = useState('car');
-    const [changes, setChanges] = useState({});
-    const DynamicFiltersComponent = getFiltersVehicleComponent(vehicleType);
-
-    const handleSelectVehicleType = (type) => {
-        console.log(type);
-        setVehicleType(type);
-    };
 
     const filterProps = formData => {
         return Object.keys(announcesFiltersMapper).reduce((carry, key) => {
@@ -72,24 +70,34 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
                         const values = field.map(item => item[property.selector]);
                         return {
                             ...carry,
-                            [property.name]: values,
+                            [property.name]: values
                         };
                     }
                 }
 
                 return {
                     ...carry,
-                    [property]: !isNaN(Number(field)) ? Number(field) : field,
+                    [property]: !isNaN(Number(field)) ? Number(field) : field
                 };
             }
             return carry;
         }, {});
     };
 
-    const onSubmit = (data, e) => {
+    const onSubmit = (form, e) => {
+        const { coordinates, radius } = form;
+        const filtersFlat = filterProps(form);
+        const data = { ...filtersFlat };
+
+        if (coordinates && radius) {
+            data.radius = radius;
+            data.coordinates = coordinates;
+            data.enableGeocoding = true;
+        }
+
         e.preventDefault();
-        setChanges(flatten(touched));
-        setFilters(data);
+        setChanges(flatten(formState.touched));
+        updateFilters(data);
     };
 
     const resetValue = (field) => {
@@ -104,27 +112,16 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
         hideForm(hiddenForm => !hiddenForm);
     };
 
-    useEffect(() => {
-        hideForm(isMobile);
-    }, [isMobile]);
+    useEffect(()=>{
+        register("vehicleType")
+    },[])
 
-    useEffect(() => {
-        if (isMounted) {
-            const { coordinates, radius } = filters;
-            const filtersFlat = filterProps(filters);
-            const data = { ...filtersFlat };
-
-            if (coordinates && radius) {
-                data.radius = radius;
-                data.coordinates = coordinates;
-                data.enableGeocoding = true;
-            }
-            fireFilters(data);
-        }
-    }, [filters]);
+    useEffect(()=>{
+        setValue("vehicleType", vehicleType)
+    },[vehicleType])
 
     return (
-        <div className={classes.filtersContainer}>
+        <div className={classes.filtersContainer} ref={ref}>
             <div className={classes.filtersTop} onClick={() => toggleFilters()}>
                 <Typography variant="h4">
                     {t('filters:select-filters')}
@@ -154,33 +151,28 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
                 </>
             )}
 
-            <div className={clsx(hiddenForm && classes.filtersHidden)}>
-                <form className="filters_form" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-                    <ControlButtons/>
-                    <Header p strong className="m-0" text={t('vehicles:vehicle-type')}/>
-                    <RadioGroupInput
-                        name="adType"
-                        noInputClass
-                        control={control}
-                        errors={errors}
-                        options={[
-                            {
-                                label: t('vehicles:rent'),
-                                value: 'rent',
-                            },
-                            {
-                                label: t('vehicles:sale'),
-                                value: 'sale',
-                            }]
-                        }
-                    />
-
-                    <Header p strong className="my-2" text={t('vehicles:vehicle-type')}/>
-                    <VehicleTypeFilterSelector
-                        handleSelectVehicleType={handleSelectVehicleType}
-                        name="vehicleType"
-                        control={control}
-                    />
+            <form className="filters_form" onSubmit={handleSubmit(onSubmit)}>
+                <div className={clsx(hiddenForm && classes.filtersHidden)}>
+                    <Typography component="h4" variant="h4" gutterBottom className="text-center">{t('vehicles:announce-type')}</Typography>
+                    <Row className="justify-content-center">
+                        {AnnounceTypes && AnnounceTypes.map((tab, index) => {
+                            return (
+                                <Col key={index} xs={4} sm={4} md={width < 500 ? 12 : 4} lg={4}>
+                                    <div className="form-check-transparent">
+                                        <input id={`ad_type${index}`}
+                                            type="radio"
+                                            name="adType"
+                                            value={tab.value}
+                                            ref={register}
+                                        />
+                                        <label htmlFor={`ad_type${index}`}>
+                                            {tab.label}
+                                        </label>
+                                    </div>
+                                </Col>
+                            )
+                        })}
+                    </Row>
 
                     {DynamicFiltersComponent && (
                         <DynamicFiltersComponent
@@ -189,14 +181,12 @@ const Filters = memo(({ defaultFilters, updateFilters: fireFilters }) => {
                             watch={watch}
                         />
                     )}
-
-                    <ControlButtons/>
-                </form>
-            </div>
+                </div>
+                <ControlButtons/>
+            </form>
         </div>
-
     );
-});
+};
 
 const ControlButtons = () => {
     const { t } = useTranslation();
@@ -216,7 +206,8 @@ const ControlButtons = () => {
     );
 };
 
-Filters.defaultProps = {
+AdvancedFilters.defaultProps = {
+    vehicleType : 'car',
     defaultFilters: {
         vehicleType: 'car',
         adType: 'sale',
@@ -227,9 +218,8 @@ Filters.defaultProps = {
         radius: 0,
         'consumption.gkm': [0, 200],
         doors: [1, 10],
-        seats: [1, 10],
-
-    },
+        seats: [1, 10]
+    }
 };
 
-export default Filters;
+export default memo(AdvancedFilters);

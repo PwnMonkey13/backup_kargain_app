@@ -1,6 +1,7 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext,  useState } from 'react';
 import { Col, Row } from 'reactstrap';
-import styled from 'styled-components';
+
+import useDimensions from 'react-use-dimensions';
 import { useForm } from 'react-hook-form';
 import Header from '../Header';
 import Divider from '../Divider';
@@ -11,31 +12,31 @@ const tabsRadio = [
         value: 'car',
         label: 'Voiture',
         img: 'tab-car.png',
-        imgSelected: 'tab-car-blue.png',
+        imgSelected: 'tab-car-blue.png'
     },
     {
         value: 'moto',
         label: 'Moto',
         img: 'tab-moto.png',
-        imgSelected: 'tab-moto-blue.png',
+        imgSelected: 'tab-moto-blue.png'
     },
     {
         value: 'utility',
         label: 'Utilitaire',
         img: 'tab-gruz.png',
-        imgSelected: 'tab-gruz-blue.png',
+        imgSelected: 'tab-gruz-blue.png'
 
     },
     {
         value: 'camper',
         label: 'Camping car',
         img: 'tab-camper.png',
-        imgSelected: 'tab-camper-blue.png',
-    },
+        imgSelected: 'tab-camper-blue.png'
+    }
 ];
 
 const VehicleTypeSelectorStep = ({ handleSelectVehicleType }) => {
-    const formRef = useRef(null);
+    const [formRef, { width }] = useDimensions();
     const { register, handleSubmit } = useForm();
     const { dispatchFormUpdate } = useContext(FormContext);
     const [type, setType] = useState(null);
@@ -53,39 +54,31 @@ const VehicleTypeSelectorStep = ({ handleSelectVehicleType }) => {
     };
 
     const onSubmit = (data) => {
-        const tab = tabsRadio.find(tab => tab.value === data.vehicleType);
         dispatchFormUpdate({
-            vehicleType: {
-                value: tab.value,
-                label: tab.label,
-            },
+            vehicleType: data.vehicleType
         });
         handleSelectVehicleType(data.vehicleType);
     };
-
-    const Img = styled.img`
-        max-width:80px;
-        object-fit:contain;
-    `;
 
     return (
         <form className="form_wizard my-4" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
             <Row className="justify-content-center">
                 {tabsRadio && tabsRadio.map((tab, index) => {
                     return (
-                        <Col key={index} xs={6} sm={3} md={3} lg={2}>
+                        <Col key={index} xs={6} sm={6} md={width < 500 ? 12 : 3} lg={3}>
                             <div className="form-check form-check-vehicle m-0" style={{ minHeight: '5rem' }}>
                                 <input id={`vehicle_type${index}`}
-                                       type="radio"
-                                       name="vehicleType"
-                                       value={tab.value}
-                                       ref={register}
-                                       onChange={() => handleClick(index)}
+                                    type="radio"
+                                    name="vehicleType"
+                                    value={tab.value}
+                                    ref={register}
+                                    onChange={() => handleClick(index)}
                                 />
                                 <label htmlFor={`vehicle_type${index}`} style={{ minHeight: '5rem' }}>
-                                    <Img src={type === tab.value ? `/images/${tab.imgSelected}` : `/images/${tab.img}`}
-                                         alt={tab.label}
-                                         title={tab.label}
+                                    <img src={type === tab.value ? `/images/${tab.imgSelected}` : `/images/${tab.img}`}
+                                        alt={tab.label}
+                                        title={tab.label}
+                                        style={{maxWidth:'80px', objectFit: 'contain' }}
                                     />
                                 </label>
                             </div>
@@ -102,13 +95,13 @@ const VehicleTypeSelectorStep = ({ handleSelectVehicleType }) => {
                         <Row>
                             {othersForm.map((tab, index) => {
                                 return (
-                                    <div className="form-check m-0">
+                                    <div key={index} className="form-check m-0">
                                         <input id={`name_second_${index}`}
-                                               type="radio"
-                                               name="vehicleType"
-                                               value={tab.value}
-                                               ref={register}
-                                               onChange={() => triggerSubmit()}
+                                            type="radio"
+                                            name="vehicleType"
+                                            value={tab.value}
+                                            ref={register}
+                                            onChange={() => triggerSubmit()}
                                         />
                                         <label htmlFor={`name_second_${index}`}>{tab.label}</label>
                                     </div>

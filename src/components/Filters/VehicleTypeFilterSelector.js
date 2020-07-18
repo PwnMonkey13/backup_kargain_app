@@ -9,27 +9,27 @@ const tabsRadio = [
         value: 'car',
         label: 'Voiture',
         img: 'tab-car.png',
-        imgSelected: 'tab-car-blue.png',
+        imgSelected: 'tab-car-blue.png'
     },
     {
         value: 'moto',
         label: 'Moto',
         img: 'tab-moto.png',
-        imgSelected: 'tab-moto-blue.png',
+        imgSelected: 'tab-moto-blue.png'
     },
     {
         value: 'utility',
         label: 'Utilitaire',
         img: 'tab-gruz.png',
-        imgSelected: 'tab-gruz-blue.png',
+        imgSelected: 'tab-gruz-blue.png'
 
     },
     {
         value: 'camper',
         label: 'Camping car',
         img: 'tab-camper.png',
-        imgSelected: 'tab-camper-blue.png',
-    },
+        imgSelected: 'tab-camper-blue.png'
+    }
 ];
 
 const othersFormOptions = [];
@@ -50,12 +50,12 @@ const VehicleTypeFilterSelector = ({ handleSelectVehicleType, name, control, rul
                         <Col key={index} xs={6} sm={4} lg={6}>
                             <div className="form-check no-input form-check-vehicle m-1">
                                 <input id={`name_${index}`}
-                                       ref={control.register(rules)}
-                                       type="radio"
-                                       name={name}
-                                       value={tab.value}
-                                       defaultChecked={tab.checked}
-                                       onClick={() => handleSelect(index)}
+                                    ref={control.register(rules)}
+                                    type="radio"
+                                    name={name}
+                                    value={tab.value}
+                                    defaultChecked={tab.checked}
+                                    onClick={() => handleSelect(index)}
                                 />
                                 <label className="p-2" htmlFor={`name_${index}`}>
                                     <img
