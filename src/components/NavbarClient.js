@@ -2,20 +2,22 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import Link from 'next-translate/Link';
 import useTranslation from 'next-translate/useTranslation';
-import { Collapse, Container, FormGroup, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
+import { Collapse, Container,  Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
 import { useTheme } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Badge from '@material-ui/core/Badge';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import ChatIcon from '@material-ui/icons/Chat';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import ChatIcon from '@material-ui/icons/Chat';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SearchIcon from '@material-ui/icons/Search';
+import CloseIcon from '@material-ui/icons/Close';
+import SettingsIcon from '@material-ui/icons/Settings';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import FaceIcon from '@material-ui/icons/Face';
-import Badge from '@material-ui/core/Badge';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
-import SettingsIcon from '@material-ui/icons/Settings';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import { getLogo } from '../libs/utils';
 import { useAuth } from '../context/AuthProvider';
 import DropdownSwitchLang from './Locales/DropdownSwitchLang';
@@ -25,53 +27,59 @@ const useStyles = makeStyles(theme => ({
     navBarClient: {
         display: 'flex',
         flex: 1,
-        width: 'min-content',
+        width: 'min-content'
     },
 
     inputSearch: {
         width: '300px',
 
         [theme.breakpoints.down('md')]: {
-            width: 'unset',
-        },
-    },
+            width: '200px'
+        }
+    }
 }));
 
 const NavbarClient = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleNavbar = () => setIsOpen(!isOpen);
     const { isAuthenticated } = useAuth();
-    const [collapsed, setCollapsed] = useState(false);
-    const toggleNavbar = () => setCollapsed(!collapsed);
+    const isMobile = useMediaQuery('(max-width:768px)');
 
     return (
-        <header className="header">
-            <Container>
-                <Navbar light expand="md" className="navbar p-2 position-relative">
-                    <NavbarBrand href="/">
-                        <img src={getLogo()} width="150" alt="logo"/>
-                    </NavbarBrand>
-                    <NavbarAction/>
-                    <div className="d-flex navbar-menu" id="open-navbar1">
-
-                        <Collapse isOpen={collapsed} navbar>
-                            {isAuthenticated ?
-                                <LoggedInUserNav/> :
-                                <VisitorNav/>
-                            }
-                        </Collapse>
-
+        <>
+            <header className="header">
+                <Container>
+                    <Navbar light expand="md" className="navbar p-2 position-relative">
+                        <NavbarBrand href="/">
+                            <img src={getLogo()} width="150" alt="logo"/>
+                        </NavbarBrand>
                         <NavbarToggler
                             className="m-2"
-                            style={{
-                                position: 'absolute',
-                                top: '10px',
-                                right: 0,
-                            }}
                             onClick={toggleNavbar}
                         />
-                    </div>
-                </Navbar>
-            </Container>
-        </header>
+                        <Collapse isOpen={isOpen} navbar>
+                            {isMobile ? (
+                                <div className={clsx("sidebar", isOpen && 'open')}>
+                                    <div className="sidebar_controls">
+                                        <Button
+                                            startIcon={<CloseIcon/>}
+                                            onClick={toggleNavbar}
+                                        />
+                                    </div>
+                                    <NavbarAction vertical={true}/>
+                                    {isAuthenticated ? <LoggedInUserNav vertical={true}/> : <VisitorNav vertical={true}/>}
+                                </div>
+                            ) : (
+                                <div className={clsx("d-flex", "navbar-menu")}>
+                                    <NavbarAction/>
+                                    {isAuthenticated ? <LoggedInUserNav/> : <VisitorNav/>}
+                                </div>
+                            )}
+                        </Collapse>
+                    </Navbar>
+                </Container>
+            </header>
+        </>
     );
 };
 
@@ -86,16 +94,16 @@ const NewAdButtonCTA = () => {
     );
 };
 
-const NavbarAction = () => {
+const NavbarAction = ({vertical}) => {
     const { t } = useTranslation();
     const classes = useStyles();
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
-        defaultMatches: true,
+        defaultMatches: true
     });
 
     return (
-        <Nav className={clsx(!isDesktop && 'd-inline-block', 'my-2')}>
+        <Nav navbar className={clsx("my-2", vertical ? "flex-column" : "flex-row-nav")}>
             {isDesktop && (
                 <NavItem className="p-2">
                     <NewAdButtonCTA/>
@@ -103,32 +111,19 @@ const NavbarAction = () => {
             )}
 
             <NavItem className="p-2">
-                <form method="GET" action="/search">
+                <form className="search-form" method="GET" action="/search">
+                    <input
+                        name="query"
+                        type="search"
+                        placeholder={t('layout:search')}
+                        className={clsx('form-control', classes.inputSearch, "search-input")}
+                    />
 
-                    <FormGroup className="form-inline search-header-wrapper m-auto position-relative">
-                        <input
-                            name="query"
-                            type="search"
-                            placeholder={t('layout:search')}
-                            className={clsx('form-control', classes.inputSearch)}
-                            id="search_input"
-                        />
-
-                        <div className="feedback-icon">
-                            <SearchIcon/>
-                        </div>
-
-                        <input
-                            type="submit"
-                            tabIndex="-1"
-                            style={{
-                                position: 'absolute',
-                                left: '-9999px',
-                                width: '1px',
-                                height: '1px',
-                            }}
-                        />
-                    </FormGroup>
+                    <button
+                        type="submit"
+                        className="search-button">
+                        <SearchIcon/>
+                    </button>
                 </form>
             </NavItem>
         </Nav>
@@ -140,17 +135,17 @@ const DropdownNotifs = ({ isOpen, keyName, toggle }) => {
         <li className="nav-item p-2 navbar_icon navbar-icon-notifications">
             <div className="dropdown show">
                 <IconButton color="inherit"
-                            data-toggle="dropdown-notifications"
-                            aria-haspopup="true"
-                            aria-expanded="true"
-                            id="dropdownMenu2"
-                            onClick={() => toggle(keyName)}>
+                    data-toggle="dropdown-notifications"
+                    aria-haspopup="true"
+                    aria-expanded="true"
+                    id="dropdownMenu2"
+                    onClick={() => toggle(keyName)}>
                     <Badge badgeContent={1} color="secondary">
                         <NotificationsIcon/>
                     </Badge>
                 </IconButton>
                 <div id="dropdown-notifications" className={clsx('dropdown-menu', isOpen && 'show')}
-                     aria-labelledby="dropdownMenu2">
+                    aria-labelledby="dropdownMenu2">
                     <div className="notf-wrapper">
                         <div>
                             <div className="text-podpiska">
@@ -195,7 +190,7 @@ const DropdownUser = ({ isOpen, keyName, toggle }) => {
                     <Link href="/profile/messages" prefetch={false}>
                         <a className="nav-link text-left"><ChatIcon/>
                             <span className="m-1">
-                                 {t('layout:messaging')}
+                                {t('layout:messaging')}
                             </span>
                         </a>
                     </Link>
@@ -204,7 +199,7 @@ const DropdownUser = ({ isOpen, keyName, toggle }) => {
                     <Link href={authenticatedUser.getProfileEditLink} prefetch={false}>
                         <a className="nav-link text-left"><SettingsIcon/>
                             <span className="m-1">
-                                 {t('layout:settings')}
+                                {t('layout:settings')}
                             </span>
                         </a>
                     </Link>
@@ -214,8 +209,8 @@ const DropdownUser = ({ isOpen, keyName, toggle }) => {
                         <a className="nav-link text-left" onClick={() => logout()}>
                             <ExitToAppIcon/>
                             <span className="m-1">
-                          {t('layout:logout')}
-                        </span>
+                                {t('layout:logout')}
+                            </span>
                         </a>
                     </Link>
                 </li>
@@ -224,10 +219,10 @@ const DropdownUser = ({ isOpen, keyName, toggle }) => {
     );
 };
 
-const LoggedInUserNav = () => {
+const LoggedInUserNav = ({vertical}) => {
     const [state, setState] = useState({
         isOpen1: false,
-        isOpen2: false,
+        isOpen2: false
     });
 
     const toggle = (toggled) => {
@@ -236,14 +231,14 @@ const LoggedInUserNav = () => {
                 .filter(key => key !== toggled)
                 .reduce((carry, key) => ({
                     ...carry,
-                    [key]: false,
+                    [key]: false
                 }), state),
-            [toggled]: !state[toggled],
+            [toggled]: !state[toggled]
         }));
     };
 
     return (
-        <Nav navbar className="flex-row-nav my-2">
+        <Nav navbar className={clsx("my-2", vertical ? "flex-column" : "flex-row-nav")}>
             <DropdownSwitchLang/>
             <DropdownNotifs isOpen={state.isOpen1} keyName="isOpen1" toggle={toggle}/>
             <DropdownUser isOpen={state.isOpen2} keyName="isOpen2" toggle={toggle}/>
@@ -251,11 +246,11 @@ const LoggedInUserNav = () => {
     );
 };
 
-const VisitorNav = () => {
+const VisitorNav = ({vertical}) => {
     const { t } = useTranslation();
 
     return (
-        <Nav navbar className="flex-row-nav">
+        <Nav navbar className={clsx("my-2", vertical ? "flex-column" : "flex-row-nav")}>
             <DropdownSwitchLang/>
             <NavItem className="p-2">
                 <Link href="/auth/login" prefetch={false}>

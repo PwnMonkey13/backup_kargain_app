@@ -2,9 +2,9 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import Pagination from 'react-paginating';
 
-const PaginateResults = memo(({ total, size, pageCount, page, handlePageChange }) => {
+const PaginateResults = ({ total, size, pageCount, page, handlePageChange }) => {
     return (
-        <div className="d-flex flex-row py-2 align-items-center">
+        <div className="d-flex flex-row py-2 align-items-center justify-content-center">
             <Pagination
                 total={total}
                 limit={size}
@@ -19,25 +19,27 @@ const PaginateResults = memo(({ total, size, pageCount, page, handlePageChange }
                     previousPage,
                     nextPage,
                     totalPages,
-                    getPageItemProps,
+                    getPageItemProps
                 }) => {
                     if (totalPages < 2) return null;
                     return (
                         <div>
-                            <button
-                                {...getPageItemProps({
-                                    pageValue: 1,
-                                    onPageChange: handlePageChange,
-                                })}
-                            >
-                                1
-                            </button>
+                            {currentPage !== 1 && (
+                                <button
+                                    {...getPageItemProps({
+                                        pageValue: 1,
+                                        onPageChange: handlePageChange
+                                    })}
+                                >
+                                    1
+                                </button>
+                            )}
 
                             {hasPreviousPage && (
                                 <button
                                     {...getPageItemProps({
                                         pageValue: previousPage,
-                                        onPageChange: handlePageChange,
+                                        onPageChange: handlePageChange
                                     })}
                                 >
                                     {'<'}
@@ -51,44 +53,46 @@ const PaginateResults = memo(({ total, size, pageCount, page, handlePageChange }
                                 }
                                 return (
                                     <button key={i}
-                                            {...getPageItemProps({
-                                                pageValue: page,
-                                                key: page,
-                                                style: activePage,
-                                                onPageChange: handlePageChange,
-                                            })}
+                                        {...getPageItemProps({
+                                            pageValue: page,
+                                            key: page,
+                                            style: activePage,
+                                            onPageChange: handlePageChange
+                                        })}
                                     >
                                         {page}
                                     </button>
                                 );
                             })}
 
-                            {hasNextPage && (
+                            {(hasNextPage && pages.length > 2) && (
+                            <>
                                 <button
                                     {...getPageItemProps({
                                         pageValue: nextPage,
-                                        onPageChange: handlePageChange,
+                                        onPageChange: handlePageChange
                                     })}
                                 >
                                     {'>'}
                                 </button>
-                            )}
 
-                            <button
-                                {...getPageItemProps({
-                                    pageValue: totalPages,
-                                    onPageChange: handlePageChange,
-                                })}
-                            >
-                                {totalPages}
-                            </button>
+                                <button
+                                    {...getPageItemProps({
+                                        pageValue: totalPages,
+                                        onPageChange: handlePageChange
+                                    })}
+                                >
+                                    {totalPages}
+                                </button>
+                            </>
+                            )}
                         </div>
                     );
                 }}
             </Pagination>
         </div>
     );
-});
+};
 
 PaginateResults.propsType = {
     total: PropTypes.number.isRequired,
@@ -98,4 +102,4 @@ PaginateResults.propsType = {
     handlePageChange : PropTypes.func.isRequired
 }
 
-export default PaginateResults;
+export default memo(PaginateResults);

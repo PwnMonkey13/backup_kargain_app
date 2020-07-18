@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Link from 'next-translate/Link';
 
-const CTALink = ({ href, title, id, className }) => {
+const CTALink = ({ href, icon: Icon, title, id, className }) => {
     return (
         <Link href={href} prefetch={false} passHref>
             <a id={id} className={
@@ -11,6 +11,10 @@ const CTALink = ({ href, title, id, className }) => {
                     'mx-1'
                 )
             }>
+                {Icon && (
+                    <span className="mx-2">
+                        <Icon/>
+                    </span>)}
                 {title}
             </a>
         </Link>
@@ -18,6 +22,6 @@ const CTALink = ({ href, title, id, className }) => {
 };
 
 CTALink.defaultProps = {
-    href : "/"
-}
+    href: '/'
+};
 export default CTALink;

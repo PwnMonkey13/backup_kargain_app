@@ -6,7 +6,7 @@ import i18nConfig from '../../../i18n.json';
 import useTranslation from 'next-translate/useTranslation';
 import startsWithLang from 'next-translate/_helpers/startsWithLang';
 
-const DropdownSwitchLang = () => {
+const DropdownSwitchLangFlags = () => {
     const router = useRouter();
     const { allLanguages, allLanguagesLabel } = i18nConfig;
     const { lang } = useTranslation();
@@ -16,14 +16,8 @@ const DropdownSwitchLang = () => {
         : href;
 
     return (
-        <li className="nav-item navbar-dropdown p-2" data-dropdown="dropdownLocale">
-            <span className="dropdown-toggler rounded-circle" onClick={() => setOpen(open => !open)}
-                style={{ width: '30px' }}> {allLanguagesLabel[lang]}
-                <i className={clsx('ml-2', 'arrow_nav', open ? 'is-bottom' : 'is-top')}/>
-            </span>
-            <ul
-                id="dropdownLocale"
-                className={clsx('dropdown', open && 'show')}
+        <div className="navbar-dropdown mx-2">
+            <ul className={clsx('dropdown-reverse', open && 'show')}
                 style={{ minWidth: 'unset' }}>
                 {allLanguages && allLanguages.map((lng, index) => {
                     if (lng === lang) return null;
@@ -35,6 +29,12 @@ const DropdownSwitchLang = () => {
                                 lang={lng}>
                                 <a className="nav-link text-left">
                                     <div className="dropdown-toggler" onClick={() => setOpen(open => !open)}>
+                                        <img className="rounded-circle"
+                                            width="30"
+                                            height="30"
+                                            src={`/images/flags/${lng}.svg`}
+                                            alt={lng}
+                                        />
                                         <span> {allLanguagesLabel[lng]} </span>
                                     </div>
                                 </a>
@@ -43,9 +43,23 @@ const DropdownSwitchLang = () => {
                     );
                 })}
             </ul>
-        </li>
-    );
-}
-;
 
-export default DropdownSwitchLang;
+            <img className="rounded-circle"
+                width="30"
+                height="30"
+                src={`/images/flags/${lang}.svg`}
+                alt={lang}
+                onClick={() => setOpen(open => !open)}
+            />
+
+            <span
+                className="dropdown-toggler"
+                onClick={() => setOpen(open => !open)}
+                style={{ width: '30px' }}>
+                <i className={clsx('ml-2', 'arrow_nav', open ? 'is-top' : 'is-bottom')}/>
+            </span>
+        </div>
+    );
+};
+
+export default DropdownSwitchLangFlags;
