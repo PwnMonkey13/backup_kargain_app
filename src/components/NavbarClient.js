@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     },
 
     inputSearch: {
-        width: '300px',
+        maxWidth: '300px',
 
         [theme.breakpoints.down('md')]: {
             width: '200px'
