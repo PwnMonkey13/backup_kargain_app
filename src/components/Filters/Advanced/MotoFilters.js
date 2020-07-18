@@ -2,20 +2,20 @@ import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import useTranslation from 'next-translate/useTranslation';
-import { GeoCitiesInput, SelectInput, SliderInput, TextInput } from '../../Form/Inputs';
+import {  SelectInput, SliderInput } from '../../Form/Inputs';
 import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
 import useAddress from '../../../hooks/useAddress';
-import FieldWrapper from '../../Form/FieldWrapper';
-import { RadioVehicleGeneralState } from '../../Vehicles/car/form.data';
+import SearchLocationInput from '../../Form/Inputs/SearchLocationInput';
+import { RadioVehicleGeneralState } from '../../Products/car/form.data';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import {
     CheckboxOptionsEquipments,
     RadioChoicesExternalColor,
     RadioChoicesPaints,
-    RadioTypeFunction,
-} from '../../Vehicles/moto/form.data';
+    RadioTypeFunction
+} from '../../Products/moto/form.data';
 
-const MotoFilters = memo(({ control, watch, errors, ...props }) => {
+const MotoFilters = ({ control, watch, errors }) => {
     const [,, coordinates] = useAddress();
     const { t } = useTranslation();
 
@@ -31,7 +31,7 @@ const MotoFilters = memo(({ control, watch, errors, ...props }) => {
         'Suzuki',
         'Triumph',
         'Yamaha',
-        'Royal Enfield',
+        'Royal Enfield'
     ];
 
     useEffect(() => {
@@ -40,8 +40,6 @@ const MotoFilters = memo(({ control, watch, errors, ...props }) => {
     }, [coordinates]);
 
     const countrySelect = watch('country');
-
-    console.log('render moto filters');
 
     return (
         <>
@@ -129,29 +127,13 @@ const MotoFilters = memo(({ control, watch, errors, ...props }) => {
                 control={control}
             />
 
-            <Typography component="span" gutterBottom>{t('vehicles:city')}</Typography>
-            {countrySelect && countrySelect.value === 'FR' ? (
-                <GeoCitiesInput
-                    name="address.city"
-                    enableGeoloc
-                    long={coordinates?.[0]}
-                    lat={coordinates?.[1]}
-                    typeAPI="geo" // vicopo
-                    control={control}
-                    errors={errors}
-                />
-            ) : (
-                <>
-                    <FieldWrapper label={t('vehicles:city')}>
-                        <TextInput
-                            name="address.city"
-                            errors={errors}
-                            control={control}
-                            rules={{ required: 'Required' }}
-                        />
-                    </FieldWrapper>
-                </>
-            )}
+            <Typography component="span" gutterBottom>{t('vehicles:address')}</Typography>
+            <SearchLocationInput
+                name="address"
+                country={countrySelect?.value}
+                control={control}
+                errors={errors}>
+            </SearchLocationInput>
 
             <Typography component="span" gutterBottom>{t('vehicles:radius')} (0 = off)</Typography>
             <SliderInput
@@ -193,12 +175,12 @@ const MotoFilters = memo(({ control, watch, errors, ...props }) => {
             />
         </>
     );
-});
+};
 
 MotoFilters.propTypes = {
     control: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
-    watch: PropTypes.func,
+    watch: PropTypes.func
 };
 
-export default MotoFilters;
+export default memo(MotoFilters);

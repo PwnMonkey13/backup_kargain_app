@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next-translate/Link';
-import CloseIcon from '@material-ui/icons/Close';
 import { Modal } from 'reactstrap';
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { themeColors } from '../theme/palette';
-import clsx from 'clsx';
 
 const useStyles = makeStyles(() => ({
     rootClass: {},

@@ -36,7 +36,7 @@ const ConfirmAccount = () => {
     useEffect(() => {
         if (!token) return;
         AuthService.confirmAccount(token)
-            .then(doc => {
+            .then(() => {
                 dispatchModal({ msg: 'Account successfully activated' });
                 setActivated(true);
                 router.push('/auth/login')
