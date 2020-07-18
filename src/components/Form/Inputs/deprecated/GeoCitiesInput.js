@@ -1,10 +1,10 @@
-import React, { memo, useState, useRef } from 'react'
+import React, { memo, useState } from 'react'
 import NiceSelect, { components } from 'react-select'
 import { Controller } from 'react-hook-form'
 import SearchIcon from '@material-ui/icons/Search';
-import PlacesServices from '../../../services/PlacesService'
-import ValidationError from '../Validations/ValidationError'
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import PlacesServices from '../../../../services/PlacesService'
+import ValidationError from '../../Validations/ValidationError'
+import { ModalDialogContext } from '../../../../context/ModalDialogContext';
 
 const { useContext } = require('react');
 
@@ -46,7 +46,7 @@ const GeoCitiesInput = memo(({ name, control, rules, errors, ...props }) => {
         const format = [
             'name',
             'postcode',
-            'city',
+            'city'
         ]
 
         let params = { q: query }
@@ -70,8 +70,8 @@ const GeoCitiesInput = memo(({ name, control, rules, errors, ...props }) => {
                         label,
                         value: {
                             ...addressParts,
-                            fullAddress : label,
-                        },
+                            fullAddress : label
+                        }
                     };
                 })
             }))

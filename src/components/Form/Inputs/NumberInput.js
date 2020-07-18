@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import ValidationError from '../Validations/ValidationError';
 
-const NumberInput = memo(({ name, rules, control, errors, ...props }) => {
+const NumberInput = ({ name, rules, control, errors, ...props }) => {
     const numericRegex = /[0-9]|\./;
 
     const onValidate = e => {
@@ -43,16 +43,16 @@ const NumberInput = memo(({ name, rules, control, errors, ...props }) => {
             {errors && <ValidationError errors={errors} name={name}/>}
         </>
     );
-});
+};
 
 NumberInput.propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired
 };
 
 NumberInput.defaultProps = {
     integer: true,
     positive: false,
-    rules: {},
+    rules: {}
 };
 
-export default NumberInput;
+export default memo(NumberInput);

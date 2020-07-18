@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { Controller } from 'react-hook-form'
-import NiceSelect, { components } from 'react-select'
+import NiceSelect from 'react-select'
 import ValidationError from '../Validations/ValidationError'
 
 const CustomClearText = () => 'clear all'
@@ -46,7 +46,7 @@ const customStyles = {
     }
 }
 
-const SelectInput = memo(({ name, control, rules, errors, ...props }) => {
+const SelectInput = ({ name, control, rules, errors, ...props }) => {
     const { options, selected } = props
     let defaultValues = []
     if (selected && Array.isArray(selected)) {
@@ -79,9 +79,9 @@ const SelectInput = memo(({ name, control, rules, errors, ...props }) => {
             {errors && <ValidationError errors={errors} name={name} />}
         </>
     )
-})
+}
 
-export default SelectInput
+export default memo(SelectInput)
 
 SelectInput.propTypes = {
     name: PropTypes.string.isRequired,
