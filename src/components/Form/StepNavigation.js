@@ -10,11 +10,12 @@ const useStyles = makeStyles(() => ({
         padding: '1rem',
         margin: '10px',
         marginTop: '40px',
-        border: '1px solid',
-    },
+        border: '1px solid'
+    }
 }));
 
-const StepNavigation = ({ prev, prevLabel, next, nextLabel, submit, submitLabel }) => {
+const StepNavigation = ({ prev, prevLabel, next, nextLabel, submit, submitLabel, ...defaultProps }) => {
+    const {defaultPrevLabel, defaultNextLabel, defaultSubmitLabel } = defaultProps;
     const classes = useStyles();
     const { t } = useTranslation();
 
@@ -23,19 +24,19 @@ const StepNavigation = ({ prev, prevLabel, next, nextLabel, submit, submitLabel 
 
             {prev && (
                 <button className={clsx('btn', classes.button)} type="button" onClick={() => prev()}>
-                    {t('vehicles:previous')}
+                    {prevLabel || t(`vehicles:${defaultPrevLabel}`)}
                 </button>
             )}
 
             {next && !submit && (
                 <button className={clsx('btn', classes.button)} type="button" onClick={e => next(e)}>
-                    {t('vehicles:following')}
+                    {nextLabel || t(`vehicles:${defaultNextLabel}`)}
                 </button>
             )}
 
             {!next && submit && (
                 <button className={clsx(classes.button, 'btn btn-primary')} type="submit">
-                    {submitLabel}
+                    {submitLabel || t(`vehicles:${defaultSubmitLabel}`)}
                 </button>
             )}
 
@@ -45,13 +46,13 @@ const StepNavigation = ({ prev, prevLabel, next, nextLabel, submit, submitLabel 
 
 StepNavigation.propTypes = {
     prev: PropTypes.func,
-    next: PropTypes.func,
+    next: PropTypes.func
 };
 
 StepNavigation.defaultProps = {
-    prevLabel: 'previous',
-    nextLabel: 'following',
-    submitLabel: 'following'
+    defaultPrevLabel: 'previous',
+    defaultNextLabel: 'following',
+    defaultSubmitLabel: 'following'
 };
 
 export default StepNavigation;

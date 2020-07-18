@@ -17,6 +17,9 @@
         "*": [
             "vehicles",
             "filters"
+        ],
+        "/static/pricing" : [
+            "pricing"
         ]
     }
 }
