@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch'
 import queryString from 'querystring'
 import handleResponse from '../libs/handleResponse'
 import config from '../config/config'
@@ -33,7 +32,7 @@ function generatePutUrl (Key, ContentType) {
         .catch(err => {
             throw err
         }
-    )
+        )
 }
 
 function putSingleObjectExternal (putURL, file, Key, ContentType) {
@@ -56,7 +55,7 @@ function putSingleObjectExternal (putURL, file, Key, ContentType) {
         .catch(err => {
             throw err
         }
-    )
+        )
 }
 
 function generateGetUrl (options) {
@@ -75,10 +74,10 @@ function generateGetUrl (options) {
         .catch(err => {
             throw err
         }
-    )
+        )
 }
 
 export default {
     generatePutUrl,
-    putSingleObjectExternal,
+    putSingleObjectExternal
 }

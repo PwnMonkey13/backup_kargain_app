@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch';
 import handleResponse from '../libs/handleResponse';
 import config from '../config/config';
 
@@ -6,15 +5,15 @@ const getConversationWithProfile = (profileId) => {
     const url = `${config.api}/conversations/profile/${profileId}`;
     const requestOptions = {
         method: 'GET',
-        credentials: 'include',
+        credentials: 'include'
     };
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
+            throw err;
+        }
         );
 };
 
@@ -30,8 +29,8 @@ const getConversationsByAuthedUserSSR = (headers) => {
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
+            throw err;
+        }
         );
 };
 
@@ -43,16 +42,16 @@ const postConversationMessage = (message, recipientId) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             message,
-            recipientId,
-        }),
+            recipientId
+        })
     };
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
+            throw err;
+        }
         );
 };
 

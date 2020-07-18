@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch';
 import queryString from 'querystring';
 import handleResponse from '../libs/handleResponse';
 import config from '../config/config';
@@ -6,7 +5,7 @@ import config from '../config/config';
 function getUsers (params = {}) {
     const requestOptions = {
         method: 'GET',
-        credentials: 'include',
+        credentials: 'include'
     };
 
     let url = `${config.api}/users/all`;
@@ -19,14 +18,14 @@ function getUsers (params = {}) {
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
+            throw err;
+        }
         );
 }
 
 function getUserByUsername (username) {
     const requestOptions = {
-        method: 'GET',
+        method: 'GET'
     };
 
     if (!username) throw 'missing username during fetch user';
@@ -44,7 +43,7 @@ function getUserByUsernameSSR (username, headers) {
     const requestOptions = {
         method: 'GET',
         credentials: 'include',
-        headers,
+        headers
     };
 
     if (!username) throw 'missing username during fetch user';
@@ -54,8 +53,8 @@ function getUserByUsernameSSR (username, headers) {
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
+            throw err;
+        }
         );
 }
 
@@ -64,7 +63,7 @@ function updateUser (updates) {
         method: 'PUT',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
+        body: JSON.stringify(updates)
     };
 
     const url = `${config.api}/users/update`;
@@ -80,7 +79,7 @@ function removeUser (username) {
     const requestOptions = {
         method: 'DELETE',
         credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' }
     };
 
     const url = `${config.api}/users/${username}`;
@@ -88,8 +87,8 @@ function removeUser (username) {
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
+            throw err;
+        }
         );
 }
 
@@ -97,7 +96,7 @@ function uploadAvatar (formData) {
     const requestOptions = {
         method: 'POST',
         credentials: 'include',
-        body: formData,
+        body: formData
     };
 
     const url = `${config.api}/users/upload/avatar`;
@@ -112,7 +111,7 @@ function uploadAvatar (formData) {
 function followUser (userId) {
     const requestOptions = {
         method: 'POST',
-        credentials: 'include',
+        credentials: 'include'
     };
 
     const url = `${config.api}/users/follow/${userId}`;
@@ -121,15 +120,15 @@ function followUser (userId) {
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
+            throw err;
+        }
         );
 }
 
 function unFollowUser (userId) {
     const requestOptions = {
         method: 'POST',
-        credentials: 'include',
+        credentials: 'include'
     };
 
     const url = `${config.api}/users/unfollow/${userId}`;
@@ -138,8 +137,8 @@ function unFollowUser (userId) {
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
+            throw err;
+        }
         );
 }
 
@@ -147,7 +146,7 @@ const subscribeNewsletter = (data) => {
     const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
     };
 
     const url = `${config.api}/users/newsletter`;
@@ -163,7 +162,7 @@ const contact = (data) => {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
     };
 
     const url = `${config.api}/users/contact`;
@@ -178,7 +177,7 @@ const contact = (data) => {
 const origin = () => {
     const requestOptions = {
         method: 'GET',
-        credentials: 'include',
+        credentials: 'include'
     };
 
     const url = `${config.api}/origin`;
@@ -205,5 +204,5 @@ export default {
     unFollowUser,
     subscribeNewsletter,
     contact,
-    origin,
+    origin
 };

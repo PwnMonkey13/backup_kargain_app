@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch';
 import handleResponse from '../libs/handleResponse';
 import config from '../config/config';
 
@@ -8,15 +7,15 @@ function createComment (body) {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify(body)
     };
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
+            throw err;
+        }
         );
 }
 
@@ -26,19 +25,19 @@ function createCommentResponse (body) {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify(body)
     };
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-                throw err;
-            },
+            throw err;
+        }
         );
 }
 
 export default {
     createComment,
-    createCommentResponse,
+    createCommentResponse
 };
