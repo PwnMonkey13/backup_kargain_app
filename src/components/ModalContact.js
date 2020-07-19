@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
+import Link from 'next-translate/Link';
+import { useForm } from 'react-hook-form';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
-import parseISO from 'date-fns/parseISO';
 import { format } from 'date-fns';
+import parseISO from 'date-fns/parseISO';
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import { useAuth } from '../context/AuthProvider';
 import useStyles from './Conversations/conversation.styles';
-import Link from 'next-translate/Link';
-import { useForm } from 'react-hook-form';
 import ValidationError from './Form/Validations/ValidationError';
 import ConversationsService from '../services/ConversationsService';
 
@@ -16,10 +16,9 @@ export default function ModalContact ({ recipient, handleClose, open }) {
     const [conversation, setConversation] = useState(null);
     const { isAuthReady, isAuthenticated, authenticatedUser } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-
     const { register, errors, handleSubmit } = useForm({
         mode: 'onChange',
-        validateCriteriaMode: 'all',
+        validateCriteriaMode: 'all'
     });
 
     const loadConversation = async () => {
@@ -40,7 +39,7 @@ export default function ModalContact ({ recipient, handleClose, open }) {
         } catch (err) {
             dispatchModalError({
                 err,
-                persist: true,
+                persist: true
             });
         }
     };
@@ -64,9 +63,9 @@ export default function ModalContact ({ recipient, handleClose, open }) {
                                         <Link href={recipient.getProfileLink} prefetch={false}>
                                             <a>
                                                 <img className="rounded-circle"
-                                                     src={recipient.getAvatar}
-                                                     alt={recipient.getUsername}
-                                                     width={50}
+                                                    src={recipient.getAvatar}
+                                                    alt={recipient.getUsername}
+                                                    width={50}
                                                 />
                                                 <span className="mx-2">{recipient.getFullName}</span>
                                             </a>
@@ -76,11 +75,11 @@ export default function ModalContact ({ recipient, handleClose, open }) {
                             </div>
                             <div className="layout" style={{
                                 overflowY: 'scroll',
-                                height: '80vh',
+                                height: '80vh'
                             }}>
                                 <div style={{
                                     height: '467px',
-                                    backgroundColor: 'gainsboro',
+                                    backgroundColor: 'gainsboro'
                                 }}>
                                     <div className={classes.messageContainer}>
                                         {conversation?.createdAt && format(parseISO(conversation.createdAt), 'MM/dd/yyyy')}
@@ -114,18 +113,18 @@ export default function ModalContact ({ recipient, handleClose, open }) {
                                     <div className="layout" style={{
                                         display: 'flex',
                                         position: 'relative',
-                                        width: '100%',
+                                        width: '100%'
                                     }}>
                                         <form className={classes.conversationContainer}
-                                              onSubmit={handleSubmit(onSubmitMessage)}>
-                                        <textarea
-                                            className={classes.conversationTextarea}
-                                            name="message"
-                                            ref={register({ required: 'required' })}
-                                            placeholder="Écrivez votre message"
-                                            maxLength="30000"
-                                            rows="5"
-                                        />
+                                            onSubmit={handleSubmit(onSubmitMessage)}>
+                                            <textarea
+                                                className={classes.conversationTextarea}
+                                                name="message"
+                                                ref={register({ required: 'required' })}
+                                                placeholder="Écrivez votre message"
+                                                maxLength="30000"
+                                                rows="5"
+                                            />
                                             {errors && <ValidationError errors={errors} name={name}/>}
                                             <button className={classes.conversationInputButton} type="submit">
                                                 Envoyer

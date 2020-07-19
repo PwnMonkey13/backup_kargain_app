@@ -50,8 +50,6 @@ const Index = (props) => {
                 await AnnounceService.getFeedAnnounces(params) :
                 await AnnounceService.getSearchAnnounces(params);
 
-            console.log(result)
-
             setState(state => ({
                 ...state,
                 announces: result.rows || [],

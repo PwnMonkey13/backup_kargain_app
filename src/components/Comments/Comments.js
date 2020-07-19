@@ -1,13 +1,13 @@
 import React, { useContext, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
+import Typography from '@material-ui/core/Typography';
 import AnnounceClass from '../../models/announce.model';
 import { useAuth } from '../../context/AuthProvider';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import commentsService from '../../services/CommentsService';
 import Comment from '../../models/comment.model';
 import CommentBlock from './CommentBlock';
-import Typography from '@material-ui/core/Typography';
 
 const Comments = ({ announceRaw }) => {
     const router = useRouter();
@@ -23,7 +23,7 @@ const Comments = ({ announceRaw }) => {
         if (!isAuthenticated) {
             return router.push({
                 pathname: '/auth/login',
-                query: { redirect: router.asPath },
+                query: { redirect: router.asPath }
             });
         }
         return Promise.resolve();
@@ -38,13 +38,13 @@ const Comments = ({ announceRaw }) => {
         try {
             const comment = await commentsService.createComment({
                 announce_id: announce.getID,
-                message,
+                message
             });
             setDoneSubmitting(true);
             dispatchModal({ msg: 'comment added successfully' });
             setComments(comments => [
                 ...comments,
-                comment,
+                comment
             ]);
         } catch (err) {
             setDoneSubmitting(true);
@@ -59,14 +59,14 @@ const Comments = ({ announceRaw }) => {
         try {
             const updatedComment = await commentsService.createCommentResponse({
                 comment_id: commentId,
-                message,
+                message
             });
             setDoneSubmitting(true);
             dispatchModal({ msg: 'response added successfully' });
             setComments(comments => [
                 ...comments.slice(0, indexComment),
                 updatedComment,
-                ...comments.slice(indexComment, comments.length - 1),
+                ...comments.slice(indexComment, comments.length - 1)
             ]);
         } catch (err) {
             setDoneSubmitting(true);
@@ -84,7 +84,7 @@ const Comments = ({ announceRaw }) => {
             <CommentForm {...{
                 onSubmitComment,
                 textareaCommentRef,
-                doneSubmitting,
+                doneSubmitting
             }}/>
 
             <div className="comments-list">
@@ -107,15 +107,15 @@ const CommentForm = ({ onSubmitComment, textareaCommentRef, doneSubmitting }) =>
     const { t } = useTranslation();
     return (
         <form onSubmit={e => onSubmitComment(e)}
-              className="comments-write">
+            className="comments-write">
             <div className="form-group position-relative w-auto">
-                     <textarea
-                         rows={5}
-                         cols={13}
-                         ref={textareaCommentRef}
-                         placeholder="ex: Superbe voiture"
-                         className="form-control editor"
-                     />
+                <textarea
+                    rows={5}
+                    cols={13}
+                    ref={textareaCommentRef}
+                    placeholder="ex: Superbe voiture"
+                    className="form-control editor"
+                />
             </div>
 
             <div className="mx-auto my-2">

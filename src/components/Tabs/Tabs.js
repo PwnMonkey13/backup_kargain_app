@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types'
 import clsx from 'clsx';
 
 const TabsItem = ({ activeTab, index, ...props }) => {
@@ -12,13 +13,13 @@ const TabsItem = ({ activeTab, index, ...props }) => {
     );
 };
 
-const Tabs = ({ defaultActive, children, id, handleClickTab: fireClickTab}) => {
+const Tabs = ({ defaultActive, children, id, handleClickTab}) => {
     const [activeTab, setActiveTab] = useState(defaultActive || 0);
     const tabs = !Array.isArray(children) ? [children] : children;
 
     const onClickTabItem = (index) => {
         setActiveTab(index);
-        fireClickTab(index)
+        handleClickTab(index)
     };
 
     return (
@@ -57,5 +58,15 @@ const Tabs = ({ defaultActive, children, id, handleClickTab: fireClickTab}) => {
 };
 
 Tabs.Item = TabsItem;
+
+Tabs.propTypes = {
+    defaultActiveIndex : PropTypes.number,
+    handleClickTab : PropTypes.func
+}
+
+Tabs.defaultProps = {
+    defaultActiveIndex : 0,
+    handleClickTab : () => {}
+}
 
 export default Tabs;

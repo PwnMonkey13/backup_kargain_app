@@ -7,16 +7,15 @@ import CTALink from '../CTALink';
 import { useAuth } from '../../context/AuthProvider';
 
 const useStyles = makeStyles(() => ({
-
     subscribeWrapper: {
         width: '500px',
         height: '400px',
         position: 'relative',
-        margin: '2rem auto',
+        margin: '2rem auto'
     },
 
     formWrapper: {
-        margin: '2rem auto',
+        margin: '2rem auto'
     },
 
     pricingBlock: {
@@ -26,14 +25,14 @@ const useStyles = makeStyles(() => ({
         border: '1px solid #eaeaea',
         borderRadius: '2px',
         margin: '0 -2.8rem',
-        marginBottom: '3rem',
+        marginBottom: '3rem'
     },
 
     pricingInfo: {
         display: 'inline-block',
         verticalAlign: 'top',
         width: '50%',
-        padding: '0 2.8rem',
+        padding: '0 2.8rem'
     },
 
     pricingPrice: {
@@ -41,7 +40,7 @@ const useStyles = makeStyles(() => ({
         verticalAlign: 'top',
         width: '50%',
         padding: '0 2.8rem',
-        textAlign: 'center',
+        textAlign: 'center'
     },
 
     priceAmount: {
@@ -50,21 +49,21 @@ const useStyles = makeStyles(() => ({
         fontWeight: '400',
         lineHeight: '4.38rem',
         marginBottom: '1rem',
-        textAlign: 'center',
+        textAlign: 'center'
     },
 
     infoText: {
         color: '#777d81',
         fontWeight: '500',
-        lineHeight: '1.69rem',
-    },
+        lineHeight: '1.69rem'
+    }
 }));
 
 const Offers = () => {
     const classes = useStyles();
     const { t } = useTranslation();
     const [purchaseLink, setPurchaseLink] = useState('/auth/register');
-    const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
+    const { isAuthenticated, authenticatedUser } = useAuth();
 
     useEffect(() => {
         if (isAuthenticated) {

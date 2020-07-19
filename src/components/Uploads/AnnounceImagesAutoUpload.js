@@ -24,15 +24,14 @@ const AnnounceImagesAutoUpload = ({ announceSlug, enableRefreshAfterUpload }) =>
         }
 
         AnnounceService.uploadImages(announceSlug, data)
-            .then(doc => {
+            .then(() => {
                 dispatchModal({ msg: 'Upload Successful' });
                 if(enableRefreshAfterUpload){
                     router.reload();
                 }
             }).catch(err => {
-                dispatchModalError({ err: 'Sorry, something went wrong' });
-            },
-        );
+                dispatchModalError({ err });
+            });
     };
 
     return (
@@ -52,8 +51,8 @@ const AnnounceImagesAutoUpload = ({ announceSlug, enableRefreshAfterUpload }) =>
                                                 maxWidth: '100%',
                                                 margin: '0 auto',
                                                 maxHeight: '200px',
-                                                objectFit: 'contain',
-                                            },
+                                                objectFit: 'contain'
+                                            }
                                         }}/>
                                     </div>
                                 </Col>
@@ -67,7 +66,7 @@ const AnnounceImagesAutoUpload = ({ announceSlug, enableRefreshAfterUpload }) =>
 };
 
 AnnounceImagesAutoUpload.propTypes = {
-    announceSlug: PropTypes.string.isRequired,
+    announceSlug: PropTypes.string.isRequired
 };
 
 export default AnnounceImagesAutoUpload;

@@ -19,16 +19,14 @@ const ContactPage = () => {
         UsersService.contact({
             email,
             message,
-            subject: subject?.value,
+            subject: subject?.value
         })
-            .then(data => {
-                console.log(data);
+            .then(() => {
                 dispatchModal({ msg: 'Your message have successfully been sent' });
             }).catch(err => {
-                console.log(err);
                 dispatchModalError({ err });
-            },
-        );
+            }
+            );
     };
 
     return (
@@ -43,7 +41,7 @@ const ContactPage = () => {
             </style>
             <h1>{t('vehicles:contact-form')} </h1>
             <form className="p-3 mt-3 mx-auto"
-                  onSubmit={handleSubmit(onSubmit)}>
+                onSubmit={handleSubmit(onSubmit)}>
 
                 <FieldWrapper label="Email">
                     <EmailInput
@@ -60,17 +58,17 @@ const ContactPage = () => {
                         name="subject"
                         options={[
                             {
-                                label: 'Demande d\informations',
-                                value: 'informations',
+                                label: "Demande d'informations",
+                                value: 'informations'
                             },
                             {
                                 label: 'Partenariat',
-                                value: 'partnership',
+                                value: 'partnership'
                             },
                             {
                                 label: 'Bug',
-                                value: 'bug',
-                            },
+                                value: 'bug'
+                            }
                         ]}
                         selected={['informations']}
                         rules={{ required: 'Required' }}
