@@ -1,11 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Col, Container, Row } from 'reactstrap';
-import Link from 'next-translate/Link';
 import clsx from 'clsx';
+import { useRouter } from 'next/router'
+import Link from 'next-translate/Link';
+import useTranslation from 'next-translate/useTranslation';
 import ChatIcon from '@material-ui/icons/Chat';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import useTranslation from 'next-translate/useTranslation';
+import Alert from '@material-ui/lab/Alert';
+import MoreIcon from '@material-ui/icons/More'
 import { useAuth } from '../../../context/AuthProvider';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
 import UsersService from '../../../services/UsersService';
@@ -15,22 +18,28 @@ import AnnounceCard from '../../../components/AnnounceCard';
 import CTALink from '../../../components/CTALink';
 import Tabs from '../../../components/Tabs/Tabs';
 import UserModel from '../../../models/user.model';
-import Error from '../../_error';
+import ModalContact from '../../../components/ModalContact';
+import ModalFollowers from '../../../components/ModalFollowers'
 import { ReactComponent as StarSVGYellow } from '../../../../public/images/svg/star-yellow.svg';
 import { ReactComponent as StarSVG } from '../../../../public/images/svg/star.svg';
-import ModalContact from '../../../components/ModalContact';
-import Alert from '@material-ui/lab/Alert';
-import ModalFollowers from '../../../components/ModalFollowers'
-import MoreIcon from '@material-ui/icons/More'
+import Error from '../../_error'
 
-const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
+const Profile = () => {
     const { t } = useTranslation();
-    const { isAuthReady, authenticatedUser, isAuthenticated, setForceLoginModal } = useAuth();
+    const router = useRouter();
+    const { username } = router.query
+    const { authenticatedUser, isAuthenticated, setForceLoginModal } = useAuth();
     const { dispatchModalError } = useContext(ModalDialogContext);
-    const profile = new UserModel(profileRaw);
-    const [stateReady, setStateReady] = useState(false);
-    const [followerCounter, setFollowersCounter] = useState(profile.getCountFollowers);
-    const [alreadyFollowProfile, setAlreadyFollowProfile] = useState(!!profile.getFollowers.find(follower => follower.user === authenticatedUser.getID));
+    const [state, setState] = useState({
+        err : null,
+        stateReady : false,
+        isSelf : false,
+        isAdmin : false,
+        profile : new UserModel()
+    });
+    const [followerCounter, setFollowersCounter] = useState(state.profile.getCountFollowers);
+    const [alreadyFollowProfile, setAlreadyFollowProfile] =
+      useState(!!state.profile.getFollowers.find(follower => follower.user === authenticatedUser.getID));
     const [openModalContact, setOpenModalContact] = useState(false);
     const [openModalFollowers, setOpenModalFollowers] = useState(false);
     const [openModalFollowings, setOpenModalFollowings] = useState(false);
@@ -47,30 +56,6 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
         setOpenModalContact(false);
     };
 
-    const handleFollowProfile = async () => {
-        if (!isAuthenticated) return setForceLoginModal(true);
-        try {
-            if (alreadyFollowProfile) {
-                await UsersService.unFollowUser(profile.getID);
-                setFollowersCounter(followerCounter => followerCounter - 1);
-                setAlreadyFollowProfile(false);
-            } else {
-                await UsersService.followUser(profile.getID);
-                setFollowersCounter(followerCounter => followerCounter + 1);
-                setAlreadyFollowProfile(true);
-            }
-        } catch (err) {
-            dispatchModalError({ err });
-        }
-    };
-
-    useEffect(() => {
-        if (isAuthReady) setStateReady(true);
-    }, [isAuthReady]);
-
-    if (!stateReady) return null;
-    if (profileRaw === undefined || err) return <Error statusCode={err?.statusCode}/>;
-
     const handleOpenModalFollowers = () => {
         setOpenModalFollowers(true);
     };
@@ -84,34 +69,80 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
     };
 
     const handleCloseModalFollowings = () => {
-        setOpenModalFolloings(false);
+        setOpenModalFollowings(false);
     };
+
+    const handleFollowProfile = async () => {
+        if (!isAuthenticated) return setForceLoginModal(true);
+        try {
+            if (alreadyFollowProfile) {
+                await UsersService.unFollowUser(state.profile.getID);
+                setFollowersCounter(followerCounter => followerCounter - 1);
+                setAlreadyFollowProfile(false);
+            } else {
+                await UsersService.followUser(state.profile.getID);
+                setFollowersCounter(followerCounter => followerCounter + 1);
+                setAlreadyFollowProfile(true);
+            }
+        } catch (err) {
+            dispatchModalError({ err, persist : true });
+        }
+    };
+
+    const fetchProfile = useCallback(async () => {
+        try{
+            const result = await UsersService.getUserByUsername(username);
+            const { user, isAdmin, isSelf } = result
+            setState(state => ({
+                ...state,
+                stateReady : true,
+                profile : new UserModel(user),
+                isAdmin,
+                isSelf
+            }))
+        } catch (err) {
+            setState(state => ({
+                ...state,
+                stateReady: true,
+                err
+            }))
+        }
+    },[username])
+
+    useEffect(()=>{
+        fetchProfile()
+    },[fetchProfile])
+
+    if (!state.stateReady) return null;
+    if (state.err) return <Error statusCode={state.err?.statusCode}/>;
 
     return (
         <Container>
-            <ModalContact
-                recipient={profile}
-                handleClose={handleCloseModalContact}
-                open={openModalContact}
+            {!state.isSelf && (
+                <ModalContact
+                    recipient={state.profile}
+                    handleClose={handleCloseModalContact}
+                    open={openModalContact}
+                />
+            )}
+
+            <ModalFollowers
+                likes={state.profile.getFollowers}
+                handleClose={handleCloseModalFollowers}
+                open={openModalFollowers}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
             />
 
             <ModalFollowers
-              likes={profile.getFollowers}
-              handleClose={handleCloseModalFollowers}
-              open={openModalFollowers}
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
+                likes={state.profile.getFollowings}
+                handleClose={handleCloseModalFollowings}
+                open={openModalFollowings}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
             />
 
-            <ModalFollowers
-              likes={profile.getFollowings}
-              handleClose={handleCloseModalFollowings}
-              open={openModalFollowers}
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
-            />
-
-            {isAdmin && (
+            {state.isAdmin && (
                 <Alert severity="info" className="mb-2">
                     Connected as Admin
                 </Alert>
@@ -119,15 +150,15 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
 
             <Row className="mx-auto">
                 <Col md={2}>
-                    <AvatarPreview src={profile.getAvatar}/>
+                    <AvatarPreview src={state.profile.getAvatar}/>
                 </Col>
                 <Col md={10}>
                     <div className="top-profile-name-btn">
-                        <h2>{profile.getFullName} <img className="mx-2" src="/images/star.png" alt=""/></h2>
+                        <h2>{state.profile.getFullName} <img className="mx-2" src="/images/star.png" alt=""/></h2>
 
-                        {isSelf ? (
+                        {state.isSelf ? (
                             <div className="mx-2">
-                                <Link href={profile.getProfileEditLink}>
+                                <Link href={state.profile.getProfileEditLink}>
                                     <a className="btn btn-outline-dark">
                                         {t('vehicles:edit-my-profile')}
                                     </a>
@@ -150,15 +181,15 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
                     </div>
 
                     <p className="top-profile-login">
-                        @{profile.getUsername}
+                        @{state.profile.getUsername}
                     </p>
 
                     <Row>
-                        {profile.getAddressParts.fullAddress && (
+                        {state.profile.getAddressParts.fullAddress && (
                             <Col xs={12} sm={4} md={4}>
                                 <span className="top-profile-location">
                                     <img className="mx-1" src="/images/location.png" alt=""/>
-                                    {profile.addressBuilder(['city', 'postalCode', 'country'])}
+                                    {state.profile.addressBuilder(['city', 'postalCode', 'country'])}
                                 </span>
                             </Col>
                         )}
@@ -168,80 +199,80 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
                                 {followerCounter} {t('vehicles:followers_plural', {count : followerCounter})}
                             </span>
 
-                            {profile.getCountFollowers && (
-                              <div className="my-2">
-                                  <ul className="d-flex align-items-center list-style-none">
-                                      {profile.getFollowers.slice(0, 3).map((userLike, index) => {
-                                          const user = new UserModel(userLike?.user);
-                                          return (
-                                            <li key={index} className="nav-item navbar-dropdown p-1">
-                                                <img className="dropdown-toggler rounded-circle"
-                                                     width="30"
-                                                     height="30"
-                                                     src={user.getAvatar}
-                                                     title={user.getFullName}
-                                                     alt={user.getUsername}
-                                                />
-                                            </li>
-                                          );
-                                      })}
-                                      <li>
-                                          <Button
-                                            type="button"
-                                            onClick={() => handleOpenModalFollowers()}
-                                            startIcon={<MoreIcon/>}>
-                                          </Button>
-                                      </li>
-                                  </ul>
-                              </div>
+                            {state.profile.getCountFollowers !== 0 && (
+                                <div className="my-2">
+                                    <ul className="d-flex align-items-center list-style-none">
+                                        {state.profile.getFollowers.slice(0, 3).map((userLike, index) => {
+                                            const user = new UserModel(userLike?.user);
+                                            return (
+                                                <li key={index} className="nav-item navbar-dropdown p-1">
+                                                    <img className="dropdown-toggler rounded-circle"
+                                                        width="30"
+                                                        height="30"
+                                                        src={user.getAvatar}
+                                                        title={user.getFullName}
+                                                        alt={user.getUsername}
+                                                    />
+                                                </li>
+                                            );
+                                        })}
+                                        <li>
+                                            <Button
+                                                type="button"
+                                                onClick={() => handleOpenModalFollowers()}
+                                                startIcon={<MoreIcon/>}>
+                                            </Button>
+                                        </li>
+                                    </ul>
+                                </div>
                             )}
 
                         </Col>
                         <Col xs={12} sm={4} md={4}>
-                              <span className="top-profile-followers">
-                                {profile.getCountFollowing} {t('vehicles:subscriptions')}
+                            <span className="top-profile-followers">
+                                {state.profile.getCountFollowing} {t('vehicles:subscriptions_plural', { count : state.profile.getCountFollowing})}
                             </span>
 
-                            {profile.getCountFollowing && (
-                              <div className="my-2">
-                                  <ul className="d-flex align-items-center list-style-none">
-                                      {profile.getFollowings.slice(0, 3).map((userLike, index) => {
-                                          const user = new UserModel(userLike?.user);
-                                          return (
-                                            <li key={index} className="nav-item navbar-dropdown p-1">
-                                                <img className="dropdown-toggler rounded-circle"
-                                                     width="30"
-                                                     height="30"
-                                                     src={user.getAvatar}
-                                                     title={user.getFullName}
-                                                     alt={user.getUsername}
-                                                />
-                                            </li>
-                                          );
-                                      })}
-                                      <li>
-                                          <Button
-                                            type="button"
-                                            onClick={() => handleOpenModalFollowings()}
-                                            startIcon={<MoreIcon/>}>
-                                          </Button>
-                                      </li>
-                                  </ul>
-                              </div>
+                            {state.profile.getCountFollowing !== 0 && (
+                                <div className="my-2">
+                                    <ul className="d-flex align-items-center list-style-none">
+                                        {state.profile.getFollowings.slice(0, 3).map((userLike, index) => {
+                                            const user = new UserModel(userLike?.user);
+                                            return (
+                                                <li key={index} className="nav-item navbar-dropdown p-1">
+                                                    <img className="dropdown-toggler rounded-circle"
+                                                        width="30"
+                                                        height="30"
+                                                        src={user.getAvatar}
+                                                        title={user.getFullName}
+                                                        alt={user.getUsername}
+                                                    />
+                                                </li>
+                                            );
+                                        })}
+                                        <li>
+                                            <Button
+                                                type="button"
+                                                onClick={() => handleOpenModalFollowings()}
+                                                startIcon={<MoreIcon/>}>
+                                            </Button>
+                                        </li>
+                                    </ul>
+                                </div>
                             )}
 
                         </Col>
                     </Row>
 
                     <p className="top-profile-desc">
-                        {profile.getDescription}
+                        {state.profile.getDescription}
                     </p>
 
                 </Col>
             </Row>
             <TabsContainer {...{
-                profile,
-                isSelf,
+                profile : state.profile,
+                isSelf : state.isSelf
             }}/>
         </Container>
     );
@@ -249,7 +280,6 @@ const Profile = ({ profileRaw, isAdmin, isSelf, err }) => {
 
 const TabsContainer = ({ profile, isSelf }) => {
     const { t } = useTranslation();
-
     const [filtersOpened] = useState(false);
     const [, setFilters] = useState({});
 
@@ -259,7 +289,9 @@ const TabsContainer = ({ profile, isSelf }) => {
 
     return (
         <Container>
-            <Tabs defaultActive={0} className="nav-tabs-profile" id="myTab">
+            <Tabs
+                defaultActive={0}
+                className="nav-tabs-profile">
                 <Tabs.Item id="home-tab" title="Vitrine">
                     <Row>
                         <Col sm={12} md={4}>
@@ -354,34 +386,7 @@ const TabsContainer = ({ profile, isSelf }) => {
                 )}
             </Tabs>
         </Container>
-
     );
 };
-
-export async function getServerSideProps (ctx) {
-    const { username } = ctx.query;
-    const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
-    try {
-        const { user, isAdmin, isSelf } = await UsersService.getUserByUsernameSSR(username, additionalHeaders);
-        return {
-            props: {
-                profileRaw: user,
-                isAdmin: isAdmin ?? false,
-                isSelf: isSelf ?? false,
-            },
-        };
-    } catch (err) {
-        return {
-            props: {
-                additionalHeaders,
-                username,
-                err: {
-                    message: err?.message ?? null,
-                    statusCode: err?.statusCode ?? 404,
-                },
-            },
-        };
-    }
-}
 
 export default Profile;

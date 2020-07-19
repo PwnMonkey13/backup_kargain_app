@@ -25,7 +25,8 @@ function getUsers (params = {}) {
 
 function getUserByUsername (username) {
     const requestOptions = {
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     };
 
     if (!username) throw 'missing username during fetch user';

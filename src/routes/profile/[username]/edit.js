@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import Link from 'next-translate/Link';
@@ -31,27 +31,27 @@ import Error from '../../_error';
 
 const useStyles = makeStyles(() => ({
     stickyNav: {
-        position: 'fixed',
+        position: 'fixed'
     },
 
     nav: {
         padding: 0,
         width: '100%',
-        maxWidth: '260px',
+        maxWidth: '260px'
     },
 
     navMobile: {
-        display: 'flex',
+        display: 'flex'
     },
 
     navList: {
         width: '100%',
         boxShadow: '0 0.5rem 1rem rgba(0,0,0,0.15)',
-        borderRadius: '20px',
+        borderRadius: '20px'
     },
 
     button: {
-        margin: '1rem',
+        margin: '1rem'
     },
 
     navItem: {
@@ -69,12 +69,12 @@ const useStyles = makeStyles(() => ({
             borderBottom: `4px solid ${themeColors.blue}`,
             color: themeColors.blue,
             textAlign: 'center',
-            background: 'none',
+            background: 'none'
         },
 
         '&:last-child': {
-            borderBottom: 'unset!important',
-        },
+            borderBottom: 'unset!important'
+        }
     },
 
     formRow: {
@@ -82,52 +82,50 @@ const useStyles = makeStyles(() => ({
 
         '& > div': {
             margin: '1rem',
-            flex: 1,
-        },
-    },
+            flex: 1
+        }
+    }
 }));
 
-const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
-    const theme = useTheme();
+const Edit = () => {
     const formRef = useRef();
+    const theme = useTheme();
     const router = useRouter();
+    const { username } = router.query
     const { isAuthReady } = useAuth();
     const { offer } = router.query;
     const { t } = useTranslation();
     const classes = useStyles();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [activeTab, setActiveTab] = useState(0);
-    const [profile] = useState(new UserModel(profileRaw));
+    const [state, setState] = useState({
+        err : null,
+        stateReady : false,
+        isSelf : false,
+        isAdmin : false,
+        profile : new UserModel()
+    });
     const [openDialogRemove, setOpenDialogRemove] = useState(false);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
-        defaultMatches: true,
-    });
-
-    const { control, watch, errors, handleSubmit } = useForm({
-        mode: 'onChange',
-        validateCriteriaMode: 'all',
-        defaultValues: {
-            ...profile.getRaw,
-            address: profile.getAddressParts,
-        },
+        defaultMatches: true
     });
 
     const tabs = [
         {
-            title: t('vehicles:my-profile'),
+            title: t('vehicles:my-profile')
         },
         {
-            title: t('vehicles:subscriptions'),
+            title: t('vehicles:subscriptions')
         },
         {
-            title: t('vehicles:payments-bills'),
+            title: t('vehicles:payments-bills')
         },
         {
-            title: t('vehicles:notifications'),
+            title: t('vehicles:notifications')
         },
         {
-            title: t('vehicles:confidentiality-security'),
-        },
+            title: t('vehicles:confidentiality-security')
+        }
     ];
 
     const toggleTab = (tabIndex) => {
@@ -149,33 +147,42 @@ const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
     };
 
     const handleRemove = () => {
-        UsersService.removeUser(profile.getUsername)
+        UsersService.removeUser(state.profile.getUsername)
             .then(() => {
                 dispatchModal({ msg: 'User successfully removed (disabled)' });
             }).catch(err => {
                 dispatchModalError({ err });
-            },
-        );
+            }
+            );
     };
 
-    const onSubmit = (form) => {
-        UsersService.updateUser(form)
-            .then(() => {
-                dispatchModal({
-                    msg: 'User successfully updated',
-                });
-            }).catch(err => {
-                dispatchModalError({ err });
-            },
-        );
-    };
+    const fetchProfile = useCallback(async () => {
+        try{
+            const result = await UsersService.getUserByUsername(username);
+            const { user, isAdmin, isSelf } = result
+            setState(state => ({
+                ...state,
+                stateReady : true,
+                profile : new UserModel(user),
+                isAdmin,
+                isSelf
+            }))
+        } catch (err) {
+            setState(state => ({
+                ...state,
+                stateReady: true,
+                err
+            }))
+        }
+    },[username])
 
-    useEffect(() => {
+    useEffect(()=>{
         if (offer) setActiveTab(2);
-    }, [isAuthReady]);
+        if(isAuthReady) fetchProfile()
+    },[isAuthReady, fetchProfile])
 
-    if (!isSelf && !isAdmin) return <Error statusCode={404}/>;
-    if (err) return <Error message={err.message} statusCode={err.statusCode}/>;
+    if (!state.stateReady) return null;
+    if (state.err) return <Error statusCode={state.err?.statusCode}/>;
 
     return (
         <>
@@ -204,7 +211,7 @@ const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
                 </DialogActions>
             </Dialog>
 
-            {isAdmin && (
+            {state.isAdmin && (
                 <Alert severity="info" className="mb-2">
                     Connected as Admin
                 </Alert>
@@ -214,7 +221,7 @@ const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
                 <NavMobile {...{
                     tabs,
                     activeTab,
-                    toggleTab,
+                    toggleTab
                 }}/>
             )}
 
@@ -227,65 +234,108 @@ const Edit = ({ profileRaw, isAdmin, isSelf, err }) => {
                             activeTab,
                             toggleTab,
                             triggerSubmit,
-                            profilePageLink: profile.getProfileLink,
+                            profilePageLink: state.profile.getProfileLink
                         }}/>
                     </Col>
                 )}
 
                 <Col xs="12" md="9" lg="9">
-                    <form className="p-3 mx-auto" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-                        {errors && <ValidationErrors errors={errors}/>}
-                        <TabContent activeTab={activeTab}>
-                            <TabPane tabId={0}>
-                                <ProfilePartialForm {...{
-                                    control,
-                                    watch,
-                                    errors,
-                                }}/>
-                            </TabPane>
-                            <TabPane tabId={1}>
-                                <Typography component="h2" variant="h2" className="text-center" gutterBottom>
-                                    {t('vehicles:subscriptions')}
-                                </Typography>
-                            </TabPane>
-                            <TabPane tabId={2}>
-                                <Typography component="h2" variant="h2" className="text-center" gutterBottom>
-                                    {t('vehicles:payments-bills')}
-                                </Typography>
-                                <OffersPurchaseForm offer={offer}/>
-                            </TabPane>
-                            <TabPane tabId={3}>
-                                <Typography component="h2" variant="h2" className="text-center" gutterBottom>
-                                    {t('vehicles:notifications')}
-                                </Typography>
-                            </TabPane>
-                            <TabPane tabId={4}>
-                                <Typography component="h2" variant="h2" className="text-center" gutterBottom>
-                                    {t('vehicles:confidentiality-security')}
-                                </Typography>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    className={classes.button}
-                                    startIcon={<DeleteIcon/>}
-                                    onClick={handleOpenDialogRemove}>
-                                    {t('vehicles:remove-profile')}
-                                </Button>
-                            </TabPane>
-                        </TabContent>
-
-                        {!isDesktop && (
-                            <Buttons {...{
-                                profilePageLink: profile.getProfileLink,
-                                triggerSubmit,
-                            }}/>
-                        )}
-                    </form>
+                    <MultiTabsForm
+                        {...{
+                            formRef,
+                            activeTab,
+                            offer,
+                            triggerSubmit,
+                            handleOpenDialogRemove,
+                            profilePageLink : state.profile.getProfileLink,
+                            defaultValues : {
+                                ...state.profile.getRaw,
+                                address :  state.profile.getAddressParts
+                            }
+                        }}/>
                 </Col>
             </Row>
         </>
     );
 };
+
+const MultiTabsForm = ({offer, activeTab, formRef, defaultValues, triggerSubmit, handleOpenDialogRemove, profilePageLink}) => {
+    const theme = useTheme();
+    const classes = useStyles();
+    const { t } = useTranslation();
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
+        defaultMatches: true
+    });
+    const { control, watch, errors, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all',
+        defaultValues
+    });
+
+    const onSubmit = (form) => {
+        UsersService.updateUser(form)
+            .then(() => {
+                dispatchModal({
+                    msg: 'User successfully updated'
+                });
+            }).catch(err => {
+                dispatchModalError({ err });
+            }
+            );
+    };
+
+    return(
+        <form className="p-3 mx-auto" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+            {errors && <ValidationErrors errors={errors}/>}
+            <TabContent activeTab={activeTab}>
+                <TabPane tabId={0}>
+                    <ProfilePartialForm {...{
+                        control,
+                        watch,
+                        errors
+                    }}/>
+                </TabPane>
+                <TabPane tabId={1}>
+                    <Typography component="h2" variant="h2" className="text-center" gutterBottom>
+                        {t('vehicles:subscriptions')}
+                    </Typography>
+                </TabPane>
+                <TabPane tabId={2}>
+                    <Typography component="h2" variant="h2" className="text-center" gutterBottom>
+                        {t('vehicles:payments-bills')}
+                    </Typography>
+                    <OffersPurchaseForm offer={offer}/>
+                </TabPane>
+                <TabPane tabId={3}>
+                    <Typography component="h2" variant="h2" className="text-center" gutterBottom>
+                        {t('vehicles:notifications')}
+                    </Typography>
+                </TabPane>
+                <TabPane tabId={4}>
+                    <Typography component="h2" variant="h2" className="text-center" gutterBottom>
+                        {t('vehicles:confidentiality-security')}
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.button}
+                        startIcon={<DeleteIcon/>}
+                        onClick={handleOpenDialogRemove}>
+                        {t('vehicles:remove-profile')}
+                    </Button>
+                </TabPane>
+            </TabContent>
+
+            {!isDesktop && (
+                <Buttons {...{
+                    profilePageLink,
+                    triggerSubmit
+                }}/>
+            )}
+        </form>
+    )
+}
 
 const ProfilePartialForm = ({ control, watch, errors }) => {
     const classes = useStyles();
@@ -360,7 +410,7 @@ const ProfilePartialForm = ({ control, watch, errors }) => {
                     control={control}
                     rules={{ required: 'Field required' }}
                     innerProps={{
-                        country: 'fr',
+                        country: 'fr'
                     }}
                 />
             </FieldWrapper>
@@ -440,31 +490,5 @@ const Buttons = ({ triggerSubmit, profilePageLink }) => {
         </div>
     );
 };
-
-export async function getServerSideProps (ctx) {
-    const { username } = ctx.query;
-    try {
-        const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
-        const data = await UsersService.getUserByUsernameSSR(username, additionalHeaders);
-        const { user: profileRaw, isAdmin, isSelf } = data;
-
-        return {
-            props: {
-                profileRaw,
-                isAdmin : isAdmin ?? false,
-                isSelf : isSelf ?? false,
-            },
-        };
-    } catch (err) {
-        return {
-            props: {
-                err: {
-                    message: err?.message ?? null,
-                    statusCode: err?.statusCode ?? 404,
-                },
-            },
-        };
-    }
-}
 
 export default Edit;

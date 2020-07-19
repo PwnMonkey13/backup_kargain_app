@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx';
 import { inflate } from 'flattenjs';
 import { useForm } from 'react-hook-form';
-import { Col, Container, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
+import { Col,  Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
@@ -15,8 +15,8 @@ import resolveObjectKey from '../../../libs/resolveObjectKey';
 import AnnounceService from '../../../services/AnnounceService';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
-import { useAuth } from '../../../context/AuthProvider';
-import AnnounceClass from '../../../models/announce.model';
+
+
 import FieldWrapper from '../../../components/Form/FieldWrapper';
 import TextInput from '../../../components/Form/Inputs/TextInput';
 import NumberInput from '../../../components/Form/Inputs/NumberInput';
@@ -41,7 +41,7 @@ import {
     RadioChoicesPaints,
     RadioFunctionVehicle,
     RadioTypeFunction,
-    RadioVehicleGeneralState,
+    RadioVehicleGeneralState
 } from '../../../components/Products/car/form.data';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -49,32 +49,35 @@ import DialogActions from '@material-ui/core/DialogActions';
 import CTALink from '../../../components/CTALink';
 import ValidationErrors from '../../../components/Form/Validations/ValidationErrors';
 import Alert from '@material-ui/lab/Alert';
+import AnnounceModel from '../../../models/announce.model'
+import { useRouter } from 'next/router'
+
 
 const useStyles = makeStyles(() => ({
 
     stickyNav: {
         position: 'fixed',
-        top: '5rem',
+        top: '5rem'
     },
 
     nav: {
         padding: 0,
         width: '100%',
-        maxWidth: '260px',
+        maxWidth: '260px'
     },
 
     navMobile: {
-        display: 'flex',
+        display: 'flex'
     },
 
     button: {
-        margin: '1rem',
+        margin: '1rem'
     },
 
     navList: {
         width: '100%',
         boxShadow: '0 0.5rem 1rem rgba(0,0,0,0.15)',
-        borderRadius: '20px',
+        borderRadius: '20px'
     },
 
     navItem: {
@@ -92,12 +95,12 @@ const useStyles = makeStyles(() => ({
             borderBottom: `4px solid ${themeColors.blue}`,
             color: themeColors.blue,
             textAlign: 'center',
-            background: 'none',
+            background: 'none'
         },
 
         '&:last-child': {
-            borderBottom: 'unset!important',
-        },
+            borderBottom: 'unset!important'
+        }
     },
 
     formRow: {
@@ -105,28 +108,28 @@ const useStyles = makeStyles(() => ({
 
         '& > div': {
             margin: '1rem',
-            flex: 1,
-        },
+            flex: 1
+        }
     },
 
     priceStarsWrapper: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        margin: '15px 0',
+        margin: '15px 0'
     },
 
     wysiwyg: {
         margin: '1rem',
         padding: '1rem',
         border: '1px solid gainsboro',
-        borderRadius: '5px',
+        borderRadius: '5px'
     },
 
     damages: {
         width: '100%',
-        margin: '2rem 1rem',
-    },
+        margin: '2rem 1rem'
+    }
 }));
 
 const allowedFields = {
@@ -171,35 +174,30 @@ const allowedFields = {
     'address.value.name': 'address.street',
     'address.value.postcode': 'address.postalcode',
     'address.value.country': 'address.country',
-    'address.value.city': 'address.city',
+    'address.value.city': 'address.city'
 };
 
-const AnnounceEdit = ({ announceRaw, isAdmin, isSelf, err }) => {
-    const refImg = useRef();
+const AnnounceEdit = () => {
     const formRef = useRef();
     const theme = useTheme();
-    const { isAuthReady } = useAuth();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const [stateReady, setStateReady] = useState(false);
+    const router = useRouter();
+    const { slug } = router.query
     const [activeTab, setActiveTab] = useState(0);
     const { t } = useTranslation();
-    const [announce] = useState(new AnnounceClass(announceRaw));
-    const { control, register, errors, handleSubmit } = useForm({
-        mode: 'onChange',
-        validateCriteriaMode: 'all',
-        defaultValues: announceRaw,
+
+    const [state, setState] = useState({
+        err : null,
+        stateReady : false,
+        isSelf : false,
+        isAdmin : false,
+        announce : new AnnounceModel(),
+        likesCounter : 0
+
     });
 
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
-        defaultMatches: true,
+        defaultMatches: true
     });
-
-    const handleCLickImg = (index) => {
-        if (refImg.current) {
-            refImg.current.slideToIndex(index);
-            refImg.current.fullScreen();
-        }
-    };
 
     const toggleTab = (tabIndex) => {
         if (activeTab !== tabIndex) {
@@ -207,59 +205,44 @@ const AnnounceEdit = ({ announceRaw, isAdmin, isSelf, err }) => {
         }
     };
 
-    const handleRemove = () => {
-        AnnounceService.removeAnnounce(announce.getSlug)
-            .then(() => {
-                dispatchModal({ msg: 'Announce successfully removed' });
-            }).catch(err => {
-                dispatchModalError({ err });
-            },
-        );
-    };
-
     const triggerSubmit = () => {
         formRef.current.dispatchEvent(new Event('submit'));
         window.scrollTo(0, 0);
     };
 
-    const onSubmit = (form) => {
-        const updates = inflate(Object.keys(allowedFields).reduce((carry, key) => {
-            const value = resolveObjectKey(form, key);
-            if (value) {
-                return {
-                    ...carry,
-                    [allowedFields[key]]: value,
-                };
-            } else {
-                return carry;
-            }
-        }, {}));
+    const fetchAnnounce = useCallback(async () => {
+        try{
+            const result = await AnnounceService.getAnnounceBySlug(slug);
+            const { announce, isAdmin, isSelf } = result
+            setState(state => ({
+                ...state,
+                stateReady : true,
+                announce : new AnnounceModel(announce),
+                isAdmin,
+                isSelf
+            }))
+        } catch (err) {
+            setState(state => ({
+                ...state,
+                stateReady: true,
+                err
+            }))
+        }
+    },[slug])
 
-        AnnounceService.updateAnnounce(announce.getSlug, updates)
-            .then(() => {
-                dispatchModal({
-                    msg: 'Ad successfully updated', persist : true
-                });
-            }).catch(err => {
-                dispatchModalError({ err });
-            },
-        );
-    };
+    useEffect(()=>{
+        fetchAnnounce()
+    },[fetchAnnounce])
 
-    useEffect(() => {
-        if (isAuthReady) setStateReady(true);
-    }, [isAuthReady]);
-
-    if (!stateReady) return null;
-    if (!isSelf && !isAdmin) return <Error statusCode={404}/>;
-    if (announceRaw === undefined || err) return <Error message={err.message} statusCode={err.statusCode}/>;
+    if (!state.stateReady) return null;
+    if (state.err) return <Error statusCode={state.err?.statusCode}/>;
 
     return (
         <>
             {!isDesktop && (
                 <NavMobile {...{
                     activeTab,
-                    toggleTab,
+                    toggleTab
                 }}/>
             )}
 
@@ -270,14 +253,14 @@ const AnnounceEdit = ({ announceRaw, isAdmin, isSelf, err }) => {
                             activeTab,
                             toggleTab,
                             triggerSubmit,
-                            slug: announce.getSlug,
+                            slug
                         }}/>
                     </Col>
                 )}
 
                 <Col sm="12" md="9" lg="9">
 
-                    {isAdmin && (
+                    {state.isAdmin && (
                         <Alert severity="info" className="mb-2">
                             Connected as Admin
                         </Alert>
@@ -287,88 +270,155 @@ const AnnounceEdit = ({ announceRaw, isAdmin, isSelf, err }) => {
                         {t('vehicles:edit-announce')}
                     </Typography>
 
-                    <form className="p-3 mx-auto" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-                        {errors && <ValidationErrors errors={errors}/>}
-
-                        <TabContent activeTab={activeTab}>
-                            <TabPane tabId={0}>
-                                <VehicleInfosPartialForm {...{
-                                    control,
-                                    errors,
-                                }} />
-                            </TabPane>
-                            <TabPane tabId={1}>
-                                <div className="form-fields">
-                                    <Typography component="h3" variant="h3" className="text-center" gutterBottom>
-                                        {t('vehicles:equipments-selection')}
-                                    </Typography>
-                                    <CheckboxGroup
-                                        name="equipments"
-                                        options={CheckboxOptionsEquipments}
-                                        defaultOptions={['ABS', 'ESP']}
-                                        control={control}
-                                        errors={errors}
-                                    />
-                                </div>
-                            </TabPane>
-
-                            <TabPane tabId={2}>
-                                <Typography component="h3" variant="h3" className="text-center" gutterBottom>
-                                    {t('vehicles:damages-potential-selection')}
-                                </Typography>
-                                <DamageSelectorControlledCar
-                                    name="damages"
-                                    control={control}
-                                    defaultValues={announce.getDamagesTabs}
-                                    selectorFullWidth
-                                />
-                            </TabPane>
-
-                            <TabPane tabId={3}>
-                                <div className="pics">
-                                    {announce.getCountImages > 0 && (
-                                        <>
-                                            <GalleryViewer
-                                                images={announce.getImages}
-                                                ref={refImg}
-                                            />
-                                            {isDesktop && (
-                                                <GalleryImgsLazy
-                                                    images={announce.getImages}
-                                                    handleCLickImg={handleCLickImg}
-                                                />
-                                            )}
-                                        </>
-                                    )}
-                                </div>
-                                <AnnounceImagesAutoUpload
-                                    announceSlug={announce.getSlug}
-                                    enableRefreshAfterUpload
-                                />
-                            </TabPane>
-
-                            <TabPane tabId={4}>
-                                <PublicationInfosPartialForm {...{
-                                    control,
-                                    errors,
-                                    register,
-                                    handleRemove,
-                                }} />
-                            </TabPane>
-                        </TabContent>
-                    </form>
+                    <MultiTabsForm {...{
+                        formRef,
+                        activeTab,
+                        slug,
+                        announce : state.announce,
+                        defaultValues : {
+                            ...state.announce.getRaw
+                        }
+                    }}/>
                 </Col>
             </Row>
 
             {!isDesktop && (
                 <Buttons
                     triggerSubmit={triggerSubmit}
-                    announcePageLink={`/announces/${announce.getSlug}`}
+                    announcePageLink={`/announces/${state.announce.getSlug}`}
                 />
             )}
         </>
     );
 };
+
+const MultiTabsForm = ({ announce, formRef, activeTab, slug, defaultValues }) => {
+    const refImg = useRef();
+    const theme = useTheme();
+    const { t } = useTranslation();
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
+        defaultMatches: true
+    });
+
+    const { control, register, errors, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all',
+        defaultValues
+    });
+
+    const onSubmit = (form) => {
+        const updates = inflate(Object.keys(allowedFields).reduce((carry, key) => {
+            const value = resolveObjectKey(form, key);
+            if (value) {
+                return {
+                    ...carry,
+                    [allowedFields[key]]: value
+                };
+            } else {
+                return carry;
+            }
+        }, {}));
+
+        AnnounceService.updateAnnounce(slug, updates)
+            .then(() => {
+                dispatchModal({
+                    msg: 'Ad successfully updated', persist : true
+                });
+            }).catch(err => {
+                dispatchModalError({ err });
+            });
+    };
+
+    const handleRemove = () => {
+        AnnounceService.removeAnnounce(slug)
+            .then(() => {
+                dispatchModal({ msg: 'Announce successfully removed' });
+            }).catch(err => {
+                dispatchModalError({ err });
+            });
+    };
+
+    const handleCLickImg = (index) => {
+        if (refImg.current) {
+            refImg.current.slideToIndex(index);
+            refImg.current.fullScreen();
+        }
+    };
+
+    return (
+        <form className="p-3 mx-auto" ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+            {errors && <ValidationErrors errors={errors}/>}
+
+            <TabContent activeTab={activeTab}>
+                <TabPane tabId={0}>
+                    <VehicleInfosPartialForm {...{
+                        control,
+                        errors
+                    }} />
+                </TabPane>
+                <TabPane tabId={1}>
+                    <div className="form-fields">
+                        <Typography component="h3" variant="h3" className="text-center" gutterBottom>
+                            {t('vehicles:equipments-selection')}
+                        </Typography>
+                        <CheckboxGroup
+                            name="equipments"
+                            options={CheckboxOptionsEquipments}
+                            defaultOptions={['ABS', 'ESP']}
+                            control={control}
+                            errors={errors}
+                        />
+                    </div>
+                </TabPane>
+
+                <TabPane tabId={2}>
+                    <Typography component="h3" variant="h3" className="text-center" gutterBottom>
+                        {t('vehicles:damages-potential-selection')}
+                    </Typography>
+                    <DamageSelectorControlledCar
+                        name="damages"
+                        control={control}
+                        defaultValues={announce.getDamagesTabs}
+                        selectorFullWidth
+                    />
+                </TabPane>
+
+                <TabPane tabId={3}>
+                    <div className="pics">
+                        {announce.getCountImages > 0 && (
+                        <>
+                            <GalleryViewer
+                                images={announce.getImages}
+                                ref={refImg}
+                            />
+                            {isDesktop && (
+                                <GalleryImgsLazy
+                                    images={announce.getImages}
+                                    handleCLickImg={handleCLickImg}
+                                />
+                            )}
+                        </>
+                        )}
+                    </div>
+                    <AnnounceImagesAutoUpload
+                        announceSlug={announce.getSlug}
+                        enableRefreshAfterUpload
+                    />
+                </TabPane>
+
+                <TabPane tabId={4}>
+                    <PublicationInfosPartialForm {...{
+                        control,
+                        errors,
+                        register,
+                        handleRemove
+                    }} />
+                </TabPane>
+            </TabContent>
+        </form>
+    )
+}
 
 const VehicleInfosPartialForm = ({ control, errors }) => {
     const { t } = useTranslation();
@@ -424,9 +474,9 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col>
                     <FieldWrapper label={t('vehicles:cylinder')}>
                         <NumberInput name="vehicleEngine.cylinder"
-                                     control={control}
-                                     errors={errors}
-                                     placeholder="150 ch"
+                            control={control}
+                            errors={errors}
+                            placeholder="150 ch"
 
                         />
                     </FieldWrapper>
@@ -438,9 +488,9 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col>
                     <FieldWrapper label={t('vehicles:gas')}>
                         <SelectInput name="vehicleEngine.gas"
-                                     options={RadioChoicesGas}
-                                     control={control}
-                                     errors={errors}
+                            options={RadioChoicesGas}
+                            control={control}
+                            errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -460,9 +510,9 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col>
                     <FieldWrapper label="Puissance kW">
                         <NumberInput name="power.kw"
-                                     control={control}
-                                     errors={errors}
-                                     placeholder={0}
+                            control={control}
+                            errors={errors}
+                            placeholder={0}
 
 
                         />
@@ -471,9 +521,9 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col>
                     <FieldWrapper label="Puissance CH">
                         <NumberInput name="power.ch"
-                                     control={control}
-                                     errors={errors}
-                                     placeholder={0}
+                            control={control}
+                            errors={errors}
+                            placeholder={0}
                         />
                     </FieldWrapper>
                 </Col>
@@ -486,9 +536,9 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col>
                     <FieldWrapper label="Type">
                         <SelectInput name="vehicleFunctionType"
-                                     options={RadioTypeFunction}
-                                     control={control}
-                                     errors={errors}
+                            options={RadioTypeFunction}
+                            control={control}
+                            errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
@@ -508,9 +558,9 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col>
                     <FieldWrapper label={t('vehicles:mileage')}>
                         <NumberInput name="mileage"
-                                     placeholder="20000 km"
-                                     control={control}
-                                     errors={errors}
+                            placeholder="20000 km"
+                            control={control}
+                            errors={errors}
 
                         />
                     </FieldWrapper>
@@ -711,7 +761,7 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
                     name="title"
                     control={control}
                     rules={{
-                        required: t('vehicles:field-is-required'),
+                        required: t('vehicles:field-is-required')
                     }}
                 />
             </FieldWrapper>
@@ -735,7 +785,7 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
                             const value = Number(val);
                             if (value < 500) return 'Min 500€';
                             if (value > 200000) return 'Max 200 000€';
-                        },
+                        }
                     }}
                 />
             </FieldWrapper>
@@ -747,8 +797,8 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
                     register={register}
                     rules={{
                         validate: {
-                            maxItems: (v) => v.length > 5 ? 'max 5' : null,
-                        },
+                            maxItems: (v) => v.length > 5 ? 'max 5' : null
+                        }
                     }}
                     errors={errors}
                 />
@@ -832,20 +882,20 @@ const NavDesktop = ({ activeTab, toggleTab, triggerSubmit, slug }) => {
     const { t } = useTranslation();
     const tabs = [
         {
-            title: t('vehicles:vehicle-informations'),
+            title: t('vehicles:vehicle-informations')
         },
         {
-            title: t('vehicles:equipments'),
+            title: t('vehicles:equipments')
         },
         {
-            title: t('vehicles:vehicle-state'),
+            title: t('vehicles:vehicle-state')
         },
         {
-            title: t('vehicles:pictures'),
+            title: t('vehicles:pictures')
         },
         {
-            title: t('vehicles:publication'),
-        },
+            title: t('vehicles:publication')
+        }
     ];
     return (
         <div className={clsx(classes.nav, classes.stickyNav)}>
@@ -875,20 +925,20 @@ const NavMobile = ({ activeTab, toggleTab }) => {
     const classes = useStyles();
     const tabs = [
         {
-            title: t('vehicles:vehicle-informations'),
+            title: t('vehicles:vehicle-informations')
         },
         {
-            title: t('vehicles:equipments'),
+            title: t('vehicles:equipments')
         },
         {
-            title: t('vehicles:vehicle-state'),
+            title: t('vehicles:vehicle-state')
         },
         {
-            title: t('vehicles:pictures'),
+            title: t('vehicles:pictures')
         },
         {
-            title: t('vehicles:publication'),
-        },
+            title: t('vehicles:publication')
+        }
     ];
     return (
         <Nav className={clsx(classes.navList, classes.navMobile)}>
@@ -903,29 +953,5 @@ const NavMobile = ({ activeTab, toggleTab }) => {
         </Nav>
     );
 };
-
-export async function getServerSideProps (ctx) {
-    const { slug } = ctx.query;
-    try {
-        const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
-        const { announce, isAdmin, isSelf } = await AnnounceService.getAnnounceBySlugSSR(slug, additionalHeaders);
-        return {
-            props: {
-                announceRaw: announce,
-                isAdmin: isAdmin ?? false,
-                isSelf: isSelf ?? false,
-            },
-        };
-    } catch (err) {
-        return {
-            props: {
-                err: {
-                    message: err?.message ?? null,
-                    statusCode: err?.statusCode ?? 404,
-                },
-            },
-        };
-    }
-}
 
 export default AnnounceEdit;

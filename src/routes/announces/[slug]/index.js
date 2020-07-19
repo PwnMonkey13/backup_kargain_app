@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx';
 import { NextSeo } from 'next-seo';
 import { Col, Container, Row } from 'reactstrap';
@@ -17,7 +17,6 @@ import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy';
 import DamageViewerTabs from '../../../components/Damages/DamageViewerTabs';
 import CarInfos from '../../../components/Products/car/CarInfos';
 import Comments from '../../../components/Comments/Comments';
-import TitleMUI from '../../../components/TitleMUI';
 import TagsList from '../../../components/Tags/TagsList';
 import CTALink from '../../../components/CTALink';
 import AnnounceService from '../../../services/AnnounceService';
@@ -32,41 +31,52 @@ import UserModel from '../../../models/user.model';
 import ModalContact from '../../../components/ModalContact';
 import ModalFollowers from '../../../components/ModalFollowers';
 
-const useStyles = makeStyles((theme) => ({
+import { useRouter } from 'next/router'
+
+const useStyles = makeStyles(() => ({
     formRow: {
         display: 'flex',
 
         '& > div': {
             margin: '1rem',
-            flex: 1,
-        },
+            flex: 1
+        }
     },
     priceStarsWrapper: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        margin: '15px 0',
+        margin: '15px 0'
     },
     wysiwyg: {
         margin: '1rem',
-        padding: '1rem',
-    },
+        padding: '1rem'
+    }
 }));
 
-const Announce = ({ announceRaw, isAdmin, isSelf, err }) => {
+const Announce = () => {
     const refImg = useRef();
     const theme = useTheme();
     const classes = useStyles();
+    const router = useRouter();
+    const { slug } = router.query
     const { t, lang } = useTranslation();
-    const { isAuthReady, isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
-    const [stateReady, setStateReady] = useState(false);
+    const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
     const { dispatchModalError } = useContext(ModalDialogContext);
-    const announce = new AnnounceModel(announceRaw);
-    const [likesCounter, setLikesCounter] = useState(announce.getLikesLength);
     const [openModalContact, setOpenModalContact] = useState(false);
     const [openModalFollowers, setOpenModalFollowers] = useState(false);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
-        defaultMatches: true,
+        defaultMatches: true
+    });
+
+    const [state, setState] = useState({
+        err : null,
+        stateReady : false,
+        isSelf : false,
+        isAdmin : false,
+        announce : new AnnounceModel(),
+        likesCounter : 0
+
     });
 
     const handleOpenModalContact = () => {
@@ -94,8 +104,8 @@ const Announce = ({ announceRaw, isAdmin, isSelf, err }) => {
     };
 
     const checkIfAlreadyLike = () => {
-        const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite?.id === announce.getID);
-        const matchAnnounceLike = announce.getLikes.find(like => like?.user?.id === authenticatedUser.getID);
+        const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite?.id === state.announce.getID);
+        const matchAnnounceLike = state.announce.getLikes.find(like => like?.user?.id === authenticatedUser.getID);
         return !!matchUserFavorite || !!matchAnnounceLike;
     };
 
@@ -103,47 +113,70 @@ const Announce = ({ announceRaw, isAdmin, isSelf, err }) => {
 
     const handleClickLikeButton = async () => {
         if (!isAuthenticated) return setForceLoginModal(true);
-        let counter = likesCounter;
+        let counter = state.likesCounter;
         try {
             if (alreadyLikeCurrentUser) {
-                await AnnounceService.removeLikeLoggedInUser(announce.getID);
+                await AnnounceService.removeLikeLoggedInUser(state.announce.getID);
                 counter -= 1;
             } else {
-                await AnnounceService.addLikeLoggedInUser(announce.getID);
+                await AnnounceService.addLikeLoggedInUser(state.announce.getID);
                 counter += 1;
             }
             if (counter < 0) counter = 0;
-            setLikesCounter(counter);
+            setState(state => ({
+                ...state,
+                counter
+            }))
 
         } catch (err) {
             dispatchModalError({ err });
         }
     };
 
-    useEffect(() => {
-        if (isAuthReady) setStateReady(true);
-    }, [isAuthReady]);
+    const fetchAnnounce = useCallback(async () => {
+        try{
+            const result = await AnnounceService.getAnnounceBySlug(slug);
+            const { announce, isAdmin, isSelf } = result
+            setState(state => ({
+                ...state,
+                stateReady : true,
+                announce : new AnnounceModel(announce),
+                isAdmin,
+                isSelf
+            }))
+        } catch (err) {
+            setState(state => ({
+                ...state,
+                stateReady: true,
+                err
+            }))
+        }
+    },[slug])
 
-    if (!stateReady) return null;
-    if (announceRaw === undefined || err) return <Error statusCode={err?.statusCode}/>;
+    useEffect(()=>{
+        fetchAnnounce()
+    },[fetchAnnounce])
+
+    if (!state.stateReady) return null;
+    if (state.err) return <Error statusCode={state.err?.statusCode}/>;
 
     return (
         <Container>
             <ModalContact
-                recipient={announce.getAuthor}
+                recipient={state.announce.getAuthor}
                 handleClose={handleCloseModalContact}
                 open={openModalContact}
             />
 
             <ModalFollowers
-                likes={announce.getLikes}
+                likes={state.announce.getLikes}
                 handleClose={handleCloseModalFollowers}
                 open={openModalFollowers}
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             />
 
-            {isAdmin && (
+            {state.isAdmin && (
                 <Alert severity="info" className="mb-2">
                     Connected as Admin
                 </Alert>
@@ -151,17 +184,17 @@ const Announce = ({ announceRaw, isAdmin, isSelf, err }) => {
 
             <div className="objava-wrapper">
                 <NextSeo
-                    title={`${announce.getTitle} - Kargain`}
-                    description={announce.getTheExcerpt()}
+                    title={`${state.announce.getTitle} - Kargain`}
+                    description={state.announce.getTheExcerpt()}
                 />
 
-                {!announce.getIsActivated && (
+                {!state.announce.getIsActivated && (
                     <Alert severity="warning">
                         Your announce is hidden from public & waiting for moderator activation
                     </Alert>
                 )}
 
-                {!announce.getIsVisible && (
+                {!state.announce.getIsVisible && (
                     <Alert color="warning">
                         Your announce is currently not published (draft mode)
                     </Alert>
@@ -171,31 +204,31 @@ const Announce = ({ announceRaw, isAdmin, isSelf, err }) => {
                     <Col sm={12} md={6}>
                         <div className="top">
                             <Typography as="h2" variant="h2">
-                                {announce.getTitle}
+                                {state.announce.getTitle}
                             </Typography>
                             <Typography as="h2" variant="h3">
-                                {announce.getManufacturerFormated}
+                                {state.announce.getManufacturerFormated}
                             </Typography>
 
                             <div className={classes.formRow}>
                                 <p className="price-announce">
-                                    {announce.getPrice} €TTC
-                                    <span> {announce.getPriceHT} €HT</span>
+                                    {state.announce.getPrice} €TTC
+                                    <span> {state.announce.getPriceHT} €HT</span>
                                 </p>
 
                                 <p>
-                                    <small>{getTimeAgo(announce.getCreationDate.raw, lang)}</small>
+                                    <small>{getTimeAgo(state.announce.getCreationDate.raw, lang)}</small>
                                 </p>
                             </div>
                         </div>
 
                         <div className="pics">
-                            {announce.getCountImages > 0 && (
+                            {state.announce.getCountImages > 0 && (
                                 <>
-                                    <GalleryViewer images={announce.getImages} ref={refImg}/>
+                                    <GalleryViewer images={state.announce.getImages} ref={refImg}/>
                                     {isDesktop && (
                                         <GalleryImgsLazy
-                                            images={announce.getImages}
+                                            images={state.announce.getImages}
                                             handleCLickImg={handleCLickImg}
                                         />
                                     )}
@@ -208,58 +241,58 @@ const Announce = ({ announceRaw, isAdmin, isSelf, err }) => {
                         <div className={classes.formRow}>
                             <div className="pic" style={{ flex: 1 }}>
                                 <img
-                                    src={announce.getAuthor.getAvatar}
+                                    src={state.announce.getAuthor.getAvatar}
                                     className="img-profile-wrapper avatar-preview"
                                     width={80}
-                                    alt={announce.getTitle}
+                                    alt={state.announce.getTitle}
                                 />
                             </div>
 
                             <div style={{ flex: 4 }}>
-                                <Link href={`/profile/${announce.getAuthor.getUsername}`}>
+                                <Link href={`/profile/${state.announce.getAuthor.getUsername}`}>
                                     <a>
                                         <Typography variant="h3" component="h2">
-                                            {announce.getAuthor.getFullName}
+                                            {state.announce.getAuthor.getFullName}
                                         </Typography>
                                     </a>
                                 </Link>
 
-                                {announce.getAdOrAuthorCustomAddress(['city', 'postCode']) && (
+                                {state.announce.getAdOrAuthorCustomAddress(['city', 'postCode']) && (
                                     <div className="top-profile-data-wrapper">
                                         <div className="top-profile-location">
                                             <img className="mx-1" src="/images/location.png" alt=""/>
-                                            {announce.getAdOrAuthorCustomAddress(['city', 'postCode'])}
+                                            {state.announce.getAdOrAuthorCustomAddress(['city', 'postCode'])}
                                         </div>
                                     </div>
                                 )}
 
-                                {announce.showCellPhone && (
+                                {state.announce.showCellPhone && (
                                     <p>
-                                        <small>{announce.getAuthor.getPhone}</small>
+                                        <small>{state.announce.getAuthor.getPhone}</small>
                                     </p>
                                 )}
                             </div>
                         </div>
 
-                        <TagsList tags={announce.getTags}/>
+                        <TagsList tags={state.announce.getTags}/>
 
                         <div className={clsx('price-stars-wrapper', classes.priceStarsWrapper)}>
                             <div className="icons-profile-wrapper">
                                 <div className="icons-star-prof" onClick={handleClickLikeButton}
-                                     title={t('vehicles:like')}>
+                                    title={t('vehicles:like')}>
                                     {alreadyLikeCurrentUser ? <StarSVGYellow/> : <StarSVG/>}
-                                    <span>{likesCounter}</span>
+                                    <span>{state.likesCounter}</span>
                                 </div>
 
                                 <a href="#comments" className="icons-star-prof" title="Commenter">
                                     <img src="/images/svg/comment.svg" alt=""/>
-                                    <span>{announce.getCountComments}</span>
+                                    <span>{state.announce.getCountComments}</span>
                                 </a>
 
-                                {isSelf ? (
+                                {state.isSelf ? (
                                     <div className="mx-2">
                                         <CTALink
-                                            href={announce.getAnnounceEditLink}
+                                            href={state.announce.getAnnounceEditLink}
                                             title={t('vehicles:edit-announce')}
                                         />
                                     </div>
@@ -280,19 +313,19 @@ const Announce = ({ announceRaw, isAdmin, isSelf, err }) => {
                             </div>
                         </div>
 
-                        {announce.getLikes.length && (
+                        {state.announce.getLikes.length && (
                             <div className="my-2">
                                 <ul className="d-flex align-items-center list-style-none">
-                                    {announce.getLikes.slice(0, 5).map((userLike, index) => {
+                                    {state.announce.getLikes.slice(0, 5).map((userLike, index) => {
                                         const user = new UserModel(userLike?.user);
                                         return (
                                             <li key={index} className="nav-item navbar-dropdown p-1">
                                                 <img className="dropdown-toggler rounded-circle"
-                                                     width="30"
-                                                     height="30"
-                                                     src={user.getAvatar}
-                                                     title={user.getFullName}
-                                                     alt={user.getUsername}
+                                                    width="30"
+                                                    height="30"
+                                                    src={user.getAvatar}
+                                                    title={user.getFullName}
+                                                    alt={user.getUsername}
                                                 />
                                             </li>
                                         );
@@ -313,7 +346,7 @@ const Announce = ({ announceRaw, isAdmin, isSelf, err }) => {
                 <section className="my-2">
                     <Typography component="h3" variant="h3">{t('vehicles:vehicle-data')}</Typography>
                     <CarInfos
-                        announce={announce}
+                        announce={state.announce}
                         enableThirdColumn
                     />
                 </section>
@@ -321,7 +354,7 @@ const Announce = ({ announceRaw, isAdmin, isSelf, err }) => {
                 <section className="my-2">
                     <Typography component="h3" variant="h3">{t('vehicles:equipments')}</Typography>
                     <Row>
-                        {announce.getVehicleEquipments && announce.getVehicleEquipments.map((equipment, index) => {
+                        {state.announce.getVehicleEquipments && state.announce.getVehicleEquipments.map((equipment, index) => {
                             return (
                                 <Col sm={6} md={3} key={index}>
                                     <div className="equipment m-3">
@@ -336,47 +369,21 @@ const Announce = ({ announceRaw, isAdmin, isSelf, err }) => {
                 <section className="my-2">
                     <Typography component="h3" variant="h3">{t('vehicles:description')}</Typography>
                     <div className={classes.wysiwyg}>
-                        {announce.getDescription}
+                        {state.announce.getDescription}
                     </div>
                 </section>
 
                 <section className="my-2">
                     <Typography component="h3" variant="h3">
-                        {t('vehicles:data-sheet')} ({announce.getCountDamages})
+                        {t('vehicles:data-sheet')} ({state.announce.getCountDamages})
                     </Typography>
-                    <DamageViewerTabs tabs={announce.getDamagesTabs}/>
+                    <DamageViewerTabs tabs={state.announce.getDamagesTabs}/>
                 </section>
 
-                <Comments announceRaw={announceRaw}/>
+                <Comments announceRaw={state.announce.getRaw}/>
             </div>
         </Container>
     );
 };
-
-export async function getServerSideProps (ctx) {
-    const { slug } = ctx.query;
-    const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
-    try {
-        const { announce, isAdmin, isSelf } = await AnnounceService.getAnnounceBySlugSSR(slug, additionalHeaders);
-        return {
-            props: {
-                announceRaw: announce,
-                isAdmin: isAdmin ?? false,
-                isSelf: isSelf ?? false,
-            },
-        };
-    } catch (err) {
-        return {
-            props: {
-                slug,
-                additionalHeaders,
-                err: {
-                    message: err?.message ?? null,
-                    statusCode: err?.statusCode ?? 404,
-                },
-            },
-        };
-    }
-}
 
 export default Announce;
