@@ -25,8 +25,7 @@ const ContactPage = () => {
                 dispatchModal({ msg: 'Your message have successfully been sent' });
             }).catch(err => {
                 dispatchModalError({ err });
-            }
-            );
+            });
     };
 
     return (

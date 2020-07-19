@@ -22,7 +22,7 @@ const Conditions = (props) => {
 
 let entriesId = {
     'fr': '6z7omSmSGSRXjeqfI4Qm91',
-    'en': '2Vmxe1xvgDoSxNAdP1hTFg',
+    'en': '2Vmxe1xvgDoSxNAdP1hTFg'
 };
 
 export default ContentfulHOC(Conditions, entriesId);

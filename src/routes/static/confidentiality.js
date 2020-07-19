@@ -5,7 +5,7 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 let entriesId = {
     'fr': '103grUBWVfZYA5SL3HV3c1',
-    'en': '7k5gtvxFQtZBcWAB02cx9Rf',
+    'en': '7k5gtvxFQtZBcWAB02cx9Rf'
 };
 
 const About = (props) => {

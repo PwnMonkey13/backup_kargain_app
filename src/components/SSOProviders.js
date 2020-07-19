@@ -10,7 +10,7 @@ import AuthService from '../services/AuthService';
 import Loader from './Loader';
 import config from '../config/config';
 
-const SSOProviders = memo(({ col }) => {
+const SSOProviders = ({ col }) => {
     const router = useRouter();
     const { redirect } = router.query;
     const { t } = useTranslation();
@@ -28,15 +28,16 @@ const SSOProviders = memo(({ col }) => {
                     router.push(`/auth/callback?redirect=/profile/${user?.username}`);
                 }
             }).catch(err => {
-            setIsLoading(false);
-            dispatchModalError({ err });
-            if (redirect) router.push(redirect);
-        });
+                setIsLoading(false);
+                dispatchModalError({ err });
+                if (redirect) router.push(redirect);
+            });
     };
 
     const responseGoogle = (response) => {
         const { accessToken, profileObj } = response;
         const { googleId, email, familyName, givenName, imageUrl } = profileObj;
+
         startAuth('google', {
             email,
             firstname: givenName,
@@ -44,8 +45,8 @@ const SSOProviders = memo(({ col }) => {
             avatarUrl: imageUrl,
             googleProvider: {
                 id: googleId,
-                token: accessToken,
-            },
+                token: accessToken
+            }
         });
     };
 
@@ -62,8 +63,8 @@ const SSOProviders = memo(({ col }) => {
             avatarUrl: picture?.data?.url,
             facebookProvider: {
                 id: id,
-                token: accessToken,
-            },
+                token: accessToken
+            }
         });
     };
 
@@ -98,10 +99,10 @@ const SSOProviders = memo(({ col }) => {
             />
         </div>
     );
-});
-
-SSOProviders.propTypes = {
-    col: PropTypes.bool,
 };
 
-export default SSOProviders;
+SSOProviders.propTypes = {
+    col: PropTypes.bool
+};
+
+export default memo(SSOProviders);
