@@ -8,7 +8,7 @@ const CTALink = ({ href, icon: Icon, title, id, className }) => {
             <a id={id} className={
                 clsx(className,
                     'btn btn-outline-primary',
-                    'mx-1'
+                    'm-1'
                 )
             }>
                 {Icon && (

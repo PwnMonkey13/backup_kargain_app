@@ -57,7 +57,7 @@ const VehicleTypeSelectorStepLight = ({ handleSelectVehicleType }) => {
                 <Row className="justify-content-center">
                     {vehicleTypes && vehicleTypes.map((tab, index) => {
                         return (
-                            <Col key={index} xs={6} sm={6} md={width < 500 ? 12 : 3} lg={3}>
+                            <Col key={index} xs={6} sm={6} md={width < 500 ? 12 : 3} lg={width < 500 ?  6 : 3}>
                                 <div className="form-check form-check-vehicle m-0">
                                     <input id={`vehicle_type${index}`}
                                         type="radio"
