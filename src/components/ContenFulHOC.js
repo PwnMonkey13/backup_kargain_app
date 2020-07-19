@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { BLOCKS, MARKS } from '@contentful/rich-text-types';
 import config from '../config/config'
 
-
-const client = require('contentful').createClient({
-    accessToken: config.contentful.CONTENTFUL_ACCESS_TOKEN,
-    space: config.contentful.CONTENTFUL_SPACE
-});
+const contentfulOptions = {
+    space: config.contentful.CONTENTFUL_SPACE,
+    accessToken: config.contentful.CONTENTFUL_ACCESS_TOKEN
+}
 
 const options = {
     renderNode: {
@@ -27,6 +26,9 @@ export default function ContentfulHOC (WrappedComponent, entriesID) {
             const { lang } = ctx;
             const pageProps = WrappedComponent.getInitialProps && await WrappedComponent.getInitialProps(ctx);
             try {
+                console.log("config")
+                console.log(config)
+                const client = require('contentful').createClient(contentfulOptions);
                 const entry = await client.getEntry(entriesID[lang]);
                 const richTextDocument = entry.fields.content;
                 const HOCProps = {
