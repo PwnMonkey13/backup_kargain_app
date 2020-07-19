@@ -6,11 +6,11 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import { useAuth } from '../../context/AuthProvider';
 import paymentsServices from '../../services/PaymentsService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
+import config from '../../config/config'
 
-const stripePromise = loadStripe('pk_test_51GqJrJEItcAGSRw8the6YZdACyYMrHOZsCRKSfNr6tJRlN4L3MpXpUjo7MOpAPvPcpY5WvIxDSwsZRH5JTKU5q9a00dDJhABpd');
+const stripePromise = loadStripe(config.stripe.API_KEY);
 
 const useStyles = makeStyles(() => ({
-
     Wrapper: {
         margin: '1rem 0',
         padding: '1rem',

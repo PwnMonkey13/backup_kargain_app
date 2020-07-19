@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import { BLOCKS, MARKS } from '@contentful/rich-text-types';
+import config from '../config/config'
 
-const CONTENTFUL_ACCESS_TOKEN = '1FLg_Swv-LqFXKNENZ_IqzEw4ajYAbMcKUJCNg1YnTw';
-const CONTENTFUL_SPACE = '15r3jjrdfhc7';
 
 const client = require('contentful').createClient({
-    space: CONTENTFUL_SPACE,
-    accessToken: CONTENTFUL_ACCESS_TOKEN,
+    accessToken: config.contentful.CONTENTFUL_ACCESS_TOKEN,
+    space: config.contentful.CONTENTFUL_SPACE
 });
 
 const options = {
     renderNode: {
+        // eslint-disable-next-line react/display-name
         [MARKS.BOLD]: (node, children) => (
             <span className="bold-title">{children}</span>
         ),
+        // eslint-disable-next-line react/display-name
         [BLOCKS.PARAGRAPH]: (node, children) => (
             <p>{children}</p>
-        ),
-    },
+        )
+    }
 };
 
 export default function ContentfulHOC (WrappedComponent, entriesID) {
@@ -32,24 +33,24 @@ export default function ContentfulHOC (WrappedComponent, entriesID) {
                     options,
                     lang,
                     entry: entriesID[lang],
-                    richTextDocument,
+                    richTextDocument
                 };
 
                 return {
                     ...HOCProps,
                     ...pageProps,
                     entriesID,
-                    lang,
+                    lang
                 };
 
             } catch (err) {
                 return {
-                    error,
+                    err,
                     ...pageProps,
-                    lang,
+                    lang
                 };
             }
-        };
+        }
 
         render () {
             return (
