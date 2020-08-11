@@ -224,22 +224,6 @@ header {
     margin: 0 auto;
 }
 
-.navbar-icon-notifications {
-    position: relative;
-
-    &:after {
-        content: '';
-        position: absolute;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: #569ffc;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: -14px;
-    }
-}
-
 #dropdownUser {
     position: absolute;
     left: -12rem;
@@ -265,6 +249,22 @@ header {
     border: 1px solid rgba(0, 0, 0, .15);
     border-radius: 17px;
     box-shadow: 0 0 23px 0 rgba(0, 0, 0, 0.11);
+}
+
+.navbar-icon-notifications {
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #569ffc;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+    }
 }
 
 //search form
