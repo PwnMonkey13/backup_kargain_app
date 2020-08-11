@@ -5,14 +5,14 @@ import { NextSeo } from 'next-seo';
 import Typography from '@material-ui/core/Typography';
 import FindInPageIcon from '@material-ui/icons/FindInPage';
 import useIsMounted from '../hooks/useIsMounted';
-import PaginateResultsSituation from '../components/PaginateResultsSituation';
 import PaginateResults from '../components/PaginateResults';
-import Sorters from '../components/Filters/Sorters';
+import Sorters from '../components/Sorters/Sorters';
 import AnnounceCard from '../components/AnnounceCard';
 import AnnounceService from '../services/AnnounceService';
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import { useAuth } from '../context/AuthProvider';
-import HomeFilters from '../components/Filters/HomeFilter'
+import AdvancedFilters from '../components/Filters/Advanced/AdvancedFilters'
+
 
 const Index = (props) => {
     const { dispatchModalError } = useContext(ModalDialogContext);
@@ -107,7 +107,9 @@ const Index = (props) => {
             <Row>
                 <Col sm={12} md={4}>
                     <Typography component="p" variant="h2">{state.announces.length} résultats de recherche</Typography>
-                    <HomeFilters updateFilters={updateFilters}/>
+                    <Typography component="p" variant="h4">Filter par : </Typography>
+
+                    <AdvancedFilters updateFilters={updateFilters}/>
                 </Col>
 
                 <Col sm={12} md={8}>
@@ -142,13 +144,8 @@ const Index = (props) => {
                             </div>
                         )}
 
-                        <PaginateResultsSituation
-                            count={state.announces.length}
-                            page={state.page}
-                        />
-
                         <PaginateResults
-                            total={state.total}
+                            totalPages={state.total}
                             limit={props.size}
                             pageCount={props.paginate}
                             currentPage={state.page}

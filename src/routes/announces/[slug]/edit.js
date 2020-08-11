@@ -15,8 +15,6 @@ import resolveObjectKey from '../../../libs/resolveObjectKey';
 import AnnounceService from '../../../services/AnnounceService';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
-
-
 import FieldWrapper from '../../../components/Form/FieldWrapper';
 import TextInput from '../../../components/Form/Inputs/TextInput';
 import NumberInput from '../../../components/Form/Inputs/NumberInput';
@@ -51,7 +49,6 @@ import ValidationErrors from '../../../components/Form/Validations/ValidationErr
 import Alert from '@material-ui/lab/Alert';
 import AnnounceModel from '../../../models/announce.model'
 import { useRouter } from 'next/router'
-
 
 const useStyles = makeStyles(() => ({
 
@@ -144,15 +141,15 @@ const allowedFields = {
     vehicleFunctionUse: 'vehicleFunctionUse',
     vehicleGeneralState: 'vehicleGeneralState',
     vehicleFunction: 'vehicleFunction',
-    'vehicleEngine.type': 'vehicleEngine.type',
-    'vehicleEngine.gas': 'vehicleEngine.gas',
-    'vehicleEngine.cylinder': 'vehicleEngine.cylinder',
-    'power.km': 'power.km',
-    'power.ch': 'power.ch',
-    'consumption.mixt': 'consumption.mixt',
-    'consumption.city': 'consumption.city',
-    'consumption.road': 'consumption.road',
-    'consumption.gkm': 'consumption.gkm',
+    'vehicleEngineType': 'vehicleEngineType',
+    'vehicleEngineGas': 'vehicleEngineGas',
+    'vehicleEngineCylinder': 'vehicleEngineCylinder',
+    'powerKm': 'powerKm',
+    'powerCh': 'powerCh',
+    'consumptionMixt': 'consumptionMixt',
+    'consumptionCity': 'consumptionCity',
+    'consumptionRoad': 'consumptionRoad',
+    'consumptionGkm': 'consumptionGkm',
     mileage: 'mileage',
     equipments: 'equipments',
     damages: 'damages',
@@ -432,7 +429,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col sm={12} md={6} lg={3}>
                     <FieldWrapper label={t('vehicles:make')}>
                         <TextInput
-                            name={'manufacturer.make.label'}
+                            name={'manufacturer.make.make'}
                             control={control}
                             disabled
                         />
@@ -473,7 +470,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
             <Row>
                 <Col>
                     <FieldWrapper label={t('vehicles:cylinder')}>
-                        <NumberInput name="vehicleEngine.cylinder"
+                        <NumberInput name="vehicleEngineCylinder"
                             control={control}
                             errors={errors}
                             placeholder="150 ch"
@@ -497,7 +494,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col>
                     <FieldWrapper label={t('vehicles:gear-box')}>
                         <SelectInput
-                            name="vehicleEngine.type"
+                            name="vehicleEngineType"
                             options={RadioChoicesEngine}
                             control={control}
                             errors={errors}
@@ -509,7 +506,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
             <Row>
                 <Col>
                     <FieldWrapper label="Puissance kW">
-                        <NumberInput name="power.kw"
+                        <NumberInput name="powerKw"
                             control={control}
                             errors={errors}
                             placeholder={0}
@@ -520,7 +517,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 </Col>
                 <Col>
                     <FieldWrapper label="Puissance CH">
-                        <NumberInput name="power.ch"
+                        <NumberInput name="powerCh"
                             control={control}
                             errors={errors}
                             placeholder={0}
@@ -600,7 +597,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col>
                     <FieldWrapper label="Mixte (g/km)">
                         <NumberInput
-                            name="consumption.mixt"
+                            name="consumptionMixt"
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
@@ -611,7 +608,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col>
                     <FieldWrapper label="Ville (g/km)">
                         <NumberInput
-                            name="consumption.city"
+                            name="consumptionCity"
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
@@ -625,7 +622,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col>
                     <FieldWrapper label="Route (g/km)">
                         <NumberInput
-                            name="consumption.road"
+                            name="consumptionRoad"
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
@@ -636,7 +633,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col>
                     <FieldWrapper label="CO2 (g/km)">
                         <NumberInput
-                            name="consumption.gkm"
+                            name="consumptionGkm"
                             control={control}
                             errors={errors}
                             placeholder={0}
