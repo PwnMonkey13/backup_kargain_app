@@ -9,7 +9,7 @@ import FieldWrapper from '../../Form/FieldWrapper';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import { FormContext } from '../../../context/FormContext';
 
-const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
+const Step1CarDetails = ({ onSubmitStep, prevStep }) => {
     const formRef = useRef(null);
     const { formDataContext } = useContext(FormContext);
     const { t, lang } = useTranslation();
@@ -23,12 +23,12 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
         RadioChoicesEmission: [],
         RadioChoicesPaints: [],
         RadioChoicesMaterials: [],
-        RadioChoicesExternalColor: [],
+        RadioChoicesExternalColor: []
     });
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
-        defaultValues: formDataContext,
+        defaultValues: formDataContext
     });
 
     const getData = async () => {
@@ -79,7 +79,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:cylinder')}>
                         <NumberInput
-                            name="vehicleEngine.cylinder"
+                            name="vehicleEngineCylinder"
                             control={control}
                             errors={errors}
                             placeholder="150 ch"
@@ -92,7 +92,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:gas')}>
                         <SelectInput
-                            name="vehicleEngine.gas"
+                            name="vehicleEngineGas"
                             options={formData.RadioChoicesGas}
                             control={control}
                             errors={errors}
@@ -102,7 +102,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:gear-box')}>
                         <SelectInput
-                            name="vehicleEngine.type"
+                            name="vehicleEngineType"
                             options={formData.RadioChoicesEngine}
                             control={control}
                             errors={errors}
@@ -115,7 +115,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:power')}>
                         <NumberInput
-                            name="power.kw"
+                            name="powerKw"
                             control={control}
                             errors={errors}
                             placeholder={0}
@@ -125,7 +125,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label="Puissance CH">
                         <NumberInput
-                            name="power.ch"
+                            name="powerCh"
                             control={control}
                             errors={errors}
                             placeholder={0}
@@ -139,7 +139,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={`${t('vehicles:consumption')} mixt`}>
                         <NumberInput
-                            name="consumption.mixt"
+                            name="consumptionMixt"
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
@@ -150,7 +150,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={`${t('vehicles:consumption')} (g/km)`}>
                         <NumberInput
-                            name="consumption.city"
+                            name="consumptionCity"
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
@@ -160,7 +160,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={`${t('vehicles:road')} (g/km)`}>
                         <NumberInput
-                            name="consumption.road"
+                            name="consumptionRoad"
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
@@ -171,7 +171,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label="CO2 (g/km)">
                         <NumberInput
-                            name="consumption.gkm"
+                            name="consumptionGkm"
                             control={control}
                             errors={errors}
                             placeholder={0}

@@ -10,7 +10,7 @@ import useIsMounted from '../../../hooks/useIsMounted';
 import { FormContext } from '../../../context/FormContext';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
 import VinDecoderService from '../../../services/VinDecoderService';
-import InternalVehiclesApiService from '../../../services/vehicles/InternalVehiclesApiService';
+import InternalVehiclesApiService from '../../../services/VehiclesService';
 
 const ColCenter = ({ children }) => <Col className="d-flex flex-column align-items-center">{children}</Col>;
 

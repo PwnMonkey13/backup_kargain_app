@@ -10,9 +10,10 @@ import StepNavigation from '../../Form/StepNavigation';
 import ToolTipWrapper from '../../Form/ToolTipWrapper';
 import { SelectInput, TextInput } from '../../Form/Inputs';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
-import CarApiService from '../../../services/vehicles/CarApiService';
+import VehiclesService from '../../../services/VehiclesService';
 import VinDecoderService from '../../../services/VinDecoderService';
 import { FormContext } from '../../../context/FormContext';
+
 
 const ColCenter = ({ children }) => (
     <Col className="d-flex flex-column align-items-center">
@@ -20,13 +21,13 @@ const ColCenter = ({ children }) => (
     </Col>
 );
 
-const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitStep, prevStep, nextStep }) => {
+const Step0CarManufacturer = ({ triggerSkipStep, onSubmitStep, prevStep, nextStep }) => {
     const formRef = useRef(null);
     const isMounted = useIsMounted();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const { formDataContext } = useContext(FormContext);
     const { t } = useTranslation();
-    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
+    const { watch, control, errors, setValue, getValues, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: formDataContext
@@ -39,22 +40,6 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
         generations: [],
         years: []
     });
-
-    const popularMakesId = [
-        3, // AlphaRomeo
-        9, // Audi
-        16, // BMW
-        107, // Peugeot
-        117, // Renault
-        28, // Citroen
-        147, // Volkswagen
-        48, // Ford
-        88, // Mercedes-Benz
-        102, // Opel
-        47, // Fiat
-        140, // Toyota
-        133 // Susuki
-    ];
 
     const triggerSubmit = () => {
         formRef.current.dispatchEvent(new Event('submit'));
@@ -100,7 +85,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                 }
             });
         }
-    }, [vinDecoded]);
+    }, [isMounted, vinDecoded]);
 
     useEffect(() => {
         if (isMounted) {
@@ -108,6 +93,7 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
             const findDefault = Object.keys(values).find(key => values[key] && values[key].value === 'other');
             if (findDefault) nextStep();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getValues()]);
 
     useEffect(() => {
@@ -117,14 +103,16 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
             watch('manufacturer.year')) {
             triggerSubmit();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watch('manufacturer.year')]);
 
     useEffect(() => {
         console.log('fetch makes');
-        CarApiService.getMakes(popularMakesId)
+        VehiclesService.getMakes("cars")
             .then(cars => {
+                console.log(cars)
                 const makesOptions = cars.map(car => ({
-                    value: car.make_id,
+                    value: Number(car.make_id),
                     label: car.make
                 }));
                 const defaultOption = {
@@ -141,101 +129,107 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
             .catch(err => {
                 dispatchModalError({ err });
             });
-        return function cleanup () {
-            console.log('unmount');
-        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => {
-        if (watch('manufacturer.make') && vinDecoded == null) {
-            const makeID = watch('manufacturer.make').value;
-            if (!isNaN(makeID)) {
-                CarApiService.getMakeModels(makeID)
-                    .then(models => {
-                        const modelsOptions = models.map(model => ({
-                            value: model.model_id,
-                            label: model.model
-                        }));
-                        const defaultOption = {
-                            value: 'other',
-                            label: 'Je ne sais pas/Autre'
-                        };
-                        setManufacturersData(manufacturersData => (
-                            {
-                                ...manufacturersData,
-                                models: [...modelsOptions, defaultOption]
-                            })
-                        );
-                    })
-                    .catch(err => {
-                        dispatchModalError({
-                            err,
-                            persist: true
-                        });
-                    });
-            }
-        }
-    }, [watch('manufacturer.make')]);
+    // useEffect(() => {
+    //     if (watch('manufacturer.make') && vinDecoded == null) {
+    //         const makeID = watch('manufacturer.make').value;
+    //         console.log('fetch models');
+    //         if (!isNaN(makeID)) {
+    //             VehiclesService.getMakeModels("cars", makeID)
+    //                 .then(data => {
+    //                     const { make, models } = data
+    //                     console.log(data)
+    //                     const modelsOptions = models.map(model => ({
+    //                         value: model.model_id,
+    //                         label: model.model
+    //                     }));
+    //                     const defaultOption = {
+    //                         value: 'other',
+    //                         label: 'Je ne sais pas/Autre'
+    //                     };
+    //                     setManufacturersData(manufacturersData => (
+    //                         {
+    //                             ...manufacturersData,
+    //                             models: [...modelsOptions, defaultOption]
+    //                         })
+    //                     );
+    //                 })
+    //                 .catch(err => {
+    //                     console.log(err)
+    //                     dispatchModalError({
+    //                         err,
+    //                         persist: true
+    //                     });
+    //                 });
+    //         }
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [watch('manufacturer.make')]);
 
-    useEffect(() => {
-        if (watch('manufacturer.model') && vinDecoded == null) {
-            const makeID = watch('manufacturer.make').value;
-            const modelID = watch('manufacturer.model').value;
-            if (!isNaN(makeID) && !isNaN(modelID)) {
-                CarApiService.getCarGenerations(makeID, modelID)
-                    .then(generations => {
-                        const generationsOptions = generations.map(
-                            // eslint-disable-next-line camelcase
-                            ({ generation_id, generation }) => ({
-                                value: generation_id,
-                                label: generation
-                            })
-                        );
-                        const defaultOption = {
-                            value: 'other',
-                            label: 'Je ne sais pas/Autre'
-                        };
-                        setManufacturersData(manufacturersData => (
-                            {
-                                ...manufacturersData,
-                                generations: [...generationsOptions, defaultOption]
-                            })
-                        );
-                    })
-                    .catch(err => {
-                        dispatchModalError({ err });
-                    });
-            }
-        }
-    }, [watch('manufacturer.model')]);
+    // useEffect(() => {
+    //     if (watch('manufacturer.model') && vinDecoded == null) {
+    //         const makeID = watch('manufacturer.make').value;
+    //         const modelID = watch('manufacturer.model').value;
+    //
+    //         if (!isNaN(makeID) && !isNaN(modelID)) {
+    //             VehiclesService.getVehiclesGenerations(makeID, modelID)
+    //                 .then(generations => {
+    //                     const generationsOptions = generations.map(
+    //                         // eslint-disable-next-line camelcase
+    //                         ({ generation_id, generation }) => ({
+    //                             value: generation_id,
+    //                             label: generation
+    //                         })
+    //                     );
+    //                     const defaultOption = {
+    //                         value: 'other',
+    //                         label: 'Je ne sais pas/Autre'
+    //                     };
+    //                     setManufacturersData(manufacturersData => (
+    //                         {
+    //                             ...manufacturersData,
+    //                             generations: [...generationsOptions, defaultOption]
+    //                         })
+    //                     );
+    //                 })
+    //                 .catch(err => {
+    //                     dispatchModalError({ err });
+    //                 });
+    //         }
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [watch('manufacturer.model')]);
 
-    useEffect(() => {
-        if (watch('manufacturer.generation') && vinDecoded == null) {
-            const makeID = watch('manufacturer.make').value;
-            const modelID = watch('manufacturer.model').value;
-            const generationID = watch('manufacturer.generation').value;
-
-            if (!isNaN(makeID) && !isNaN(modelID) && !isNaN(generationID)) {
-                CarApiService.getCarYearsVersion(makeID, modelID, generationID)
-                    .then(years => {
-                        const yearsOptions = years.map(year => ({
-                            value: year.year,
-                            label: year.year
-                        }));
-                        setManufacturersData(manufacturersData => (
-                            {
-                                ...manufacturersData,
-                                years: yearsOptions
-                            })
-                        );
-                    })
-                    .catch(err => {
-                        dispatchModalError({ err });
-                    }
-                    );
-            }
-        }
-    }, [watch('manufacturer.generation')]);
+    // useEffect(() => {
+    //     if (watch('manufacturer.generation') && vinDecoded == null) {
+    //         const makeID = watch('manufacturer.make').value;
+    //         const modelID = watch('manufacturer.model').value;
+    //         const generationID = watch('manufacturer.generation').value;
+    //
+    //         if (!isNaN(makeID) && !isNaN(modelID) && !isNaN(generationID)) {
+    //             VehiclesService.getVehiclesYearsVersion(makeID, modelID, generationID)
+    //                 .then(years => {
+    //                     const yearsOptions = years.map(year => ({
+    //                         value: year.year,
+    //                         label: year.year
+    //                     }));
+    //                     setManufacturersData(manufacturersData => (
+    //                         {
+    //                             ...manufacturersData,
+    //                             years: yearsOptions
+    //                         })
+    //                     );
+    //                 })
+    //                 .catch(err => {
+    //                     dispatchModalError({ err });
+    //                 }
+    //                 );
+    //         }
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [watch('manufacturer.generation')]);
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
@@ -268,7 +262,6 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
 
             <Row>
                 <Col sm={12} md={6} lg={3}>
-
                     <FieldWrapper label={t('vehicles:make')} labelTop>
                         <SelectInput
                             name="manufacturer.make"
@@ -276,13 +269,13 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                             control={control}
                             errors={errors}
                             options={manufacturersData.makes}
-                            onChange={([selected, option]) => {
-                                collectStepChanges({
-                                    name: option.name,
-                                    label: selected.label
-                                });
-                                return selected;
-                            }}
+                            // onChange={([selected],name) => {
+                            //     collectStepChanges({
+                            //         name: name,
+                            //         label: selected.label
+                            //     });
+                            //     return selected;
+                            // }}
                         />
                     </FieldWrapper>
                 </Col>
@@ -295,13 +288,13 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                             control={control}
                             errors={errors}
                             disabled={!watch('manufacturer.make')}
-                            onChange={([selected, option]) => {
-                                collectStepChanges({
-                                    name: option.name,
-                                    label: selected.label
-                                });
-                                return selected;
-                            }}
+                            // onChange={([selected, option]) => {
+                            //     collectStepChanges({
+                            //         name: option.name,
+                            //         label: selected.label
+                            //     });
+                            //     return selected;
+                            // }}
                         />
                     </FieldWrapper>
                 </Col>
@@ -314,13 +307,13 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                             control={control}
                             errors={errors}
                             disabled={!watch('manufacturer.generation')}
-                            onChange={([selected, option]) => {
-                                collectStepChanges({
-                                    name: option.name,
-                                    label: selected.label
-                                });
-                                return selected;
-                            }}
+                            // onChange={([selected, option]) => {
+                            //     collectStepChanges({
+                            //         name: option.name,
+                            //         label: selected.label
+                            //     });
+                            //     return selected;
+                            // }}
                         />
                     </FieldWrapper>
                 </Col>
@@ -333,13 +326,13 @@ const Step0CarManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitSte
                             control={control}
                             errors={errors}
                             disabled={!watch('manufacturer.generation')}
-                            onChange={([selected, option]) => {
-                                collectStepChanges({
-                                    name: option.name,
-                                    label: selected.label
-                                });
-                                return selected;
-                            }}
+                            // onChange={([selected, option]) => {
+                            //     collectStepChanges({
+                            //         name: option.name,
+                            //         label: selected.label
+                            //     });
+                            //     return selected;
+                            // }}
                         />
                     </FieldWrapper>
                 </Col>

@@ -15,12 +15,12 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
     const { t, lang } = useTranslation();
     const [formData, setFormData] = useState({
         RadioVehicleGeneralState: [],
-        CheckboxOptionsEquipments: [],
+        CheckboxOptionsEquipments: []
     });
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
-        defaultValues: formDataContext,
+        defaultValues: formDataContext
     });
 
     const getData = async () => {
@@ -72,7 +72,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:cylinder')}>
                         <NumberInput
-                            name="vehicleEngine.cylinder"
+                            name="vehicleEngineCylinder"
                             control={control}
                             errors={errors}
                         />
@@ -84,7 +84,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:gas')}>
                         <SelectInput
-                            name="vehicleEngine.gas"
+                            name="vehicleEngineGas"
                             options={formData.RadioChoicesGas}
                             control={control}
                             errors={errors}
@@ -94,7 +94,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:gear-box')}>
                         <SelectInput
-                            name="vehicleEngine.type"
+                            name="vehicleEngineType"
                             options={formData.RadioChoicesEngine}
                             control={control}
                             errors={errors}
@@ -108,7 +108,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label="Puissance kW">
                         <NumberInput
-                            name="power.kw"
+                            name="powerKw"
                             control={control}
                             errors={errors}
                         />
@@ -117,7 +117,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label="Puissance CH">
                         <NumberInput
-                            name="power.ch"
+                            name="powerCh"
                             control={control}
                             errors={errors}
                         />
@@ -130,7 +130,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={`${t('vehicles:consumption')} mixt`}>
                         <NumberInput
-                            name="consumption.mixt"
+                            name="consumptionMixt"
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
@@ -141,7 +141,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={`${t('vehicles:consumption')} (g/km)`}>
                         <NumberInput
-                            name="consumption.city"
+                            name="consumptionCity"
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
@@ -151,7 +151,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={`${t('vehicles:road')} (g/km)`}>
                         <NumberInput
-                            name="consumption.road"
+                            name="consumptionRoad"
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
@@ -162,7 +162,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label="CO2 (g/km)">
                         <NumberInput
-                            name="consumption.gkm"
+                            name="consumptionGkm"
                             control={control}
                             errors={errors}
                             placeholder={0}

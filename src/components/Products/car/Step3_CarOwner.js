@@ -25,6 +25,12 @@ const Step = ({ handleSubmitForm, prevStep }) => {
         }
     });
 
+    const getFiles = (files) => {
+        setValue('images', files);
+    };
+
+    const countrySelect = watch('countrySelect');
+    
     useEffect(() => {
         register({ name: 'location.coordinates' });
         setValue('location.coordinates', coordinates);
@@ -33,12 +39,6 @@ const Step = ({ handleSubmitForm, prevStep }) => {
     useEffect(() => {
         register({ name: 'images' });
     }, []);
-
-    const getFiles = (files) => {
-        setValue('images', files);
-    };
-
-    const countrySelect = watch('countrySelect');
 
     return (
         <form className="form_wizard" onSubmit={handleSubmit(handleSubmitForm)}>

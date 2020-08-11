@@ -6,10 +6,9 @@ import FieldWrapper from '../../Form/FieldWrapper';
 import StepNavigation from '../../Form/StepNavigation';
 import { SelectInput } from '../../Form/Inputs';
 import useIsMounted from '../../../hooks/useIsMounted';
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import { FormContext } from '../../../context/FormContext';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
-import MotorsBikesApiService from '../../../services/vehicles/InternalVehiclesApiService';
+import VehiclesService from '../../../services/VehiclesService';
 
 const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitStep, prevStep, nextStep }) => {
     const formRef = useRef(null);
@@ -27,21 +26,6 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
         models: []
     });
 
-    const popularMakes = [
-        'Aprilia',
-        'BMW',
-        'Ducati',
-        'Honda',
-        'Harley-Davidson',
-        'Husqvarna',
-        'Kawasaki',
-        'KTM',
-        'Suzuki',
-        'Triumph',
-        'Yamaha',
-        'Royal Enfield'
-    ];
-
     const triggerSubmit = () => {
         console.log('triggerSubmitStep');
         formRef.current.dispatchEvent(new Event('submit'));
@@ -53,17 +37,19 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
             const findDefault = Object.keys(values).find(key => values[key] && values[key].value === 'other');
             if (findDefault) nextStep();
         }
-    }, [getValues()]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [getValues(), isMounted]);
 
     useEffect(() => {
         if (isMounted && watch('manufacturer.make') && watch('manufacturer.model')) {
             triggerSubmit();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watch('manufacturer.model')]);
 
     useEffect(() => {
         console.log('fetch makes');
-        MotorsBikesApiService.getMakes(popularMakes)
+        VehiclesService.getMakes("motorcycles")
             .then(motos => {
                 const makesOptions = motos.map(car => ({
                     value: car.make,
@@ -83,17 +69,15 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
             .catch(err => {
                 dispatchModalError({ err });
             });
-        return function cleanup () {
-            console.log('unmount');
-        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         if (watch('manufacturer.make')) {
             console.log('fetch 2');
-            const make = watch('manufacturer.make').value;
-            if (make) {
-                MotorsBikesApiService.getMakeModels(make)
+            const makeID = watch('manufacturer.make').value;
+            if (makeID) {
+                VehiclesService.getMakeModels("motorcycles", makeID)
                     .then(data => data.models)
                     .then(models => {
                         const modelsOptions = models.map(model => ({
@@ -118,13 +102,12 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
                     });
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watch('manufacturer.make')]);
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
-
             <Header text="Sélectionnez votre moto"/>
-
             <Row>
                 <Col>
                     <FieldWrapper label="Marque" labelTop>
@@ -133,11 +116,10 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
                             placeholder="Select a motorcycle make"
                             control={control}
                             errors={errors}
-                            featured={SelectOptionsUtils(popularMakes)}
                             options={manufacturersData.makes}
-                            onChange={([selected, option]) => {
+                            onChange={([selected, name]) => {
                                 collectStepChanges({
-                                    name: option.name,
+                                    name: name,
                                     label: selected.label
                                 });
                                 return selected;
