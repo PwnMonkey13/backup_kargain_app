@@ -147,7 +147,7 @@ const LightFiltersForm = ({ control, watch, errors }) => {
                 <Col md={6}>
                     <FieldWrapper label={t('vehicles:gas')}>
                         <SelectInput
-                            name="vehicleEngine.gas"
+                            name="vehicleEngineGas"
                             className="mb-2"
                             options={RadioChoicesGas}
                             control={control}

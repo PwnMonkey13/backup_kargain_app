@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button'
-import SearchFiltersAdvanced from '../components/Filters/SearchFiltersAdvanced';
+import SearchFiltersAdvanced from '../components/Filters/Advanced/SearchFiltersAdvanced';
 import AnnounceService from '../services/AnnounceService';
 import SearchResults from '../components/Search/SearchResults'
 import useIsMounted from '../hooks/useIsMounted';

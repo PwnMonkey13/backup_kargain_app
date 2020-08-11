@@ -1,19 +1,19 @@
-import React, { memo, useEffect,  useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { flatten } from 'flattenjs';
 import clsx from 'clsx';
-import useDimensions from 'react-use-dimensions';
 import Button from '@material-ui/core/Button';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import useTranslation from 'next-translate/useTranslation';
-import announcesFiltersMapper from '../../../libs/announcesFiltersMapper';
-import resolveObjectKey from '../../../libs/resolveObjectKey';
+import { cleanObj } from '../../../libs/utils'
+import filterProps from '../../../libs/filterProps'
+import FiltersChanges from '../FiltersChanges'
+import { SelectInput } from '../../Form/Inputs'
+import FieldWrapper from '../../Form/FieldWrapper'
+import { useAuth } from '../../../context/AuthProvider'
 import getFiltersVehicleComponent from './index';
-import { Col, Row } from 'reactstrap'
 
 const useStyles = makeStyles(() => ({
     filtersContainer: {
@@ -31,6 +31,26 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
+const   vehicleTypes = [
+    {
+        value: 'car',
+        label: 'Voiture'
+    },
+    {
+        value: 'moto',
+        label: 'Moto'
+    },
+    {
+        value: 'utility',
+        label: 'Utilitaire'
+
+    },
+    {
+        value: 'camper',
+        label: 'Camping car'
+    }
+];
+
 const AnnounceTypes = [
     {
         value: 'sale',
@@ -46,46 +66,29 @@ const AnnounceTypes = [
     }
 ]
 
-const AdvancedFilters = ({ vehicleType, defaultFilters, updateFilters }) => {
+const AdvancedFilters = ({ defaultFilters, updateFilters, ...props }) => {
     const classes = useStyles();
     const { t } = useTranslation();
+    const { isAuthReady, authenticatedUser } = useAuth();
     const isMobile = useMediaQuery('(max-width:768px)');
     const [hiddenForm, hideForm] = useState(isMobile);
     const [changes, setChanges] = useState({});
-    const [ref, { width }] = useDimensions();
+    const [vehicleType, setVehicleType] = useState(props.vehicleType)
     const DynamicFiltersComponent = getFiltersVehicleComponent(vehicleType);
-    const { watch, register, control, setValue, formState, errors, handleSubmit } = useForm({
+    const [announceTypesFiltered, setAnnouncesTypesFiltered] = useState(AnnounceTypes);
+    const {watch, control, setValue, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
-        defaultValues: defaultFilters
+        defaultValues: {
+            ...defaultFilters,
+            vehicleType : vehicleTypes[0],
+            adType : AnnounceTypes[0]
+        }
     });
-
-    const filterProps = formData => {
-        return Object.keys(announcesFiltersMapper).reduce((carry, key) => {
-            const property = announcesFiltersMapper[key];
-            const field = resolveObjectKey(formData, key);
-            if (field && property) {
-                if (typeof property === 'object') {
-                    if (Array.isArray(field) && property.type === 'array') {
-                        const values = field.map(item => item[property.selector]);
-                        return {
-                            ...carry,
-                            [property.name]: values
-                        };
-                    }
-                }
-
-                return {
-                    ...carry,
-                    [property]: !isNaN(Number(field)) ? Number(field) : field
-                };
-            }
-            return carry;
-        }, {});
-    };
 
     const onSubmit = (form, e) => {
         const { coordinates, radius } = form;
+        const changes = cleanObj(form)
         const filtersFlat = filterProps(form);
         const data = { ...filtersFlat };
 
@@ -96,12 +99,13 @@ const AdvancedFilters = ({ vehicleType, defaultFilters, updateFilters }) => {
         }
 
         e.preventDefault();
-        setChanges(flatten(formState.touched));
+        setChanges(changes);
         updateFilters(data);
     };
 
     const resetValue = (field) => {
-        setValue(field, defaultFilters[field]);
+        const defaultValue = defaultFilters[field]
+        setValue(field, defaultValue);
         setChanges(changes => {
             const { [field]: rm, ...rest } = changes;
             return rest;
@@ -113,15 +117,12 @@ const AdvancedFilters = ({ vehicleType, defaultFilters, updateFilters }) => {
     };
 
     useEffect(()=>{
-        register("vehicleType")
-    },[])
-
-    useEffect(()=>{
-        setValue("vehicleType", vehicleType)
-    },[vehicleType])
+        const isPro = authenticatedUser.getIsPro
+        if(!isPro) setAnnouncesTypesFiltered(types => types.filter(type => type.value !== 'sale-pro'))
+    },[authenticatedUser, isAuthReady])
 
     return (
-        <div className={classes.filtersContainer} ref={ref}>
+        <div className={classes.filtersContainer}>
             <div className={classes.filtersTop} onClick={() => toggleFilters()}>
                 <Typography variant="h4">
                     {t('filters:select-filters')}
@@ -129,50 +130,33 @@ const AdvancedFilters = ({ vehicleType, defaultFilters, updateFilters }) => {
                 </Typography>
             </div>
 
-            {Object.keys(changes).length !== 0 && (
-                <>
-                    <Typography variant="h4">{t('vehicles:filtered-by')} : </Typography>
-                    <ul className="list-style-none">
-                        {changes && Object.keys(changes).map((field, index) => {
-                            return (
-                                <li key={index} className="my-1">
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        endIcon={<HighlightOffIcon/>}
-                                        onClick={() => resetValue(field)}
-                                    >
-                                        {t(`filters:${field}`)}
-                                    </Button>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </>
-            )}
+            <FiltersChanges {...{changes, resetValue}} />
 
             <form className="filters_form" onSubmit={handleSubmit(onSubmit)}>
+                <ControlButtons/>
                 <div className={clsx(hiddenForm && classes.filtersHidden)}>
-                    <Typography component="h4" variant="h4" gutterBottom className="text-center">{t('vehicles:announce-type')}</Typography>
-                    <Row className="justify-content-center">
-                        {AnnounceTypes && AnnounceTypes.map((tab, index) => {
-                            return (
-                                <Col key={index} xs={4} sm={4} md={width < 500 ? 12 : 4} lg={4}>
-                                    <div className="form-check-transparent">
-                                        <input id={`ad_type${index}`}
-                                            type="radio"
-                                            name="adType"
-                                            value={tab.value}
-                                            ref={register}
-                                        />
-                                        <label htmlFor={`ad_type${index}`}>
-                                            {tab.label}
-                                        </label>
-                                    </div>
-                                </Col>
-                            )
-                        })}
-                    </Row>
+
+                    <FieldWrapper label={t('vehicles:vehicle-type')}>
+                        <SelectInput
+                            name="vehicleType"
+                            control={control}
+                            errors={errors}
+                            options={vehicleTypes}
+                            onChange={selected =>{
+                                setVehicleType(selected.value)
+                                return selected
+                            }}
+                        />
+                    </FieldWrapper>
+
+                    <FieldWrapper label={t('vehicles:announce-type')}>
+                        <SelectInput
+                            name="adType"
+                            control={control}
+                            errors={errors}
+                            options={announceTypesFiltered}
+                        />
+                    </FieldWrapper>
 
                     {DynamicFiltersComponent && (
                         <DynamicFiltersComponent
@@ -182,7 +166,6 @@ const AdvancedFilters = ({ vehicleType, defaultFilters, updateFilters }) => {
                         />
                     )}
                 </div>
-                <ControlButtons/>
             </form>
         </div>
     );
@@ -207,19 +190,7 @@ const ControlButtons = () => {
 };
 
 AdvancedFilters.defaultProps = {
-    vehicleType : 'car',
-    defaultFilters: {
-        vehicleType: 'car',
-        adType: 'sale',
-        price: [0, 200000],
-        'vehicleEngine.cylinder': [1, 20],
-        mileage: [0, 200000],
-        'power.kw': [0, 200],
-        radius: 0,
-        'consumption.gkm': [0, 200],
-        doors: [1, 10],
-        seats: [1, 10]
-    }
+    vehicleType : vehicleTypes[0].value
 };
 
 export default memo(AdvancedFilters);

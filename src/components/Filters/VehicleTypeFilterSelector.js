@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { Col, Row } from 'reactstrap';
-import { SelectInput } from '../Form/Inputs';
-import Divider from '../Divider';
-import Header from '../Header';
 
 const tabsRadio = [
     {
@@ -32,8 +29,6 @@ const tabsRadio = [
     }
 ];
 
-const othersFormOptions = [];
-
 const VehicleTypeFilterSelector = ({ handleSelectVehicleType, name, control, rules }) => {
     const [type, setType] = useState(null);
 
@@ -42,6 +37,7 @@ const VehicleTypeFilterSelector = ({ handleSelectVehicleType, name, control, rul
         setType(type);
         handleSelectVehicleType(type);
     };
+
     return (
         <section>
             <Row className="justify-content-center">
@@ -71,23 +67,6 @@ const VehicleTypeFilterSelector = ({ handleSelectVehicleType, name, control, rul
                     );
                 })}
             </Row>
-
-            {othersFormOptions && othersFormOptions.length > 0 && (
-                <>
-                    <Divider/>
-                    <Header p text="Autres types de véhicules"/>
-                    <SelectInput
-                        name={`${name}Select`}
-                        options={othersFormOptions}
-                        control={control}
-                        rules={rules}
-                        onChange={([selected]) => {
-                            control.setValue(name, null);
-                            return selected;
-                        }}
-                    />
-                </>
-            )}
         </section>
     );
 };

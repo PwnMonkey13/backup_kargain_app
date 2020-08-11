@@ -3,12 +3,8 @@ import useTranslation from 'next-translate/useTranslation'
 import Typography from '@material-ui/core/Typography';
 import { useForm } from 'react-hook-form';
 import { Col, Row } from 'reactstrap';
-
 import Alert from '@material-ui/lab/Alert'
-
-
-import announcesFiltersMapper from '../../../libs/announcesFiltersMapper';
-import resolveObjectKey from '../../../libs/resolveObjectKey';
+import filterProps from '../../../libs/filterProps'
 import LightFiltersForm from './LightFiltersForm';
 import FieldWrapper from '../../Form/FieldWrapper';
 import { TextInput } from '../../Form/Inputs';
@@ -37,30 +33,6 @@ const LightFilters = ({query, defaultFilters, vehicleType, updateFilters}) => {
         validateCriteriaMode: 'all',
         defaultValues : defaultFilters
     })
-
-    const filterProps = formData => {
-        return Object.keys(announcesFiltersMapper).reduce((carry, key) => {
-            const property = announcesFiltersMapper[key];
-            const field = resolveObjectKey(formData, key);
-            if (field && property) {
-                if (typeof property === 'object') {
-                    if (Array.isArray(field) && property.type === 'array') {
-                        const values = field.map(item => item[property.selector]);
-                        return {
-                            ...carry,
-                            [property.name]: values
-                        };
-                    }
-                }
-
-                return {
-                    ...carry,
-                    [property]: !isNaN(Number(field)) ? Number(field) : field
-                };
-            }
-            return carry;
-        }, {});
-    };
 
     const onSubmit = (form, e) => {
         const { coordinates, radius } = form;
@@ -149,11 +121,11 @@ LightFilters.defaultProps = {
         vehicleType: 'car',
         adType: 'sale',
         price: [0, 200000],
-        'vehicleEngine.cylinder': [1, 20],
+        'vehicleEngineCylinder': [1, 20],
         mileage: [0, 200000],
-        'power.kw': [0, 200],
+        'powerKw': [0, 200],
         radius: 0,
-        'consumption.gkm': [0, 200],
+        'consumptionGkm': [0, 200],
         doors: [1, 10],
         seats: [1, 10]
     }

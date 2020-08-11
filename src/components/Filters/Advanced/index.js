@@ -1,12 +1,12 @@
-import CarFilters from './CarFilters';
-import MotoFilters from './MotoFilters';
-import CamperFilters from './CamperFilters';
-import UtilityFilters from './UtilityFilters';
+import CarFilters from './vehicles/CarFilters';
+import MotoFilters from './vehicles/MotoFilters';
+import CamperFilters from './vehicles/CamperFilters'
+import UtilityFilters from './vehicles/UtilityFilters';
 
 export default function getFiltersVehicleComponent (type) {
+    console.log(type)
     switch (type) {
     case 'car' :
-    default:
         return CarFilters;
     case 'camper' :
         return CamperFilters;
@@ -14,5 +14,7 @@ export default function getFiltersVehicleComponent (type) {
         return UtilityFilters;
     case 'moto':
         return MotoFilters;
+    default:
+        return CarFilters;
     }
 }

@@ -1,10 +1,10 @@
 import React, {   useState } from 'react';
 import {  Container } from 'reactstrap'
+import useTranslation from 'next-translate/useTranslation'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Typography from '@material-ui/core/Typography'
-import useTranslation from 'next-translate/useTranslation'
-import AdvancedFilters from './Advanced/AdvancedFilters';
-import Tabs from '../Tabs/Tabs'
+import LightFilters from './LightFilters';
+import Tabs from '../../Tabs/Tabs'
 
 const useStyles = makeStyles(() => ({
     img: {
@@ -41,10 +41,10 @@ const vehicleTypes = [
     }
 ]
 
-const SearchFiltersAdvanced = ({query, updateFilters}) => {
-    const [type, setType] = useState(vehicleTypes[0].value)
+const SearchFiltersLight = ({query, updateFilters }) => {
     const classes = useStyles()
     const {t} = useTranslation()
+    const [type, setType] = useState(vehicleTypes[0].value)
 
     return (
         <Container>
@@ -57,8 +57,8 @@ const SearchFiltersAdvanced = ({query, updateFilters}) => {
                         return (
                             <Tabs.Item
                                 key={index}
-                                id={`vehicle_type${index}`}
                                 className="vehicle_tab"
+                                id={`vehicle_type${index}`}
                                 img={<img
                                     src={type === tab.value ? `/images/${tab.imgSelected}` : `/images/${tab.img}`}
                                     alt={tab.label}
@@ -66,7 +66,7 @@ const SearchFiltersAdvanced = ({query, updateFilters}) => {
                                     className={classes.img}
                                 />}
                             >
-                                <AdvancedFilters
+                                <LightFilters
                                     disableToggleFilters={true}
                                     query={query}
                                     vehicleType={type}
@@ -85,4 +85,4 @@ const SearchFiltersAdvanced = ({query, updateFilters}) => {
     )
 }
 
-export default React.memo(SearchFiltersAdvanced)
+export default React.memo(SearchFiltersLight)

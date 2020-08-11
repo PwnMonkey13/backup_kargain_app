@@ -1,43 +1,60 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import useTranslation from 'next-translate/useTranslation';
-import {  SelectInput, SliderInput } from '../../Form/Inputs';
-import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
-import useAddress from '../../../hooks/useAddress';
-import SearchLocationInput from '../../Form/Inputs/SearchLocationInput';
-import { RadioVehicleGeneralState } from '../../Products/car/form.data';
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import {  SelectInput, SliderInput } from '../../../Form/Inputs';
+import SelectCountryFlags from '../../../Form/Inputs/SelectCountryFlags';
+import useAddress from '../../../../hooks/useAddress';
+import SearchLocationInput from '../../../Form/Inputs/SearchLocationInput';
+import { RadioVehicleGeneralState } from '../../../Products/car/form.data';
+
 import {
     CheckboxOptionsEquipments,
     RadioChoicesExternalColor,
     RadioChoicesPaints,
     RadioTypeFunction
-} from '../../Products/moto/form.data';
+} from '../../../Products/moto/form.data';
+import CarFilters from './CarFilters'
+import VehiclesService from '../../../../services/VehiclesService'
+import { ModalDialogContext } from '../../../../context/ModalDialogContext'
 
-const MotoFilters = ({ control, watch, errors }) => {
+const MotoFilters = ({vehicleType, control, watch, errors }) => {
     const [,, coordinates] = useAddress();
     const { t } = useTranslation();
-
-    const popularMakes = [
-        'Aprilia',
-        'BMW',
-        'Ducati',
-        'Honda',
-        'Harley-Davidson',
-        'Husqvarna',
-        'Kawasaki',
-        'KTM',
-        'Suzuki',
-        'Triumph',
-        'Yamaha',
-        'Royal Enfield'
-    ];
+    const { dispatchModalError } = useContext(ModalDialogContext);
+    const [manufacturersData, setManufacturersData] = useState({
+        makes: []
+    });
 
     useEffect(() => {
         control.register({ name: 'coordinates' });
         control.setValue('coordinates', coordinates);
     }, [coordinates]);
+
+    useEffect(() => {
+        console.log('fetch makes');
+        VehiclesService.getMakes(vehicleType)
+            .then(motos => {
+                const makesOptions = motos.map(car => ({
+                    value: car.make_id,
+                    label: car.make
+                }));
+                const defaultOption = {
+                    value: 'other',
+                    label: 'Je ne sais pas/Autre'
+                };
+                setManufacturersData(manufacturersData => (
+                    {
+                        ...manufacturersData,
+                        makes: [...makesOptions, defaultOption]
+                    })
+                );
+            })
+            .catch(err => {
+                dispatchModalError({ err });
+            });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const countrySelect = watch('country');
 
@@ -48,7 +65,7 @@ const MotoFilters = ({ control, watch, errors }) => {
                 name="manufacturer.make"
                 control={control}
                 errors={errors}
-                options={SelectOptionsUtils(popularMakes)}
+                options={manufacturersData.makes}
             />
 
             <Typography component="span" gutterBottom>{t('vehicles:price')}</Typography>
@@ -84,7 +101,7 @@ const MotoFilters = ({ control, watch, errors }) => {
             <div className="d-flex my-2">
                 <SliderInput
                     classNames="my-4 mt-2"
-                    name="vehicleEngine.cylinder"
+                    name="vehicleEngineCylinder"
                     defaultValue={[1, 20]}
                     min={1}
                     max={20}
@@ -110,7 +127,7 @@ const MotoFilters = ({ control, watch, errors }) => {
             <Typography component="span" gutterBottom>{t('vehicles:power')}</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
-                name="power.kw"
+                name="powerKw"
                 defaultValue={[0, 200]}
                 min={0}
                 max={200}
@@ -182,5 +199,9 @@ MotoFilters.propTypes = {
     errors: PropTypes.object.isRequired,
     watch: PropTypes.func
 };
+
+CarFilters.defaultProps = {
+    vehicleType : "motorcycles"
+}
 
 export default memo(MotoFilters);

@@ -1,11 +1,11 @@
-import React, {  useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import useTranslation from 'next-translate/useTranslation';
-import {  SelectInput, SliderInput } from '../../Form/Inputs';
-import SearchLocationInput from '../../Form/Inputs/SearchLocationInput';
-import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
-import useAddress from '../../../hooks/useAddress';
+import {  SelectInput, SliderInput } from '../../../Form/Inputs';
+import SearchLocationInput from '../../../Form/Inputs/SearchLocationInput';
+import SelectCountryFlags from '../../../Form/Inputs/SelectCountryFlags';
+import useAddress from '../../../../hooks/useAddress';
 import {
     CheckboxOptionsEquipments,
     RadioChoicesEmission,
@@ -16,29 +16,62 @@ import {
     RadioChoicesPaints,
     RadioTypeFunction,
     RadioVehicleGeneralState
-} from '../../Products/utility/form.data';
+} from '../../../Products/utility/form.data';
+import FieldWrapper from '../../../Form/FieldWrapper'
+import VehiclesService from '../../../../services/VehiclesService'
+import { ModalDialogContext } from '../../../../context/ModalDialogContext'
 
-const UtilityFilters = ({ control, watch, errors }) => {
+const UtilityFilters = ({vehicleType, control, watch, errors }) => {
     const [, , coordinates] = useAddress();
-    const [makes] = useState([]);
     const { t } = useTranslation();
-
+    const countrySelect = watch('country');
+    const { dispatchModalError } = useContext(ModalDialogContext);
+    const [manufacturersData, setManufacturersData] = useState({
+        makes: []
+    });
     useEffect(() => {
         control.register({ name: 'coordinates' });
         control.setValue('coordinates', coordinates);
     }, [coordinates]);
 
-    const countrySelect = watch('country');
+    useEffect(() => {
+        console.log('fetch makes');
+        VehiclesService.getMakes(vehicleType)
+            .then(utilities => {
+                const makesOptions = utilities.map(car => ({
+                    value: car.make_id,
+                    label: car.make
+                }));
+                const defaultOption = {
+                    value: 'other',
+                    label: 'Je ne sais pas/Autre'
+                };
+                setManufacturersData(manufacturersData => (
+                    {
+                        ...manufacturersData,
+                        makes: [...makesOptions, defaultOption]
+                    })
+                );
+            })
+            .catch(err => {
+                dispatchModalError({ err });
+            });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>
-            <Typography component="span">{t('vehicles:make')}</Typography>
-            <SelectInput
-                name="manufacturer.make"
-                control={control}
-                errors={errors}
-                options={makes}
-            />
+            <FieldWrapper label={t('vehicles:make')}>
+                <SelectInput
+                    name="manufacturer.make"
+                    isMulti
+                    placeholder={t('vehicles:select-vehicle-make')}
+                    options={manufacturersData.makes}
+                    control={control}
+                    errors={errors}
+                />
+            </FieldWrapper>
+
 
             <Typography component="span" gutterBottom>{t('vehicles:price')}</Typography>
             <SliderInput
@@ -84,7 +117,7 @@ const UtilityFilters = ({ control, watch, errors }) => {
 
             <Typography component="span" gutterBottom>{t('vehicles:gear-box')}</Typography>
             <SelectInput
-                name="vehicleEngine.type"
+                name="vehicleEngineType"
                 options={RadioChoicesEngine}
                 control={control}
                 errors={errors}
@@ -92,7 +125,7 @@ const UtilityFilters = ({ control, watch, errors }) => {
 
             <Typography component="span" gutterBottom>{t('vehicles:gas')}</Typography>
             <SelectInput
-                name="vehicleEngine.gas"
+                name="vehicleEngineGas"
                 className="mb-2"
                 options={RadioChoicesGas}
                 control={control}
@@ -103,7 +136,7 @@ const UtilityFilters = ({ control, watch, errors }) => {
             <div className="d-flex my-2">
                 <SliderInput
                     classNames="my-4 mt-2"
-                    name="vehicleEngine.cylinder"
+                    name="vehicleEngineCylinder"
                     defaultValue={[1, 20]}
                     min={1}
                     max={20}
@@ -116,7 +149,7 @@ const UtilityFilters = ({ control, watch, errors }) => {
             <Typography component="span" gutterBottom>{t('vehicles:power')}</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
-                name="power.kw"
+                name="powerKw"
                 defaultValue={[0, 200]}
                 min={0}
                 max={200}
@@ -175,7 +208,7 @@ const UtilityFilters = ({ control, watch, errors }) => {
             <Typography component="span" gutterBottom>{t('vehicles:co2-consumption')}</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
-                name="consumption.gkm"
+                name="consumptionGkm"
                 defaultValue={[0, 200]}
                 min={0}
                 max={200}

@@ -14,7 +14,7 @@ import useIsMounted from '../hooks/useIsMounted';
 import AnnounceService from '../services/AnnounceService';
 import { ModalDialogContext } from '../context/ModalDialogContext'
 import SearchResults from '../components/Search/SearchResults'
-import SearchFiltersLight from '../components/Filters/SearchFiltersLight';
+import SearchFiltersLight from '../components/Filters/Light/SearchFiltersLight';
 
 const useStyles = makeStyles((theme) => ({
     root: {
