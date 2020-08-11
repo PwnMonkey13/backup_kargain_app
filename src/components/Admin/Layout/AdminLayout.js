@@ -1,9 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Link from '@material-ui/core/Link';
+
+
 import Sidebar from './Sidebar';
-import TopBar from './TopBar';
+
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -32,7 +32,7 @@ const AdminLayout = ({ children }) => {
 
     return (
         <div className={classes.root}>
-            <TopBar handleDrawerToggle={handleDrawerToggle}/>
+            <To7pBar handleDrawerToggle={handleDrawerToggle}/>
             <main className="d-flex">
                 <Sidebar
                     onClose={handleDrawerClose}
@@ -45,26 +45,6 @@ const AdminLayout = ({ children }) => {
                 </section>
             </main>
         </div>
-    );
-};
-
-const BreadCrumb = () => {
-    return (
-        <Breadcrumbs aria-label="breadcrumb">
-            <Link color="inherit" href="/">
-                Material-UI
-            </Link>
-            <Link color="inherit" href="/getting-started/installation/">
-                Core
-            </Link>
-            <Link
-                color="textPrimary"
-                href="/components/breadcrumbs/"
-                aria-current="page"
-            >
-                Breadcrumb
-            </Link>
-        </Breadcrumbs>
     );
 };
 

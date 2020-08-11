@@ -4,9 +4,9 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import TableMUI from '../TableMUI';
 import AnnounceService from '../../../services/AnnounceService';
+import AnnounceModel from '../../../models/announce.model'
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
-import TablePaginationActions from '../../TablePaginationActions';
-import AnnounceModel from '../../../models/announce.model';
+import TablePaginationActions from '../TablePaginationActions';
 import { getTimeAgo } from '../../../libs/utils';
 import StatusBullet from '../StatusBullet';
 import VisibleBullet from '../VisibleBullet';
@@ -14,7 +14,7 @@ import ActivatedBullet from '../ActivatedBullet';
 
 const AdsTable = () => {
     const router = useRouter();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModalError } = useContext(ModalDialogContext);
     const [loading, setLoading] = useState(false);
     const [pageIndex, setPageIndex] = useState(0);
     const [rowsLength, setRowsLength] = useState(60);
@@ -34,6 +34,7 @@ const AdsTable = () => {
             grouping: false,
             searchable: true,
             sorting: true,
+            // eslint-disable-next-line react/display-name
             render: AnnounceModel => {
                 return <img
                     alt=""
@@ -61,6 +62,7 @@ const AdsTable = () => {
             grouping: false,
             searchable: true,
             sorting: true,
+            // eslint-disable-next-line react/display-name
             render: AnnounceModel => <ActivatedBullet
                 slug={AnnounceModel.getSlug}
                 activated={AnnounceModel.getIsActivated}
@@ -72,6 +74,7 @@ const AdsTable = () => {
             grouping: false,
             searchable: true,
             sorting: true,
+            // eslint-disable-next-line react/display-name
             render: AnnounceModel => <VisibleBullet
                 slug={AnnounceModel.getSlug}
                 visible={AnnounceModel.getIsVisible}
@@ -83,6 +86,7 @@ const AdsTable = () => {
             grouping: false,
             searchable: true,
             sorting: true,
+            // eslint-disable-next-line react/display-name
             render: AnnounceModel => <StatusBullet
                 slug={AnnounceModel.getSlug}
                 status={AnnounceModel.getStatus}

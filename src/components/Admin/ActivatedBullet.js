@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext,  useState } from 'react';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import AnnounceService from '../../services/AnnounceService';
 import NiceSelect, { components } from 'react-select';
@@ -15,8 +15,8 @@ const useStyles = makeStyles((theme) => ({
         width: '300px',
         padding: '1rem',
         border: '1px solid gainsboro',
-        backgroundColor: 'antiquewhite',
-    },
+        backgroundColor: 'antiquewhite'
+    }
 }));
 
 const { Option } = components;
@@ -46,26 +46,26 @@ const ActivatedBullet = ({ slug, activated: activatedProps }) => {
         {
             label: 'Enable',
             value: true,
-            color: 'green',
+            color: 'green'
         },
         {
             label: 'Disable',
             value: false,
-            color: 'red',
-        },
+            color: 'red'
+        }
     ].map(option => ({
         ...option,
-        icon: <BulletPoint color={option.color}/>,
+        icon: <BulletPoint color={option.color}/>
     }));
 
     const handleUpdate = async () => {
         try {
             const data = await AnnounceService.updateAdminAnnounce(slug, {
-                activated: selectedOption,
+                activated: selectedOption
             });
-            const { emailResult } = data;
+            const { document } = data;
             setActivated(activated => !activated);
-            dispatchModal({ msg: `updated. Mail sent to ${emailResult.to}` });
+            dispatchModal({ msg: `updated. Mail sent to ${document?.user?.email}` });
         } catch (err) {
             dispatchModalError({ err });
         }
@@ -81,7 +81,7 @@ const ActivatedBullet = ({ slug, activated: activatedProps }) => {
                         options={options}
                         components={{
                             Option: CustomSelectOption,
-                            SingleValue: CustomSelectValue,
+                            SingleValue: CustomSelectValue
                         }}
                     />
                     <Button
