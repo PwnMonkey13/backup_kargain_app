@@ -5,7 +5,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import UsersService from '../../../services/UsersService';
 import TableMUI from '../TableMUI';
 import BulletPoint from '../../BulletPoint';
-import TablePaginationActions from '../../TablePaginationActions';
+import TablePaginationActions from '../TablePaginationActions';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
 import UserModel from '../../../models/user.model';
 
@@ -93,7 +93,7 @@ const UsersTable = () => {
             grouping: true,
             sorting: true,
             searchable: true,
-            render: userModel => BooleanBullet(userModel.isPro)
+            render: userModel => BooleanBullet(userModel.getIsPro)
         },
         {
             title: 'Premium',

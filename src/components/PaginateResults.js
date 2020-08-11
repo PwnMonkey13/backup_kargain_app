@@ -2,11 +2,11 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import Pagination from 'react-paginating';
 
-const PaginateResults = ({ total, size, pageCount, page, handlePageChange }) => {
+const PaginateResults = ({ totalPages, size, pageCount, page, handlePageChange }) => {
     return (
         <div className="d-flex flex-row py-2 align-items-center justify-content-center">
             <Pagination
-                total={total}
+                total={totalPages}
                 limit={size}
                 pageCount={pageCount}
                 currentPage={page}
@@ -95,7 +95,7 @@ const PaginateResults = ({ total, size, pageCount, page, handlePageChange }) => 
 };
 
 PaginateResults.propsType = {
-    total: PropTypes.number.isRequired,
+    totalPages: PropTypes.number.isRequired,
     size: PropTypes.number.isRequired,
     pageCount : PropTypes.number.isRequired,
     page: PropTypes.number.isRequired,

@@ -1,7 +1,7 @@
-import React, { memo } from 'react'
+import  React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import { Controller } from 'react-hook-form'
+import { Controller } from 'react-hook-form';
 import NiceSelect from 'react-select'
 import ValidationError from '../Validations/ValidationError'
 
@@ -22,13 +22,6 @@ const ClearIndicator = props => {
 }
 
 const customStyles = {
-    menu: (provided, state) => ({
-        ...provided,
-        width: state.selectProps.width,
-        borderBottom: '1px dotted pink',
-        color: state.selectProps.menuColor,
-        padding: 20
-    }),
     control: (_, { selectProps: { width } }) => ({
         width: width,
         flex: 1
@@ -38,20 +31,20 @@ const customStyles = {
         borderBottom: '1px dotted pink',
         color: state.isSelected ? 'red' : 'blue',
         padding: 20
-    }),
-    singleValue: (provided, state) => {
-        const opacity = state.isDisabled ? 0.5 : 1
-        const transition = 'opacity 300ms'
-        return { ...provided, opacity, transition }
-    }
+    })
 }
 
 const SelectInput = ({ name, control, rules, errors, ...props }) => {
     const { options, selected } = props
-    let defaultValues = []
-    if (selected && Array.isArray(selected)) {
-        defaultValues = selected.reduce((carry, selected) =>
-            ([...carry, options.find(option => option.value.toLowerCase() === selected.toString().toLowerCase())]), [])
+    let defaultValues = null
+    let selectedOptions = selected;
+    if (selectedOptions) {
+        if (!Array.isArray(selectedOptions)) selectedOptions = [selectedOptions]
+        defaultValues = selectedOptions.reduce((carry, selected) =>
+            ([...carry, options.find(option => {
+                if (typeof selected === "object") return option?.value?.toLowerCase() === selected?.value?.toString()?.toLowerCase()
+                return option?.value?.toLowerCase() === selected?.toString()?.toLowerCase()
+            })]), [])
     }
 
     return (
@@ -62,18 +55,23 @@ const SelectInput = ({ name, control, rules, errors, ...props }) => {
                     name={name}
                     control={control}
                     rules={rules}
-                    as={ <NiceSelect
-                        options={options}
-                        width={props.width}
-                        isClearable={props.isClearable}
-                        isMulti={props.isMulti}
-                        isDisabled={props.disabled}
-                        styles={{ customStyles }}
-                        defaultValue={defaultValues}
-                        placeholder={props.placeholder}
-                        components={{ clearValue: ClearIndicator }}
-                        forwardProps={{ featured: props.featured }}
-                    />}
+                    onChange={([selected])=>{
+                        if(props.onChange) return props.onChange(selected, name)
+                        return selected
+                    }}
+                    as={
+                        <NiceSelect
+                            options={options}
+                            width={props.width}
+                            isClearable={props.isClearable}
+                            isMulti={props.isMulti}
+                            isDisabled={props.disabled}
+                            styles={{ customStyles }}
+                            defaultValue={defaultValues}
+                            placeholder={props.placeholder}
+                            components={{ clearValue: ClearIndicator }}
+                            forwardProps={{ featured: props.featured }}
+                        />}
                 />
             </div>
             {errors && <ValidationError errors={errors} name={name} />}

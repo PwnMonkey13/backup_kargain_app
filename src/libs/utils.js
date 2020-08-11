@@ -1,10 +1,11 @@
-import React from 'react';
+
 import parseISO from 'date-fns/parseISO';
 import differenceInHours from 'date-fns/differenceInHours';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import differenceInDays from 'date-fns/differenceInDays';
 import differenceInMonths from 'date-fns/differenceInMonths';
 import differenceInYears from 'date-fns/differenceInYears';
+import {inflate, flatten} from 'flattenjs'
 
 export function getLogo () {
     return '/images/Kargain_logo.png';
@@ -18,13 +19,13 @@ const dirMap = {
     // greater-than
     gt: {
         asc: 1,
-        desc: -1,
+        desc: -1
     },
     // less-than
     lt: {
         asc: -1,
-        desc: 1,
-    },
+        desc: 1
+    }
 };
 
 const doSort = (A, B, property, direction = 'ASC') => {
@@ -40,37 +41,9 @@ const doSort = (A, B, property, direction = 'ASC') => {
     return 0;
 };
 
-export const createSorter = (...args) => {
-    if (typeof args[0] === 'string') {
-        args = [
-            {
-                direction: args[1],
-                property: args[0],
-            },
-        ];
-    }
+export const cleanObj = (obj) => inflate(Object.entries(flatten(obj)).reduce((a,[k,v]) => (v ? (a[k]=v, a) : a), {}))
 
-    return (A, B) => {
-        let ret = 0;
-
-        args.some(sorter => {
-            const { property, direction = 'ASC' } = sorter;
-            const value = doSort(A, B, property, direction);
-
-            if (value === 0) {
-                // they are equal, continue to next sorter if any
-                return false;
-            } else {
-                // they are different, stop at current sorter
-                ret = value;
-
-                return true;
-            }
-        });
-
-        return ret;
-    };
-};
+export const cleanObjFlat = (obj) => Object.entries(flatten(obj)).reduce((a,[k,v]) => (v ? (a[k]=v, a) : a), {})
 
 export const getTimeAgo = (isoTime, lang) => {
     const fr = lang === 'fr'
@@ -84,7 +57,7 @@ export const getTimeAgo = (isoTime, lang) => {
         M: fr ? "mois" : "month",
         MS: fr ? "mois" : "months",
         y: fr ? "année" : "year",
-        ys: fr ?  "années" : "years",
+        ys: fr ?  "années" : "years"
     }
 
     const time = buildTime(isoTime, labels)

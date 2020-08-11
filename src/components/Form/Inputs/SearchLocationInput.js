@@ -39,9 +39,16 @@ const SearchLocationInput = ({ name, control, rules, errors, country, types, ...
 
             autoComplete.addListener('place_changed', () => {
                 const addressObject = autoComplete.getPlace();
-                const address_components = addressObject?.address_components;
+                let address_components = addressObject?.address_components;
                 const formatted_address = addressObject?.formatted_address;
+
                 if (Array.isArray(address_components)) {
+
+                    //if missing housenumber
+                    if(address_components.length !== 6){
+                        address_components.unshift({})
+                    }
+
                     const [houseNumberObj, streetObj, cityObj, districtObj, regionObj, countryObj, postalCodeObj] = address_components;
                     const values = {
                         housenumber: houseNumberObj?.long_name,

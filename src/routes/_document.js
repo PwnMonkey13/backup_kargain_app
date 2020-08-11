@@ -13,8 +13,7 @@ class MyDocument extends Document {
                     <meta property="og:url" content="kargain.com"/>
                     <meta name="viewport" content="width=device-width, initial-scale=1"/>
                     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-                    <script type="text/javascript"
-                        src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"/>
+                    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"/>
                     <script type="text/javascript"
                         src={`https://maps.googleapis.com/maps/api/js?key=${config.google.STATIC_API_KEY}&libraries=places`}/>
                 </Head>

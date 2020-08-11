@@ -76,26 +76,24 @@ export default class AnnounceModel {
         return this.raw?.vehicleType;
     }
 
-    get geVehicleEngine () {
-        const type = this.raw?.vehicleEngine?.type?.label;
-        const gas = this.raw?.vehicleEngine?.gas?.label;
-        const cylinder = this.raw?.vehicleEngine?.cylinder;
-
-        return {
-            type,
-            gas,
-            cylinder,
-        };
+    get geVehicleEngineType () {
+        return this.raw?.vehicleEngineType?.label;
     }
 
-    get getVehiclePower () {
-        const ch = this.raw?.power?.ch;
-        const kw = this.raw?.power?.kw;
+    get geVehicleEngineGas () {
+        return this.raw?.vehicleEngineGas?.label;
+    }
 
-        return {
-            ch,
-            kw,
-        };
+    get geVehicleEngineCylinder () {
+        return this.raw?.vehicleEngineCylinder;
+    }
+
+    get getVehiclePowerCh () {
+        return this.raw?.powerCh;
+    }
+
+    get getVehiclePowerKw () {
+        return this.raw?.powerKw;
     }
 
     get getVehicleFunction () {

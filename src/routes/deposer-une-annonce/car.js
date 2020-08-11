@@ -15,8 +15,7 @@ const CarForm = (props) => {
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
 
     const onFinalSubmit = form => {
-        const { featured_image: featuredImage, images, ...body } = form;
-
+        const { images, ...body } = form;
         let formData = new FormData();
 
         if (images && Array.isArray(images)) {
@@ -31,17 +30,24 @@ const CarForm = (props) => {
         dispatchModal({ msg: 'Creating...' });
         try {
             const announce = await AnnounceService.createAnnounce(body);
-            if (images) {
+            const link = `/announces/${announce.slug}`;
+
+            if (announce && images) {
                 await AnnounceService.uploadImages(announce.slug, formData);
             }
-            const link = `/announces/${announce.slug}`;
-            router.push(link);
+
             dispatchModal({
                 type: 'success',
                 msg: 'Announce created successfully'
             });
+
+            router.push(link);
+
         } catch (err) {
-            dispatchModalError({ err });
+            dispatchModalError({
+                err,
+                persist : true
+            });
         }
     };
 

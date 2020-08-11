@@ -15,11 +15,11 @@ export default class UserModel {
         return this.raw?.role;
     }
 
-    get isAdmin () {
+    get getIsAdmin () {
         return this.raw?.isAdmin ?? false;
     }
 
-    get isPro () {
+    get getIsPro () {
         return this.raw?.isPro ?? false;
     }
 

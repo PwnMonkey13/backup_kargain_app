@@ -62,7 +62,7 @@ ValueLabelComponent.propTypes = {
 
 const RangeSlider = ({ name, rules, control, errors, ...props }) => {
     const InputClasses = clsx('input-field', props.fullwidth && 'w-100', props.classNames);
-    const [value, setValue] = useState(props.defaultValue || Number(props.max - props.min)/2);
+    const [value, setValue] = useState(props.defaultValue || props.max);
 
     const handleChange = (e, val) => {
         setValue(val);
@@ -70,7 +70,7 @@ const RangeSlider = ({ name, rules, control, errors, ...props }) => {
 
     useEffect(()=>{
         control.register(name, rules)
-        control.setValue(name, props.defaultValue)
+        control.setValue(name, value)
     },[value])
 
     return (
