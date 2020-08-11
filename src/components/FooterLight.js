@@ -4,8 +4,7 @@ import Link from 'next-translate/Link';
 import { Nav, Navbar } from 'reactstrap'
 import useTranslation from 'next-translate/useTranslation';
 import { makeStyles } from '@material-ui/core/styles';
-
-import DropdownSwitchLangFlags from './Locales/DropdownSwitchLangFlags'
+import DropdownSwitchLangFlags from './Locales/DropdownSwitchLang'
 
 const useStyles = makeStyles((theme) => ({
     footerLinks: {
@@ -29,26 +28,26 @@ const FooterLight = () => {
     const { t } = useTranslation();
     const classes = useStyles();
     const links = [
-        {
-            label: 'Contact',
-            link: '/static/contact'
-        },
+        // {
+        //     label: 'Contact',
+        //     link: '/static/contact'
+        // },
         {
             label: t('layout:about-us'),
             link: '/static/about'
         },
         {
-            label: t('layout:privacy'),
+            label: t('layout:confidentiality'),
             link: '/static/confidentiality'
         },
         {
             label: t('layout:terms'),
             link: '/static/conditions'
-        },
-        {
-            label: t('layout:pricing'),
-            link: '/static/pricing'
         }
+        // {
+        //     label: t('layout:pricing'),
+        //     link: '/static/pricing'
+        // }
     ];
 
     return (
@@ -66,9 +65,7 @@ const FooterLight = () => {
                             );
                         })}
 
-                        <li className="nav-item navbar-dropdown p-2">
-                            <DropdownSwitchLangFlags/>
-                        </li>
+                        <DropdownSwitchLangFlags dropdownStyle={{top : 'unset', bottom : '-40px'}}/>
                     </Nav>
                 </Navbar>
             </div>

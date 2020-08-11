@@ -6,7 +6,7 @@ import i18nConfig from '../../../i18n.json';
 import useTranslation from 'next-translate/useTranslation';
 import startsWithLang from 'next-translate/_helpers/startsWithLang';
 
-const DropdownSwitchLang = () => {
+const DropdownSwitchLang = ({dropdownStyle}) => {
     const router = useRouter();
     const { allLanguages, allLanguagesLabel } = i18nConfig;
     const { lang } = useTranslation();
@@ -24,7 +24,7 @@ const DropdownSwitchLang = () => {
             <ul
                 id="dropdownLocale"
                 className={clsx('dropdown', open && 'show')}
-                style={{ minWidth: 'unset' }}>
+                style={{ minWidth: 'unset', ...dropdownStyle}}>
                 {allLanguages && allLanguages.map((lng, index) => {
                     if (lng === lang) return null;
                     return (

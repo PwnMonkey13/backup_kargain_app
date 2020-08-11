@@ -6,11 +6,13 @@ import { Collapse, Container,  Nav, Navbar, NavbarBrand, NavbarToggler, NavItem 
 import { useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
+import AddIcon from '@material-ui/icons/Add';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import ChatIcon from '@material-ui/icons/Chat';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SearchIcon from '@material-ui/icons/Search';
+import HomeIcon from '@material-ui/icons/Home';
 import CloseIcon from '@material-ui/icons/Close';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
@@ -20,7 +22,6 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
 import { getLogo } from '../libs/utils';
 import { useAuth } from '../context/AuthProvider';
-import DropdownSwitchLang from './Locales/DropdownSwitchLang';
 import CTALink from './CTALink';
 
 const useStyles = makeStyles(theme => ({
@@ -83,11 +84,14 @@ const NavbarClient = () => {
     );
 };
 
-const NewAdButtonCTA = () => {
+const NewAdButtonCTA = ({isDesktop}) => {
     const { t } = useTranslation();
+    console.log(isDesktop)
+
     return (
         <CTALink
-            title={t('layout:create-announce')}
+            title={isDesktop && t('layout:create-announce')}
+            icon={!isDesktop && AddIcon}
             href="/deposer-une-annonce"
             className="cta_nav_link"
         />
@@ -102,13 +106,13 @@ const NavbarAction = ({vertical}) => {
         defaultMatches: true
     });
 
+    // console.log(isDesktop)
+
     return (
         <Nav navbar className={clsx("my-2", vertical ? "flex-column" : "flex-row-nav")}>
-            {isDesktop && (
-                <NavItem className="p-2">
-                    <NewAdButtonCTA/>
-                </NavItem>
-            )}
+            <NavItem className="p-2">
+                <NewAdButtonCTA isDesktop={isDesktop}/>
+            </NavItem>
 
             <NavItem className="p-2">
                 <form className="search-form" method="GET" action="/search">
@@ -132,7 +136,7 @@ const NavbarAction = ({vertical}) => {
 
 const DropdownNotifs = ({ isOpen, keyName, toggle }) => {
     return (
-        <li className="nav-item p-2 navbar_icon navbar-icon-notifications">
+        <li className="nav-item navbar_icon navbar-icon-notifications">
             <div className="dropdown show">
                 <IconButton color="inherit"
                     data-toggle="dropdown-notifications"
@@ -164,15 +168,19 @@ const DropdownUser = ({ isOpen, keyName, toggle }) => {
     const { t } = useTranslation();
 
     return (
-        <li className="nav-item navbar-dropdown p-2" data-dropdown="dropdownUser">
-            <span className="dropdown-toggler rounded-circle" onClick={() => toggle(keyName)}>
+        <li className="nav-item navbar-dropdown">
+            <IconButton color="inherit"
+                data-toggle="dropdownUser"
+                aria-haspopup="true"
+                aria-expanded="true"
+                onClick={() => toggle(keyName)}>
                 <PermIdentityIcon/>
-            </span>
+            </IconButton>
 
             <ul className={clsx('dropdown', isOpen && 'show')} id="dropdownUser">
-                {authenticatedUser.isAdmin && (
+                {authenticatedUser.getIsAdmin && (
                     <li className="px-0 dropdown-item">
-                        <Link href={`/admin`} prefetch={false}>
+                        <Link href={`/admin/ads`} prefetch={false}>
                             <a className="nav-link text-left"><DashboardIcon/><span className="m-1">Admin</span></a>
                         </Link>
                     </li>
@@ -239,7 +247,15 @@ const LoggedInUserNav = ({vertical}) => {
 
     return (
         <Nav navbar className={clsx("my-2", vertical ? "flex-column" : "flex-row-nav")}>
-            <DropdownSwitchLang/>
+            <NavItem>
+                <Link href="/" prefetch={false}>
+                    <a>
+                        <IconButton color="inherit">
+                            <HomeIcon/>
+                        </IconButton>
+                    </a>
+                </Link>
+            </NavItem>
             <DropdownNotifs isOpen={state.isOpen1} keyName="isOpen1" toggle={toggle}/>
             <DropdownUser isOpen={state.isOpen2} keyName="isOpen2" toggle={toggle}/>
         </Nav>
@@ -251,7 +267,6 @@ const VisitorNav = ({vertical}) => {
 
     return (
         <Nav navbar className={clsx("my-2", vertical ? "flex-column" : "flex-row-nav")}>
-            <DropdownSwitchLang/>
             <NavItem className="p-2">
                 <Link href="/auth/login" prefetch={false}>
                     <a className="nav-link">

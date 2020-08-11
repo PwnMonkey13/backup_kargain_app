@@ -1,17 +1,16 @@
-import React, {useState} from "react"
+import React from "react"
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
+import useTranslation from 'next-translate/useTranslation'
 import MenuIcon from '@material-ui/icons/Menu'
-import EmailIcon from '@material-ui/icons/Email';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import AddIcon from '@material-ui/icons/Add';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import {AppBar, Badge, MenuItem, Menu, IconButton, Toolbar} from "@material-ui/core"
+import {AppBar,  MenuItem, Menu, IconButton, Toolbar} from "@material-ui/core"
 import Typography from '@material-ui/core/Typography'
 import theme from '../../../theme'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { useAuth } from '../../../context/AuthProvider'
 
 const drawerWidth = 240;
 
@@ -93,14 +92,13 @@ const useStyles = makeStyles((theme) => ({
 
 const TopBar = ({handleDrawerToggle, open, ...props}) => {
     const classes = useStyles();
+    const { t } = useTranslation();
     const {className, onClickTogglerNav, ...rest} = props;
-    const [notifications] = useState([...Array(10)]);
+    const { logout } = useAuth();
     const menuId = 'primary-search-account-menu';
     const mobileMenuId = 'primary-search-account-menu-mobile';
-
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -131,9 +129,26 @@ const TopBar = ({handleDrawerToggle, open, ...props}) => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
+            <MenuItem onClick={handleProfileMenuOpen}>
+                <IconButton
+                    aria-label="account of current user"
+                    aria-controls="primary-search-account-menu"
+                    aria-haspopup="true"
+                    color="inherit"
+                >
+                    <AccountCircleIcon />
+                </IconButton>
+                <p>Profile</p>
+            </MenuItem>
+
             <MenuItem>
-                <Link href="/auth/logout" prefetch={false}>
-                    <a className="nav-link text-left"><ExitToAppIcon/><span className="m-1">Déconnection</span></a>
+                <Link href="" prefetch={false}>
+                    <a className="nav-link text-left" onClick={() => logout()}>
+                        <ExitToAppIcon/>
+                        <span className="m-1">
+                            Déconnexion
+                        </span>
+                    </a>
                 </Link>
             </MenuItem>
         </Menu>
@@ -149,22 +164,22 @@ const TopBar = ({handleDrawerToggle, open, ...props}) => {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem>
-                <IconButton aria-label="show 4 new mails" color="inherit">
-                    <Badge badgeContent={4} color="secondary">
-                        <EmailIcon />
-                    </Badge>
-                </IconButton>
-                <p>Messages</p>
-            </MenuItem>
-            <MenuItem>
-                <IconButton aria-label="show 11 new notifications" color="inherit">
-                    <Badge badgeContent={11} color="secondary">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
-                <p>Notifications</p>
-            </MenuItem>
+            {/*<MenuItem>*/}
+            {/*    <IconButton aria-label="show 4 new mails" color="inherit">*/}
+            {/*        <Badge badgeContent={4} color="secondary">*/}
+            {/*            <EmailIcon />*/}
+            {/*        </Badge>*/}
+            {/*    </IconButton>*/}
+            {/*    <p>Messages</p>*/}
+            {/*</MenuItem>*/}
+            {/*<MenuItem>*/}
+            {/*    <IconButton aria-label="show 11 new notifications" color="inherit">*/}
+            {/*        <Badge badgeContent={11} color="secondary">*/}
+            {/*            <NotificationsIcon />*/}
+            {/*        </Badge>*/}
+            {/*    </IconButton>*/}
+            {/*    <p>Notifications</p>*/}
+            {/*</MenuItem>*/}
             <MenuItem onClick={handleProfileMenuOpen}>
                 <IconButton
                     aria-label="account of current user"
@@ -175,6 +190,12 @@ const TopBar = ({handleDrawerToggle, open, ...props}) => {
                     <AccountCircleIcon />
                 </IconButton>
                 <p>Profile</p>
+            </MenuItem>
+
+            <MenuItem>
+                <Link href="/auth/logout" prefetch={false}>
+                    <a className="nav-link text-left"><ExitToAppIcon/><span className="m-1">Déconnection</span></a>
+                </Link>
             </MenuItem>
         </Menu>
     );
@@ -211,16 +232,16 @@ const TopBar = ({handleDrawerToggle, open, ...props}) => {
                     </Link>
                     <div style={{flexGrow: 1}}/>
                     <div className={classes.sectionDesktop}>
-                        <IconButton aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                                <EmailIcon/>
-                            </Badge>
-                        </IconButton>
-                        <IconButton aria-label="show notifications" color="inherit">
-                            <Badge badgeContent={notifications.length} color="secondary">
-                                <NotificationsIcon/>
-                            </Badge>
-                        </IconButton>
+                        {/*<IconButton aria-label="show 4 new mails" color="inherit">*/}
+                        {/*    <Badge badgeContent={4} color="secondary">*/}
+                        {/*        <EmailIcon/>*/}
+                        {/*    </Badge>*/}
+                        {/*</IconButton>*/}
+                        {/*<IconButton aria-label="show notifications" color="inherit">*/}
+                        {/*    <Badge badgeContent={notifications.length} color="secondary">*/}
+                        {/*        <NotificationsIcon/>*/}
+                        {/*    </Badge>*/}
+                        {/*</IconButton>*/}
                         <IconButton
                             edge="end"
                             aria-label="account of current user"
@@ -240,7 +261,7 @@ const TopBar = ({handleDrawerToggle, open, ...props}) => {
                             onClick={handleMobileMenuOpen}
                             color="inherit"
                         >
-                            <AddIcon/>
+                            <MenuIcon/>
                         </IconButton>
                     </div>
                 </Toolbar>
