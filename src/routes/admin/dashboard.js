@@ -5,12 +5,12 @@ import Budget from '../../components/Admin/components/Budget';
 import TotalUsers from '../../components/Admin/components/TotalUsers';
 import TasksProgress from '../../components/Admin/components/TasksProgress/TasksProgress';
 import TotalProfit from '../../components/Admin/components/TotalProfit';
-import LatestSales from '../../components/Admin/components/LatestSales';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
-        padding: theme.spacing(4),
-    },
+        padding: theme.spacing(4)
+    }
 }));
 
 const DashboardAdmin = () => {
@@ -60,7 +60,7 @@ const DashboardAdmin = () => {
                     xl={9}
                     xs={12}
                 >
-                    <LatestSales/>
+                    {/*<LatestSales/>*/}
                 </Grid>
             </Grid>
         </div>

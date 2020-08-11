@@ -11,8 +11,8 @@ import Button from '@material-ui/core/Button'
 const useStyles = makeStyles((theme) => ({
     root: {
         flexShrink: 0,
-        marginLeft: theme.spacing(2.5),
-    },
+        marginLeft: theme.spacing(2.5)
+    }
 }));
 
 function TablePaginationActions({ count, page, rowsPerPage, onChangePage }) {
@@ -52,8 +52,8 @@ function TablePaginationActions({ count, page, rowsPerPage, onChangePage }) {
             </Button>
 
             <IconButton onClick={handleNextButtonClick}
-                        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                        aria-label="next page">
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="next page">
                 <KeyboardArrowRight/>
             </IconButton>
 
@@ -77,7 +77,7 @@ TablePaginationActions.propTypes = {
     count: PropTypes.number,
     page: PropTypes.number,
     rowsPerPage: PropTypes.number.isRequired,
-    onChangePage: PropTypes.func.isRequired,
+    onChangePage: PropTypes.func.isRequired
 };
 
 TablePaginationActions.defaultProps =  {

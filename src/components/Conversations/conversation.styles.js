@@ -5,7 +5,7 @@ export default makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        flexWrap: 'wrap',
+        flexWrap: 'wrap'
     },
     paper: {
         backgroundColor: theme.palette.background.paper,
@@ -15,16 +15,16 @@ export default makeStyles(theme => ({
         width: '500px',
 
         [theme.breakpoints.down('xs')]: {
-            width: '350px',
+            width: '350px'
 
-        },
+        }
 
     },
 
     conversations: {
         flexWrap: 'wrap',
         display: 'flex',
-        height: '100%',
+        height: '100%'
     },
 
     conversationsList: {
@@ -38,20 +38,20 @@ export default makeStyles(theme => ({
 
         [theme.breakpoints.up('md')]: {
             width: '30%',
-            borderRight: '1px solid #e6ebef',
-        },
+            borderRight: '1px solid #e6ebef'
+        }
     },
 
     styleScroller: {
         height: '100%',
-        position: 'relative',
+        position: 'relative'
     },
 
     scrollerContainer: {
         position: 'relative',
         maxHeight: '100vh',
         overflow: 'auto',
-        willChange: 'transform',
+        willChange: 'transform'
     },
 
     conversationListItem: {
@@ -63,14 +63,14 @@ export default makeStyles(theme => ({
 
         '&:hover': {
             backgroundColor: '#d9e6f7',
-            color: '#369',
-        },
+            color: '#369'
+        }
     },
 
     itemDetails: {
         verticalAlign: 'top',
         overflow: 'hidden',
-        width: '50%',
+        width: '50%'
     },
 
     itemDetailsPreview: {
@@ -78,7 +78,7 @@ export default makeStyles(theme => ({
         textOverflow: 'ellipsis',
         width: '100%',
         display: 'block',
-        overflow: 'hidden',
+        overflow: 'hidden'
     },
 
     conversation: {
@@ -96,14 +96,14 @@ export default makeStyles(theme => ({
         [theme.breakpoints.down('sm')]: {
             position: 'absolute',
             width: '100%',
-            zIndex: 1,
-        },
+            zIndex: 1
+        }
     },
 
     conversationCloseMobile: {
         [theme.breakpoints.down('sm')]: {
-            display: 'none',
-        },
+            display: 'none'
+        }
     },
 
     conversationHeader: {
@@ -120,7 +120,7 @@ export default makeStyles(theme => ({
         boxShadow: '0 0.2rem 0.2rem 0 rgba(0,0,0,.1)',
         borderBottom: '1px solid #cad1d9',
 
-        [theme.breakpoints.down('md')]: {},
+        [theme.breakpoints.down('md')]: {}
     },
 
     headerUsername: {
@@ -140,35 +140,35 @@ export default makeStyles(theme => ({
             display: 'block',
 
             '&:hover': {
-                color: '#ff5e14',
-            },
-        },
+                color: '#ff5e14'
+            }
+        }
     },
 
     pointerClose: {
         display: 'flex',
-        cursor: 'pointer',
+        cursor: 'pointer'
     },
 
     messageContainer: {
         display: 'block',
         wordWrap: 'break-word',
-        margin: '0 1.6rem',
+        margin: '0 1.6rem'
     },
 
     textJustifiedStart: {
         display: 'flex',
-        justifyContent: 'flex-start',
+        justifyContent: 'flex-start'
     },
 
     textJustifiedEnd: {
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-end'
     },
 
     basicMessage: {
         maxWidth: '70%',
-        display: 'block',
+        display: 'block'
     },
 
     messageBubble: {
@@ -179,7 +179,7 @@ export default makeStyles(theme => ({
         margin: '.5rem',
         backgroundColor: '#d9e6f7',
         color: '#369',
-        fontWeight: 400,
+        fontWeight: 400
     },
 
     messageBubbleLeft: {
@@ -188,15 +188,15 @@ export default makeStyles(theme => ({
         whiteSpace: 'pre-line',
         padding: '.5rem',
         margin: '.5rem',
-        fontWeight: 400,
+        fontWeight: 400
     },
 
     conversationContainer: {
         display: 'flex',
         width: '100%',
         [theme.breakpoints.down('sm')]: {
-            flexDirection: 'column',
-        },
+            flexDirection: 'column'
+        }
     },
 
     conversationInput: {
@@ -206,13 +206,13 @@ export default makeStyles(theme => ({
         justifyContent: 'center',
         display: 'flex',
         borderTop: '1px solid #e6ebef',
-        padding: '.5rem',
+        padding: '.5rem'
     },
 
     conversationTextarea: {
         margin: 0,
         minWidth: 'unset',
-        width: '100%',
+        width: '100%'
     },
 
     conversationInputButton: {
@@ -221,6 +221,6 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         width: 'auto',
         padding: '1rem',
-        textDecoration: 'none',
-    },
+        textDecoration: 'none'
+    }
 }));

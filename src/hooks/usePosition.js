@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react'
+import { useState, useLayoutEffect } from 'react'
 
 function getStyle(el, styleName) {
     return getComputedStyle(el)[styleName];
@@ -21,7 +21,7 @@ function getOffset(el) {
 
     return {
         top: rect.top + winX,
-        left: rect.left + winY,
+        left: rect.left + winY
     };
 }
 
@@ -42,7 +42,7 @@ function getPosition(el) {
 
         while (offsetParent &&
             (offsetParent === doc.body || offsetParent === doc.documentElement)
-            ) {
+        ) {
             offsetParent = offsetParent.parentNode;
         }
 
@@ -55,7 +55,7 @@ function getPosition(el) {
 
     return {
         top: offset.top - parentOffset.top - marginTop,
-        left: offset.left - parentOffset.left - marginLeft,
+        left: offset.left - parentOffset.left - marginLeft
     };
 }
 
@@ -63,7 +63,7 @@ function usePosition(ref) {
     let { top, left } = getPosition(ref.current);
     let [ElementPosition, setElementPosition ] = useState({
         top: top,
-        left: left,
+        left: left
     });
 
     function handleChangePosition() {

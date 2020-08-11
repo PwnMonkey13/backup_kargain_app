@@ -12,6 +12,7 @@ function getFeedAnnounces (params = {}) {
     });
 
     const url = `${baseRoute}?${qs}`;
+
     const requestOptions = {
         method: 'GET',
         credentials: 'include'

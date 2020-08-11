@@ -7,9 +7,7 @@ import AuthService from '../../services/AuthService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../components/Form/Inputs';
 import FieldWrapper from '../../components/Form/FieldWrapper';
-
 import SelectCountryFlags from '../../components/Form/Inputs/SelectCountryFlags';
-import Spacer from '../../components/Spacer';
 import SSOProviders from '../../components/SSOProviders';
 import useAddress from '../../hooks/useAddress';
 import SearchLocationInput from '../../components/Form/Inputs/SearchLocationInput'
@@ -88,7 +86,6 @@ const RegisterPro = () => {
                             </SearchLocationInput>
                         </FieldWrapper>
 
-                        <Spacer bottom="30"/>
                         <Typography component="h3" variant="h3">Vous </Typography>
 
                         <FieldWrapper label={t('vehicles:lastname')}>

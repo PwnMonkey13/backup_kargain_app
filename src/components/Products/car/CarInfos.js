@@ -6,7 +6,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const useStyles = makeStyles(() => ({
     root: {
-        flex: 1,
+        flex: 1
     },
 
     spec: {
@@ -16,9 +16,9 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
 
         '& span': {
-            fontWeight: 700,
-        },
-    },
+            fontWeight: 700
+        }
+    }
 }));
 
 const CarInfos = memo(({ announce, enableThirdColumn }) => {
@@ -55,24 +55,24 @@ const CarInfos = memo(({ announce, enableThirdColumn }) => {
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>Carburant: </span>{announce.geVehicleEngine.gas}
+                        <span>Carburant: </span>{announce.geVehicleEngineGas}
                     </Typography>
                 </div>
             </Col>
             <Col sm={12} md={cols}>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>Boite: </span>{announce.geVehicleEngine.type}
+                        <span>Boite: </span>{announce.geVehicleEngineType}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>Cylindrée: </span>{announce.geVehicleEngine.cylinder}
+                        <span>Cylindrée: </span>{announce.geVehicleEngineCylinder}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>Puissance CH: </span>{announce.getVehiclePower.ch}
+                        <span>Puissance CH: </span>{announce.getVehiclePowerCh}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
@@ -148,6 +148,6 @@ const CarInfos = memo(({ announce, enableThirdColumn }) => {
 CarInfos.propTypes = {
     announce: PropTypes.object.isRequired,
     responsiveCols: PropTypes.bool,
-    enableThirdColumn: PropTypes.bool,
+    enableThirdColumn: PropTypes.bool
 };
 export default CarInfos;

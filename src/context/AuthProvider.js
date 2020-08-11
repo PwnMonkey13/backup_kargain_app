@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
                 ...authState,
                 isAuthReady: true,
                 isAuthenticated: !!user,
-                isAuthenticatedUserAdmin: User.isAdmin,
+                isAuthenticatedUserAdmin: User.getIsAdmin,
                 authenticatedUser: User
             }));
         } catch (err) {

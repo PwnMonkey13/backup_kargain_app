@@ -9,26 +9,26 @@ import IconButton from '@material-ui/core/IconButton';
 import DamagesNavResponsive from './DamagesNavResponsive';
 import Header from '../Header';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
     annoPickerContainer: {
         display: 'flex',
         justifyContent: 'center',
         userSelect: 'none',
         position: 'relative',
         maxWidth: '500px',
-        cursor: 'crosshair',
+        cursor: 'crosshair'
     },
 
     annoStage: {
         position: 'relative',
         width: '100%',
-        marginTop: '1rem',
+        marginTop: '1rem'
     },
 
     annoImg: {
         objectFit: 'contain',
         width: '100%',
-        border: '1px solid',
+        border: '1px solid'
     },
 
     annoInputs: {
@@ -36,21 +36,21 @@ const useStyles = makeStyles(theme => ({
         border: '1px solid gainsboro',
         textAlign: 'center',
         marginTop: '2rem',
-        overflowX: 'auto',
+        overflowX: 'auto'
     },
 
     annoInput: {
         display: 'flex',
         justifyContent: 'left',
         alignContent: 'center',
-        margin: '.6rem .4rem',
+        margin: '.6rem .4rem'
     },
 
     annoFloatingNumber: {
         position: 'absolute',
         cursor: 'default',
         marginLeft: '-.5rem',
-        marginTop: '-.5rem',
+        marginTop: '-.5rem'
     },
 
     annoNumber: {
@@ -63,15 +63,15 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '50%',
         width: '1.4rem',
         height: '1.4rem',
-        display: 'inline-block',
-    },
+        display: 'inline-block'
+    }
 
 }));
 
 const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFullWidth, ...props }) => {
     const classes = useStyles();
     let annoRefs = [];
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
     const warningDamageRef = useRef(null);
     const [activeTab, setActiveTab] = useState(0);
     const [damagesTabs, setDamagesTabs] = useState(tabs);
@@ -95,8 +95,8 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
         const stage = {
             position: {
                 left: `${x * 100}%`,
-                top: `${y * 100}%`,
-            },
+                top: `${y * 100}%`
+            }
         };
 
         setDamagesTabs(damagesTabs =>
@@ -104,7 +104,7 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
                 if (i === indexTab) {
                     return {
                         ...item,
-                        stages: [...item.stages, stage],
+                        stages: [...item.stages, stage]
                     };
                 } else {
                     return item;
@@ -119,12 +119,12 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
                     return {
                         ...item,
                         stages: item.stages.slice(0, indexStage)
-                            .concat(item.stages.slice(indexStage + 1, item.stages.length)),
+                            .concat(item.stages.slice(indexStage + 1, item.stages.length))
                     };
                 } else {
                     return item;
                 }
-            }),
+            })
         );
     };
 
@@ -138,17 +138,17 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
                             if (ii === stageIndex) {
                                 return {
                                     ...stage,
-                                    text: value,
+                                    text: value
                                 };
                             } else {
                                 return stage;
                             }
-                        }),
+                        })
                     };
                 } else {
                     return item;
                 }
-            }),
+            })
         );
     };
 
@@ -158,10 +158,10 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
                 {...{
                     damagesTabsLight: damagesTabs && damagesTabs.map(tab => ({
                         title: tab.title,
-                        countStages: tab.stages.length,
+                        countStages: tab.stages.length
                     })),
                     activeTab,
-                    setActiveTab,
+                    setActiveTab
                 }}
             />
 
@@ -180,7 +180,7 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
                                         annoRefs,
                                         indexTab,
                                         damageTab,
-                                        getClick,
+                                        getClick
                                     }}/>
                                 </Col>
                                 <Col sm={12} md={col} lg={6}>
@@ -204,14 +204,14 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
                                                     </div>
                                                     <div style={{
                                                         margin: 'auto',
-                                                        flex: 3,
+                                                        flex: 3
                                                     }}>
                                                         <input type="text"
-                                                               value={stage.text || ''}
-                                                               onChange={(e) => onInputStageChange(indexTab, indexStage, e.target.value)}
-                                                               className={clsx('form-control form-control-sm')}
-                                                               name={`annotation_${indexStage + 1}`}
-                                                               placeholder={t('vehicles:damages-{number}-description',{ number : indexStage + 1})}
+                                                            value={stage.text || ''}
+                                                            onChange={(e) => onInputStageChange(indexTab, indexStage, e.target.value)}
+                                                            className={clsx('form-control form-control-sm')}
+                                                            name={`annotation_${indexStage + 1}`}
+                                                            placeholder={t('vehicles:damages-{number}-description',{ number : indexStage + 1})}
                                                         />
                                                     </div>
                                                 </div>
@@ -238,18 +238,18 @@ const DamagesPicker = ({ annoRefs, indexTab, damageTab, getClick }) => {
     return (
         <div className={clsx(classes.annoPickerContainer)}>
             <div className={clsx(classes.annoStage)}
-                 id={`anno_${indexTab}`}
-                 ref={annoRef => annoRefs[indexTab] = annoRef}
-                 onClick={(e) => getClick(e, indexTab)}
+                id={`anno_${indexTab}`}
+                ref={annoRef => annoRefs[indexTab] = annoRef}
+                onClick={(e) => getClick(e, indexTab)}
             >
                 <img className={clsx(classes.annoImg)} src={damageTab.img} alt={damageTab.title}/>
 
                 {damageTab.stages && damageTab.stages.map((stage, indexStage) => (
                     <span key={indexStage}
-                          style={{ ...stage.position }}
-                          className={clsx(classes.annoFloatingNumber, classes.annoNumber)}>
-                    {indexStage + 1}
-                </span>
+                        style={{ ...stage.position }}
+                        className={clsx(classes.annoFloatingNumber, classes.annoNumber)}>
+                        {indexStage + 1}
+                    </span>
                 ))}
             </div>
         </div>
@@ -265,12 +265,12 @@ DamageSelectorTabs.propTypes = {
         title: PropTypes.string,
         key: PropTypes.string,
         stages: PropTypes.array,
-        maxDamages: PropTypes.number,
-    })).isRequired,
+        maxDamages: PropTypes.number
+    })).isRequired
 };
 
 DamageSelectorTabs.defaultProps = {
     defaultMaxDamages: 10,
-    enableDebug: false,
+    enableDebug: false
 };
 export default DamageSelectorTabs;
