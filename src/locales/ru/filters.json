@@ -1,8 +1,11 @@
 {
-    "select-filters" : "Выберите фильтры",
+    "select-filters" : "Sélectionner les filtres",
     "price": "Prix",
     "adType": "Type d'annonce",
     "vehicleType": "Type de véhicule",
+    "vehicleEngineType" : "Type de moteur",
+    "vehicleEngineGas" : "Type de carburant",
+    "vehicleEngineCylinder" : "Nombre de cylindres",
     "manufacturer" : {
         "make": "Marque"
     },
@@ -13,6 +16,8 @@
     "vehicleEngine.cylinder": "Nombre de cylindres",
     "mileage": "Kilométrage",
     "power.kw": "Puissance",
+    "powerKw": "Puissance",
+    "consumptionGkm" : "Consommation",
     "countrySelect": "Pays",
     "address.city": "Ville",
     "radius": "Rayon",
