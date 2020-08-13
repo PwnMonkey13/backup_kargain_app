@@ -190,7 +190,7 @@ const Profile = () => {
                             <Col xs={12} sm={4} md={4}>
                                 <span className="top-profile-location">
                                     <img className="mx-1" src="/images/location.png" alt=""/>
-                                    {state.profile.addressBuilder(['city', 'postalCode', 'country'])}
+                                    {state.profile.addressBuilder(['city', 'postCode', 'country'])}
                                 </span>
                             </Col>
                         )}

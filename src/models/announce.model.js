@@ -45,10 +45,10 @@ export default class AnnounceModel {
     }
 
     get getManufacturer () {
-        const make = this.raw?.manufacturer?.make?.label ?? null;
-        const model = this.raw?.manufacturer?.model?.label ?? null;
-        const year = this.raw?.manufacturer?.year?.label ?? null;
-        const version = this.raw?.manufacturer?.version?.label ?? null;
+        const make = this.raw?.manufacturer?.make?.make ?? null;
+        const model = this.raw?.manufacturer?.model?.model ?? null;
+        const year = this.raw?.manufacturer?.model?.year ?? null;
+        const version = this.raw?.manufacturer?.model?.trim ?? null;
 
         return {
             make,
@@ -152,6 +152,7 @@ export default class AnnounceModel {
     getAdOrAuthorCustomAddress = (queryParts = []) => {
         const adParts = this.getAddressParts;
         const authorParts = this.getAuthor.getAddressParts;
+
         return queryParts ? queryParts.reduce((carry, part) => {
             const value = (part === 'country') ? this.getCountryLabel : adParts[part] ?? authorParts[part];
             return value ? [...carry, value] : carry;
@@ -162,7 +163,7 @@ export default class AnnounceModel {
         const houseNumber = this.raw?.address?.housenumber;
         const street = this.raw?.address?.street;
         const city = this.raw?.address?.city;
-        const postCode = this.raw?.address?.postalcode;
+        const postCode = this.raw?.address?.postCode;
         const fullAddress = this.raw?.address?.fullAddress;
 
         return {

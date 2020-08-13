@@ -19,6 +19,10 @@ const Step = ({ handleSubmitForm, prevStep }) => {
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: {
+            title : [
+              formDataContext?.manufacturer?.make?.label,
+              formDataContext?.manufacturer?.model?.label,
+              formDataContext?.manufacturer?.year?.label].join(' - '),
             ...formDataContext,
             showCellPhone: true,
             visible: true
@@ -30,7 +34,7 @@ const Step = ({ handleSubmitForm, prevStep }) => {
     };
 
     const countrySelect = watch('countrySelect');
-    
+
     useEffect(() => {
         register({ name: 'location.coordinates' });
         setValue('location.coordinates', coordinates);

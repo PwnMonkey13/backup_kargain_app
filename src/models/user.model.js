@@ -126,7 +126,7 @@ export default class UserModel {
         const houseNumber = this.raw?.address?.housenumber;
         const street = this.raw?.address?.street;
         const city = this.raw?.address?.city;
-        const postalCode = this.raw?.address?.postalcode;
+        const postCode = this.raw?.address?.postCode;
         const country = this.raw?.address?.country;
         const fullAddress = this.raw?.address?.fullAddress;
 
@@ -135,7 +135,7 @@ export default class UserModel {
             houseNumber,
             street,
             city,
-            postalCode,
+            postCode,
             country,
         };
     }
