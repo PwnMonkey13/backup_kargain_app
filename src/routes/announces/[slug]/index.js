@@ -42,11 +42,16 @@ const useStyles = makeStyles(() => ({
             flex: 1
         }
     },
+    priceRow : {
+        display: 'flex',
+        justifyContent : "space-between"
+    },
     priceStarsWrapper: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        margin: '15px 0'
+        margin: '15px 0',
+        borderBottom : '1px solid'
     },
     wysiwyg: {
         margin: '1rem',
@@ -212,7 +217,7 @@ const Announce = () => {
                                 {state.announce.getManufacturerFormated}
                             </Typography>
 
-                            <div className={classes.formRow}>
+                            <div className={classes.priceRow}>
                                 <p className="price-announce">
                                     {state.announce.getPrice} €TTC
                                     <span> {state.announce.getPriceHT} €HT</span>
@@ -220,6 +225,14 @@ const Announce = () => {
 
                                 <p>
                                     <small>{getTimeAgo(state.announce.getCreationDate.raw, lang)}</small>
+                                    <img
+                                        className="mx-1"
+                                        src='/images/share.png'
+                                        alt="share"
+                                        onClick={() => {
+                                            console.log('TODO SHARE')
+                                        }}
+                                    />
                                 </p>
                             </div>
                         </div>
@@ -267,12 +280,7 @@ const Announce = () => {
                                         </div>
                                     </div>
                                 )}
-
-                                {state.announce.showCellPhone && (
-                                    <p>
-                                        <small>{state.announce.getAuthor.getPhone}</small>
-                                    </p>
-                                )}
+                                {state.announce.showCellPhone && <p> {state.announce.getAuthor.getPhone} </p> }
                             </div>
                         </div>
 
@@ -315,7 +323,7 @@ const Announce = () => {
                             </div>
                         </div>
 
-                        {state.announce.getLikes.length && (
+                        {state.announce.getLikes.length !== 0 && (
                             <div className="my-2">
                                 <ul className="d-flex align-items-center list-style-none">
                                     {state.announce.getLikes.slice(0, 5).map((userLike, index) => {
