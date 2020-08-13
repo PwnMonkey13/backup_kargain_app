@@ -1,24 +1,18 @@
-import React, {  useEffect, useRef, forwardRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Controller } from 'react-hook-form';
+
 import ValidationError from '../Validations/ValidationError';
 
 let autoComplete;
 
-// eslint-disable-next-line react/display-name
-const Internal = forwardRef((props, ref) => {
-    const { value } = props;
-    return (
-        <input ref={ref} {...props} value={value?.fullAddress}/>
-    );
-});
-
-const SearchLocationInput = ({ name, control, rules, errors, country, types, ...props }) => {
+const SearchLocationInput = ({ name, control, rules, errors, country, ...props }) => {
     const autoCompleteRef = useRef(null);
+    const [value, setValue] = useState()
 
     useEffect(() => {
         control.register(name, rules);
+        setValue(control.getValues()?.address?.fullAddress)
     }, []);
 
     useEffect(() => {
@@ -44,20 +38,29 @@ const SearchLocationInput = ({ name, control, rules, errors, country, types, ...
 
                 if (Array.isArray(address_components)) {
 
-                    //if missing housenumber
-                    if(address_components.length !== 6){
-                        address_components.unshift({})
+                    const types = {
+                        'street_number' : { type : 'number', key : 'housenumber'},
+                        'route' : {key : 'street' },
+                        'locality' : { key : 'city' },
+                        'postal_code' : { key : 'postCode' },
+                        // 'administrative_area_level_1' : '',
+                        // 'administrative_area_level_2' : '',
+                        'country' : { key : 'country' }
                     }
 
-                    const [houseNumberObj, streetObj, cityObj, districtObj, regionObj, countryObj, postalCodeObj] = address_components;
+                    const addressMapper = Object.keys(types).reduce((carry, index) => {
+                        const match = address_components.find(item => item.types.includes(index))
+                        if(match) carry[types[index].key] = types[index].type === "number" ? Number(match?.long_name) : match?.long_name
+                        return carry
+                    },{})
+
                     const values = {
-                        housenumber: houseNumberObj?.long_name,
-                        street: streetObj?.long_name,
-                        city: cityObj?.long_name,
-                        postalCode: postalCodeObj?.long_name,
-                        country: countryObj?.long_name,
+                        ...addressMapper,
                         fullAddress: formatted_address
                     };
+
+                    console.log(values)
+
                     control.setValue(name, values);
                 }
             });
@@ -67,11 +70,18 @@ const SearchLocationInput = ({ name, control, rules, errors, country, types, ...
     return (
         <>
             <div className={clsx('input-field', props.fullwidth && 'w-100', 'my-2')}>
-                <Controller
-                    name={name}
-                    control={control}
-                    rules={rules}
-                    as={<Internal ref={autoCompleteRef}/>}
+                <input
+                    type="text"
+                    ref={e => {
+                        autoCompleteRef.current = e
+                    }}
+                    defaultValue={value}
+                    onKeyDown={e => {
+                        if(e.keyCode === 13) {
+                            e.preventDefault();
+                            return false;
+                        }
+                    }}
                 />
             </div>
             {errors && <ValidationError errors={errors} name={name}/>}
