@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const CarInfos = memo(({ announce, enableThirdColumn }) => {
+const CarInfos = ({ announce, enableThirdColumn }) => {
     const classes = useStyles();
     const cols = enableThirdColumn ? 4 : 6;
 
@@ -143,11 +143,11 @@ const CarInfos = memo(({ announce, enableThirdColumn }) => {
             )}
         </Row>
     );
-});
+};
 
 CarInfos.propTypes = {
     announce: PropTypes.object.isRequired,
     responsiveCols: PropTypes.bool,
     enableThirdColumn: PropTypes.bool
 };
-export default CarInfos;
+export default memo(CarInfos);

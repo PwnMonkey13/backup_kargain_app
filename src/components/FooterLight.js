@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
     link: {
         borderRight: '1px solid gainsboro',
         color: '#343333',
-        fontWeight: 700
+        fontWeight: 700,
+        padding : '0 1rem'
     }
 }));
 
@@ -28,10 +29,6 @@ const FooterLight = () => {
     const { t } = useTranslation();
     const classes = useStyles();
     const links = [
-        // {
-        //     label: 'Contact',
-        //     link: '/static/contact'
-        // },
         {
             label: t('layout:about-us'),
             link: '/static/about'
@@ -44,10 +41,6 @@ const FooterLight = () => {
             label: t('layout:terms'),
             link: '/static/conditions'
         }
-        // {
-        //     label: t('layout:pricing'),
-        //     link: '/static/pricing'
-        // }
     ];
 
     return (

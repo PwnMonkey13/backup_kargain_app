@@ -23,6 +23,7 @@ const CarForm = (props) => {
                 formData.append('images', images[i]);
             }
         }
+
         startPost(body, formData, images);
     };
 

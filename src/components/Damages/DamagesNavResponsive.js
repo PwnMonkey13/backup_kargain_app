@@ -2,13 +2,13 @@ import React, { memo } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import NiceSelect from 'react-select';
-
 import { useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
+import useTranslation from 'next-translate/useTranslation'
 
-const DamagesNav = memo(({ activeTab, setActiveTab, damagesTabsLight }) => {
+const DamagesNav = ({ activeTab, setActiveTab, damagesTabsLight }) => {
     const theme = useTheme();
-
+    const { t } = useTranslation()
     const isUpTablet = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true
     });
@@ -24,7 +24,7 @@ const DamagesNav = memo(({ activeTab, setActiveTab, damagesTabsLight }) => {
                                     onClick={() => {
                                         setActiveTab(indexTab);
                                     }}>
-                                    {tab.title}
+                                    {t(`vehicles:${tab.title}`)}
                                 </a>
                             </li>
                         );
@@ -44,7 +44,7 @@ const DamagesNav = memo(({ activeTab, setActiveTab, damagesTabsLight }) => {
             )}
         </div>
     );
-});
+};
 
 DamagesNav.propTypes = {
     activeTab: PropTypes.number.isRequired,
@@ -59,5 +59,5 @@ DamagesNav.defaultProps = {
     activeTab : 0,
     damagesTabsLight : []
 }
-export default DamagesNav;
+export default memo(DamagesNav);
 

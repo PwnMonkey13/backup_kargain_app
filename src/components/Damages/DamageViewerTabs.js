@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
         border: '1px solid gainsboro',
         textAlign: 'center',
         marginTop: '2rem',
-        overflowX: 'auto',
+        overflowX: 'auto'
     },
 
     annoContainer: {
@@ -20,33 +20,33 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         userSelect: 'none',
         position: 'relative',
-        maxWidth: '500px',
+        maxWidth: '500px'
     },
 
     annoStage: {
         position: 'relative',
         width: '100%',
-        marginTop: '1rem',
+        marginTop: '1rem'
     },
 
     annoImg: {
         objectFit: 'contain',
         width: '100%',
-        border: '1px solid',
+        border: '1px solid'
     },
 
     annoInput: {
         display: 'flex',
         justifyContent: 'left',
         alignContent: 'center',
-        margin: '.6rem .4rem',
+        margin: '.6rem .4rem'
     },
 
     annoFloatingNumber: {
         position: 'absolute',
         cursor: 'default',
         marginLeft: '-.5rem',
-        marginTop: '-.5rem',
+        marginTop: '-.5rem'
     },
 
     annoNumber: {
@@ -59,10 +59,10 @@ const useStyles = makeStyles(() => ({
         borderRadius: '50%',
         width: '1.4rem',
         height: '1.4rem',
-        display: 'inline-block',
+        display: 'inline-block'
     },
 
-    annoInputField: {},
+    annoInputField: {}
 
 }));
 
@@ -77,10 +77,10 @@ const DamageViewerTabs = ({ tabs }) => {
                 {...{
                     damagesTabsLight: tabs && tabs.map(tab => ({
                         title: tab.key,
-                        countStages: tab.stages.length,
+                        countStages: tab.stages.length
                     })),
                     activeTab,
-                    setActiveTab,
+                    setActiveTab
                 }}
             />
 
@@ -111,15 +111,15 @@ const DamagesMappedImg = ({ tab, index, annoRefs }) => {
     return (
         <div className={clsx(classes.annoContainer)}>
             <div className={clsx(classes.annoStage)}
-                 id={`anno_${index}`}
-                 ref={annoRef => annoRefs[index] = annoRef}
+                id={`anno_${index}`}
+                ref={annoRef => annoRefs[index] = annoRef}
             >
                 <img className={clsx(classes.annoImg)} src={tab.img} alt={tab.alt}/>
 
                 {tab.stages && tab.stages.map((stage, index) => (
                     <span key={index}
-                          style={{ ...stage.position }}
-                          className={clsx(classes.annoFloatingNumber, classes.annoNumber)}>
+                        style={{ ...stage.position }}
+                        className={clsx(classes.annoFloatingNumber, classes.annoNumber)}>
                         {index + 1}
                     </span>
                 ))}
@@ -143,14 +143,14 @@ const DamagesList = ({ tab }) => {
                         </div>
                         <div style={{
                             margin: 'auto',
-                            flex: 3,
+                            flex: 3
                         }}>
                             <input type="text"
-                                   readOnly
-                                   value={stage.input}
-                                   className={clsx(classes.annoInputField, 'form-control form-control-sm')}
-                                   name={`annotation_${index + 1}`}
-                                   placeholder={t('vehicles:damages-{number}-description', { number : index + 1})}
+                                readOnly
+                                value={stage.input}
+                                className={clsx(classes.annoInputField, 'form-control form-control-sm')}
+                                name={`annotation_${index + 1}`}
+                                placeholder={t('vehicles:damages-{number}-description', { number : index + 1})}
                             />
                         </div>
                     </div>

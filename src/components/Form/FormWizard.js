@@ -13,14 +13,13 @@ const calculatePourcent = (current, length) => {
     return ((current + 1) / (length + 1)) * 100;
 };
 
-const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, ...props }) => {
+const FormWizard = ({ debug, formKey, onFinalSubmit, children }) => {
     const isMounted = useIsMounted();
     const steps = Array.isArray(children) ? children.filter(child => child.props.hidden !== true) : children ? [children] : [];
     const { formDataContext, dispatchFormUpdate } = useContext(FormContext);
     const [activeStep, setActiveStep] = useState(formDataContext.currentStep || 0);
     const [maxActiveStep, setMaxActiveStep] = useState(steps.length);
     const [pourcent, setPourcent] = useState(() => calculatePourcent(activeStep, steps.length));
-    const [stepChanges, setStepChanges] = useState([]);
     const [endForm, setEndForm] = useState(false);
 
     useEffect(()=>{
@@ -45,13 +44,6 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, ...p
             setEndForm(false);
         }
     }, [endForm]);
-
-    const collectStepChanges = useCallback(item => {
-        setStepChanges(stepChanges => ({
-            ...stepChanges,
-            [item.name]: item.label
-        }));
-    }, []);
 
     const setStep = useCallback((index) => {
         setActiveStep(index);
@@ -87,35 +79,13 @@ const FormWizard = ({ debug, formKey, resumeModel, onFinalSubmit, children, ...p
                 maxActiveStep={maxActiveStep}
             />
             <ProgressBar percent={pourcent} filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"/>
-            {/*{props.enableResume ? (*/}
-            {/*    <Row className="mx-auto px-2 my-4">*/}
-            {/*        <Col md={8} lg={9}>*/}
-            {/*            <ControlledStep*/}
-            {/*                step={steps[activeStep]}*/}
-            {/*                // collectStepChanges={collectStepChanges}*/}
-            {/*                onSubmitStep={onSubmitStep}*/}
-            {/*                prevStep={prevStep}*/}
-            {/*                nextStep={nextStep}*/}
-            {/*                handleSubmitForm={handleSubmitForm}*/}
-            {/*            />*/}
-            {/*        </Col>*/}
-            {/*        <Col md={4} lg={3}>*/}
-            {/*            <FormResume*/}
-            {/*                resumeModel={resumeModel}*/}
-            {/*                formValues={{ ...formDataContext, ...stepChanges }}*/}
-            {/*            />*/}
-            {/*        </Col>*/}
-            {/*    </Row>*/}
-            {/*) : (*/}
             <ControlledStep
                 step={steps[activeStep]}
-                // collectStepChanges={collectStepChanges}
                 onSubmitStep={onSubmitStep}
                 prevStep={prevStep}
                 nextStep={nextStep}
                 handleSubmitForm={handleSubmitForm}
             />
-            {/*)}*/}
 
             {debug && (
                 <Row>

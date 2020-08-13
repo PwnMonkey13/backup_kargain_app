@@ -2,14 +2,19 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import clsx from 'clsx';
 import { inflate } from 'flattenjs';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router'
 import { Col,  Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
+import useTranslation from 'next-translate/useTranslation';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import useTranslation from 'next-translate/useTranslation';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import Alert from '@material-ui/lab/Alert';
 import { themeColors } from '../../../theme/palette';
 import resolveObjectKey from '../../../libs/resolveObjectKey';
 import AnnounceService from '../../../services/AnnounceService';
@@ -28,6 +33,9 @@ import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy';
 import NumberInputMUI from '../../../components/Form/Inputs/NumberInputMUI';
 import CheckboxGroup from '../../../components/Form/Inputs/CheckboxGroup';
 import CheckboxMUI from '../../../components/Form/Inputs/CheckboxMUI';
+import CTALink from '../../../components/CTALink';
+import ValidationErrors from '../../../components/Form/Validations/ValidationErrors';
+import AnnounceModel from '../../../models/announce.model'
 import Error from '../../_error';
 import {
     CheckboxOptionsEquipments,
@@ -41,14 +49,8 @@ import {
     RadioTypeFunction,
     RadioVehicleGeneralState
 } from '../../../components/Products/car/form.data';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import CTALink from '../../../components/CTALink';
-import ValidationErrors from '../../../components/Form/Validations/ValidationErrors';
-import Alert from '@material-ui/lab/Alert';
-import AnnounceModel from '../../../models/announce.model'
-import { useRouter } from 'next/router'
+import { SelectCountryFlags } from '../../../components/Form/Inputs'
+import SearchLocationInput from '../../../components/Form/Inputs/SearchLocationInput'
 
 const useStyles = makeStyles(() => ({
 
@@ -69,6 +71,14 @@ const useStyles = makeStyles(() => ({
 
     button: {
         margin: '1rem'
+    },
+
+    buttonRemove: {
+        backgroundColor : themeColors.red,
+
+        "&:hover" : {
+            backgroundColor : themeColors.red
+        }
     },
 
     navList: {
@@ -169,7 +179,7 @@ const allowedFields = {
     'address.label': 'address.fullAddress',
     'address.value.housenumber': 'address.housenumber',
     'address.value.name': 'address.street',
-    'address.value.postcode': 'address.postalcode',
+    'address.value.postcode': 'address.postCode',
     'address.value.country': 'address.country',
     'address.value.city': 'address.city'
 };
@@ -298,7 +308,7 @@ const MultiTabsForm = ({ announce, formRef, activeTab, slug, defaultValues }) =>
         defaultMatches: true
     });
 
-    const { control, register, errors, handleSubmit } = useForm({
+    const { watch, control, register, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues
@@ -406,6 +416,7 @@ const MultiTabsForm = ({ announce, formRef, activeTab, slug, defaultValues }) =>
 
                 <TabPane tabId={4}>
                     <PublicationInfosPartialForm {...{
+                        watch,
                         control,
                         errors,
                         register,
@@ -439,7 +450,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col sm={12} md={6} lg={3}>
                     <FieldWrapper label={t('vehicles:model')}>
                         <TextInput
-                            name={'manufacturer.model.label'}
+                            name={'manufacturer.model.model'}
                             control={control}
                             disabled
                         />
@@ -449,7 +460,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col sm={12} md={6} lg={3}>
                     <FieldWrapper label={t('vehicles:generation')}>
                         <TextInput
-                            name={'manufacturer.generation.label'}
+                            name={'manufacturer.model.trim'}
                             control={control}
                             disabled
                         />
@@ -459,7 +470,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                 <Col sm={12} md={6} lg={3}>
                     <FieldWrapper label={t('vehicles:year')}>
                         <TextInput
-                            name={'manufacturer.year.label'}
+                            name={'manufacturer.model.year'}
                             control={control}
                             disabled
                         />
@@ -734,7 +745,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
     );
 };
 
-const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }) => {
+const PublicationInfosPartialForm = ({ watch, register, control, errors, handleRemove }) => {
     const classes = useStyles();
     const { t } = useTranslation();
     const [openDialogRemove, setOpenDialogRemove] = React.useState(false);
@@ -746,6 +757,8 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
     const handleCloseDialogRemove = () => {
         setOpenDialogRemove(false);
     };
+
+    const countrySelect = watch('countrySelect');
 
     return (
         <div className="form-fields">
@@ -801,27 +814,47 @@ const PublicationInfosPartialForm = ({ register, control, errors, handleRemove }
                 />
             </FieldWrapper>
 
-            <Typography component="h3" variant="h3" className="text-center" gutterBottom>
-                {t('vehicles:announce-management')}
-            </Typography>
+            <FieldWrapper label={t('vehicles:country')}>
+                <SelectCountryFlags
+                    name="countrySelect"
+                    errors={errors}
+                    control={control}
+                />
+            </FieldWrapper>
 
-            <CheckboxMUI
-                name="status"
-                value="active"
-                label={t('vehicles:archive-announce')}
-                color="secondary"
-                control={control}
-                errors={errors}
-            />
+            <FieldWrapper label={t('vehicles:address')}>
+                <SearchLocationInput
+                    name="address"
+                    country={countrySelect?.value}
+                    control={control}
+                    errors={errors}
+                    rules={{ required: 'Required' }}>
+                </SearchLocationInput>
+            </FieldWrapper>
 
-            <Button
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                startIcon={<DeleteIcon/>}
-                onClick={handleOpenDialogRemove}>
-                {t('vehicles:remove-announce')}
-            </Button>
+            <div style={{ border : '1px solid', padding : '1rem'}}>
+                <Typography component="h3" variant="h3" className="text-center" gutterBottom>
+                    {t('vehicles:announce-management')}
+                </Typography>
+
+                <CheckboxMUI
+                    name="status"
+                    value="active"
+                    label={t('vehicles:archive-announce')}
+                    color="secondary"
+                    control={control}
+                    errors={errors}
+                />
+
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.buttonRemove}
+                    startIcon={<DeleteIcon/>}
+                    onClick={handleOpenDialogRemove}>
+                    {t('vehicles:remove-announce')}
+                </Button>
+            </div>
 
             <Dialog
                 open={openDialogRemove}
