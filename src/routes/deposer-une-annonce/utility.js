@@ -4,6 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
+import Step0_DynVehicleManufacturer from '../../components/Products/Step0_DynVehicleManufacturer'
 import Step1CamperDetails from '../../components/Products/utility/Step1_UtiilityDetails';
 import Step2UtilityStatus from '../../components/Products/utility/Step2_UtiliyStatus';
 import Step3CarOwner from '../../components/Products/car/Step3_CarOwner';
@@ -51,6 +52,10 @@ const UtilityForm = (props) => {
             resumeModel={resumeModel}
             onFinalSubmit={onFinalSubmit}
         >
+            <Step0_DynVehicleManufacturer
+                vehicleTypeModel={"trucks"}
+                title={t('vehicles:vehicle-selection')}
+            />
             <Step1CamperDetails title={t('vehicles:vehicle-description')}/>
             <Step2UtilityStatus title={t('vehicles:vehicle-state')}/>
             <Step3CarOwner title={t('vehicles:your-announce')}/>

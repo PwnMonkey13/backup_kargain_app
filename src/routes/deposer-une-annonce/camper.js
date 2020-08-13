@@ -4,7 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import Step0_CamperManufacturer from '../../components/Products/camper/Step0_CamperManufacturer';
+import Step0_DynVehicleManufacturer from '../../components/Products/Step0_DynVehicleManufacturer'
 import Step1CamperDetails from '../../components/Products/camper/Step1_CamperDetails';
 import Step2CamperStatus from '../../components/Products/camper/Step2_CamperStatus';
 import Step3CarOwner from '../../components/Products/car/Step3_CarOwner';
@@ -52,7 +52,10 @@ const CarForm = (props) => {
             prevRoute="/deposer-une-annonce"
             resumeModel={resumeModel}
             onFinalSubmit={onFinalSubmit}>
-            <Step0_CamperManufacturer title={t('vehicles:vehicle-selection')}/>
+            <Step0_DynVehicleManufacturer
+                vehicleTypeModel={"campers"}
+                title={t('vehicles:vehicle-selection')}
+            />
             <Step1CamperDetails title={t('vehicles:vehicle-description')}/>
             <Step2CamperStatus title={t('vehicles:vehicle-state')}/>
             <Step3CarOwner title={t('vehicles:your-announce')}/>

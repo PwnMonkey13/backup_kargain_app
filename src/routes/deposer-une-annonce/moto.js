@@ -4,7 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import Step0MotosManufacturer from '../../components/Products/moto/Step0_MotosManufacturer';
+import Step0_DynVehicleManufacturer from '../../components/Products/Step0_DynVehicleManufacturer';
 import Step1MotoDetails from '../../components/Products/moto/Step1_MotoDetails';
 import Step2MotoStatus from '../../components/Products/moto/Step2_MotoStatus';
 import Step3MotoOwner from '../../components/Products/moto/Step3_MotoOwner';
@@ -35,7 +35,10 @@ const MotorCyclesForm = (props) => {
             prevRoute="/deposer-une-annonce"
             // resumeModel={[]}
             onFinalSubmit={onFinalSubmit}>
-            <Step0MotosManufacturer title={t('vehicles:vehicle-selection')}/>
+            <Step0_DynVehicleManufacturer
+                vehicleTypeModel={"motorcycles"}
+                title={t('vehicles:vehicle-selection')}
+            />
             <Step1MotoDetails title={t('vehicles:vehicle-description')}/>
             <Step2MotoStatus title={t('vehicles:vehicle-state')}/>
             <Step3MotoOwner title={t('vehicles:your-announce')}/>

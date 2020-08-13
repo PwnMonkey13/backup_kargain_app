@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { Col, Row } from 'reactstrap';
-import Header from '../../Header';
-import FieldWrapper from '../../Form/FieldWrapper';
-import StepNavigation from '../../Form/StepNavigation';
-import { SelectInput } from '../../Form/Inputs';
-import useIsMounted from '../../../hooks/useIsMounted';
-import { FormContext } from '../../../context/FormContext';
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
-import VehiclesService from '../../../services/VehiclesService';
+import Header from '../Header';
+import FieldWrapper from '../Form/FieldWrapper';
+import StepNavigation from '../Form/StepNavigation';
+import { SelectInput } from '../Form/Inputs';
+import useIsMounted from '../../hooks/useIsMounted';
+import { FormContext } from '../../context/FormContext';
+import { ModalDialogContext } from '../../context/ModalDialogContext';
+import VehiclesService from '../../services/VehiclesService';
 
-const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmitStep, prevStep, nextStep }) => {
+const Step0_DynVehicleManufacturer = ({vehicleTypeModel, triggerSkipStep, onSubmitStep, prevStep, nextStep }) => {
     const formRef = useRef(null);
     const isMounted = useIsMounted();
     const { dispatchModalError } = useContext(ModalDialogContext);
@@ -27,7 +28,6 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
     });
 
     const triggerSubmit = () => {
-        console.log('triggerSubmitStep');
         formRef.current.dispatchEvent(new Event('submit'));
     };
 
@@ -41,7 +41,9 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
     }, [getValues(), isMounted]);
 
     useEffect(() => {
-        if (isMounted && watch('manufacturer.make') && watch('manufacturer.model')) {
+        if (isMounted &&
+          watch('manufacturer.make') &&
+          watch('manufacturer.model')) {
             triggerSubmit();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,11 +51,11 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
 
     useEffect(() => {
         console.log('fetch makes');
-        VehiclesService.getMakes("motorcycles")
-            .then(motos => {
-                const makesOptions = motos.map(car => ({
-                    value: car.make,
-                    label: car.make
+        VehiclesService.getMakes(vehicleTypeModel)
+            .then(makes => {
+                const makesOptions = makes.map(make => ({
+                    value: make._id,
+                    label: make.make
                 }));
                 const defaultOption = {
                     value: 'other',
@@ -74,14 +76,14 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
 
     useEffect(() => {
         if (watch('manufacturer.make')) {
-            console.log('fetch 2');
-            const makeID = watch('manufacturer.make').value;
-            if (makeID) {
-                VehiclesService.getMakeModels("motorcycles", makeID)
-                    .then(data => data.models)
+            const make = watch('manufacturer.make').label;
+            console.log('fetch models');
+
+            if (make) {
+                VehiclesService.getMakeModels(vehicleTypeModel, make)
                     .then(models => {
                         const modelsOptions = models.map(model => ({
-                            value: model.model,
+                            value: model._id,
                             label: model.model
                         }));
                         const defaultOption = {
@@ -107,23 +109,16 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
-            <Header text="Sélectionnez votre moto"/>
+            <Header text="Sélectionnez la marque de votre vehicle"/>
             <Row>
                 <Col>
                     <FieldWrapper label="Marque" labelTop>
                         <SelectInput
                             name="manufacturer.make"
-                            placeholder="Select a motorcycle make"
+                            placeholder="Select a vehicle make"
                             control={control}
                             errors={errors}
                             options={manufacturersData.makes}
-                            onChange={([selected, name]) => {
-                                collectStepChanges({
-                                    name: name,
-                                    label: selected.label
-                                });
-                                return selected;
-                            }}
                         />
                     </FieldWrapper>
                 </Col>
@@ -135,13 +130,6 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
                             options={manufacturersData.models}
                             control={control}
                             errors={errors}
-                            onChange={([selected, option]) => {
-                                collectStepChanges({
-                                    name: option.name,
-                                    label: selected.label
-                                });
-                                return selected;
-                            }}
                         />
                     </FieldWrapper>
                 </Col>
@@ -151,4 +139,9 @@ const Step0_MotosManufacturer = ({ collectStepChanges, triggerSkipStep, onSubmit
         </form>
     );
 };
-export default Step0_MotosManufacturer;
+
+Step0_DynVehicleManufacturer.propTypes = {
+    vehicleTypeModel : PropTypes.string.isRequired
+}
+
+export default Step0_DynVehicleManufacturer;

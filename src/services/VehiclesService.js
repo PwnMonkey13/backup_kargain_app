@@ -7,8 +7,53 @@ function buildUrl (url, params = {}) {
     return Object.keys(params).length ? `${url}?${queryString.stringify(params)}` : url;
 }
 
+function getCarsDistinctModels (make) {
+    if (!make) throw 'make param is required';
+    const url = `${config.api}/vehicles/cars/distinct/make/models`;
+
+    return fetch(buildUrl(url, { make }))
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+            throw err;
+        });
+}
+
+function getCarsMakeModelTrims (make, model) {
+    if (!make) throw 'make param is required';
+    if (!model) throw 'model param is required';
+
+    const url = `${config.api}/vehicles/cars/distinct/make/model/trims`;
+
+    return fetch(buildUrl(url, { make, model }))
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+            throw err;
+        });
+}
+
+function getCarsMakeModelTrimYears (make, model, trim) {
+    if (!make) throw 'make param is required';
+    if (!model) throw 'model param is required';
+    if (!trim) throw 'trim param is required';
+
+    const url = `${config.api}/vehicles/cars/make/model/trim/years`;
+
+    return fetch(buildUrl(url, {
+        make,
+        model,
+        trim
+    }))
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+            throw err;
+        });
+}
+
 function getMakes (vehicleType) {
-    const url = buildUrl(`${config.api}/vehicles/${vehicleType}/makes`);
+    const url = `${config.api}/vehicles/dyn/${vehicleType}/makes`;
     return fetch(url)
         .then(handleResponse)
         .then(json => json.data)
@@ -17,11 +62,12 @@ function getMakes (vehicleType) {
         });
 }
 
-function getMakeModels (vehicleType, makeID) {
-    if (!makeID) throw 'make param is required';
-    const url = `${config.api}/vehicles/${vehicleType}/${makeID}/models`;
 
-    return fetch(url)
+function getMakeModels (vehicleType, make) {
+    if (!make) throw 'make param is required';
+    const url = `${config.api}/vehicles/dyn/${vehicleType}/models`;
+
+    return fetch(buildUrl(url, { make }))
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
@@ -70,5 +116,8 @@ export default {
     getMakes,
     getMakeModels,
     getVehiclesGenerations,
+    getCarsDistinctModels,
+    getCarsMakeModelTrims,
+    getCarsMakeModelTrimYears,
     getVehiclesYearsVersion
 };
