@@ -4,7 +4,7 @@ import DamageSelectorTabs from './DamageSelectorTabs';
 import PropTypes from 'prop-types';
 
 const DamageSelectorControlledCar = ({ name, control, defaultValues, selectorFullWidth }) => {
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
 
     const tabs = [
         {
@@ -30,12 +30,12 @@ const DamageSelectorControlledCar = ({ name, control, defaultValues, selectorFul
         },
         {
             title: t('vehicles:left-side'),
-            key: 'side-left',
+            key: 'left-side',
             img: '/images/annotations-views/side-left.png',
         },
         {
             title: t('vehicles:right-side'),
-            key: 'side-right',
+            key: 'right-side',
             img: '/images/annotations-views/side-right.png',
         },
         {
