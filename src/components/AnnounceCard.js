@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next-translate/Link';
+import useDimensions from 'react-use-dimensions'
+import clsx from 'clsx'
 import { ReactComponent as StarSVG } from '../../public/images/svg/star.svg';
 import { ReactComponent as StarSVGYellow } from '../../public/images/svg/star-yellow.svg';
 import { ModalDialogContext } from '../context/ModalDialogContext';
@@ -18,7 +20,7 @@ import { getTimeAgo } from '../libs/utils';
 import TagsList from './Tags/TagsList';
 import CTALink from './CTALink';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     card: {
         background: '#FFF',
         position: 'relative',
@@ -33,7 +35,10 @@ const useStyles = makeStyles(() => ({
 
     cardTop: {
         display: 'flex',
-        margin: '1rem'
+        margin: '1rem',
+        [theme.breakpoints.down('md')]: {
+            margin: '.3rem'
+        }
     },
 
     cardTopInfos: {
@@ -41,17 +46,24 @@ const useStyles = makeStyles(() => ({
         flexDirection: 'column',
         width: '100%',
         margin: '0 1rem'
+    },
+
+    cardTopSubInfos : {
+        display : 'flex',
+        justifyContent : 'center',
+        margin : `${theme.width}`
     }
 }));
 
 const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
     const classes = useStyles();
     const announce = new AnnounceClass(announceRaw);
+    const [refWidth, { width }] = useDimensions();
     const { dispatchModalError } = useContext(ModalDialogContext);
     const [likesCounter, setLikesCounter] = useState(announce.getLikesLength);
     const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
     const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
 
     const alreadyLikeCurrentUser = () => {
         const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite.id === announce.getID);
@@ -75,7 +87,7 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
     };
 
     return (
-        <div className="objava-wrapper cardAd">
+        <div className="objava-wrapper cardAd" ref={refWidth}>
             <div className={classes.cardTop}>
                 <div className="avatar">
                     <Link href={announce.getAuthor.getProfileLink} prefetch={false}>
@@ -98,22 +110,23 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                         </Link>
                     </div>
 
-                    <div className="d-flex justify-content-between">
-                        <div className="top-profile-data-wrapper">
-                            {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country']) && (
-                                <div className="top-profile-location">
-                                    <img className="mx-1" src="/images/location.png" alt=""/>
-                                    {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country'])}
-                                </div>
-                            )}
-                        </div>
-                        <div>
-                            <small className="mx-2"> {getTimeAgo(announce.getCreationDate.raw, lang)}</small>
-                            <img src="/images/share.png" alt=""/>
-                        </div>
-                    </div>
+                    {width >= 500 && (
+                        <CardTopSubInfos
+                            announce={announce}
+                            width={width}
+                        />
+                    )}
                 </div>
             </div>
+
+            {width < 500 && (
+                <div className="m-2">
+                    <CardTopSubInfos
+                        announce={announce}
+                        width={width}
+                    />
+                </div>
+            )}
 
             {announce.getFeaturedImg && (
                 <div className="cardAd_Featured">
@@ -200,6 +213,28 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
         </div>
     );
 };
+
+const CardTopSubInfos = ({width, announce}) => {
+    const classes = useStyles()
+    const { lang } = useTranslation()
+
+    return(
+        <div className={clsx(classes.cardTopSubInfos, width <= 500 && 'flex-column')}>
+            <div className="top-profile-data-wrapper">
+                {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country']) && (
+                    <div className="top-profile-location">
+                        <img className="mx-1" src="/images/location.png" alt=""/>
+                        {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country'])}
+                    </div>
+                )}
+            </div>
+            <div>
+                <small className="mx-2"> {getTimeAgo(announce.getCreationDate.raw, lang)}</small>
+                <img src="/images/share.png" alt=""/>
+            </div>
+        </div>
+    )
+}
 
 AnnounceCard.propTypes = {
     announceRaw: PropTypes.any.isRequired,

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Router, useRouter } from 'next/router';
 import { DefaultSeo } from 'next-seo';
 import withGA from 'next-ga'
+import PropTypes from 'prop-types';
 import DynamicNamespaces from 'next-translate/DynamicNamespaces';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import { ModalDialogContextProvider } from '../context/ModalDialogContext';
@@ -85,5 +86,10 @@ export function reportWebVitals(metric) {
     // These metrics can be sent to any analytics service
     // console.log(metric)
 }
+
+MyApp.propTypes = {
+    Component: PropTypes.elementType.isRequired,
+    pageProps: PropTypes.object.isRequired
+};
 
 export default withGA('UA-229369587', Router)(appWithI18n(MyApp, i18nConfig));

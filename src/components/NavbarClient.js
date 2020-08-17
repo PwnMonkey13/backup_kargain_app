@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import Link from 'next-translate/Link';
 import useTranslation from 'next-translate/useTranslation';
 import { Collapse, Container,  Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
-import { useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
 import AddIcon from '@material-ui/icons/Add';
@@ -50,7 +49,7 @@ const NavbarClient = () => {
         <>
             <header className="header">
                 <Container>
-                    <Navbar light expand="md" className="navbar p-2 position-relative">
+                    <Navbar light expand="md" className="navbar position-relative">
                         <NavbarBrand href="/">
                             <img src={getLogo()} width="150" alt="logo"/>
                         </NavbarBrand>
@@ -59,22 +58,26 @@ const NavbarClient = () => {
                             onClick={toggleNavbar}
                         />
                         <Collapse isOpen={isOpen} navbar>
-                            {isMobile ? (
-                                <div className={clsx("sidebar", isOpen && 'open')}>
-                                    <div className="sidebar_controls">
-                                        <Button
-                                            startIcon={<CloseIcon/>}
-                                            onClick={toggleNavbar}
-                                        />
+                            {isOpen && (
+                            <>
+                                {isMobile ? (
+                                    <div className={clsx("sidebar", isOpen && 'open')}>
+                                        <div className="sidebar_controls">
+                                            <Button
+                                                startIcon={<CloseIcon/>}
+                                                onClick={toggleNavbar}
+                                            />
+                                        </div>
+                                        <NavbarAction vertical={true}/>
+                                        {isAuthenticated ? <LoggedInUserNav/> : <VisitorNav/>}
                                     </div>
-                                    <NavbarAction vertical={true}/>
-                                    {isAuthenticated ? <LoggedInUserNav vertical={true}/> : <VisitorNav vertical={true}/>}
-                                </div>
-                            ) : (
-                                <div className={clsx("d-flex", "navbar-menu")}>
-                                    <NavbarAction/>
-                                    {isAuthenticated ? <LoggedInUserNav/> : <VisitorNav/>}
-                                </div>
+                                ) : (
+                                    <div className={clsx("d-flex", "navbar-menu")}>
+                                        <NavbarAction/>
+                                        {isAuthenticated ? <LoggedInUserNav/> : <VisitorNav/>}
+                                    </div>
+                                )}
+                            </>
                             )}
                         </Collapse>
                     </Navbar>
@@ -86,7 +89,6 @@ const NavbarClient = () => {
 
 const NewAdButtonCTA = ({isDesktop}) => {
     const { t } = useTranslation();
-    console.log(isDesktop)
 
     return (
         <CTALink
@@ -98,20 +100,14 @@ const NewAdButtonCTA = ({isDesktop}) => {
     );
 };
 
-const NavbarAction = ({vertical}) => {
+const NavbarAction = ({ vertical }) => {
     const { t } = useTranslation();
     const classes = useStyles();
-    const theme = useTheme();
-    const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
-        defaultMatches: true
-    });
-
-    // console.log(isDesktop)
 
     return (
         <Nav navbar className={clsx("my-2", vertical ? "flex-column" : "flex-row-nav")}>
             <NavItem className="p-2">
-                <NewAdButtonCTA isDesktop={isDesktop}/>
+                <NewAdButtonCTA isDesktop={true}/>
             </NavItem>
 
             <NavItem className="p-2">
@@ -246,7 +242,7 @@ const LoggedInUserNav = ({vertical}) => {
     };
 
     return (
-        <Nav navbar className={clsx("my-2", vertical ? "flex-column" : "flex-row-nav")}>
+        <Nav navbar className={clsx("my-2", "justify-content-center", vertical ? "flex-column" : "flex-row-nav")}>
             <NavItem>
                 <Link href="/" prefetch={false}>
                     <a>

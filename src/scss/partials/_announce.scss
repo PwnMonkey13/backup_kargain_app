@@ -40,8 +40,12 @@
     }
 
     .cardAd_Content{
-        padding: .5rem 1rem;
+        padding: .5rem;
         margin: 0 .5rem;
+
+        @media (max-width: 500px) {
+            margin: unset;
+        }
     }
 }
 

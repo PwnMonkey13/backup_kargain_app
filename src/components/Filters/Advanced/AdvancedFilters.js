@@ -71,7 +71,7 @@ const AdvancedFilters = ({ defaultFilters, updateFilters, ...props }) => {
     const { t } = useTranslation();
     const { isAuthReady, authenticatedUser } = useAuth();
     const isMobile = useMediaQuery('(max-width:768px)');
-    const [hiddenForm, hideForm] = useState(isMobile);
+    const [hiddenForm, hideForm] = useState(true);
     const [changes, setChanges] = useState({});
     const [vehicleType, setVehicleType] = useState(props.vehicleType)
     const DynamicFiltersComponent = getFiltersVehicleComponent(vehicleType);
@@ -115,6 +115,10 @@ const AdvancedFilters = ({ defaultFilters, updateFilters, ...props }) => {
     const toggleFilters = () => {
         hideForm(hiddenForm => !hiddenForm);
     };
+
+    useEffect(()=>{
+        toggleFilters()
+    },[isMobile])
 
     useEffect(()=>{
         const isPro = authenticatedUser.getIsPro
