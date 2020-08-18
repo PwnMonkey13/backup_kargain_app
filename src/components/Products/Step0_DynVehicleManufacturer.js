@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { Col, Row } from 'reactstrap';
-import Header from '../Header';
 import FieldWrapper from '../Form/FieldWrapper';
 import StepNavigation from '../Form/StepNavigation';
 import { SelectInput } from '../Form/Inputs';
@@ -109,7 +108,6 @@ const Step0_DynVehicleManufacturer = ({vehicleTypeModel, triggerSkipStep, onSubm
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
-            <Header text="Sélectionnez la marque de votre vehicle"/>
             <Row>
                 <Col>
                     <FieldWrapper label="Marque" labelTop>

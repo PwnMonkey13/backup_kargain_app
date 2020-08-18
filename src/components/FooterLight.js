@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         borderRight: '1px solid gainsboro',
         color: '#343333',
         fontWeight: 700,
-        padding : '0 1rem'
+        paddingRight : '10px'
     }
 }));
 

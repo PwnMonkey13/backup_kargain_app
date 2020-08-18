@@ -50,8 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
     cardTopSubInfos : {
         display : 'flex',
-        justifyContent : 'center',
-        margin : `${theme.width}`
+        justifyContent : 'space-between'
     }
 }));
 
@@ -220,14 +219,12 @@ const CardTopSubInfos = ({width, announce}) => {
 
     return(
         <div className={clsx(classes.cardTopSubInfos, width <= 500 && 'flex-column')}>
-            <div className="top-profile-data-wrapper">
-                {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country']) && (
-                    <div className="top-profile-location">
-                        <img className="mx-1" src="/images/location.png" alt=""/>
-                        {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country'])}
-                    </div>
-                )}
-            </div>
+            {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country']) && (
+                <div className="top-profile-location">
+                    <img className="mx-1" src="/images/location.png" alt=""/>
+                    {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country'])}
+                </div>
+            )}
             <div>
                 <small className="mx-2"> {getTimeAgo(announce.getCreationDate.raw, lang)}</small>
                 <img src="/images/share.png" alt=""/>

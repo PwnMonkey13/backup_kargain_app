@@ -387,7 +387,10 @@ const Announce = () => {
                     <Typography component="h3" variant="h3">
                         {t('vehicles:data-sheet')} ({state.announce.getCountDamages})
                     </Typography>
-                    <DamageViewerTabs tabs={state.announce.getDamagesTabs}/>
+                    <DamageViewerTabs
+                        tabs={state.announce.getDamagesTabs}
+                        vehicleType={state.announce.getVehicleType}
+                    />
                 </section>
 
                 <Comments announceRaw={state.announce.getRaw}/>

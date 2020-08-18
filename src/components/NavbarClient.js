@@ -58,7 +58,7 @@ const NavbarClient = () => {
                             onClick={toggleNavbar}
                         />
                         <Collapse isOpen={isOpen} navbar>
-                            {isOpen && (
+                            {(!isMobile || isOpen) && (
                             <>
                                 {isMobile ? (
                                     <div className={clsx("sidebar", isOpen && 'open')}>

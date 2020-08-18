@@ -2,12 +2,13 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row } from 'reactstrap';
 import { ProgressBar } from 'react-step-progress-bar';
-
+import useTranslation from 'next-translate/useTranslation'
 import ControlledStep from './ControlledStep';
 import BreadcrumbSteps from './BreadcrumbSteps';
 import useIsMounted from '../../hooks/useIsMounted';
 import DebugLocalStorage from '../DebugLocalStorage';
 import { FormContext } from '../../context/FormContext';
+import Header from '../Header'
 
 const calculatePourcent = (current, length) => {
     return ((current + 1) / (length + 1)) * 100;
@@ -15,6 +16,7 @@ const calculatePourcent = (current, length) => {
 
 const FormWizard = ({ debug, formKey, onFinalSubmit, children }) => {
     const isMounted = useIsMounted();
+    const { t } = useTranslation();
     const steps = Array.isArray(children) ? children.filter(child => child.props.hidden !== true) : children ? [children] : [];
     const { formDataContext, dispatchFormUpdate } = useContext(FormContext);
     const [activeStep, setActiveStep] = useState(formDataContext.currentStep || 0);
@@ -79,6 +81,8 @@ const FormWizard = ({ debug, formKey, onFinalSubmit, children }) => {
                 maxActiveStep={maxActiveStep}
             />
             <ProgressBar percent={pourcent} filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"/>
+            <Header as="h4" center={false} text={[t('layout:form'), t(`vehicles:${formKey.toLowerCase()}`)].join(' ')}/>
+
             <ControlledStep
                 step={steps[activeStep]}
                 onSubmitStep={onSubmitStep}

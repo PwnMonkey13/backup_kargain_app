@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 const Header = ({ as, text, className, children, ...props }) => {
-    const classnames = clsx(className, 'text-center')
+    const classnames = clsx(className, props.center && 'text-center')
     const styles = {}
     let el = as
     if (props.p) el = 'p'
