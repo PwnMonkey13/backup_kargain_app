@@ -27,7 +27,7 @@ import SelectInput from '../../../components/Form/Inputs/SelectInput';
 import TagsControlled from '../../../components/Tags/TagsControlled';
 import TextareaInput from '../../../components/Form/Inputs/TextareaInput';
 import AnnounceImagesAutoUpload from '../../../components/Uploads/AnnounceImagesAutoUpload';
-import DamageSelectorControlledCar from '../../../components/Damages/DamageSelectorControlledCar';
+import DamageSelectorControlled from '../../../components/Damages/DamageSelectorControlled';
 import GalleryViewer from '../../../components/Gallery/GalleryViewer';
 import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy';
 import NumberInputMUI from '../../../components/Form/Inputs/NumberInputMUI';
@@ -383,7 +383,7 @@ const MultiTabsForm = ({ announce, formRef, activeTab, slug, defaultValues }) =>
                     <Typography component="h3" variant="h3" className="text-center" gutterBottom>
                         {t('vehicles:damages-potential-selection')}
                     </Typography>
-                    <DamageSelectorControlledCar
+                    <DamageSelectorControlled
                         name="damages"
                         control={control}
                         defaultValues={announce.getDamagesTabs}

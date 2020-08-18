@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx';
+import PropTypes from 'prop-types'
 import useTranslation from 'next-translate/useTranslation';
 import { Col, Row, TabContent, TabPane } from 'reactstrap';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Header from '../Header';
 import DamagesNavResponsive from './DamagesNavResponsive';
+import damagesFilters from './damagesFilters'
 
 const useStyles = makeStyles(() => ({
     annoInputs: {
@@ -63,22 +65,28 @@ const useStyles = makeStyles(() => ({
     },
 
     annoInputField: {}
-
 }));
 
-const DamageViewerTabs = ({ tabs }) => {
+const DamageViewerTabs = ({ vehicleType, tabs }) => {
     const warningDamageRef = useRef(null);
     const [activeTab, setActiveTab] = useState(0);
+    const [damagesTabs, setDamagesTabs ] = useState([])
     let annoRefs = [];
+
+    useEffect(()=>{
+        const p = damagesFilters(vehicleType, tabs).map(tab => ({
+            key: tab.key,
+            countStages: tab.stages.length
+        }));
+
+        setDamagesTabs(p)
+    },[vehicleType,tabs])
 
     return (
         <section className="anno">
             <DamagesNavResponsive
                 {...{
-                    damagesTabsLight: tabs && tabs.map(tab => ({
-                        title: tab.key,
-                        countStages: tab.stages.length
-                    })),
+                    damagesTabs,
                     activeTab,
                     setActiveTab
                 }}
@@ -130,7 +138,7 @@ const DamagesMappedImg = ({ tab, index, annoRefs }) => {
 
 const DamagesList = ({ tab }) => {
     const classes = useStyles();
-    const { t, lang } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <div className={clsx(classes.annoInputs)}>
@@ -160,8 +168,13 @@ const DamagesList = ({ tab }) => {
     );
 };
 
-DamageViewerTabs.propTypes = {};
+DamageViewerTabs.propTypes = {
+    vehicleType: PropTypes.string.isRequired
+};
 
-DamageViewerTabs.defaultProps = {};
+DamageViewerTabs.defaultProps = {
+    tabs : [],
+    vehicleType : 'car'
+};
 
 export default DamageViewerTabs;

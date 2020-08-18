@@ -12,9 +12,9 @@ import Header from '../../Header';
 import SearchLocationInput from '../../Form/Inputs/SearchLocationInput';
 
 const Step = ({ handleSubmitForm, prevStep }) => {
+    const { t } = useTranslation();
     const [, , coordinates] = useAddress();
     const { formDataContext } = useContext(FormContext);
-    const { t } = useTranslation();
     const { watch, control, errors, setValue, register, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
@@ -85,6 +85,15 @@ const Step = ({ handleSubmitForm, prevStep }) => {
                     </FieldWrapper>
                 </Col>
             </Row>
+
+            <FieldWrapper >
+                <CheckboxMUI
+                    name="showCellPhone"
+                    label={t('vehicles:show-cell-phone')}
+                    control={control}
+                    errors={errors}
+                />
+            </FieldWrapper>
 
             <FieldWrapper label={t('vehicles:country')}>
                 <SelectCountryFlags

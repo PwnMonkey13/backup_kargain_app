@@ -6,7 +6,7 @@ import { useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
 import useTranslation from 'next-translate/useTranslation'
 
-const DamagesNav = ({ activeTab, setActiveTab, damagesTabsLight }) => {
+const DamagesNav = ({ activeTab, setActiveTab, damagesTabs }) => {
     const theme = useTheme();
     const { t } = useTranslation()
     const isUpTablet = useMediaQuery(theme.breakpoints.up('md'), {
@@ -17,14 +17,14 @@ const DamagesNav = ({ activeTab, setActiveTab, damagesTabsLight }) => {
         <div className="annoNav">
             {isUpTablet ? (
                 <ul className="nav nav-tabs">
-                    {damagesTabsLight && damagesTabsLight.map((tab, indexTab) => {
+                    {damagesTabs.map((tab, indexTab) => {
                         return (
                             <li key={indexTab} className={clsx('nav-item')}>
                                 <a className={clsx('nav-link', activeTab === indexTab && 'active')}
                                     onClick={() => {
                                         setActiveTab(indexTab);
                                     }}>
-                                    {t(`vehicles:${tab.title}`)}
+                                    {t(`vehicles:${tab.key}`)}
                                 </a>
                             </li>
                         );
@@ -32,9 +32,9 @@ const DamagesNav = ({ activeTab, setActiveTab, damagesTabsLight }) => {
                 </ul>
             ) : (
                 <NiceSelect
-                    options={damagesTabsLight && damagesTabsLight.map((tab, index) => ({
+                    options={damagesTabs.map((tab, index) => ({
                         value: index,
-                        label: `${tab.title} (${tab.countStages})`
+                        label: `${t(`vehicles:${tab.key}`)} (${tab.countStages})`
                     }))}
                     onChange={({ value }) => {
                         setActiveTab(value);
@@ -49,15 +49,15 @@ const DamagesNav = ({ activeTab, setActiveTab, damagesTabsLight }) => {
 DamagesNav.propTypes = {
     activeTab: PropTypes.number.isRequired,
     setActiveTab: PropTypes.func.isRequired,
-    damagesTabsLight: PropTypes.arrayOf(PropTypes.shape({
-        title: PropTypes.string.isRequired,
+    damagesTabs: PropTypes.arrayOf(PropTypes.shape({
+        key: PropTypes.string.isRequired,
         countStages: PropTypes.number
     }))
 };
 
 DamagesNav.defaultProps = {
     activeTab : 0,
-    damagesTabsLight : []
+    damagesTabs : []
 }
 export default memo(DamagesNav);
 

@@ -65,7 +65,6 @@ const useStyles = makeStyles(() => ({
         height: '1.4rem',
         display: 'inline-block'
     }
-
 }));
 
 const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFullWidth, ...props }) => {
@@ -74,7 +73,11 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
     const { t } = useTranslation();
     const warningDamageRef = useRef(null);
     const [activeTab, setActiveTab] = useState(0);
-    const [damagesTabs, setDamagesTabs] = useState(tabs);
+    const [damagesTabs, setDamagesTabs] = useState([]);
+
+    useEffect(() => {
+        setDamagesTabs(tabs);
+    }, [tabs]);
 
     useEffect(() => {
         fireChanges(damagesTabs);
@@ -156,9 +159,9 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
         <section className="anno">
             <DamagesNavResponsive
                 {...{
-                    damagesTabsLight: damagesTabs && damagesTabs.map(tab => ({
-                        title: tab.title,
-                        countStages: tab.stages.length
+                    damagesTabs: damagesTabs.map(tab => ({
+                        key: tab.key,
+                        countStages: tab.stages?.length
                     })),
                     activeTab,
                     setActiveTab

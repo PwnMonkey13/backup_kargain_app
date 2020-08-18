@@ -9,13 +9,13 @@ import FieldWrapper from '../../Form/FieldWrapper';
 import TagsControlled from '../../Tags/TagsControlled';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import { FormContext } from '../../../context/FormContext';
-import DamageSelectorControlledCar from '../../Damages/DamageSelectorControlledCar';
+import DamageSelectorControlled from '../../Damages/DamageSelectorControlled';
 
-const Step = ({ onSubmitStep, prevStep, nextStep }) => {
+const Step = ({ onSubmitStep, prevStep }) => {
     const formRef = useRef(null);
     const { formDataContext } = useContext(FormContext);
     const { t } = useTranslation();
-    const { watch, control, errors, setValue, getValues, register, formState, handleSubmit } = useForm({
+    const { control, errors, getValues, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: formDataContext
@@ -63,8 +63,9 @@ const Step = ({ onSubmitStep, prevStep, nextStep }) => {
                 />
             </FieldWrapper>
 
-            <DamageSelectorControlledCar
+            <DamageSelectorControlled
                 name="damages"
+                vehicleType="moto"
                 control={control}
                 defaultValues={getValues().damages}
             />

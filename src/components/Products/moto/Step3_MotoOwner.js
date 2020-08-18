@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { Col, Row } from 'reactstrap';
 import useTranslation from 'next-translate/useTranslation';
@@ -10,14 +10,20 @@ import UploadDropZone from '../../Uploads/UploadDropZone';
 import { FormContext } from '../../../context/FormContext';
 import Header from '../../Header';
 import SearchLocationInput from '../../Form/Inputs/SearchLocationInput';
+import useAddress from '../../../hooks/useAddress'
 
 const Step = ({ prevStep, handleSubmitForm }) => {
-    const { formDataContext } = useContext(FormContext);
     const { t } = useTranslation();
-    const { watch, control, errors, setValue, handleSubmit } = useForm({
+    const [, , coordinates] = useAddress();
+    const { formDataContext } = useContext(FormContext);
+    const { watch, control, errors, setValue, register, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: {
+            title : [
+            formDataContext?.manufacturer?.make?.label,
+            formDataContext?.manufacturer?.model?.label,
+            formDataContext?.manufacturer?.year?.label].join(' - '),
             ...formDataContext,
             showCellPhone: true,
             visible: true
@@ -29,6 +35,15 @@ const Step = ({ prevStep, handleSubmitForm }) => {
     };
 
     const countrySelect = watch('countrySelect');
+
+    useEffect(() => {
+        register({ name: 'location.coordinates' });
+        setValue('location.coordinates', coordinates);
+    }, [coordinates]);
+
+    useEffect(() => {
+        register({ name: 'images' });
+    }, []);
 
     return (
         <form className="form_wizard" onSubmit={handleSubmit(handleSubmitForm)}>
@@ -73,7 +88,7 @@ const Step = ({ prevStep, handleSubmitForm }) => {
                 </Col>
             </Row>
 
-            <FieldWrapper label={t('vehicles:show-cell-phone')}>
+            <FieldWrapper>
                 <CheckboxMUI
                     name="showCellPhone"
                     label={t('vehicles:show-cell-phone')}

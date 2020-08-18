@@ -157,5 +157,9 @@
   "left-side" : "Coté gauche",
   "right-side" : "Coté droit",
   "mecanic" : "Mecanique",
-  "garage" : "Garage"
+  "garage" : "Garage",
+  "moto" : "Moto",
+  "car" : "Voiture",
+  "utility" : "Utilitaire",
+  "camper" : "Camping car"
 }

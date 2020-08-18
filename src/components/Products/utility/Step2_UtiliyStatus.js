@@ -8,19 +8,19 @@ import { SelectInput, TextareaInput } from '../../Form/Inputs';
 import TagsControlled from '../../Tags/TagsControlled';
 import { FormContext } from '../../../context/FormContext';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
-import DamageSelectorControlledCar from '../../Damages/DamageSelectorControlledCar';
+import DamageSelectorControlled from '../../Damages/DamageSelectorControlled';
 
 const Step = ({ onSubmitStep, prevStep }) => {
     const { formDataContext } = useContext(FormContext);
     const { t, lang } = useTranslation();
     const [formData, setFormData] = useState({
         RadioVehicleGeneralState: [],
-        CheckboxOptionsEquipments: [],
+        CheckboxOptionsEquipments: []
     });
     const { control, errors, getValues, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
-        defaultValues: formDataContext,
+        defaultValues: formDataContext
     });
 
     const getData = async () => {
@@ -82,8 +82,9 @@ const Step = ({ onSubmitStep, prevStep }) => {
                 />
             </FieldWrapper>
 
-            <DamageSelectorControlledCar
+            <DamageSelectorControlled
                 name="damages"
+                // vehicleType="car"
                 control={control}
                 defaultValues={getValues().damages}
             />
