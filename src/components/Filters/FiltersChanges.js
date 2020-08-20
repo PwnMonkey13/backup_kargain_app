@@ -34,17 +34,21 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const FiltersChanges = ({changes, resetValue}) => {
+const FiltersChanges = ({changes = {}, resetValue}) => {
     const { t } = useTranslation();
     const classes = useStyles()
+    const fieldsToHide = ["coordinates"]
+    const filtered = Object.keys(changes)
+        .filter(key => !fieldsToHide.includes(key))
+        .reduce((carry, key)=> ({...carry, [key] : changes[key]}),{});
 
     return(
         <>
-            {Object.keys(changes).length !== 0 && (
+            {Object.keys(filtered).length !== 0 && (
             <>
                 <Typography variant="h4">{t('vehicles:filtered-by')} : </Typography>
                 <ul className="list-style-none">
-                    {changes && Object.keys(changes).map((name, index) => {
+                    {Object.keys(filtered).map((name, index) => {
                         const filter = changes[name]
 
                         return (
@@ -72,9 +76,6 @@ const FiltersChanges = ({changes, resetValue}) => {
 }
 
 const RenderFilterLabel = ({name, filter}) => {
-    console.log(filter)
-    console.log(name)
-
     const { t } = useTranslation();
     const options = fieldOptions[name];
     let val =  null;

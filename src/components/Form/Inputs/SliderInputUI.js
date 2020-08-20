@@ -66,12 +66,12 @@ const RangeSlider = ({ name, rules, control, errors, ...props }) => {
 
     const handleChange = (e, val) => {
         setValue(val);
+        control.setValue(name, value)
     };
 
     useEffect(()=>{
         control.register(name, rules)
-        control.setValue(name, value)
-    },[value])
+    },[])
 
     return (
         <>

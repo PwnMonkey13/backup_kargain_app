@@ -76,14 +76,15 @@ const AdvancedFilters = ({ defaultFilters, updateFilters, ...props }) => {
     const [vehicleType, setVehicleType] = useState(props.vehicleType)
     const DynamicFiltersComponent = getFiltersVehicleComponent(vehicleType);
     const [announceTypesFiltered, setAnnouncesTypesFiltered] = useState(AnnounceTypes);
+    const defaultValues = {
+        ...defaultFilters,
+        vehicleType : vehicleTypes[0],
+        adType : AnnounceTypes[0]
+    }
     const {watch, control, setValue, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
-        defaultValues: {
-            ...defaultFilters,
-            vehicleType : vehicleTypes[0],
-            adType : AnnounceTypes[0]
-        }
+        defaultValues
     });
 
     const onSubmit = (form, e) => {
@@ -103,11 +104,11 @@ const AdvancedFilters = ({ defaultFilters, updateFilters, ...props }) => {
         updateFilters(data);
     };
 
-    const resetValue = (field) => {
-        const defaultValue = defaultFilters[field]
-        setValue(field, defaultValue);
+    const resetValue = (name) => {
+        const defaultValue = defaultValues?.[name]
+        setValue(name, defaultValue);
         setChanges(changes => {
-            const { [field]: rm, ...rest } = changes;
+            const { [name]: rm, ...rest } = changes;
             return rest;
         });
     };

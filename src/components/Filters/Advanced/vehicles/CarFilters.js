@@ -106,7 +106,8 @@ const CarFilters = ({ control, watch, errors }) => {
                     min={1}
                     max={20}
                     step={1}
-                    marks={true}
+                    defaultValue={[1, 20]}
+                    // marks={true}
                     errors={errors}
                     control={control}
                 />
