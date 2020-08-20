@@ -150,7 +150,7 @@ const Step0CarManufacturer = ({ triggerSkipStep, onSubmitStep, prevStep, nextSte
                 VehiclesService.getCarsDistinctModels(make)
                     .then(data => {
                         const { values } = data
-                        if(!Array.isArray(values)) console.log('missing models array')
+                        if(!Array.isArray(values)) throw "missing models array"
 
                         const modelsOptions = values.map(model => ({
                             value: model,
@@ -187,7 +187,7 @@ const Step0CarManufacturer = ({ triggerSkipStep, onSubmitStep, prevStep, nextSte
                 VehiclesService.getCarsMakeModelTrims(make, model)
                     .then(data => {
                         const { values } = data
-                        if (!Array.isArray(values)) console.log('missing generations array')
+                        if (!Array.isArray(values)) throw "missing generations array"
 
                         const generationsOptions = values.map(trim => ({
                             value: trim,
@@ -222,8 +222,7 @@ const Step0CarManufacturer = ({ triggerSkipStep, onSubmitStep, prevStep, nextSte
             if(make && model && trim) {
                 VehiclesService.getCarsMakeModelTrimYears(make, model, trim)
                     .then(results => {
-                        console.log(results)
-                        if (!Array.isArray(results)) console.log('missing years array')
+                        if (!Array.isArray(results)) throw "missing years array"
 
                         const yearsOptions = results.map(result => ({
                             value: result._id,

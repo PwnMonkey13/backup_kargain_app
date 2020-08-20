@@ -35,28 +35,27 @@ const useStyles = makeStyles(() => ({
 }));
 
 const PopupAlert = () => {
-        const classes = useStyles();
-        const { modalState } = useContext(ModalDialogContext);
-        const [state, setState] = useState(modalState);
+    const classes = useStyles();
+    const { modalState } = useContext(ModalDialogContext);
+    const [state, setState] = useState({});
 
-        useEffect(() => {
-            setState({ ...modalState });
-        }, [modalState]);
+    useEffect(() => {
+        setState(modalState);
+    }, [modalState]);
 
-        const toggleModal = () => {
-            setState(!state.active);
-        };
+    const toggleModal = () => {
+        setState(!state.active);
+    };
 
-        const getMessage = () => {
-            if (state.msg) return state.msg;
-            if (state.type === 'error') {
-                if (typeof state.err === 'object') {
-                    return `[${state.err?.statusCode}] ${state.err?.name} : ${state.err?.message}`;
-                }
-                return state.err;
-            }
-            return null;
-        };
+    const getMessage = () => {
+        if (state.msg) return state.msg;
+        if (state.type === 'error') {
+            if (typeof state.err !== 'object') return state.err;
+            if(state.err?.statusCode) return `[${state.err?.statusCode}] ${state.err?.name} : ${state.err?.message}`;
+            else return `${state.err?.name} : ${state.err?.message}`;
+        }
+        return null;
+    };
 
     return (
         <Modal className={classes.rootClass} zIndex={1601}

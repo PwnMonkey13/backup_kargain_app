@@ -8,20 +8,20 @@ const ModalDialogContextProvider = ({ children }) => {
         type: null,
         msg: null,
         err: null,
-        link: null,
+        link: null
     });
 
     const dispatchModal = ({ persist, ...action }) => {
         const timeout = persist ? 4000000 : 4000;
         setState({
             active: true,
-            ...action,
+            ...action
         });
 
         setTimeout(() => {
             setState(state => ({
                 ...state,
-                active: false,
+                active: false
             }));
         }, timeout);
     };
@@ -33,21 +33,30 @@ const ModalDialogContextProvider = ({ children }) => {
                 type: null,
                 msg: null,
                 err: null,
-                link: null,
+                link: null
             }));
         }
     },[state.active])
 
-    const dispatchModalError = (action) => dispatchModal({
-        ...action,
-        type: 'error',
-    });
+    const dispatchModalError = (action) => {
+        if (action?.err?.message === "Failed to fetch")
+            dispatchModal({
+                ...action,
+                type: 'error',
+                persist: true,
+                err: new Error("Can't connect to server")
+            });
+        else dispatchModal({
+            ...action,
+            type: 'error'
+        });
+    }
 
     return (
         <ModalDialogContext.Provider value={{
             modalState : state,
             dispatchModal,
-            dispatchModalError,
+            dispatchModalError
         }}>
             {children}
         </ModalDialogContext.Provider>
