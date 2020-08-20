@@ -203,10 +203,8 @@ const StripeCard = ({ offer }) => {
             const data = await paymentsServices.createPaymentIntent({
                 product: offer.title
             });
-            console.log(data);
             setClientSecret(data.clientSecret);
         } catch (err) {
-            console.log(err);
             setError(err);
         }
     };
@@ -241,7 +239,6 @@ const StripeCard = ({ offer }) => {
                     }
                 }
             });
-            console.log(payload);
 
             if (payload.error) {
                 elements.getElement('card').focus();
@@ -258,8 +255,6 @@ const StripeCard = ({ offer }) => {
                     payload,
                     offerTitle : offer.title
                 });
-
-                console.log(result);
 
                 if (payload.paymentIntent.status === 'succeeded') {
                     dispatchModal({

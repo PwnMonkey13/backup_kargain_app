@@ -58,9 +58,6 @@ const SearchLocationInput = ({ name, control, rules, errors, country, ...props }
                         ...addressMapper,
                         fullAddress: formatted_address
                     };
-
-                    console.log(values)
-
                     control.setValue(name, values);
                 }
             });

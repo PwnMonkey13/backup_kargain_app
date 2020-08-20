@@ -18,20 +18,20 @@ const useStyles = makeStyles(() => ({
         color: 'white',
         border: 'none',
         transition: 'all .3s',
-        transformOrigin: '50% 50%',
+        transformOrigin: '50% 50%'
     },
     modalSuccess: {
         backgroundColor: themeColors.green,
-        color: themeColors.white,
+        color: themeColors.white
     },
     modalWarning: {
         backgroundColor: themeColors.red,
-        color: themeColors.white,
+        color: themeColors.white
     },
     modalInfo: {
         backgroundColor: themeColors.blue,
-        color: themeColors.white,
-    },
+        color: themeColors.white
+    }
 }));
 
 const PopupAlert = () => {
@@ -58,22 +58,22 @@ const PopupAlert = () => {
             return null;
         };
 
-        return (
-            <Modal className={classes.rootClass} zIndex={1601}
-                   wrapClassName={classes.wrapClass}
-                   modalClassName={classes.modalClass}
-                   contentClassName={state.err ? classes.modalWarning : classes.modalSuccess}
-                   isOpen={state.active}
-                   toggle={toggleModal}>
-                <div className="modal-body">
-                    <p> {getMessage()} </p>
-                    {state.link && (
-                        <p><Link href={state.link}>See page</Link></p>
-                    )}
-                </div>
-            </Modal>
-        );
-    }
+    return (
+        <Modal className={classes.rootClass} zIndex={1601}
+            wrapClassName={classes.wrapClass}
+            modalClassName={classes.modalClass}
+            contentClassName={state.err ? classes.modalWarning : classes.modalSuccess}
+            isOpen={state.active}
+            toggle={toggleModal}>
+            <div className="modal-body">
+                <p> {getMessage()} </p>
+                {state.link && (
+                    <p><Link href={state.link}>See page</Link></p>
+                )}
+            </div>
+        </Modal>
+    );
+}
 ;
 
 export default PopupAlert;

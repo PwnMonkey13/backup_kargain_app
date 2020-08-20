@@ -16,7 +16,7 @@ const handleResponse = response => {
                 throw 'Something failed on the server'
             });
     } else {
-        let msg = null;
+        let msg;
         switch (response.status) {
         case 401:
         case 403:

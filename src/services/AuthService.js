@@ -14,8 +14,7 @@ function login (form) {
         .then(json => json.data)
         .catch(err => {
             throw err;
-        }
-        );
+        });
 }
 
 function SSOAuthLogin (provider, data) {
@@ -33,8 +32,7 @@ function SSOAuthLogin (provider, data) {
             .then(json => json.data)
             .catch(err => {
                 throw err;
-            }
-            );
+            });
     }
 }
 
@@ -61,13 +59,10 @@ function register (form) {
 
     return fetch(`${config.api}/auth/register`, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json;
-        })
+        .then(json => json.data)
         .catch(err => {
             throw err;
-        }
-        );
+        });
 }
 
 function registerPro (form) {
@@ -79,9 +74,7 @@ function registerPro (form) {
 
     return fetch(`${config.api}/auth/register-pro`, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
+        .then(json => json.data)
         .catch(err => {
             throw err;
         });
@@ -129,9 +122,7 @@ function askForEmailActivation (email) {
 
     return fetch(`${config.api}/auth/ask-email-activation`, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json;
-        })
+        .then(json => json.data)
         .catch(err => {
             throw err;
         });
@@ -161,9 +152,7 @@ function forgotPassword (email) {
 
     return fetch(`${config.api}/auth/forgot-password`, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
+        .then(json => json.data)
         .catch(err => {
             throw err;
         });
@@ -183,9 +172,7 @@ function resetPassword (token, password) {
 
     return fetch(`${config.api}/auth/reset-password`, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
+        .then(json => json.data)
         .catch(err => {
             throw err;
         });

@@ -70,7 +70,6 @@ const Offers = () => {
             setPurchaseLink(authenticatedUser.getProfileEditLink);
         }
     }, [isAuthenticated]);
-    console.log(isAuthenticated);
 
     return (
         <div className="offers">

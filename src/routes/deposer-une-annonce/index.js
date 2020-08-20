@@ -79,7 +79,6 @@ const Page = () => {
     }
 
     const onSubmit = (data) => {
-        console.log(data)
         const { adType, vehicleType} = data
         const route = `${vehicleType.toLowerCase()}`;
         dispatchFormUpdate({ adType, vehicleType });

@@ -184,12 +184,8 @@ const origin = () => {
     const url = `${config.api}/origin`;
     return fetch(url, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            console.log(json);
-            return json;
-        })
+        .then(json => json)
         .catch(err => {
-            console.log(err);
             throw err;
         });
 };

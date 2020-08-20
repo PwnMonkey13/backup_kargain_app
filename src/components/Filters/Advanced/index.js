@@ -4,7 +4,6 @@ import CamperFilters from './vehicles/CamperFilters'
 import UtilityFilters from './vehicles/UtilityFilters';
 
 export default function getFiltersVehicleComponent (type) {
-    console.log(type)
     switch (type) {
     case 'car' :
         return CarFilters;

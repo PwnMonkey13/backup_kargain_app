@@ -9,28 +9,22 @@ function getLang (ctx, config) {
         const { lang } = req.query;
         if (lang) return lang;
     }
-    return startsWithLang(asPath, config.allLanguages)
+    return startsWithLang(asPath, config?.allLanguages)
         ? asPath.split('/')[1]
         : config.defaultLanguage;
-}
-
-function removeTrailingSlash (path = '') {
-    return path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path;
 }
 
 export default function appWithI18n (AppToTranslate, config = {}) {
     function AppWithTranslations (props) {
         const { lang, defaultLanguage } = props;
         const { defaultLangRedirect } = config;
-        // console.log('props');
-        // console.log(props);
 
         return (
             <I18nProvider
                 lang={lang}
                 internals={{
                     defaultLangRedirect,
-                    defaultLanguage,
+                    defaultLanguage
                 }}
             >
                 <AppToTranslate {...props} />
@@ -47,40 +41,15 @@ export default function appWithI18n (AppToTranslate, config = {}) {
 
         const lang = getLang(ctx, {
             ...config,
-            defaultLanguage,
+            defaultLanguage
         });
-
-        // const page = removeTrailingSlash(ctx.pathname);
 
         return {
             config,
             lang,
             defaultLanguage,
-            pageProps,
+            pageProps
         };
-
-        // try {
-        // const namespaces = await getPageNamespaces(config, page, ctx);
-        // const asyncLoadNS = async (lang, ns) => await Promise.resolve(await import(`../../locales/${lang}/${ns}.json`));
-        // const pageNamespaces = await Promise.all(namespaces.map(ns => asyncLoadNS(lang, ns)));
-        // return {
-        //     lang,
-        //     defaultLanguage,
-        //     pageProps,
-        // namespacesNames: namespaces,
-        // namespaces: namespaces.reduce((obj, ns, i) => ({
-        //     ...obj,
-        //     [ns]: pageNamespaces[i],
-        // }), {}),
-        // };
-        //
-        // } catch (err) {
-        //     return {
-        //         lang,
-        //         defaultLanguage,
-        //         pageProps
-        //     };
-        // }
     };
 
     return AppWithTranslations;
