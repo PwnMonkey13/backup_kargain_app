@@ -3,6 +3,7 @@
   "filter-by": "Фильтровать",
   "apply-filters": "Применить фильтр",
   "reset-filters": "Сбросить фильтры",
+  "{count}-results-search" : "{{count}} результаты поиска",
   "my-profile" : "Мой профиль",
   "edit-my-profile" : "Редактировать профиль",
   "payments-bills" : "Оплаты и фактуры",

@@ -1,9 +1,10 @@
 {
     "sort-by": "Sort by",
-    "filter-by": "Filtrer by",
+    "filter-by": "Filter by",
     "filtered-by": "Filtered by",
     "apply-filters": "Apply filters",
     "reset-filters": "Reset filters",
+    "{count}-results-search" : "{{count}} search results",
     "my-profile": "My profile",
     "edit-my-profile": "Edit my profile",
     "payments-bills": "Payments & bills",

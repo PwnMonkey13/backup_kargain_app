@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import clsx from 'clsx';
 import { NextSeo } from 'next-seo';
+import useTranslation from 'next-translate/useTranslation'
 import Typography from '@material-ui/core/Typography';
 import FindInPageIcon from '@material-ui/icons/FindInPage';
 import useIsMounted from '../hooks/useIsMounted';
@@ -13,8 +14,8 @@ import { ModalDialogContext } from '../context/ModalDialogContext';
 import { useAuth } from '../context/AuthProvider';
 import AdvancedFilters from '../components/Filters/Advanced/AdvancedFilters'
 
-
 const Index = (props) => {
+    const { t } = useTranslation()
     const { dispatchModalError } = useContext(ModalDialogContext);
     const { isAuthenticated } = useAuth();
     const isMounted = useIsMounted();
@@ -106,9 +107,8 @@ const Index = (props) => {
 
             <Row>
                 <Col sm={12} md={4}>
-                    <Typography component="p" variant="h2">{state.announces.length} résultats de recherche</Typography>
-                    <Typography component="p" variant="h4">Filter par : </Typography>
-
+                    <Typography component="p" variant="h2">{t('vehicles:{count}-results-search', { count : state.announces.length})}</Typography>
+                    <Typography component="p" variant="h4">{t('vehicles:filter-by')} : </Typography>
                     <AdvancedFilters updateFilters={updateFilters}/>
                 </Col>
 

@@ -4,6 +4,7 @@
   "filtered-by": "Filtré par",
   "apply-filters": "Appliquer les filtres",
   "reset-filters": "Reinitialiser les filtres",
+  "{count}-results-search" : "{{count}} résultats de recherche",
   "my-profile" : "Mon profil",
   "edit-my-profile" : "Editer mon profil",
   "payments-bills" : "Paiements & factures",
