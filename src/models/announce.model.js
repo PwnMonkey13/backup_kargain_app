@@ -1,6 +1,6 @@
 import UserModel from './user.model';
 import parseISO from 'date-fns/parseISO';
-import ImageModel from './ImageModel';
+import ImageModel from './image.model';
 
 export default class AnnounceModel {
     constructor (ad) {
@@ -149,15 +149,25 @@ export default class AnnounceModel {
     }
 
     //allowed : ['houseNumber', 'street', 'city', 'postCode', 'fullAddress', 'country'
-    getAdOrAuthorCustomAddress = (queryParts = []) => {
+    getAdOrAuthorCustomAddress = (queryParts = ['street', 'city', 'postCode', 'country']) => {
         const adParts = this.getAddressParts;
         const authorParts = this.getAuthor.getAddressParts;
 
         return queryParts ? queryParts.reduce((carry, part) => {
             const value = (part === 'country') ? this.getCountryLabel : adParts[part] ?? authorParts[part];
             return value ? [...carry, value] : carry;
-        }, []).join(' ') : null;
+        }, []).join(', ') : null;
     };
+
+    buildAddressGoogleMapLink (parts = ['street', 'city', 'postCode', 'country']) {
+        const base = "https://www.google.com/maps/search/?api=1"
+        const keys = !Array.isArray(parts) ? [parts] : parts;
+        const string = keys
+          .filter(key => this.getAddressParts[key] != null)
+          .map(key => this.getAddressParts[key])
+          .join('+');
+        return `${base}&query=${encodeURI(string)}`
+    }
 
     get getAddressParts () {
         const houseNumber = this.raw?.address?.housenumber;

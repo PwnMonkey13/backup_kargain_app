@@ -2,7 +2,7 @@ import React from 'react';
 import { Col } from 'reactstrap';
 import Typography from '@material-ui/core/Typography';
 import CardMediaMUI from '../CardMediaMUI';
-import UploadedImage from '../../models/ImageModel';
+import UploadedImage from '../../models/image.model';
 
 const GalleryImgsCardMUI = ({ images }) => {
     return (

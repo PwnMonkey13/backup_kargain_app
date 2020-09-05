@@ -23,6 +23,11 @@
     align-items: center;
 }
 
+.follow_container{
+    &:hover{
+        cursor: pointer;
+    }
+}
 .top-profile-followers {
     display: flex;
     align-items: center;

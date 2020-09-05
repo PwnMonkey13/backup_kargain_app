@@ -165,5 +165,6 @@
     "moto" : "Motorbike",
     "car" : "Car",
     "utility" : "Utility",
-    "camper" : "Camper"
+    "camper" : "Camper",
+    "back_to_profile" : "Back to profile"
 }

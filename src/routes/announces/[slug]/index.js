@@ -271,10 +271,14 @@ const Announce = () => {
 
                                 {state.announce.getAdOrAuthorCustomAddress(['city', 'postCode']) && (
                                     <div className="top-profile-data-wrapper">
-                                        <div className="top-profile-location">
-                                            <img className="mx-1" src="/images/location.png" alt=""/>
-                                            {state.announce.getAdOrAuthorCustomAddress(['city', 'postCode'])}
-                                        </div>
+                                        <a href={state.announce.buildAddressGoogleMapLink()}
+                                            target="_blank"
+                                            rel="noreferrer">
+                                            <span className="top-profile-location">
+                                                <img className="mx-1" src="/images/location.png" alt=""/>
+                                                {state.announce.getAdOrAuthorCustomAddress()}
+                                            </span>
+                                        </a>
                                     </div>
                                 )}
                                 {state.announce.showCellPhone && <p> {state.announce.getAuthor.getPhone} </p> }
