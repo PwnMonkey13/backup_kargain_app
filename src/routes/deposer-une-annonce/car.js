@@ -4,10 +4,11 @@ import useTranslation from 'next-translate/useTranslation';
 import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
-import Step0CarManufacturer from '../../components/Products/car/Step0_CarManufacturer';
 import Step1CarDetails from '../../components/Products/car/Step1_CarDetails';
 import Step2CarStatus from '../../components/Products/car/Step2_CarStatus';
 import Step3CarOwner from '../../components/Products/car/Step3_CarOwner';
+import Step0_DynVehicleManufacturer from '../../components/Products/Step0_DynVehicleManufacturer';
+import { vehicleTypes } from '../../business/vehicleTypes.js'
 
 const CarForm = (props) => {
     const router = useRouter();
@@ -31,15 +32,16 @@ const CarForm = (props) => {
         dispatchModal({ msg: 'Creating...' });
         try {
             const announce = await AnnounceService.createAnnounce(body);
-            const link = `/announces/${announce.slug}`;
+            const link = `/announces/${announce?.slug}`;
 
             if (announce && images) {
                 await AnnounceService.uploadImages(announce.slug, formData);
             }
 
             dispatchModal({
-                type: 'success',
-                msg: 'Announce created successfully'
+                msg: t('vehicles:announce_created_successfully'),
+                persist : true,
+                link
             });
 
             router.push(link);
@@ -52,27 +54,16 @@ const CarForm = (props) => {
         }
     };
 
-    const resumeModel = [
-        {
-            vehicleType: 'Type de véhicule'
-        },
-        {
-            vin: 'Immat. VIN',
-            'manufacturer.make': 'Marque',
-            'manufacturer.model': 'Modele',
-            'manufacturer.generation': 'Version',
-            'manufacturer.year': 'Année'
-        }
-    ];
-
     return (
         <FormWizard
             formKey={props.formKey}
             prevRoute="/deposer-une-annonce"
-            resumeModel={resumeModel}
-            // enableResume={true}
             onFinalSubmit={onFinalSubmit}>
-            <Step0CarManufacturer title={t('vehicles:vehicle-selection')}/>
+
+            <Step0_DynVehicleManufacturer
+                vehicleType={vehicleTypes.car}
+                title={t('vehicles:vehicle-selection')}
+            />
             <Step1CarDetails title={t('vehicles:vehicle-description')}/>
             <Step2CarStatus title={t('vehicles:vehicle-state')}/>
             <Step3CarOwner title={t('vehicles:your-announce')}/>

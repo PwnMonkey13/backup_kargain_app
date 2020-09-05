@@ -151,10 +151,7 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
             <div className="cardAd_Content">
                 <div className="price-stars-wrapper">
                     <div className="icons-profile-wrapper">
-                        <div style={{
-                            flex: 1,
-                            display: 'flex'
-                        }}>
+                        <div style={{ flex: 2, display: 'flex' }}>
                             <div className="icons-star-prof icons-star-current"
                                 title={t('vehicles:i-like')}
                                 onClick={handleClickLikeButton}>
@@ -167,7 +164,7 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                                 <span>{announce.getCountComments}</span>
                             </div>
                         </div>
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 3 }}>
                             <div className="price-announce">
                                 {announce.getPrice} €TTC
                                 <span> {announce.getPriceHT} €HT</span>

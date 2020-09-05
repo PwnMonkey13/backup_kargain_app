@@ -1,13 +1,19 @@
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import useTranslation from 'next-translate/useTranslation'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import resolveObjectKey from '../../libs/resolveObjectKey'
 
 const fieldOptions = {
-    coordinates: {
-        hideValue : true
+    'manufacturer.make' : {
+        key : 'label'
+    },
+    vehicleType : {
+        key : 'value'
+    },
+    adType : {
+        key : 'value'
     },
     mileage : {
         suffix : 'km'
@@ -38,18 +44,36 @@ const FiltersChanges = ({changes = {}, resetValue}) => {
     const { t } = useTranslation();
     const classes = useStyles()
     const fieldsToHide = ["coordinates"]
-    const filtered = Object.keys(changes)
-        .filter(key => !fieldsToHide.includes(key))
-        .reduce((carry, key)=> ({...carry, [key] : changes[key]}),{});
+    const filtered = Object.keys(fieldOptions).reduce((carry, key)=> {
+        if(fieldsToHide[key]) return carry;
+        const match = resolveObjectKey(changes, key);
+        if(match) return {...carry, [key] : match }
+        return carry;
+    },{})
 
     return(
-        <>
+        <div className="changes">
             {Object.keys(filtered).length !== 0 && (
-            <>
-                <Typography variant="h4">{t('vehicles:filtered-by')} : </Typography>
                 <ul className="list-style-none">
-                    {Object.keys(filtered).map((name, index) => {
-                        const filter = changes[name]
+                    {Object.keys(filtered).map((key, index) => {
+                        const filter = filtered[key]
+                        const options = fieldOptions[name];
+                        let val;
+
+                        if(Array.isArray(filter)) {
+                            val = filter
+                                .filter(v => typeof v !== "object")
+                                .map(v => options?.suffix ? `${v}${options?.suffix}` : v)
+                                .join(' - ')
+                        }
+
+                        else if(typeof filter === "object"){
+                            val = options?.suffix ? `${filter?.label} ${options?.suffix}` : filter?.label;
+                        }
+
+                        else val = options?.suffix ? `${filter} ${options?.suffix}` : filter;
+
+                        if(options?.hideValue || !val) return null
 
                         return (
                             <li key={index} className="my-1">
@@ -58,47 +82,17 @@ const FiltersChanges = ({changes = {}, resetValue}) => {
                                     variant="contained"
                                     color="secondary"
                                     endIcon={<HighlightOffIcon/>}
-                                    onClick={() => resetValue(name)}
+                                    onClick={() => resetValue(key)}
                                 >
-                                    <RenderFilterLabel
-                                        name={name}
-                                        filter={filter}
-                                    />
+                                    <span className="text-left"> {t(`filters:${key}`)} : {val} </span>
                                 </Button>
                             </li>
                         );
                     })}
                 </ul>
-            </>
             )}
-        </>
+        </div>
     )
-}
-
-const RenderFilterLabel = ({name, filter}) => {
-    const { t } = useTranslation();
-    const options = fieldOptions[name];
-    let val =  null;
-
-    if(options?.hideValue) return null
-
-    if(Array.isArray(filter)) {
-        val = filter
-            .filter(v => typeof v !== "object")
-            .map(v => options?.suffix ? `${v}${options?.suffix}` : v)
-            .join(' - ')
-    }
-    else if(typeof filter === "object") val = options?.suffix ? `${filter?.label} ${options?.suffix}` : filter?.label;
-    else val = options?.suffix ? `${filter} ${options?.suffix}` : filter;
-
-    if(val){
-        return(
-            <>
-                {t(`filters:${name}`)} : {val}
-            </>
-        )
-    }
-
 }
 
 export default FiltersChanges

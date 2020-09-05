@@ -8,6 +8,7 @@ import Step0_DynVehicleManufacturer from '../../components/Products/Step0_DynVeh
 import Step1MotoDetails from '../../components/Products/moto/Step1_MotoDetails';
 import Step2MotoStatus from '../../components/Products/moto/Step2_MotoStatus';
 import Step3MotoOwner from '../../components/Products/moto/Step3_MotoOwner';
+import {vehicleTypes} from '../../business/vehicleTypes'
 
 const MotorCyclesForm = (props) => {
     const router = useRouter();
@@ -36,7 +37,7 @@ const MotorCyclesForm = (props) => {
             // resumeModel={[]}
             onFinalSubmit={onFinalSubmit}>
             <Step0_DynVehicleManufacturer
-                vehicleTypeModel={"motorcycles"}
+                vehicleType={vehicleTypes.moto}
                 title={t('vehicles:vehicle-selection')}
             />
             <Step1MotoDetails title={t('vehicles:vehicle-description')}/>

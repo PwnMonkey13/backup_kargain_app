@@ -1,11 +1,18 @@
 export default {
+    'adType': 'TYPE_AD',
     'adType.value': 'TYPE_AD',
+    'vehicleType': 'VEHICLE_TYPE',
     'vehicleType.value': 'VEHICLE_TYPE',
     'vehicleTypeSelect.value': 'TYPE',
     'manufacturer.make': {
         name: 'MAKE',
         type: 'array',
-        selector: 'value'
+        selector: 'label'
+    },
+    'manufacturer.model': {
+        name: 'MODEL',
+        type: 'array',
+        selector: 'label'
     },
     'vehicleEngineType.value': 'ENGINE_TYPE',
     'vehicleEngineGas.value': 'ENGINE_GAS',

@@ -1,18 +1,20 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
-import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import Typography from '@material-ui/core/Typography';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import useTranslation from 'next-translate/useTranslation';
-import { cleanObj } from '../../../libs/utils'
+import { cleanObj } from '../../../libs/utils';
 import filterProps from '../../../libs/filterProps'
 import FiltersChanges from '../FiltersChanges'
 import { SelectInput } from '../../Form/Inputs'
 import FieldWrapper from '../../Form/FieldWrapper'
 import { useAuth } from '../../../context/AuthProvider'
+import { ModalDialogContext } from '../../../context/ModalDialogContext'
+import vehicleTypes, { vehicleTypeRefModels } from '../../../business/vehicleTypes.js'
+import AnnounceTypes from '../../../business/announceTypes.js'
+import VehiclesService from '../../../services/VehiclesService'
+import useAddress from '../../../hooks/useAddress'
 import getFiltersVehicleComponent from './index';
 
 const useStyles = makeStyles(() => ({
@@ -31,49 +33,23 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const   vehicleTypes = [
-    {
-        value: 'car',
-        label: 'Voiture'
-    },
-    {
-        value: 'moto',
-        label: 'Moto'
-    },
-    {
-        value: 'utility',
-        label: 'Utilitaire'
-
-    },
-    {
-        value: 'camper',
-        label: 'Camping car'
-    }
-];
-
-const AnnounceTypes = [
-    {
-        value: 'sale',
-        label: 'Vente'
-    },
-    {
-        value: 'sale-pro',
-        label: 'Vente pro'
-    },
-    {
-        value: 'rent',
-        label: 'Location'
-    }
-]
-
-const AdvancedFilters = ({ defaultFilters, updateFilters, ...props }) => {
+const AdvancedFilters = ({ defaultFilters, updateFilters, vehicleType, setVehicleType }) => {
+    const cache = useRef({});
     const classes = useStyles();
     const { t } = useTranslation();
+    const isCar = vehicleType === "car"
+    const [, , coordinates] = useAddress();
+    const vehicleTypeModel = vehicleTypeRefModels[vehicleType]
     const { isAuthReady, authenticatedUser } = useAuth();
-    const isMobile = useMediaQuery('(max-width:768px)');
-    const [hiddenForm, hideForm] = useState(true);
+    const { dispatchModalError } = useContext(ModalDialogContext);
     const [changes, setChanges] = useState({});
-    const [vehicleType, setVehicleType] = useState(props.vehicleType)
+    const [manufacturersData, setManufacturersData] = useState({
+        makes: [],
+        models: [],
+        generations: [],
+        years: []
+    });
+
     const DynamicFiltersComponent = getFiltersVehicleComponent(vehicleType);
     const [announceTypesFiltered, setAnnouncesTypesFiltered] = useState(AnnounceTypes);
     const defaultValues = {
@@ -81,11 +57,15 @@ const AdvancedFilters = ({ defaultFilters, updateFilters, ...props }) => {
         vehicleType : vehicleTypes[0],
         adType : AnnounceTypes[0]
     }
-    const {watch, control, setValue, errors, handleSubmit } = useForm({
+
+    const {watch, register, control, setValue, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues
     });
+
+    const selectedMake = watch('manufacturer.make')
+    const selectedModel = watch('manufacturer.model')
 
     const onSubmit = (form, e) => {
         const { coordinates, radius } = form;
@@ -113,64 +93,255 @@ const AdvancedFilters = ({ defaultFilters, updateFilters, ...props }) => {
         });
     };
 
-    const toggleFilters = () => {
-        hideForm(hiddenForm => !hiddenForm);
-    };
+    const fetchMakes = useCallback(async () => {
+        const cacheKey = `${vehicleType}_makes`;
 
-    useEffect(()=>{
-        toggleFilters()
-    },[isMobile])
+        if(!cache.current[cacheKey]) {
+            console.log('fetch makes');
+            await VehiclesService.getMakes(vehicleTypeModel)
+                .then(makes => {
+                    if(!Array.isArray(makes)) makes = [makes]
+                    const makesOptions = makes.map(make => ({
+                        value: make._id,
+                        label: make.make
+                    }));
+
+                    const defaultOption = {
+                        value: 'other',
+                        label: 'Je ne sais pas/Autre'
+                    };
+
+                    const data = [...makesOptions, defaultOption]
+                    cache.current[cacheKey] = data;
+
+                    setManufacturersData(manufacturersData => (
+                        {
+                            ...manufacturersData,
+                            makes: data
+                        })
+                    );
+                })
+                .catch(err => {
+                    dispatchModalError({ err });
+                });
+        } else{
+            setManufacturersData(manufacturersData => (
+                {
+                    ...manufacturersData,
+                    makes: cache.current[cacheKey]
+                })
+            );
+        }
+
+    },[vehicleTypeModel])
+
+    const fetchModels = useCallback(async ()=> {
+        const make = selectedMake?.label;
+        const cacheKey = `${vehicleType}_makes_${make}_models`;
+
+        if (!make) return
+        if(!cache.current[cacheKey]) {
+            console.log('fetch models');
+            const modelsService = isCar ? VehiclesService.getCarsDistinctModels
+                : VehiclesService.getMakeModels
+
+            await modelsService(vehicleTypeModel, make)
+                .then(models => {
+                    if(!Array.isArray(models)) models = [models]
+                    let modelsOptions = [];
+
+                    if(isCar){
+                        modelsOptions = models.map(model => ({
+                            value: model,
+                            label: model
+                        }));
+                    }
+                    else {
+                        modelsOptions = models.map(model => ({
+                            value: model._id,
+                            label: model.model
+                        }));
+                    }
+
+                    const defaultOption = {
+                        value: 'other',
+                        label: 'Je ne sais pas/Autre'
+                    };
+
+                    const data = [...modelsOptions, defaultOption]
+                    cache.current[cacheKey] = data;
+
+                    setManufacturersData(manufacturersData => (
+                        {
+                            ...manufacturersData,
+                            models: data
+                        })
+                    );
+                })
+                .catch(err => {
+                    dispatchModalError({
+                        err,
+                        persist: true
+                    });
+                });
+        } else {
+            setManufacturersData(manufacturersData => (
+                {
+                    ...manufacturersData,
+                    models: cache.current[cacheKey]
+                })
+            );
+        }
+    },[selectedMake])
+
+    const fetchModelsYears = useCallback(async() => {
+        const make = selectedMake?.value;
+        const model = selectedModel?.value;
+        const cacheKey = `${vehicleType}_makes_${make}_models_${model}`;
+
+        if (!make || !model) return
+        if(!cache.current[cacheKey]) {
+            console.log('fetch cars models years');
+            await VehiclesService.getCarsMakeModelTrimYears(make, model)
+                .then(years => {
+                    if(!Array.isArray(years)) years = [years]
+
+                    const yearsOptions = years.map(year => ({
+                        value: year._id,
+                        label: year.year
+                    }));
+
+                    const defaultOption = {
+                        value: 'other',
+                        label: 'Je ne sais pas/Autre'
+                    };
+
+                    const data = [...yearsOptions, defaultOption]
+                    cache.current[cacheKey] = data;
+
+                    setManufacturersData(manufacturersData => (
+                        {
+                            ...manufacturersData,
+                            years: data
+                        })
+                    );
+                })
+                .catch(err => {
+                    dispatchModalError({ err });
+                });
+        } else {
+            setManufacturersData(manufacturersData => (
+                {
+                    ...manufacturersData,
+                    years: cache.current[cacheKey]
+                })
+            );
+        }
+    },[vehicleTypeModel])
 
     useEffect(()=>{
         const isPro = authenticatedUser.getIsPro
         if(!isPro) setAnnouncesTypesFiltered(types => types.filter(type => type.value !== 'sale-pro'))
     },[authenticatedUser, isAuthReady])
 
+    useEffect(() => {
+        register({ name: 'coordinates' });
+        setValue('coordinates', coordinates);
+    }, [coordinates]);
+
+    useEffect(() => {
+        setValue('manufacturer.make', null)
+        setValue('manufacturer.model', null)
+        setValue('manufacturer.year', null)
+    }, [vehicleType]);
+
+    useEffect(() => {
+        fetchMakes()
+    }, [fetchMakes]);
+
+    useEffect(() => {
+        const make = selectedMake?.label;
+        if (!make) return
+        fetchModels()
+    }, [selectedMake, fetchModels]);
+
+    useEffect(() => {
+        const model = selectedModel?.label;
+        if (!model) return
+        fetchModelsYears()
+    }, [selectedModel, fetchModelsYears]);
+
     return (
         <div className={classes.filtersContainer}>
-            <div className={classes.filtersTop} onClick={() => toggleFilters()}>
-                <Typography variant="h4">
-                    {t('filters:select-filters')}
-                    <i className={clsx('ml-2', 'arrow_nav', hiddenForm ? 'is-top' : 'is-bottom')}/>
-                </Typography>
-            </div>
 
             <FiltersChanges {...{changes, resetValue}} />
 
             <form className="filters_form" onSubmit={handleSubmit(onSubmit)}>
                 <ControlButtons/>
-                <div className={clsx(hiddenForm && classes.filtersHidden)}>
 
-                    <FieldWrapper label={t('vehicles:vehicle-type')}>
-                        <SelectInput
-                            name="vehicleType"
-                            control={control}
-                            errors={errors}
-                            options={vehicleTypes}
-                            onChange={selected =>{
-                                setVehicleType(selected.value)
-                                return selected
-                            }}
-                        />
-                    </FieldWrapper>
+                <FieldWrapper label={t('vehicles:vehicle-type')}>
+                    <SelectInput
+                        name="vehicleType"
+                        control={control}
+                        errors={errors}
+                        options={vehicleTypes}
+                        onChange={selected =>{
+                            setVehicleType(selected.value)
+                            return selected
+                        }}
+                    />
+                </FieldWrapper>
 
-                    <FieldWrapper label={t('vehicles:announce-type')}>
-                        <SelectInput
-                            name="adType"
-                            control={control}
-                            errors={errors}
-                            options={announceTypesFiltered}
-                        />
-                    </FieldWrapper>
+                <FieldWrapper label={t('vehicles:announce-type')}>
+                    <SelectInput
+                        name="adType"
+                        control={control}
+                        errors={errors}
+                        options={announceTypesFiltered}
+                        onChange={selected =>{
+                            setVehicleType(selected.value)
+                            return selected
+                        }}
+                    />
+                </FieldWrapper>
 
-                    {DynamicFiltersComponent && (
-                        <DynamicFiltersComponent
-                            control={control}
-                            errors={errors}
-                            watch={watch}
-                        />
-                    )}
-                </div>
+                <FieldWrapper label={t('vehicles:make')}>
+                    <SelectInput
+                        name="manufacturer.make"
+                        control={control}
+                        errors={errors}
+                        options={manufacturersData.makes}
+                    />
+                </FieldWrapper>
+
+                <FieldWrapper label={t('vehicles:model')}>
+                    <SelectInput
+                        name="manufacturer.model"
+                        options={manufacturersData.models}
+                        control={control}
+                        errors={errors}
+                        disabled={!watch('manufacturer.make')}
+                    />
+                </FieldWrapper>
+
+                <FieldWrapper label={t('vehicles:year')}>
+                    <SelectInput
+                        name="year"
+                        placeholder="Select year"
+                        options={manufacturersData.years}
+                        control={control}
+                        errors={errors}
+                        disabled={!watch('manufacturer.model') || !isCar}
+                    />
+                </FieldWrapper>
+
+                {DynamicFiltersComponent && (
+                    <DynamicFiltersComponent
+                        control={control}
+                        errors={errors}
+                        watch={watch}
+                    />
+                )}
             </form>
         </div>
     );

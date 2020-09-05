@@ -1,47 +1,89 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
-import { Col, Row } from 'reactstrap';
-import useTranslation from 'next-translate/useTranslation'
-import FieldWrapper from '../Form/FieldWrapper';
-import StepNavigation from '../Form/StepNavigation';
-import { SelectInput } from '../Form/Inputs';
-import useIsMounted from '../../hooks/useIsMounted';
-import { FormContext } from '../../context/FormContext';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
-import VehiclesService from '../../services/VehiclesService';
-import { vehicleTypeRefModels } from '../../business/vehicleTypes'
+import { Col, Container, Row } from 'reactstrap';
+import useTranslation from 'next-translate/useTranslation';
+import { SelectInput, SliderInput } from '../../Form/Inputs';
+import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
+import FieldWrapper from '../../Form/FieldWrapper';
+import SearchLocationInput from '../../Form/Inputs/SearchLocationInput';
+import { RadioChoicesGas } from '../../Products/car/form.data';
+import useAddress from '../../../hooks/useAddress';
+import VehiclesService from '../../../services/VehiclesService'
+import { ModalDialogContext } from '../../../context/ModalDialogContext'
+import {vehicleTypeRefModels} from '../../../business/vehicleTypes'
 
-const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitStep, prevStep }) => {
-    const { t } = useTranslation();
-    const isMounted = useIsMounted();
+// const popularMakesOptions = [
+//     {
+//         label: 'AlphaRomeo',
+//         value: 3
+//     },
+//     {
+//         label: 'Audi',
+//         value: 9
+//     },
+//     {
+//         label: 'BMW',
+//         value: 16
+//     },
+//     {
+//         label: 'Peugeot',
+//         value: 107
+//     },
+//     {
+//         label: 'Renault',
+//         value: 117
+//     },
+//     {
+//         label: 'Citroen',
+//         value: 28
+//     },
+//     {
+//         label: 'Volkswagen',
+//         value: 147
+//     },
+//     {
+//         label: 'Ford',
+//         value: 48
+//     },
+//     {
+//         label: 'Mercedes-Benz',
+//         value: 88
+//     },
+//     {
+//         label: 'Opel',
+//         value: 182
+//     },
+//     {
+//         label: 'Fiat',
+//         value: 47
+//     },
+//     {
+//         label: 'Toyota',
+//         value: 140
+//     },
+//     {
+//         label: 'Susuki',
+//         value: 133
+//     }
+// ];
+
+const HomeFiltersForm = ({ vehicleType, methods }) => {
     const cache = useRef({});
-    const formRef = useRef(null);
+    const { t } = useTranslation();
     const isCar = vehicleType === "car"
-
+    const [, , coordinates] = useAddress();
     const vehicleTypeModel = vehicleTypeRefModels[vehicleType]
+    const { setValue, control, errors, watch } = methods;
+    const countrySelect = watch('countrySelect');
+    const selectedMake = watch('manufacturer.make')
+    const selectedModel = watch('manufacturer.model')
     const { dispatchModalError } = useContext(ModalDialogContext);
-    const { formDataContext } = useContext(FormContext);
-    const { watch, control, errors, setValue, handleSubmit } = useForm({
-        mode: 'onChange',
-        validateCriteriaMode: 'all',
-        defaultValues: formDataContext
-    });
-
     const [manufacturersData, setManufacturersData] = useState({
         makes: [],
         models: [],
         generations: [],
         years: []
     });
-
-    const selectedMake = watch('manufacturer.make')
-    const selectedModel = watch('manufacturer.model')
-    const selectedYear = watch('manufacturer.year')
-
-    const triggerSubmit = () => {
-        formRef.current.dispatchEvent(new Event('submit'));
-    };
 
     const fetchMakes = useCallback(async () => {
         const cacheKey = `${vehicleType}_makes`;
@@ -97,6 +139,7 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
 
             await modelsService(vehicleTypeModel, make)
                 .then(models => {
+                    console.log(models)
                     if(!Array.isArray(models)) models = [models]
                     let modelsOptions = [];
 
@@ -190,6 +233,11 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
     },[vehicleTypeModel])
 
     useEffect(() => {
+        control.register({ name: 'coordinates' });
+        control.setValue('coordinates', coordinates);
+    }, [coordinates]);
+
+    useEffect(() => {
         setValue('manufacturer.make', null)
         setValue('manufacturer.model', null)
         setValue('manufacturer.year', null)
@@ -211,42 +259,35 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
         fetchModelsYears()
     }, [selectedModel, fetchModelsYears]);
 
-    useEffect(() => {
-        if (isMounted) {
-            if (!isCar) {
-                if (selectedMake && selectedModel) triggerSubmit()
-            } else if (selectedMake && selectedModel && selectedYear) triggerSubmit
-        }
-    }, [selectedModel]);
-
     return (
-        <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
+        <Container>
             <Row>
-                <Col md={4}>
-                    <FieldWrapper label="Marque" labelTop>
+                <Col md={6}>
+                    <FieldWrapper label={t('vehicles:make')}>
                         <SelectInput
                             name="manufacturer.make"
-                            placeholder="Select a vehicle make"
                             control={control}
                             errors={errors}
                             options={manufacturersData.makes}
                         />
                     </FieldWrapper>
                 </Col>
-                <Col md={4}>
-                    <FieldWrapper label="Modele" labelTop>
+
+                <Col md={6}>
+                    <FieldWrapper label={t('vehicles:model')}>
                         <SelectInput
                             name="manufacturer.model"
-                            placeholder="Select a motorcycle model"
                             options={manufacturersData.models}
-                            disabled={!watch('manufacturer.make')}
                             control={control}
                             errors={errors}
+                            disabled={!watch('manufacturer.make')}
                         />
                     </FieldWrapper>
                 </Col>
+            </Row>
 
-                <Col md={4}>
+            <Row>
+                <Col md={6}>
                     <FieldWrapper label={t('vehicles:year')}>
                         <SelectInput
                             name="year"
@@ -258,15 +299,80 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
                         />
                     </FieldWrapper>
                 </Col>
+                <Col md={6}>
+                    <FieldWrapper label={t('vehicles:price')}>
+                        <SliderInput
+                            classNames="my-4 mt-2"
+                            name="price"
+                            min={0}
+                            max={200000}
+                            step={1000}
+                            errors={errors}
+                            control={control}
+                            suffix="€"
+                        />
+                    </FieldWrapper>
+                </Col>
             </Row>
-            <button className="btn" onClick={triggerSkipStep}>Passer cette étape</button>
-            <StepNavigation prev={prevStep} submit/>
-        </form>
+            <Row>
+                <Col md={6}>
+                    <FieldWrapper label={t('vehicles:mileage')}>
+                        <SliderInput
+                            classNames="my-4 mt-2"
+                            name="mileage"
+                            min={0}
+                            max={200000}
+                            step={1000}
+                            errors={errors}
+                            control={control}
+                            suffix="km"
+                        />
+                    </FieldWrapper>
+                </Col>
+                <Col md={6}>
+                    <FieldWrapper label={t('vehicles:gas')}>
+                        <SelectInput
+                            name="vehicleEngineGas"
+                            className="mb-2"
+                            options={RadioChoicesGas}
+                            control={control}
+                            errors={errors}
+                        />
+                    </FieldWrapper>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col md={6}>
+                    <FieldWrapper label={t('vehicles:country')}>
+                        <SelectCountryFlags
+                            name="countrySelect"
+                            errors={errors}
+                            control={control}
+                        />
+                    </FieldWrapper>
+                </Col>
+                <Col md={6}>
+                    <FieldWrapper label={t('vehicles:address')}>
+                        <SearchLocationInput
+                            name="address"
+                            country={countrySelect?.value}
+                            errors={errors}
+                            control={control}>
+                        </SearchLocationInput>
+                    </FieldWrapper>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 
-Step0_DynVehicleManufacturer.propTypes = {
-    vehicleType : PropTypes.string.isRequired
+HomeFiltersForm.defaultProps = {
+    vehicleType : 'car'
 }
 
-export default Step0_DynVehicleManufacturer;
+HomeFiltersForm.propTypes = {
+    methods: PropTypes.object.isRequired
+};
+
+export default React.memo(HomeFiltersForm);

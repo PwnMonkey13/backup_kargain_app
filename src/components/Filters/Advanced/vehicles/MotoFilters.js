@@ -1,13 +1,11 @@
-import React, { memo, useContext, useEffect, useState } from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import useTranslation from 'next-translate/useTranslation';
 import {  SelectInput, SliderInput } from '../../../Form/Inputs';
 import SelectCountryFlags from '../../../Form/Inputs/SelectCountryFlags';
-import useAddress from '../../../../hooks/useAddress';
 import SearchLocationInput from '../../../Form/Inputs/SearchLocationInput';
 import { RadioVehicleGeneralState } from '../../../Products/car/form.data';
-
 import {
     CheckboxOptionsEquipments,
     RadioChoicesExternalColor,
@@ -15,58 +13,13 @@ import {
     RadioTypeFunction
 } from '../../../Products/moto/form.data';
 import CarFilters from './CarFilters'
-import VehiclesService from '../../../../services/VehiclesService'
-import { ModalDialogContext } from '../../../../context/ModalDialogContext'
 
-const MotoFilters = ({vehicleType, control, watch, errors }) => {
-    const [,, coordinates] = useAddress();
+const MotoFilters = ({ control, watch, errors }) => {
     const { t } = useTranslation();
-    const { dispatchModalError } = useContext(ModalDialogContext);
-    const [manufacturersData, setManufacturersData] = useState({
-        makes: []
-    });
-
-    useEffect(() => {
-        control.register({ name: 'coordinates' });
-        control.setValue('coordinates', coordinates);
-    }, [coordinates]);
-
-    useEffect(() => {
-        console.log('fetch makes');
-        VehiclesService.getMakes(vehicleType)
-            .then(motos => {
-                const makesOptions = motos.map(car => ({
-                    value: car.make_id,
-                    label: car.make
-                }));
-                const defaultOption = {
-                    value: 'other',
-                    label: 'Je ne sais pas/Autre'
-                };
-                setManufacturersData(manufacturersData => (
-                    {
-                        ...manufacturersData,
-                        makes: [...makesOptions, defaultOption]
-                    })
-                );
-            })
-            .catch(err => {
-                dispatchModalError({ err });
-            });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     const countrySelect = watch('country');
 
     return (
         <>
-            <Typography component="span">{t('vehicles:make')}</Typography>
-            <SelectInput
-                name="manufacturer.make"
-                control={control}
-                errors={errors}
-                options={manufacturersData.makes}
-            />
 
             <Typography component="span" gutterBottom>{t('vehicles:price')}</Typography>
             <SliderInput
@@ -102,10 +55,11 @@ const MotoFilters = ({vehicleType, control, watch, errors }) => {
                 <SliderInput
                     classNames="my-4 mt-2"
                     name="vehicleEngineCylinder"
-                    defaultValue={[1, 20]}
-                    min={1}
-                    max={20}
-                    step={1}
+                    suffix="cm3"
+                    min={10}
+                    max={1000}
+                    step={10}
+                    defaultValue={[1, 1000]}
                     errors={errors}
                     control={control}
                 />

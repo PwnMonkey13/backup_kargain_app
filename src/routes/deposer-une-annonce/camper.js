@@ -8,6 +8,7 @@ import Step0_DynVehicleManufacturer from '../../components/Products/Step0_DynVeh
 import Step1CamperDetails from '../../components/Products/camper/Step1_CamperDetails';
 import Step2CamperStatus from '../../components/Products/camper/Step2_CamperStatus';
 import Step3CarOwner from '../../components/Products/car/Step3_CarOwner';
+import {vehicleTypes} from '../../business/vehicleTypes'
 
 const CarForm = (props) => {
     const { dispatchModal } = useContext(ModalDialogContext);
@@ -52,8 +53,9 @@ const CarForm = (props) => {
             prevRoute="/deposer-une-annonce"
             resumeModel={resumeModel}
             onFinalSubmit={onFinalSubmit}>
+
             <Step0_DynVehicleManufacturer
-                vehicleTypeModel={"campers"}
+                vehicleType={vehicleTypes.camper}
                 title={t('vehicles:vehicle-selection')}
             />
             <Step1CamperDetails title={t('vehicles:vehicle-description')}/>

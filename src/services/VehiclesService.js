@@ -117,7 +117,7 @@ export default {
     getMakeModels,
     getVehiclesGenerations,
     getCarsDistinctModels,
-    getCarsMakeModelTrims,
+    getCarsDistinctMakeModelTrims,
     getCarsMakeModelTrimYears,
     getVehiclesYearsVersion
 };

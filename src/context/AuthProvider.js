@@ -77,10 +77,10 @@ export const AuthProvider = ({ children }) => {
             isAuthenticatedUserAdmin: authState.isAuthenticatedUserAdmin,
             authenticatedUser: authState.authenticatedUser,
             forceLoginModal: authState.forceLoginModal,
-            setForceLoginModal: () => {
+            setForceLoginModal: (force) => {
                 setAuthState(authState => ({
                     ...authState,
-                    forceLoginModal: true
+                    forceLoginModal: Boolean(force)
                 }));
             },
             setIsAuthenticated: () => {

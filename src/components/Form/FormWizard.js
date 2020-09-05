@@ -80,7 +80,7 @@ const FormWizard = ({ debug, formKey, onFinalSubmit, children }) => {
                 setStep={setStep}
                 maxActiveStep={maxActiveStep}
             />
-            <ProgressBar percent={pourcent} filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"/>
+            <ProgressBar percent={pourcent} filledBackground="linear-gradient(to right, #5480e4, #2C6BFC)"/>
             <Header as="h4" center={false} text={[t('layout:form'), t(`vehicles:${formKey.toLowerCase()}`)].join(' ')}/>
 
             <ControlledStep

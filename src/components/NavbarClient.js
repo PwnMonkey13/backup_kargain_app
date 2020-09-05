@@ -244,7 +244,7 @@ const LoggedInUserNav = ({vertical}) => {
     return (
         <Nav navbar className={clsx("my-2", "justify-content-center", vertical ? "flex-column" : "flex-row-nav")}>
             <NavItem>
-                <Link href="/" prefetch={false}>
+                <Link href="/feed" prefetch={false}>
                     <a>
                         <IconButton color="inherit">
                             <HomeIcon/>

@@ -36,7 +36,6 @@ const SearchPage = () => {
     const [state, setState] = useState({
         loading: false,
         sorter: {},
-        hideFilters : false,
         filters: {},
         page: 1,
         announces: [],
@@ -53,22 +52,36 @@ const SearchPage = () => {
     };
 
     const fetchSearch = useCallback(async () => {
+
+        const { sorter, filters, page } = state;
+        // const { size } = props;
+
+        const params = {
+            ...filters,
+            sort_by: sorter.key,
+            sort_ord: sorter.asc ? 'ASC' : null,
+            page
+            // size
+        };
+
         try{
-            const result = await AnnounceService.getSearchAnnounces(state.filters);
+            const result = await AnnounceService.getSearchAnnounces(params);
             setState(state => ({
                 ...state,
                 announces: result.rows || [],
                 total: result.total || 0,
                 loading: false
             }))
+
         } catch (err) {
             setState(state => ({
                 ...state,
                 loading: false
             }));
+
             dispatchModalError({err})
         }
-    },[state.filters])
+    },[state.page, state.filters, state.sorter])
 
     useEffect(()=> {
         if (isMounted) fetchSearch()
@@ -76,53 +89,46 @@ const SearchPage = () => {
 
     return (
         <Container>
-            <NextSeo
-                title="Kargain"
-                description="Vos meilleurs annonces automobiles"
-            />
-
-            <div className="mt-4">
-                {state.hideFilters ? (
-                    <>
-                        <Paper component="ul" className={classes.root}>
-                            {Object.keys(state.filters).map((key, index) => {
-                                return (
-                                    <li key={index}>
-                                        <Chip
-                                            label={`${key} : ${state.filters[key]}`}
-                                            onDelete={handleDeleteFilter(key)}
-                                            className={classes.chip}
-                                        />
-                                    </li>
-                                );
-                            })}
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={()=>{
-                                    setState(state => ({
-                                        ...state,
-                                        hideFilters: false
-                                    }))}}
-                            >
-                                modifier les filters
-                            </Button>
-                        </Paper>
-                        <SearchResults results={state}/>
-                    </>
-                ): (
-                    <SearchFiltersAdvanced
-                        query={query}
-                        updateFilters={filters => {
-                            setState(state => ({
-                                ...state,
-                                filters,
-                                hideFilters: true
-                            }))
-                        }}
-                    />
-                )}
-            </div>
+            {state.hideFilters ? (
+                <>
+                    <Paper component="ul" className={classes.root}>
+                        {Object.keys(state.filters).map((key, index) => {
+                            return (
+                                <li key={index}>
+                                    <Chip
+                                        label={`${key} : ${state.filters[key]}`}
+                                        onDelete={handleDeleteFilter(key)}
+                                        className={classes.chip}
+                                    />
+                                </li>
+                            );
+                        })}
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={()=>{
+                                setState(state => ({
+                                    ...state,
+                                    hideFilters: false
+                                }))}}
+                        >
+                            modifier les filters
+                        </Button>
+                    </Paper>
+                    <SearchResults results={state}/>
+                </>
+            ): (
+                <SearchFiltersAdvanced
+                    query={query}
+                    updateFilters={filters => {
+                        setState(state => ({
+                            ...state,
+                            filters,
+                            hideFilters: true
+                        }))
+                    }}
+                />
+            )}
         </Container>
     )
 };

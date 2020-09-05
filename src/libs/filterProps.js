@@ -5,6 +5,7 @@ const filterProps = formData => {
     return Object.keys(announcesFiltersMapper).reduce((carry, key) => {
         const property = announcesFiltersMapper[key];
         const field = resolveObjectKey(formData, key);
+
         if (field && property) {
             if (typeof property === 'object') {
                 if (Array.isArray(field) && property.type === 'array') {
@@ -12,6 +13,12 @@ const filterProps = formData => {
                     return {
                         ...carry,
                         [property.name]: values
+                    };
+                }
+                else{
+                    return {
+                        ...carry,
+                        [property.name]: field[property.selector]
                     };
                 }
             }

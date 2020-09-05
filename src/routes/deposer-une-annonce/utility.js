@@ -8,6 +8,7 @@ import Step0_DynVehicleManufacturer from '../../components/Products/Step0_DynVeh
 import Step1CamperDetails from '../../components/Products/utility/Step1_UtiilityDetails';
 import Step2UtilityStatus from '../../components/Products/utility/Step2_UtiliyStatus';
 import Step3CarOwner from '../../components/Products/car/Step3_CarOwner';
+import {vehicleTypes} from '../../business/vehicleTypes'
 
 const UtilityForm = (props) => {
     const router = useRouter();
@@ -53,7 +54,7 @@ const UtilityForm = (props) => {
             onFinalSubmit={onFinalSubmit}
         >
             <Step0_DynVehicleManufacturer
-                vehicleTypeModel={"trucks"}
+                vehicleType={vehicleTypes.utility}
                 title={t('vehicles:vehicle-selection')}
             />
             <Step1CamperDetails title={t('vehicles:vehicle-description')}/>

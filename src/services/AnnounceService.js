@@ -4,21 +4,28 @@ import queryString from 'query-string';
 
 const baseRoute = `${config.api}/announces`;
 
-function getFeedAnnounces (params = {}) {
-    const qs = queryString.stringify(params, {
-        arrayFormat: 'comma',
-        skipNull: true,
-        skipEmptyString: true
-    });
-
-    const url = `${baseRoute}?${qs}`;
-
+//admin
+function getAnnouncesAll () {
     const requestOptions = {
         method: 'GET',
         credentials: 'include'
     };
 
-    return fetch(url, requestOptions)
+    return fetch(`${baseRoute}/all`, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+            throw err;
+        });
+}
+
+function getFeedAnnounces (params = {}) {
+    const requestOptions = {
+        method: 'GET',
+        credentials: 'include'
+    };
+
+    return fetch(buildUrl(`${baseRoute}/feed`,params), requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
@@ -39,7 +46,7 @@ function getSearchAnnounces (params = {}) {
         credentials: 'include'
     };
 
-    return fetch(url, requestOptions)
+    return fetch(buildUrl(`${baseRoute}/search`,params), requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
@@ -47,20 +54,32 @@ function getSearchAnnounces (params = {}) {
         });
 }
 
-function getAnnouncesAll () {
-    const url = `${baseRoute}/all`;
+function getSearchAnnouncesCount (params = {}) {
     const requestOptions = {
         method: 'GET',
         credentials: 'include'
     };
 
-    return fetch(url, requestOptions)
+    return fetch(buildUrl(`${baseRoute}/count`,params), requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
             throw err;
-        }
-        );
+        });
+}
+
+function getProfileAnnounces (params = {}) {
+    const requestOptions = {
+        method: 'GET',
+        credentials: 'include'
+    };
+
+    return fetch(buildUrl(`${baseRoute}/profile`,params), requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+            throw err;
+        });
 }
 
 function getAnnounceBySlug (slug) {
@@ -75,22 +94,6 @@ function getAnnounceBySlug (slug) {
         .then(json => {
             return json.data;
         })
-        .catch(err => {
-            throw err;
-        });
-}
-
-function getAnnounceBySlugSSR (slug, headers) {
-    const requestOptions = {
-        method: 'GET',
-        credentials: 'include',
-        headers
-    };
-
-    const url = `${baseRoute}/slug/${slug}`;
-    return fetch(url, requestOptions)
-        .then(handleResponse)
-        .then(json => json.data)
         .catch(err => {
             throw err;
         });
@@ -211,8 +214,8 @@ const removeLikeLoggedInUser = (announceId) => {
 export default {
     getFeedAnnounces,
     getSearchAnnounces,
+    getSearchAnnouncesCount,
     getAnnouncesAll,
-    getAnnounceBySlugSSR,
     getAnnounceBySlug,
     createAnnounce,
     updateAnnounce,

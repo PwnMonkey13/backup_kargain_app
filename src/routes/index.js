@@ -1,166 +1,109 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Col, Container, Row } from 'reactstrap';
-import clsx from 'clsx';
-import { NextSeo } from 'next-seo';
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import PropTypes from 'prop-types';
+import { Container } from 'reactstrap'
+import { useRouter} from 'next/router'
 import useTranslation from 'next-translate/useTranslation'
-import Typography from '@material-ui/core/Typography';
-import FindInPageIcon from '@material-ui/icons/FindInPage';
+import { makeStyles } from '@material-ui/core/styles'
 import useIsMounted from '../hooks/useIsMounted';
-import PaginateResults from '../components/PaginateResults';
-import Sorters from '../components/Sorters/Sorters';
-import AnnounceCard from '../components/AnnounceCard';
 import AnnounceService from '../services/AnnounceService';
-import { ModalDialogContext } from '../context/ModalDialogContext';
-import { useAuth } from '../context/AuthProvider';
-import AdvancedFilters from '../components/Filters/Advanced/AdvancedFilters'
+import { ModalDialogContext } from '../context/ModalDialogContext'
+import HomeFilters from '../components/Filters/Home/HomeFilters'
 
-const Index = (props) => {
-    const { t } = useTranslation()
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        listStyle: 'none',
+        padding: theme.spacing(0.5),
+        margin: 0
+    },
+    chip: {
+        margin: theme.spacing(0.5)
+    },
+
+    filtersContainer: {
+        padding: '.5rem'
+    },
+
+    filtersTop: {
+        display: 'flex',
+        alignItems: 'center',
+        borderBottom: '1px solid gainsboro'
+    },
+
+    filtersHidden: {
+        display: 'none'
+    }
+}));
+
+const SearchPage = ( ) => {
+    const router = useRouter()
+    const classes = useStyles()
+    const { query } = router.query;
+    const isMounted = useIsMounted()
+    const {t} = useTranslation()
     const { dispatchModalError } = useContext(ModalDialogContext);
-    const { isAuthenticated } = useAuth();
-    const isMounted = useIsMounted();
-    const [filtersOpened] = useState(false);
     const [state, setState] = useState({
         loading: false,
         sorter: {},
+        hideFilters : false,
         filters: {},
         page: 1,
         announces: [],
         total: 0
     });
 
-    const fetchAnnounces = async () => {
-        const { sorter, filters, page } = state;
-        const { size } = props;
-
-        setState(state => ({
-            ...state,
-            loading: true
-        }));
-
-        try {
-            const params = {
-                ...filters,
-                sort_by: sorter.key,
-                sort_ord: sorter.asc ? 'ASC' : null,
-                page,
-                size
-            };
-
-            const result = isAuthenticated ?
-                await AnnounceService.getFeedAnnounces(params) :
-                await AnnounceService.getSearchAnnounces(params);
+    const fetchSearch = useCallback(async () => {
+        try{
+            const result = await AnnounceService.getSearchAnnouncesCount(state.filters);
 
             setState(state => ({
                 ...state,
                 announces: result.rows || [],
                 total: result.total || 0,
                 loading: false
-            }));
+            }))
+
         } catch (err) {
             setState(state => ({
                 ...state,
                 loading: false
             }));
-            dispatchModalError({ err });
+            dispatchModalError({err})
         }
-    };
+    },[state.filters])
 
-    useEffect(() => {
-        const process = async () => {
-            await fetchAnnounces();
-            window.scrollTo(0, 0);
-        };
-
-        if (isMounted) {
-            process();
-        }
-    }, [isMounted, state.sorter, state.filters, state.page]);
-
-    const handlePageChange = (page, e) => {
-        setState(state => ({
-            ...state,
-            page
-        }));
-    };
-
-    const updateFilters = (filters) => {
-        setState(state => ({
-            ...state,
-            filters
-        }));
-    };
-
-    const updateSorter = (sorter) => {
-        setState(state => ({
-            ...state,
-            sorter
-        }));
-    };
+    useEffect(()=> {
+        if (isMounted) fetchSearch()
+    },[fetchSearch, isMounted])
 
     return (
         <Container>
-            <NextSeo
-                title="Kargain"
-                description="Vos meilleurs annonces automobiles"
-            />
-
-            <Row>
-                <Col sm={12} md={4}>
-                    <Typography component="p" variant="h2">{t('vehicles:{count}-results-search', { count : state.announces.length})}</Typography>
-                    <Typography component="p" variant="h4">{t('vehicles:filter-by')} : </Typography>
-                    <AdvancedFilters updateFilters={updateFilters}/>
-                </Col>
-
-                <Col sm={12} md={8}>
-                    <section className="cd-tab-filter-wrapper">
-                        <div className={clsx('cd-tab-filter', filtersOpened && 'filter-is-visible')}>
-                            <Sorters updateSorter={updateSorter}/>
-                        </div>
-                    </section>
-
-                    <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
-                        {state.announces.length ? (
-                            <Row className="my-2 d-flex justify-content-center">
-                                {state.announces.map((announceRaw, index) => (
-                                    <Col key={index} sm={12} md={12} className="my-2">
-                                        <AnnounceCard {...{
-                                            announceRaw,
-                                            isAuthenticated,
-                                            detailsFontSize: '13px'
-                                        }}/>
-                                    </Col>
-                                ))}
-                            </Row>
-                        ) : (
-                            <div className="d-flex flex-column my-2 mx-auto">
-                                <FindInPageIcon fontSize="large"/>
-                                <Typography variant="h3">
-                                    No result found
-                                </Typography>
-                                <p>
-                                    Try to change filters
-                                </p>
-                            </div>
-                        )}
-
-                        <PaginateResults
-                            totalPages={state.total}
-                            limit={props.size}
-                            pageCount={props.paginate}
-                            currentPage={state.page}
-                            handlePageChange={handlePageChange}
-                        />
-                    </section>
-                </Col>
-            </Row>
+            <div className={classes.filtersContainer}>
+                <HomeFilters
+                    totalResult={state.total}
+                    query={query}
+                    updateFilters={filters =>{
+                        setState(state => ({
+                            ...state,
+                            filters,
+                            hideFilters: true
+                        }))}}
+                />
+            </div>
         </Container>
-    );
+    )
 };
 
-Index.defaultProps = {
-    paginate: 3,
-    size: 5
+SearchPage.propTypes = {
+    featuredImgHeight: PropTypes.number,
+    announces: PropTypes.shape({
+        rows: PropTypes.array
+    })
 };
 
-export default Index;
+SearchPage.defaultProps = {
+    featuredImgHeight: 500
+};
+export default SearchPage;

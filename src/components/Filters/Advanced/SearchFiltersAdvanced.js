@@ -1,80 +1,57 @@
 import React, {   useState } from 'react';
 import {  Container } from 'reactstrap'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import Typography from '@material-ui/core/Typography'
-import useTranslation from 'next-translate/useTranslation'
 import AdvancedFilters from './AdvancedFilters';
+import vehicleTypes from '../../../business/vehicleTypes.js'
 import Tabs from '../../Tabs/Tabs'
+import clsx from 'clsx'
 
 const useStyles = makeStyles(() => ({
+    vehicleTypeActive : {
+        border: 'none',
+        color: '#569ffc',
+        textAlign: 'center',
+        background: 'none',
+        borderBottom: '4px solid #569ffc'
+    },
+
     img: {
+        marginBottom: '7px',
+        marginTop: '2px',
         maxWidth: '80px',
-        objectFit: 'contain'
+        objectFit: 'contain',
+        height: '30px'
     }
 }))
 
-const vehicleTypes = [
-    {
-        value: 'car',
-        label: 'Voiture',
-        img: 'tab-car.png',
-        imgSelected: 'tab-car-blue.png'
-    },
-    {
-        value: 'moto',
-        label: 'Moto',
-        img: 'tab-moto.png',
-        imgSelected: 'tab-moto-blue.png'
-    },
-    {
-        value: 'utility',
-        label: 'Utilitaire',
-        img: 'tab-gruz.png',
-        imgSelected: 'tab-gruz-blue.png'
-
-    },
-    {
-        value: 'camper',
-        label: 'Camping car',
-        img: 'tab-camper.png',
-        imgSelected: 'tab-camper-blue.png'
-    }
-]
-
 const SearchFiltersAdvanced = ({query, updateFilters}) => {
-    const [type, setType] = useState(vehicleTypes[0].value)
     const classes = useStyles()
-    const {t} = useTranslation()
+    const [vehicleType, setVehicleType] = useState(vehicleTypes[0].value)
 
     return (
         <Container>
-            <Typography component="h3" variant="h3" gutterBottom className="text-center">{t('vehicles:vehicle-type')} </Typography>
-            {vehicleTypes && vehicleTypes.length && (
+            {vehicleTypes.length !== 0 && (
                 <Tabs
                     defaultActive={0}
-                    handleClickTab={(index) => setType(vehicleTypes[index].value)}>
+                    handleClickTab={(index) => setVehicleType(vehicleTypes[index].value)}>
                     {vehicleTypes && vehicleTypes.map((tab, index) => {
+                        const isActive = vehicleType === tab.value
                         return (
                             <Tabs.Item
                                 key={index}
-                                id={`vehicle_type${index}`}
-                                className="vehicle_tab"
+                                className={clsx(classes.vehicleType, isActive && classes.vehicleTypeActive)}
                                 img={<img
-                                    src={type === tab.value ? `/images/${tab.imgSelected}` : `/images/${tab.img}`}
+                                    src={isActive ? `/images/${tab.imgSelected}` : `/images/${tab.img}`}
                                     alt={tab.label}
                                     title={tab.label}
                                     className={classes.img}
                                 />}
                             >
                                 <AdvancedFilters
-                                    disableToggleFilters={true}
-                                    query={query}
-                                    vehicleType={type}
+                                    vehicleType={vehicleType}
+                                    setVehicleType={setVehicleType}
                                     updateFilters={updateFilters}
-                                    defaultFilters={{
-                                        vehicleType : type,
-                                        adType : "sale"
-                                    }}
+                                    query={query}
                                 />
                             </Tabs.Item>
                         )
