@@ -11,13 +11,13 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        flexWrap: 'wrap',
+        flexWrap: 'wrap'
     },
     paper: {
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
+        padding: theme.spacing(2, 4, 3)
     },
 
     list: {
@@ -25,16 +25,16 @@ const useStyles = makeStyles((theme) => ({
         height: '500px',
         width: '300px',
         overflowX: 'hidden',
-        overflowY: 'scroll',
+        overflowY: 'scroll'
     },
 
     pointerClose: {
         display: 'flex',
-        cursor: 'pointer',
-    },
+        cursor: 'pointer'
+    }
 }));
 
-export default function ModalFollowers ({ likes, open, handleClose }) {
+export default function ModalFollowers ({ title, likes, open, handleClose }) {
     const classes = useStyles();
 
     return (
@@ -42,31 +42,32 @@ export default function ModalFollowers ({ likes, open, handleClose }) {
             <Fade in={open}>
                 <div className={classes.paper}>
                     <Typography component="h2" variant="h2">
-                        Followers ({likes.length})
+                        {title} ({likes.length})
                     </Typography>
                     <div className="my-2">
                         <ul className={classes.list}>
-                            {likes && likes.map((userLike, index) => {
-                                const user = new UserModel(userLike?.user);
-                                return (
-                                    <li key={index} className="nav-item navbar-dropdown p-1">
-                                        <Link href={user.getProfileLink}>
-                                            <div className="d-flex align-items-center">
-                                                <img className="dropdown-toggler rounded-circle mx-2"
-                                                     width="50"
-                                                     height="50"
-                                                     src={user.getAvatar}
-                                                     title={user.getFullName}
-                                                     alt={user.getUsername}
-                                                />
-                                                <Typography variant="body1">
-                                                    {user.getFullName}
-                                                </Typography>
-                                            </div>
-                                        </Link>
-                                    </li>
-                                );
-                            })}
+                            {likes && likes
+                                .map((userLike, index) => {
+                                    const user = new UserModel(userLike?.user);
+                                    return (
+                                        <li key={index} className="nav-item navbar-dropdown p-1">
+                                            <Link href={user.getProfileLink}>
+                                                <a className="d-flex align-items-center">
+                                                    <img className="dropdown-toggler rounded-circle mx-2"
+                                                        width="50"
+                                                        height="50"
+                                                        src={user.getAvatar}
+                                                        title={user.getFullName}
+                                                        alt={user.getUsername}
+                                                    />
+                                                    <Typography variant="body1">
+                                                        {user.getFullName}
+                                                    </Typography>
+                                                </a>
+                                            </Link>
+                                        </li>
+                                    );
+                                })}
                         </ul>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import Router from 'next-translate/Router'
+import useTranslation from 'next-translate/useTranslation'
 import AuthService from '../services/AuthService';
 import UserModel from '../models/user.model';
 
@@ -57,17 +57,8 @@ export const AuthProvider = ({ children }) => {
     const LogoutAction = async () => {
         try {
             await AuthService.logout();
-            updateAuthenticatedRawUser(null);
-            setAuthState(authState => ({
-                ...authState,
-                isAuthenticated: false
-            }));
         } catch (err) {
             updateAuthenticatedRawUser(null);
-            setAuthState(authState => ({
-                ...authState,
-                isAuthenticated: false
-            }));
         }
     };
     return (

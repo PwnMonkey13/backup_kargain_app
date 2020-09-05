@@ -486,7 +486,7 @@ const Buttons = ({ triggerSubmit, profilePageLink }) => {
                 {t('vehicles:save')}
             </Button>
 
-            <CTALink title="back to profile" href={profilePageLink}/>
+            <CTALink title={t('vehicles:back_to_profile')} href={profilePageLink}/>
         </div>
     );
 };

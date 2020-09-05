@@ -99,19 +99,21 @@ export default class UserModel {
     }
 
     get getFollowers () {
-        return this.raw?.followers ?? [];
-    }
-
-    get getFollowings () {
-        return this.raw?.followings ?? [];
+        const followers = this.raw?.followers ?? [];
+        return followers.filter(like => like.user !== null)
     }
 
     get getCountFollowers () {
-        return this.raw?.followers?.length ?? 0;
+        return this.getFollowers.length;
+    }
+
+    get getFollowings () {
+        const followings = this.raw?.followings ?? [];
+        return followings.filter(like => like.user !== null)
     }
 
     get getCountFollowing () {
-        return this.raw?.followings?.length ?? 0;
+        return this.getFollowings.length;
     }
 
     get getDescription () {
@@ -146,5 +148,15 @@ export default class UserModel {
             .filter(key => this.getAddressParts[key] != null)
             .map(key => this.getAddressParts[key])
             .join(', ');
+    }
+
+    buildAddressGoogleMapLink (parts = ['street', 'city', 'postCode', 'country']) {
+        const base = "https://www.google.com/maps/search/?api=1"
+        const keys = !Array.isArray(parts) ? [parts] : parts;
+        const string = keys
+          .filter(key => this.getAddressParts[key] != null)
+          .map(key => this.getAddressParts[key])
+          .join('+');
+        return `${base}&query=${encodeURI(string)}`
     }
 };
