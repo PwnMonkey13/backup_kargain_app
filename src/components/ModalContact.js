@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useRef, useContext, useEffect, useState } from 'react';
 import Link from 'next-translate/Link';
+import useTranslation from 'next-translate/useTranslation'
 import { useForm } from 'react-hook-form';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
@@ -13,10 +14,12 @@ import ConversationsService from '../services/ConversationsService';
 
 export default function ModalContact ({ recipient, handleClose, open }) {
     const classes = useStyles();
+    const { t } = useTranslation()
+    const contentRef = useRef()
     const [conversation, setConversation] = useState(null);
     const { isAuthReady, isAuthenticated, authenticatedUser } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const { register, errors, handleSubmit } = useForm({
+    const { register, errors, handleSubmit, reset } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all'
     });
@@ -36,6 +39,10 @@ export default function ModalContact ({ recipient, handleClose, open }) {
             const conversation = await ConversationsService.postConversationMessage(message, recipient.getID);
             setConversation(conversation);
             dispatchModal({ msg: 'Message posted' });
+            if(contentRef.current){
+                contentRef.current.scrollTop = contentRef.current?.scrollHeight
+            }
+            reset()
         } catch (err) {
             dispatchModalError({
                 err,
@@ -45,18 +52,21 @@ export default function ModalContact ({ recipient, handleClose, open }) {
     };
 
     useEffect(() => {
-        if(isAuthReady && isAuthenticated){
-            if (recipient) loadConversation();
+        if(isAuthReady && isAuthenticated && recipient){
+            loadConversation();
         }
-        console.log('not connected')
     }, [isAuthReady, isAuthenticated]);
 
     return (
-        <Modal className={classes.modal} open={open} onClose={handleClose}>
+        <Modal
+            className={classes.modal}
+            open={open}
+            onClose={handleClose}
+        >
             <Fade in={open}>
                 <div className={classes.paper}>
                     {recipient && (
-                        <>
+                        <div className={classes.conversation}>
                             <div className={classes.conversationHeader}>
                                 <div className={classes.headerUsername}>
                                     <div style={{ maxWidth: '70%' }}>
@@ -73,67 +83,61 @@ export default function ModalContact ({ recipient, handleClose, open }) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="layout" style={{
-                                overflowY: 'scroll',
-                                height: '80vh'
-                            }}>
-                                <div style={{
-                                    height: '467px',
-                                    backgroundColor: 'gainsboro'
-                                }}>
-                                    <div className={classes.messageContainer}>
-                                        {conversation?.createdAt && format(parseISO(conversation.createdAt), 'MM/dd/yyyy')}
-                                        {conversation?.messages.map((message, index) => {
-                                            if (authenticatedUser.getID === message?.from) {
-                                                return (
-                                                    <div key={index} className={classes.textJustifiedEnd}>
-                                                        <div className={classes.basicMessage}>
-                                                            <div className={classes.messageBubble}>
-                                                                {message?.content}
-                                                            </div>
+                            <div className={classes.conversationContent} ref={contentRef}>
+                                <div className={classes.messageContainer}>
+                                    {conversation?.createdAt && format(parseISO(conversation.createdAt), 'MM/dd/yyyy')}
+                                    {conversation?.messages.map((message, index) => {
+                                        if (authenticatedUser.getID === message?.from) {
+                                            return (
+                                                <div key={index} className={classes.textJustifiedEnd}>
+                                                    <div className={classes.basicMessage}>
+                                                        <div className={classes.messageBubble}>
+                                                            {message?.content}
                                                         </div>
-                                                    </div>
-                                                );
-                                            } else {
-                                                return (
-                                                    <div key={index} className={classes.textJustifiedStart}>
-                                                        <div className={classes.basicMessage}>
-                                                            <div className={classes.messageBubbleLeft}>
-                                                                {message?.content}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            }
-                                        })}
-                                    </div>
-                                </div>
 
-                                <div className={classes.conversationInput}>
-                                    <div className="layout" style={{
-                                        display: 'flex',
-                                        position: 'relative',
-                                        width: '100%'
-                                    }}>
-                                        <form className={classes.conversationContainer}
-                                            onSubmit={handleSubmit(onSubmitMessage)}>
-                                            <textarea
-                                                className={classes.conversationTextarea}
-                                                name="message"
-                                                ref={register({ required: 'required' })}
-                                                placeholder="Écrivez votre message"
-                                                maxLength="30000"
-                                                rows="5"
-                                            />
-                                            {errors && <ValidationError errors={errors} name={name}/>}
-                                            <button className={classes.conversationInputButton} type="submit">
-                                                Envoyer
-                                            </button>
-                                        </form>
-                                    </div>
+                                                        <img className="dropdown-toggler rounded-circle mx-2"
+                                                            width="30"
+                                                            height="30"
+                                                            src={authenticatedUser.getAvatar}
+                                                            title={authenticatedUser.getFullName}
+                                                            alt={authenticatedUser.getUsername}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            );
+                                        } else {
+                                            return (
+                                                <div key={index} className={classes.textJustifiedStart}>
+                                                    <div className={classes.basicMessage}>
+                                                        <div className={classes.messageBubbleLeft}>
+                                                            {message?.content}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+                                    })}
                                 </div>
                             </div>
-                        </>
+                            <div className={classes.conversationFooter}>
+                                <form
+                                    className={classes.conversationForm}
+                                    onSubmit={handleSubmit(onSubmitMessage)}>
+                                    <textarea
+                                        className={classes.conversationTextarea}
+                                        name="message"
+                                        ref={register({ required: t('form_validations:required') })}
+                                        placeholder={t('vehicles:write_your_message')}
+                                        maxLength="30000"
+                                        rows="3"
+                                    />
+                                    {errors && <ValidationError errors={errors} name={name}/>}
+                                    <button className={classes.conversationInputButton} type="submit">
+                                        {t('vehicles:send')}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     )}
                 </div>
             </Fade>

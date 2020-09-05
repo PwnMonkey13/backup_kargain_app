@@ -9,21 +9,21 @@ export default makeStyles(theme => ({
     },
     paper: {
         backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
+        borderRadius : '5px',
+        border: '1px solid gainsboro',
         boxShadow: theme.shadows[5],
         padding: '.5rem',
-        width: '500px',
+        width: '100%',
+        maxWidth: '600px',
 
         [theme.breakpoints.down('xs')]: {
             width: '350px'
-
         }
-
     },
 
     conversations: {
-        flexWrap: 'wrap',
         display: 'flex',
+        flexWrap: 'wrap',
         height: '100%'
     },
 
@@ -55,6 +55,8 @@ export default makeStyles(theme => ({
     },
 
     conversationListItem: {
+        display: 'flex',
+        alignItems : 'normal',
         padding: '1rem',
         cursor: 'pointer',
         flexDirection: 'row',
@@ -115,11 +117,23 @@ export default makeStyles(theme => ({
         justifyContent: 'space-between',
         background: '#fff',
         zIndex: 1,
-        marginBottom: '1rem',
         boxShadow: '0 0.2rem 0.2rem 0 rgba(0,0,0,.1)',
-        borderBottom: '1px solid #cad1d9',
+        borderBottom: '1px solid #cad1d9'
+        // [theme.breakpoints.down('md')]: {}
+    },
 
-        [theme.breakpoints.down('md')]: {}
+    conversationContent: {
+        height: '60vh',
+        display: 'block',
+        overflowY: 'scroll',
+        backgroundColor: 'gainsboro',
+        padding : '.5rem'
+    },
+
+    messageContainer: {
+        display: 'block',
+        wordWrap: 'break-word',
+        margin: '0 .5rem'
     },
 
     headerUsername: {
@@ -149,12 +163,6 @@ export default makeStyles(theme => ({
         cursor: 'pointer'
     },
 
-    messageContainer: {
-        display: 'block',
-        wordWrap: 'break-word',
-        margin: '0 1.6rem'
-    },
-
     textJustifiedStart: {
         display: 'flex',
         justifyContent: 'flex-start'
@@ -166,8 +174,9 @@ export default makeStyles(theme => ({
     },
 
     basicMessage: {
-        maxWidth: '70%',
-        display: 'block'
+        display: 'flex',
+        alignItems : 'center',
+        maxWidth: '70%'
     },
 
     messageBubble: {
@@ -190,22 +199,22 @@ export default makeStyles(theme => ({
         fontWeight: 400
     },
 
-    conversationContainer: {
-        display: 'flex',
-        width: '100%',
-        [theme.breakpoints.down('sm')]: {
-            flexDirection: 'column'
-        }
-    },
-
-    conversationInput: {
+    conversationFooter: {
         background: '#fff',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex',
-        borderTop: '1px solid #e6ebef',
-        padding: '.5rem'
+        borderTop: '1px solid #e6ebef'
+    },
+
+    conversationForm: {
+        display: 'flex',
+        position: 'relative',
+        width: '100%',
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column'
+        }
     },
 
     conversationTextarea: {

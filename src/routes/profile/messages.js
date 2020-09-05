@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import ValidationError from '../../components/Form/Validations/ValidationError';
 
-const Messages = ({ conversations }) => {
+const Messages = () => {
     const classes = useStyles();
     const theme = useTheme();
     const [selectedConversation, setSelectedConversation] = useState(null);
@@ -25,16 +25,22 @@ const Messages = ({ conversations }) => {
 
     const { register, errors, handleSubmit } = useForm({
         mode: 'onChange',
-        validateCriteriaMode: 'all',
+        validateCriteriaMode: 'all'
     });
 
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'), {
-        defaultMatches: true,
+        defaultMatches: true
     });
 
-    useEffect(() => {
-        if (conversations.length) handleSelectConversation(0);
-    }, []);
+    const loadConversations = async () => {
+        try {
+            const conversations = await ConversationsService.getCurrentUserConversations();
+            console.log(conversations)
+            setConversations(conversations);
+        } catch (err) {
+            dispatchModalError({ err });
+        }
+    };
 
     const onSubmitMessage = async (form) => {
         const { message } = form;
@@ -45,7 +51,7 @@ const Messages = ({ conversations }) => {
         } catch (err) {
             dispatchModalError({
                 err,
-                persist: true,
+                persist: true
             });
         }
     };
@@ -61,24 +67,39 @@ const Messages = ({ conversations }) => {
         setOpenedConversation(false);
     };
 
+    useEffect(() => {
+        loadConversations();
+    }, []);
+
+    useEffect(() => {
+        if (conversations.length) handleSelectConversation(0);
+    }, []);
+
     return (
         <>
-            <h2>Messagerie</h2>
+            <h2>{t('vehicles:messaging')}</h2>
             <div className={classes.conversations}>
                 <div className={classes.conversationsList}>
                     <div className={classes.styleScroller}>
                         <div className={classes.scrollerContainer}>
-                            <div style={{
-                                width: '100%',
-                            }}>
-                                {conversations ? conversations.map((conversation, index) => {
+                            <div style={{ width: '100%' }}>
+                                {conversations.length > 0 ? conversations.map((conversation, index) => {
                                     const recipient = new UserModel(conversation.to);
                                     return (
                                         <div key={index}
-                                             className={classes.conversationListItem}
-                                             onClick={() => handleSelectConversation(index)}>
+                                            className={classes.conversationListItem}
+                                            onClick={() => handleSelectConversation(index)}>
+
+                                            <img className="dropdown-toggler rounded-circle mx-2"
+                                                width="30"
+                                                height="30"
+                                                src={recipient.getAvatar}
+                                                title={recipient.getFullName}
+                                                alt={recipient.getUsername}
+                                            />
+
                                             <div className={classes.itemDetails}>
-                                                <p>
+                                                <p className="mt-0">
                                                     {recipient.getFullName}
                                                 </p>
                                                 <p className={classes.itemDetailsPreview}>
@@ -91,7 +112,7 @@ const Messages = ({ conversations }) => {
                                         </div>
                                     );
                                 }) : (
-                                    <p>no conversations yet</p>
+                                    <p>{t('vehicles:no_conversations_yet')}</p>
                                 )}
                             </div>
                         </div>
@@ -109,9 +130,9 @@ const Messages = ({ conversations }) => {
                                     <Link href={recipient.getProfileLink} prefetch={false}>
                                         <a>
                                             <img className="rounded-circle"
-                                                 src={recipient.getAvatar}
-                                                 alt={recipient.getUsername}
-                                                 width={50}
+                                                src={recipient.getAvatar}
+                                                alt={recipient.getUsername}
+                                                width={50}
                                             />
                                             <span className="mx-2">{recipient.getFullName}</span>
                                         </a>
@@ -125,7 +146,7 @@ const Messages = ({ conversations }) => {
                             </div>
                         </div>
 
-                        <div className="layout position-relative">
+                        <div className={classes.conversationContent}>
                             <div className={classes.messageContainer}>
                                 {selectedConversation.createdAt && format(parseISO(selectedConversation.createdAt), 'MM/dd/yyyy')}
                                 {selectedConversation?.messages.map((message, index) => {
@@ -136,6 +157,13 @@ const Messages = ({ conversations }) => {
                                                     <div className={classes.messageBubble}>
                                                         {message?.content}
                                                     </div>
+                                                    <img className="dropdown-toggler rounded-circle mx-2"
+                                                        width="30"
+                                                        height="30"
+                                                        src={authenticatedUser.getAvatar}
+                                                        title={authenticatedUser.getFullName}
+                                                        alt={authenticatedUser.getUsername}
+                                                    />
                                                 </div>
                                             </div>
                                         );
@@ -143,6 +171,13 @@ const Messages = ({ conversations }) => {
                                         return (
                                             <div key={index} className={classes.textJustifiedStart}>
                                                 <div className={classes.basicMessage}>
+                                                    <img className="dropdown-toggler rounded-circle mx-2"
+                                                        width="30"
+                                                        height="30"
+                                                        src={recipient.getAvatar}
+                                                        title={recipient.getFullName}
+                                                        alt={recipient.getUsername}
+                                                    />
                                                     <div className={classes.messageBubbleLeft}>
                                                         {message?.content}
                                                     </div>
@@ -152,30 +187,24 @@ const Messages = ({ conversations }) => {
                                     }
                                 })}
                             </div>
-                            <div className={classes.conversationInput}>
-                                <div className="layout" style={{
-                                    display: 'flex',
-                                    position: 'relative',
-                                    width: '100%',
-                                }}>
-                                    <form className={classes.conversationContainer}
-                                          onSubmit={handleSubmit(onSubmitMessage)}>
-
-                                           <textarea
-                                               className={classes.conversationTextarea}
-                                               name="message"
-                                               ref={register({ required: 'required' })}
-                                               placeholder="Écrivez votre message"
-                                               maxLength="30000"
-                                               rows="5"
-                                           />
-                                        {errors && <ValidationError errors={errors} name={name}/>}
-                                        <button className={classes.conversationInputButton} type="submit">
-                                            Envoyer
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
+                        </div>
+                        <div className={classes.conversationFooter}>
+                            <form
+                                className={classes.conversationForm}
+                                onSubmit={handleSubmit(onSubmitMessage)}>
+                                <textarea
+                                    className={classes.conversationTextarea}
+                                    name="message"
+                                    ref={register({ required: t('form_validations:required') })}
+                                    placeholder={t('vehicles:write_your_message')}
+                                    maxLength="30000"
+                                    rows="3"
+                                />
+                                {errors && <ValidationError errors={errors} name={name}/>}
+                                <button className={classes.conversationInputButton} type="submit">
+                                    {t('vehicles:send')}
+                                </button>
+                            </form>
                         </div>
                     </div>
                 )}
@@ -185,32 +214,3 @@ const Messages = ({ conversations }) => {
 };
 
 export default Messages;
-
-export async function getServerSideProps (ctx) {
-    const additionalHeaders = { Cookie: ctx.req.headers['cookie'] };
-    const pageProps = {
-        requiredAuth: true,
-    };
-    try {
-        const conversations = await ConversationsService.getConversationsByAuthedUserSSR(additionalHeaders);
-        return {
-            props: {
-                ...pageProps,
-                conversations,
-            },
-        };
-    } catch (err) {
-        return {
-            props: {
-                ...pageProps,
-                conversations: [],
-                err: {
-                    message: err?.message ?? null,
-                    statusCode: err?.statusCode ?? 404,
-                },
-            },
-        };
-    }
-}
-
-

@@ -1,8 +1,8 @@
 import handleResponse from '../libs/handleResponse';
 import config from '../config/config';
 
-const getConversationWithProfile = (profileId) => {
-    const url = `${config.api}/conversations/profile/${profileId}`;
+const getCurrentUserConversations = () => {
+    const url = `${config.api}/conversations`;
     const requestOptions = {
         method: 'GET',
         credentials: 'include'
@@ -13,16 +13,14 @@ const getConversationWithProfile = (profileId) => {
         .then(json => json.data)
         .catch(err => {
             throw err;
-        }
-        );
+        });
 };
 
-const getConversationsByAuthedUserSSR = (headers) => {
-    const url = `${config.api}/conversations`;
+const getConversationWithProfile = (profileId) => {
+    const url = `${config.api}/conversations/profile/${profileId}`;
     const requestOptions = {
         method: 'GET',
-        credentials: 'include',
-        headers : headers
+        credentials: 'include'
     };
 
     return fetch(url, requestOptions)
@@ -57,6 +55,6 @@ const postConversationMessage = (message, recipientId) => {
 
 export default {
     getConversationWithProfile,
-    getConversationsByAuthedUserSSR,
+    getCurrentUserConversations,
     postConversationMessage
 }
