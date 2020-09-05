@@ -70,7 +70,11 @@ const ProtectedRouter = ({ children, pageProps }) => {
     return (
         <DynamicNamespaces
             dynamic={(lang, ns) => import(`../locales/${lang}/${ns}.json`).then((m) => m.default)}
-            namespaces={['layout']}
+            namespaces={[
+                'layout',
+                'messages_api',
+                'form_validations'
+            ]}
         >
             {showLoginModal && <PopupLogin/>}
             <Layout>
