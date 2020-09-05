@@ -1,20 +1,17 @@
 import React, { useContext, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import Typography from '@material-ui/core/Typography';
 import AnnounceClass from '../../models/announce.model';
 import { useAuth } from '../../context/AuthProvider';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import commentsService from '../../services/CommentsService';
-import Comment from '../../models/comment.model';
-import CommentBlock from './CommentBlock';
+import CommentsList from './CommentsList'
 
 const Comments = ({ announceRaw }) => {
     const router = useRouter();
     const { isAuthenticated } = useAuth();
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const textareaCommentRef = useRef();
-    const { t } = useTranslation();
     const announce = new AnnounceClass(announceRaw);
     const [comments, setComments] = useState(announce.getComments);
     const [doneSubmitting, setDoneSubmitting] = useState(true);
@@ -52,53 +49,14 @@ const Comments = ({ announceRaw }) => {
         }
     };
 
-    const onSubmitResponse = async (commentId, indexComment, message) => {
-        await checkAuthRedirection();
-        setDoneSubmitting(false);
-
-        try {
-            const updatedComment = await commentsService.createCommentResponse({
-                comment_id: commentId,
-                message
-            });
-            setDoneSubmitting(true);
-            dispatchModal({ msg: 'response added successfully' });
-            setComments(comments => [
-                ...comments.slice(0, indexComment),
-                updatedComment,
-                ...comments.slice(indexComment, comments.length - 1)
-            ]);
-        } catch (err) {
-            setDoneSubmitting(true);
-            dispatchModalError({ err });
-        }
-    };
-
-    return (
-        <div id="comments" className="comments m-t-60 m-b-60">
-            <div className="comments-header">
-                <Typography component="h3" variant="h3">
-                    {t('vehicles:comment_plural')}
-                </Typography>
-            </div>
+    return(
+        <div className="comments_container">
+            <CommentsList comments={comments}/>
             <CommentForm {...{
                 onSubmitComment,
                 textareaCommentRef,
                 doneSubmitting
             }}/>
-
-            <div className="comments-list">
-                {comments && comments.map((item, indexComment) => {
-                    const comment = new Comment(item);
-                    return <CommentBlock
-                        key={indexComment}
-                        comment={comment}
-                        disableReply
-                        indexComment={indexComment}
-                        onSubmitResponse={onSubmitResponse}
-                    />;
-                })}
-            </div>
         </div>
     );
 };
@@ -110,7 +68,7 @@ const CommentForm = ({ onSubmitComment, textareaCommentRef, doneSubmitting }) =>
             className="comments-write">
             <div className="form-group position-relative w-auto">
                 <textarea
-                    rows={5}
+                    rows={3}
                     cols={13}
                     ref={textareaCommentRef}
                     placeholder="ex: Superbe voiture"
@@ -123,7 +81,7 @@ const CommentForm = ({ onSubmitComment, textareaCommentRef, doneSubmitting }) =>
                     disabled={!doneSubmitting}
                     type="submit"
                     className="btn btn-primary">
-                    {t('vehicles:send')}
+                    {t('vehicles:add_a_comment')}
                 </button>
             </div>
         </form>

@@ -32,6 +32,8 @@
   "{page}-announces-of-{pages}" : "{{page}} sur {{pages}}",
   "save" : "Enregistrer",
   "send" : "Envoyer",
+  "add_a_comment" : "Ajouter un commentaire",
+  "remove_comment" : "Supprimer le commentaire",
   "save-announce" : "Enregistrer mon annonce",
   "skip-step" : "Passer cette étape",
   "previous" : "Précedent",

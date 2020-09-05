@@ -99,7 +99,10 @@ const Messages = ({ conversations }) => {
                 </div>
 
                 {selectedConversation && (
-                    <div className={clsx(classes.conversation, !openedConversation && classes.conversationCloseMobile)}>
+                    <div className={clsx(
+                        classes.conversation,
+                        !openedConversation && classes.conversationCloseMobile
+                    )} style={{ width: '70%' }}>
                         <div className={classes.conversationHeader}>
                             <div className={classes.headerUsername}>
                                 <div style={{ maxWidth: '70%' }}>

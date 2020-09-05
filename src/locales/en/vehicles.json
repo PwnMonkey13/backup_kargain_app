@@ -32,6 +32,8 @@
     "{page}-announces-of-{pages}": "{{page}} of {{pages}}",
     "save": "Save",
     "send": "Send",
+    "add_a_comment" : "Add a comment",
+    "remove_comment" : "Remove comment",
     "save-announce": "Save Ad",
     "skip-step": "Skip step",
     "previous": "Previous",

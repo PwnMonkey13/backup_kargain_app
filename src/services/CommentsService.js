@@ -19,25 +19,21 @@ function createComment (body) {
         );
 }
 
-function createCommentResponse (body) {
-    const url = `${config.api}/comments/response`;
+function disableComment (commentID) {
     const requestOptions = {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        method: 'PUT',
+        credentials: 'include'
     };
 
-    return fetch(url, requestOptions)
+    return fetch(`${config.api}/comments/disable/${commentID}`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
             throw err;
-        }
-        );
+        });
 }
 
 export default {
     createComment,
-    createCommentResponse
+    disableComment
 };

@@ -88,7 +88,6 @@ export default makeStyles(theme => ({
         left: 0,
         height: '100%',
         overflow: 'hidden',
-        width: '70%',
         border: '1px solid gainsboro',
         padding: '.5rem',
         background: '#fff',

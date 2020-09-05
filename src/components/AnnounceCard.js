@@ -12,7 +12,7 @@ import clsx from 'clsx'
 import { ReactComponent as StarSVG } from '../../public/images/svg/star.svg';
 import { ReactComponent as StarSVGYellow } from '../../public/images/svg/star-yellow.svg';
 import { ModalDialogContext } from '../context/ModalDialogContext';
-import CommentsListLight from './Comments/CommentsListLight';
+import CommentsListLight from './Comments/CommentsList';
 import AnnounceService from '../services/AnnounceService';
 import AnnounceClass from '../models/announce.model';
 import { useAuth } from '../context/AuthProvider';

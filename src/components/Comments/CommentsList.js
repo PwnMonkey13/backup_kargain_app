@@ -1,39 +1,112 @@
-import React from 'react';
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types';
+import Link from 'next-translate/Link'
+import useTranslation from 'next-translate/useTranslation';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogActions from '@material-ui/core/DialogActions'
+import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography';
 import Comment from '../../models/comment.model';
-import CommentsBlock from './CommentBlock';
-import useTranslation from 'next-translate/useTranslation';
+import { useAuth } from '../../context/AuthProvider'
+import { ModalDialogContext } from '../../context/ModalDialogContext'
+import CommentsService from '../../services/CommentsService'
 
 const CommentsList = ({ comments }) => {
-    const { t } = useTranslation()
-    return (
-        <div className="comments m-t-60 m-b-60">
-            <div className="comments-header">
-                <Typography component="h3" variant="h3">
-                    {t('vehicles:comments')} ({comments.length})
-                </Typography>
-                <div className="comments-mode">
-                    <a href="https://benzin.fr/auctions/show/m50360e34019920sans0reserve-5eac26fe1b710?order=recents"
-                        className="active">
-                        Récents
-                    </a>
-                    <a href="https://benzin.fr/auctions/show/m50360e34019920sans0reserve-5eac26fe1b710?order=populars">
-                        Populaires
-                    </a>
-                </div>
-            </div>
+    const { authenticatedUser } = useAuth();
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const [openDialogRemove, setOpenDialogRemove] = useState(false);
+    const [selectCommentID, setSelectedCommentID] = useState()
 
-            <div className="comments-list">
+    const handleOpenDialogRemove = (commentID) => {
+        setOpenDialogRemove(true);
+        setSelectedCommentID(commentID)
+    };
+
+    const handleCloseDialogRemove = () => {
+        setOpenDialogRemove(false);
+    };
+
+    const handleRemoveComment = () => {
+        CommentsService.disableComment(selectCommentID)
+            .then(() => {
+                dispatchModal({ msg: 'Comment successfully removed' });
+                window.location.reload()
+            }).catch(err => {
+                dispatchModalError({ err });
+            });
+    };
+
+    return (
+        <div className="comments">
+            <ModalConfirmRemoveComment
+                openDialogRemove={openDialogRemove}
+                handleCloseDialogRemove={handleCloseDialogRemove}
+                handleCallback={handleRemoveComment}
+            />
+
+            <ul className="commentsCardList">
                 {comments && comments.map((item, index) => {
                     const comment = new Comment(item);
-                    return <CommentsBlock key={index} comment={comment} index={index}/>;
+                    const isOwn = authenticatedUser.getID === comment.getAuthor.getID
+
+                    return (
+                        <li key={index} className="d-flex align-items-center my-2">
+                            {isOwn && (
+                                <span
+                                    className="mx-1 top-profile-location edit"
+                                    onClick={()=>handleOpenDialogRemove(comment.getID) }>
+                                    <RemoveCircleIcon/>
+                                </span>
+                            )}
+
+                            <Link href={comment.getAuthor.getProfileLink}>
+                                <a>
+                                    <Typography as="p" gutterBottom className="mx-1">
+                                        <strong>{comment.getAuthor.getFullName} : </strong>
+                                    </Typography>
+                                </a>
+                            </Link>
+
+                            <Typography as="p" gutterBottom>
+                                {comment.getMessage}
+                            </Typography>
+                        </li>
+                    );
                 })}
-            </div>
+            </ul>
         </div>
     );
 };
 
+const ModalConfirmRemoveComment = ({openDialogRemove, handleCloseDialogRemove, handleCallback}) => {
+    const { t } = useTranslation()
+
+    return(
+        <Dialog
+            open={openDialogRemove}
+            onClose={handleCloseDialogRemove}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title" disableTypography>
+                {t('vehicles:confirm-suppression')}
+            </DialogTitle>
+            <DialogActions>
+                <Button onClick={handleCloseDialogRemove} color="primary" autoFocus>
+                    {t('vehicles:cancel')}
+                </Button>
+                <Button
+                    variant="contained"
+                    startIcon={<RemoveCircleIcon/>}
+                    onClick={handleCallback}>
+                    {t('vehicles:remove_comment')}
+                </Button>
+            </DialogActions>
+        </Dialog>
+    )
+}
 CommentsList.propTypes = {
     comments: PropTypes.array.isRequired
 };

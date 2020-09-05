@@ -1,14 +1,16 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx';
 import { NextSeo } from 'next-seo';
-import { Col, Container, Row } from 'reactstrap';
 import Link from 'next-translate/Link';
+import { useRouter } from 'next/router'
+import { Col, Container, Row } from 'reactstrap';
+import Alert from '@material-ui/lab/Alert';
 import { useMediaQuery } from '@material-ui/core';
-import MoreIcon from '@material-ui/icons/More';
+import CommentIcon from '@material-ui/icons/Comment';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import Typography from '@material-ui/core/Typography';
 import useTheme from '@material-ui/core/styles/useTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import Alert from '@material-ui/lab/Alert';
 import useTranslation from 'next-translate/useTranslation';
 import { ReactComponent as StarSVG } from '../../../../public/images/svg/star.svg';
 import { ReactComponent as StarSVGYellow } from '../../../../public/images/svg/star-yellow.svg';
@@ -24,14 +26,9 @@ import AnnounceModel from '../../../models/announce.model';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
 import { useAuth } from '../../../context/AuthProvider';
 import { getTimeAgo } from '../../../libs/utils';
-import Error from '../../_error';
-import Button from '@material-ui/core/Button';
-import ChatIcon from '@material-ui/icons/Chat';
-import UserModel from '../../../models/user.model';
 import ModalContact from '../../../components/ModalContact';
 import ModalFollowers from '../../../components/ModalFollowers';
-
-import { useRouter } from 'next/router'
+import Error from '../../_error';
 
 const useStyles = makeStyles(() => ({
     formRow: {
@@ -165,6 +162,8 @@ const Announce = () => {
     if (!state.stateReady) return null;
     if (state.err) return <Error statusCode={state.err?.statusCode}/>;
 
+    console.log(state)
+
     return (
         <Container>
             <ModalContact
@@ -286,16 +285,19 @@ const Announce = () => {
 
                         <div className={clsx('price-stars-wrapper', classes.priceStarsWrapper)}>
                             <div className="icons-profile-wrapper">
-                                <div className="icons-star-prof" onClick={handleClickLikeButton}
-                                    title={t('vehicles:like')}>
-                                    {alreadyLikeCurrentUser ? <StarSVGYellow/> : <StarSVG/>}
-                                    <span>{state.likesCounter}</span>
+                                <div className="icons-star-prof">
+                                    <span onClick={()=>handleClickLikeButton()}>
+                                        {alreadyLikeCurrentUser ? <StarSVGYellow/> : <StarSVG/>}
+                                    </span>
+                                    <span onClick={() => handleOpenModalFollowers()}>
+                                        {state.likesCounter}
+                                    </span>
                                 </div>
 
-                                <a href="#comments" className="icons-star-prof" title="Commenter">
-                                    <img src="/images/svg/comment.svg" alt=""/>
+                                <div className="icons-star-prof">
+                                    <CommentIcon/>
                                     <span>{state.announce.getCountComments}</span>
-                                </a>
+                                </div>
 
                                 {state.isSelf ? (
                                     <div className="mx-2">
@@ -305,49 +307,16 @@ const Announce = () => {
                                         />
                                     </div>
                                 ) : (
-                                    <div className="mx-2">
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            startIcon={<ChatIcon/>}
-                                            onClick={() => {
-                                                handleOpenModalContact(true);
-                                            }}
-                                        >
-                                            {t('vehicles:contact')}
-                                        </Button>
+                                    <div
+                                        className="icons-star-prof mx-2"
+                                        onClick={()=>handleOpenModalContact(true)}>
+                                        <MailOutlineIcon/>
                                     </div>
                                 )}
                             </div>
                         </div>
 
-                        {state.announce.getLikes.length !== 0 && (
-                            <div className="my-2">
-                                <ul className="d-flex align-items-center list-style-none">
-                                    {state.announce.getLikes.slice(0, 5).map((userLike, index) => {
-                                        const user = new UserModel(userLike?.user);
-                                        return (
-                                            <li key={index} className="nav-item navbar-dropdown p-1">
-                                                <img className="dropdown-toggler rounded-circle"
-                                                    width="30"
-                                                    height="30"
-                                                    src={user.getAvatar}
-                                                    title={user.getFullName}
-                                                    alt={user.getUsername}
-                                                />
-                                            </li>
-                                        );
-                                    })}
-                                    <li>
-                                        <Button
-                                            type="button"
-                                            onClick={() => handleOpenModalFollowers()}
-                                            startIcon={<MoreIcon/>}>
-                                        </Button>
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
+                        <Comments announceRaw={state.announce.getRaw}/>
                     </Col>
                 </Row>
 
@@ -390,8 +359,6 @@ const Announce = () => {
                         vehicleType={state.announce.getVehicleType}
                     />
                 </section>
-
-                <Comments announceRaw={state.announce.getRaw}/>
             </div>
         </Container>
     );

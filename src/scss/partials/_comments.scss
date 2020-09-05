@@ -1,15 +1,13 @@
 @import 'variables';
 
 .comments {
-    padding: 0 .5rem;
+    padding: .5rem;
+    overflow-y: auto;
+    max-height: 25rem;
 
     .commentsCardList {
         list-style-type: none;
         margin: 1rem;
-    }
-
-    textarea {
-        margin-left: unset;
     }
 
     .profile-small {
