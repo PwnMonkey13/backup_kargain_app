@@ -1,6 +1,6 @@
 {
-    "language-name-fr": "Francais",
-    "language-name-en": "English",
+    "language-name-fr": "французский язык",
+    "language-name-en": "английский",
     "language-name-ru": "Русский",
     "settings": "Настройки",
     "create-announce": "Добавить обьявление",
@@ -11,9 +11,13 @@
     "login-facebook": "Вход через Facebook",
     "login-google": "Вход через Google",
     "remember-me": "Запомни меня",
+    "account_created" : "Аккаунт создан. Пожалуйста, проверьте свой адрес электронной почты, чтобы подтвердить свою учетную запись",
     "password-forgotten": "восстановить пароль",
+    "reset-password" : "Сброс пароля",
     "register": "Создать аккаунт",
     "register-pro": "Создать аккаунт Про",
+    "company" : "Компания",
+    "siren" : "Сирена",
     "footer-text": "Global Digital Automotive Marketplace",
     "mail-us": "Свяжиться с нами по электронной почте",
     "call-us": "Позвонить нам",
@@ -30,5 +34,6 @@
     "messaging": "обмен сообщениями",
     "close": "Закрывать",
     "premium" : "премия",
-    "pricing" : "ценообразование"
+    "pricing" : "ценообразование",
+    "form" : "Форма"
 }
