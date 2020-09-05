@@ -19,25 +19,24 @@ const ConfirmAccount = () => {
     const [activated, setActivated] = useState(false);
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
-        validateCriteriaMode: 'all',
+        validateCriteriaMode: 'all'
     });
 
     const onSubmitAskForActivation = (form) => {
         const { email } = form;
         AuthService.askForEmailActivation(email)
             .then(() => {
-                dispatchModal({ msg: 'Email activation send to your email box' });
+                dispatchModal({ msg: t('vehicles:activation_email_sent') });
             }).catch(err => {
                 dispatchModalError({ err });
-            },
-        );
+            });
     };
 
     useEffect(() => {
         if (!token) return;
         AuthService.confirmAccount(token)
             .then(() => {
-                dispatchModal({ msg: 'Account successfully activated' });
+                dispatchModal({ msg: t('vehicles:account_activated') });
                 setActivated(true);
                 router.push('/auth/login')
             })
@@ -51,20 +50,23 @@ const ConfirmAccount = () => {
     if (!token) {
         return (
             <>
-                <h1>Activer mon compte Kargain</h1>
+                <h1>{t('vehicles:activate_my_profile')}</h1>
                 <Row className="justify-content-center">
                     <Col sm={12} md={6} lg={6}>
                         <form className="p-3 mt-3 mx-auto" onSubmit={handleSubmit(onSubmitAskForActivation)}>
-                            <FieldWrapper label="Email" required>
+                            <FieldWrapper label={t('vehicles:')}>
                                 <EmailInput
                                     name="email"
                                     inline
                                     errors={errors}
                                     control={control}
+                                    rules={{ required: t('form_validations:required')}}
                                 />
                             </FieldWrapper>
                             <div className="submit">
-                                <button className="btn btn-outline-primary" type="submit">Activer mon compte</button>
+                                <button className="btn btn-outline-primary" type="submit">
+                                    Activer mon compte
+                                </button>
                             </div>
                         </form>
                     </Col>

@@ -4,6 +4,7 @@ import { Modal } from 'reactstrap';
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { themeColors } from '../theme/palette';
+import useTranslation from 'next-translate/useTranslation'
 
 const useStyles = makeStyles(() => ({
     rootClass: {},
@@ -35,6 +36,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const PopupAlert = () => {
+    const { t } = useTranslation()
     const classes = useStyles();
     const { modalState } = useContext(ModalDialogContext);
     const [state, setState] = useState({});
@@ -50,9 +52,8 @@ const PopupAlert = () => {
     const getMessage = () => {
         if (state.msg) return state.msg;
         if (state.type === 'error') {
-            if (typeof state.err !== 'object') return state.err;
-            if(state.err?.statusCode) return `[${state.err?.statusCode}] ${state.err?.name} : ${state.err?.message}`;
-            else return `${state.err?.name} : ${state.err?.message}`;
+            const err = typeof state.err === 'object' ? state.err?.message : state.err
+            return t(`messages_api:${err}`);
         }
         return null;
     };

@@ -30,38 +30,39 @@ const ContactPage = () => {
 
     return (
         <div className="container mt-4">
-            <style jsx>{`
-                        form{
-                            border-radius : 5px;
-                            border : 1px solid gainsboro;
-                            max-width : 500px
-                        }
-                    `}
+            <style jsx>
+                {`
+                      form{
+                          border-radius : 5px;
+                          border : 1px solid gainsboro;
+                          max-width : 500px
+                      }
+                `}
             </style>
             <h1>{t('vehicles:contact-form')} </h1>
             <form className="p-3 mt-3 mx-auto"
                 onSubmit={handleSubmit(onSubmit)}>
 
-                <FieldWrapper label="Email">
+                <FieldWrapper label={t('vehicles:email_address')}>
                     <EmailInput
                         name="email"
                         inline
                         errors={errors}
                         control={control}
-                        rules={{ required: 'Required' }}
+                        rules={{ required: t('form_validations:required') }}
                     />
                 </FieldWrapper>
 
-                <FieldWrapper label="Sujet">
+                <FieldWrapper label={t('vehicles:subject')}>
                     <SelectInput
                         name="subject"
                         options={[
                             {
-                                label: "Demande d'informations",
+                                label: t('vehicles:informations_request'),
                                 value: 'informations'
                             },
                             {
-                                label: 'Partenariat',
+                                label: t('vehicles:partnership_request'),
                                 value: 'partnership'
                             },
                             {
@@ -70,20 +71,20 @@ const ContactPage = () => {
                             }
                         ]}
                         selected={['informations']}
-                        rules={{ required: 'Required' }}
+                        rules={{ required: t('form_validations:required') }}
                         control={control}
                         errors={errors}
                     />
                 </FieldWrapper>
 
-                <FieldWrapper label="Message">
+                <FieldWrapper label={t('vehicles:message')}>
                     <TextareaInput
+                        className="form-control editor"
                         name="message"
                         rows={5}
                         cols={13}
                         control={control}
                         errors={errors}
-                        className="form-control editor"
                     />
                 </FieldWrapper>
 

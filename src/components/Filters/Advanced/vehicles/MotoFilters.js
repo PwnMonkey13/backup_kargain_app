@@ -137,7 +137,7 @@ const MotoFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span">{t('vehicles:external-color')}</Typography>
+            <Typography component="span">{t('vehicles:external_color')}</Typography>
             <SelectInput
                 name="externalColor"
                 options={RadioChoicesExternalColor}

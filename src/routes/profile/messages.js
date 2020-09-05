@@ -13,10 +13,13 @@ import useStyles from '../../components/Conversations/conversation.styles';
 import { useForm } from 'react-hook-form';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import ValidationError from '../../components/Form/Validations/ValidationError';
+import useTranslation from 'next-translate/useTranslation';
 
 const Messages = () => {
     const classes = useStyles();
     const theme = useTheme();
+    const { t } = useTranslation()
+    const [conversations, setConversations] = useState([]);
     const [selectedConversation, setSelectedConversation] = useState(null);
     const [openedConversation, setOpenedConversation] = useState(false);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);

@@ -150,7 +150,7 @@ const UtilityFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span">{t('vehicles:class-emission')}</Typography>
+            <Typography component="span">{t('vehicles:class_emission')}</Typography>
             <SelectInput
                 name="emission"
                 options={RadioChoicesEmission}
@@ -171,7 +171,7 @@ const UtilityFilters = ({ control, watch, errors }) => {
                 suffix="kw"
             />
 
-            <Typography component="span" gutterBottom>{t('vehicles:doors-quantity')}</Typography>
+            <Typography component="span" gutterBottom>{t('vehicles:doors_quantity')}</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="doors"
@@ -195,7 +195,7 @@ const UtilityFilters = ({ control, watch, errors }) => {
                 control={control}
             />
 
-            <Typography component="span">{t('vehicles:doors-quantity')}</Typography>
+            <Typography component="span">{t('vehicles:doors_quantity')}</Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="seats"
@@ -207,7 +207,7 @@ const UtilityFilters = ({ control, watch, errors }) => {
                 control={control}
             />
 
-            <Typography component="span">{t('vehicles:external-color')}</Typography>
+            <Typography component="span">{t('vehicles:external_color')}</Typography>
             <SelectInput
                 name="externalColor"
                 options={RadioChoicesMaterials}
@@ -223,7 +223,7 @@ const UtilityFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span">{t('vehicles:external-color')}</Typography>
+            <Typography component="span">{t('vehicles:external_color')}</Typography>
             <SelectInput
                 name="externalColor"
                 options={RadioChoicesExternalColor}
@@ -231,7 +231,7 @@ const UtilityFilters = ({ control, watch, errors }) => {
                 errors={errors}
             />
 
-            <Typography component="span">{t('vehicles:internal-color')}</Typography>
+            <Typography component="span">{t('vehicles:internal_color')}</Typography>
             <SelectInput
                 name="internalColor"
                 options={RadioChoicesExternalColor}

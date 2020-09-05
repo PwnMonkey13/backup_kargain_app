@@ -15,8 +15,7 @@ function createComment (body) {
         .then(json => json.data)
         .catch(err => {
             throw err;
-        }
-        );
+        });
 }
 
 function disableComment (commentID) {

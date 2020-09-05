@@ -62,7 +62,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:vehicle-function')}>
+                    <FieldWrapper label={t('vehicles:vehicle_function')}>
                         <SelectInput
                             name="vehicleFunction"
                             options={formData.RadioFunctionVehicle}
@@ -213,7 +213,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
 
             <Row>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:doors-quantity')}>
+                    <FieldWrapper label={t('vehicles:doors_quantity')}>
                         <SelectInput
                             name="doors"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -224,7 +224,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:seats-quantity')}>
+                    <FieldWrapper label={t('vehicles:seats_quantity')}>
                         <SelectInput
                             name="seats"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -258,7 +258,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:external-color')}>
+                    <FieldWrapper label={t('vehicles:external_color')}>
                         <SelectInput
                             name="externalColor"
                             options={RadioChoicesExternalColor}
@@ -268,7 +268,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:internal-color')}>
+                    <FieldWrapper label={t('vehicles:internal_color')}>
                         <SelectInput
                             name="internalColor"
                             options={RadioChoicesExternalColor}

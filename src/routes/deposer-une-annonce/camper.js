@@ -18,40 +18,27 @@ const CarForm = (props) => {
     const onFinalSubmit = data => {
         AnnounceService.createAnnounce(data, props.token)
             .then(doc => {
-                const link = `/announces/${doc.slug}`;
+                const link = `/announces/${doc?.slug}`;
+
                 dispatchModal({
-                    type: 'success',
-                    msg: 'Announce created successfully',
+                    msg: t('vehicles:announce_created_successfully'),
+                    persist : true,
                     link
                 });
+
                 router.push(link);
             }).catch(err => {
                 dispatchModal({
                     type: 'error',
                     err
                 });
-            }
-            );
+            });
     };
-
-    const resumeModel = [
-        {
-            vehicleType: 'Type de véhicule'
-        },
-        {
-            vin: 'Immat. VIN',
-            'manufacturer.make': t('vehicles:make'),
-            'manufacturer.model': 'Modele',
-            'manufacturer.generation': 'Version',
-            'manufacturer.year': 'Année'
-        }
-    ];
 
     return (
         <FormWizard
             formKey={props.formKey}
             prevRoute="/deposer-une-annonce"
-            resumeModel={resumeModel}
             onFinalSubmit={onFinalSubmit}>
 
             <Step0_DynVehicleManufacturer

@@ -9,7 +9,7 @@ import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../compo
 import FieldWrapper from '../../components/Form/FieldWrapper';
 import SelectCountryFlags from '../../components/Form/Inputs/SelectCountryFlags';
 import SSOProviders from '../../components/SSOProviders';
-import useAddress from '../../hooks/useAddress';
+
 import SearchLocationInput from '../../components/Form/Inputs/SearchLocationInput'
 
 const formConfig = {
@@ -18,18 +18,18 @@ const formConfig = {
 };
 
 const RegisterPro = () => {
-    const { control, errors, getValues, watch, handleSubmit } = useForm(formConfig);
+    const { control, errors, getValues, watch, handleSubmit} = useForm(formConfig);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const [, , coordinates] = useAddress();
     const { t } = useTranslation();
 
     const onSubmit = (form) => {
+        // eslint-disable-next-line unused-imports/no-unused-vars
         const { confirm, confirmPwd, ...data } = form;
         AuthService.registerPro(data)
             .then(() => {
                 dispatchModal({
                     persist: true,
-                    msg: 'Account created. Please check your email box to validate your account'
+                    msg: t('layout:account_created')
                 });
             }).catch(err => {
                 dispatchModalError({ err });
@@ -44,27 +44,29 @@ const RegisterPro = () => {
             <Row>
                 <Col className="m-auto" sm="12" md="10">
                     <SSOProviders/>
-                    <form className="p-3 mx-auto" style={{
-                        borderRadius: '5px',
-                        maxWidth: '500px'
-                    }}>
+                    <form className="p-3 mx-auto"
+                        onSubmit={handleSubmit(onSubmit)}
+                        style={{
+                            borderRadius: '5px',
+                            maxWidth: '500px'
+                        }}>
 
                         <Typography component="h3" variant="h3">Votre société</Typography>
-                        <FieldWrapper label="Raison sociale">
+                        <FieldWrapper label={t('layout:company')}>
                             <TextInput
                                 name="company.name"
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
+                                rules={{ required: t('form_validations:required') }}
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="SIREN">
+                        <FieldWrapper label={t('layout:siren')}>
                             <TextInput
                                 name="company.siren"
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
+                                rules={{ required: t('form_validations:required') }}
                             />
                         </FieldWrapper>
 
@@ -82,18 +84,18 @@ const RegisterPro = () => {
                                 country={countrySelect?.value}
                                 control={control}
                                 errors={errors}
-                                rules={{ required: 'Required' }}>
+                                rules={{ required: t('form_validations:required') }}>
                             </SearchLocationInput>
                         </FieldWrapper>
 
-                        <Typography component="h3" variant="h3">Vous </Typography>
+                        <Typography component="h3" variant="h3">{t('vehicles:about-you')}</Typography>
 
                         <FieldWrapper label={t('vehicles:lastname')}>
                             <TextInput
                                 name="lastname"
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
+                                rules={{ required: t('form_validations:required') }}
                             />
                         </FieldWrapper>
 
@@ -102,16 +104,16 @@ const RegisterPro = () => {
                                 name="firstname"
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
+                                rules={{ required: t('form_validations:required') }}
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label="Email">
+                        <FieldWrapper label={t('vehicles:email_address')}>
                             <EmailInput
                                 name="email"
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
+                                rules={{ required: t('form_validations:required') }}
                             />
                         </FieldWrapper>
 
@@ -121,31 +123,29 @@ const RegisterPro = () => {
                                 errors={errors}
                                 control={control}
                                 rules={{
-                                    required: 'Required',
-                                    minLength: {
-                                        value: 6,
-                                        message: 'Min 6 chars'
+                                    required: t('form_validations:required'),
+                                    pattern: {
+                                        value: /^(?=.*\d).{4,16}$/,
+                                        message: t('form_validations:regexPwd{min}{max}', {
+                                            min: 4,
+                                            max: 16
+                                        })
                                     }
-                                    // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
                                 }}
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label={t('vehicles:password-confirm')}>
+                        <FieldWrapper label={t('vehicles:password_confirm')}>
                             <PasswordInput
                                 name="confirmPwd"
                                 errors={errors}
                                 control={control}
                                 rules={{
-                                    required: 'Required',
-                                    minLength: {
-                                        value: 6,
-                                        message: 'Min 6 chars'
-                                    },
+                                    required: t('form_validations:required'),
                                     validate: {
                                         matchesPreviousPassword: (value) => {
                                             const { password } = getValues();
-                                            return password === value || 'Passwords should match!';
+                                            return password === value || t('form_validations:form_validations')
                                         }
                                     }
                                 }}
@@ -158,7 +158,7 @@ const RegisterPro = () => {
                                 name="confirm"
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
+                                rules={{ required: t('form_validations:required') }}
                             />
                         </FieldWrapper>
                     </form>

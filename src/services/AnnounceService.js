@@ -1,6 +1,6 @@
 import handleResponse from '../libs/handleResponse';
 import config from '../config/config';
-import queryString from 'query-string';
+import {buildUrl} from '../libs/utils'
 
 const baseRoute = `${config.api}/announces`;
 
@@ -34,13 +34,6 @@ function getFeedAnnounces (params = {}) {
 }
 
 function getSearchAnnounces (params = {}) {
-    const qs = queryString.stringify(params, {
-        arrayFormat: 'comma',
-        skipNull: true,
-        skipEmptyString: true
-    });
-
-    const url = `${baseRoute}/search?${qs}`;
     const requestOptions = {
         method: 'GET',
         credentials: 'include'
@@ -88,12 +81,9 @@ function getAnnounceBySlug (slug) {
         credentials: 'include'
     };
 
-    const url = `${baseRoute}/slug/${slug}`;
-    return fetch(url, requestOptions)
+    return fetch(`${baseRoute}/slug/${slug}`, requestOptions)
         .then(handleResponse)
-        .then(json => {
-            return json.data;
-        })
+        .then(json => json.data)
         .catch(err => {
             throw err;
         });
@@ -107,8 +97,7 @@ function createAnnounce (data) {
         body: JSON.stringify(data)
     };
 
-    const url = `${baseRoute}`;
-    return fetch(url, requestOptions)
+    return fetch(`${baseRoute}`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
@@ -124,8 +113,7 @@ function updateAnnounce (slug, data) {
         body: JSON.stringify(data)
     };
 
-    const url = `${baseRoute}/update/${slug}`;
-    return fetch(url, requestOptions)
+    return fetch(`${baseRoute}/update/${slug}`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
@@ -141,8 +129,7 @@ function updateAdminAnnounce (slug, updates) {
         body: JSON.stringify(updates)
     };
 
-    const url = `${baseRoute}/update-admin/${slug}`;
-    return fetch(url, requestOptions)
+    return fetch(`${baseRoute}/update-admin/${slug}`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
@@ -156,8 +143,7 @@ function removeAnnounce (slug) {
         credentials: 'include'
     };
 
-    const url = `${baseRoute}/remove/${slug}`;
-    return fetch(url, requestOptions)
+    return fetch(`${baseRoute}/remove/${slug}`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
@@ -172,8 +158,7 @@ function uploadImages (slug, formData) {
         body: formData
     };
 
-    const url = `${baseRoute}/upload/${slug}`;
-    return fetch(url, requestOptions)
+    return fetch(`${baseRoute}/upload/${slug}`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
@@ -187,8 +172,7 @@ const addLikeLoggedInUser = (announceId) => {
         credentials: 'include'
     };
 
-    const url = `${baseRoute}/addLike/${announceId}`;
-    return fetch(url, requestOptions)
+    return fetch(`${baseRoute}/addLike/${announceId}`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
@@ -202,8 +186,7 @@ const removeLikeLoggedInUser = (announceId) => {
         credentials: 'include'
     };
 
-    const url = `${baseRoute}/removeLike/${announceId}`;
-    return fetch(url, requestOptions)
+    return fetch(`${baseRoute}/removeLike/${announceId}`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
@@ -213,6 +196,7 @@ const removeLikeLoggedInUser = (announceId) => {
 
 export default {
     getFeedAnnounces,
+    getProfileAnnounces,
     getSearchAnnounces,
     getSearchAnnouncesCount,
     getAnnouncesAll,

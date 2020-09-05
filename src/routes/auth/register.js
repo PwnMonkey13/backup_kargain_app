@@ -13,7 +13,7 @@ import CTALink from '../../components/CTALink';
 
 const formConfig = {
     mode: 'onChange',
-    validateCriteriaMode: 'all',
+    validateCriteriaMode: 'all'
 };
 
 const RegisterPage = () => {
@@ -23,6 +23,7 @@ const RegisterPage = () => {
     const router = useRouter();
 
     const onSubmit = (form) => {
+        // eslint-disable-next-line unused-imports/no-unused-vars
         const { confirm, confirmPwd, ...data } = form;
         AuthService.register(data)
             .then(() => {
@@ -30,12 +31,12 @@ const RegisterPage = () => {
 
                 dispatchModal({
                     persist: true,
-                    msg: 'Account created. Please check your email box to validate your account',
+                    msg: t('layout:account_created')
                 });
             }).catch(err => {
                 dispatchModalError({ err });
-            },
-        );
+            }
+            );
     };
 
     return (
@@ -52,17 +53,18 @@ const RegisterPage = () => {
                         />
                     </div>
 
-                    <form className="p-3 mx-auto" style={{
-                        borderRadius: '5px',
-                        maxWidth: '500px',
-                    }}
-                          onSubmit={handleSubmit(onSubmit)}>
+                    <form className="p-3 mx-auto"
+                        onSubmit={handleSubmit(onSubmit)}
+                        style={{
+                            borderRadius: '5px',
+                            maxWidth: '500px'
+                        }}>
                         <FieldWrapper label={t('vehicles:firstname')}>
                             <TextInput
                                 name="firstname"
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
+                                rules={{ required: t('form_validations:required')}}
                             />
                         </FieldWrapper>
 
@@ -71,7 +73,7 @@ const RegisterPage = () => {
                                 name="lastname"
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
+                                rules={{ required: t('form_validations:required')}}
                             />
                         </FieldWrapper>
 
@@ -80,7 +82,7 @@ const RegisterPage = () => {
                                 name="email"
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
+                                rules={{ required: t('form_validations:required')}}
                             />
                         </FieldWrapper>
 
@@ -90,33 +92,36 @@ const RegisterPage = () => {
                                 errors={errors}
                                 control={control}
                                 rules={{
-                                    required: 'Required',
-                                    minLength: {
-                                        value: 6,
-                                        message: 'Min 6 chars',
-                                    },
-                                    // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
-                                }}
+                                    required: t('form_validations:required'),
+                                    pattern: {
+                                        value : /^(?=.*\d).{4,16}$/,
+                                        message : t('form_validations:regexPwd{min}{max}',{
+                                            min : 4, max : 16
+                                        })
+                                    }}
+                                }
                             />
                         </FieldWrapper>
 
-                        <FieldWrapper label={t('vehicles:password-confirm')}>
+                        <FieldWrapper label={t('vehicles:password_confirm')}>
                             <PasswordInput
                                 name="confirmPwd"
                                 errors={errors}
                                 control={control}
                                 rules={{
-                                    required: 'Required',
-                                    minLength: {
-                                        value: 6,
-                                        message: 'Min 6 chars',
+                                    required: t('form_validations:required'),
+                                    pattern: {
+                                        value : /^(?=.*\d).{4,16}$/,
+                                        message : t('form_validations:regexPwd{min}{max}',{
+                                            min : 4, max : 16
+                                        })
                                     },
                                     validate: {
                                         matchesPreviousPassword: (value) => {
                                             const { password } = getValues();
-                                            return password === value || 'Passwords should match!';
-                                        },
-                                    },
+                                            return password === value || t('form_validations:form_validations')
+                                        }
+                                    }
                                 }}
                             />
                         </FieldWrapper>
@@ -127,7 +132,7 @@ const RegisterPage = () => {
                                 label={t('vehicles:accept-cgu')}
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
+                                rules={{ required: t('form_validations:required') }}
                             />
                         </FieldWrapper>
 

@@ -1,25 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Container } from 'reactstrap';
 import { useAuth } from '../../context/AuthProvider';
 import Offers from '../../components/Stripe/Offers';
-import { useRouter } from 'next/router';
+import useIsMounted from '../../hooks/useIsMounted'
+
 
 const Index = () => {
-    const router = useRouter()
-    const { isAuthReady, isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
-    const [selectedOffer, setSelectedOffer] = useState({});
-    const [isSelectedOffer, setIsSelectedOffer] = useState(false);
+    const { isAuthenticated, setForceLoginModal } = useAuth();
+    const isMounted = useIsMounted()
 
-    if (Object.keys(selectedOffer).length !== 0 && !isAuthenticated) {
-        setForceLoginModal(true);
-    }
-
-    useEffect(()=>{
-        if(isSelectedOffer){
-            if(isAuthenticated) router.push(`${authenticatedUser.getProfileEditLink}`)
-            else setForceLoginModal(true)
+    useEffect(()=> {
+        if(isMounted){
+            if (!isAuthenticated) return setForceLoginModal(true);
+            setForceLoginModal(false);
         }
-    },[isAuthReady, isAuthenticated, isSelectedOffer])
+    },[isMounted, isAuthenticated])
 
     return (
         <Container>

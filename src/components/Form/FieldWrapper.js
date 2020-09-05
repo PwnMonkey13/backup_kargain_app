@@ -26,7 +26,7 @@ const FieldWrapper = ({ isRow, children, ...props }) => {
                 <label className={classes.label} htmlFor={name}>
                     <span>
                         {label} :
-                        {required && <span className="required_label">*</span>}
+                        {required && <span className="required_label"> *</span>}
                     </span>
                 </label>
             )}

@@ -142,7 +142,11 @@ export default class UserModel {
         };
     }
 
-    addressBuilder (parts) {
+    updateAnnounces (announces) {
+        this.raw.garage = announces
+    }
+
+    buildAddressString (parts = ['street', 'city', 'postCode', 'country']) {
         const keys = !Array.isArray(parts) ? [parts] : parts;
         return keys
             .filter(key => this.getAddressParts[key] != null)

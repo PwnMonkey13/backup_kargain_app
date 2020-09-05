@@ -551,7 +551,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label={t('vehicles:vehicle-function')}>
+                    <FieldWrapper label={t('vehicles:vehicle_function')}>
                         <SelectInput
                             name="vehicleFunction"
                             options={RadioFunctionVehicle}
@@ -587,7 +587,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label={t('vehicles:owners-quantity')}>
+                    <FieldWrapper label={t('vehicles:owners_quantity')}>
                         <SelectInput
                             name="ownersCount"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -656,7 +656,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label={t('vehicles:class-emission')}>
+                    <FieldWrapper label={t('vehicles:class_emission')}>
                         <SelectInput
                             name="emission"
                             options={RadioChoicesEmission}
@@ -672,7 +672,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
             </Typography>
             <Row>
                 <Col>
-                    <FieldWrapper label={t('vehicles:doors-quantity')}>
+                    <FieldWrapper label={t('vehicles:doors_quantity')}>
                         <SelectInput
                             name="doors"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -683,7 +683,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label={t('vehicles:seats-quantity')}>
+                    <FieldWrapper label={t('vehicles:seats_quantity')}>
                         <SelectInput
                             name="seats"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -721,7 +721,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label={t('vehicles:internal-color')}>
+                    <FieldWrapper label={t('vehicles:internal_color')}>
                         <SelectInput
                             name="externalColor"
                             options={RadioChoicesExternalColor}
@@ -731,7 +731,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label={t('vehicles:external-color')}>
+                    <FieldWrapper label={t('vehicles:external_color')}>
                         <SelectInput
                             name="internalColor"
                             options={RadioChoicesExternalColor}
@@ -828,7 +828,7 @@ const PublicationInfosPartialForm = ({ watch, register, control, errors, handleR
                     country={countrySelect?.value}
                     control={control}
                     errors={errors}
-                    rules={{ required: 'Required' }}>
+                    rules={{ required: t('form_validations:required') }}>
                 </SearchLocationInput>
             </FieldWrapper>
 

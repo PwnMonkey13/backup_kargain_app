@@ -1,9 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-
-
 import Sidebar from './Sidebar';
-
+import TopBar from './TopBar'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -32,7 +30,7 @@ const AdminLayout = ({ children }) => {
 
     return (
         <div className={classes.root}>
-            <To7pBar handleDrawerToggle={handleDrawerToggle}/>
+            <TopBar handleDrawerToggle={handleDrawerToggle}/>
             <main className="d-flex">
                 <Sidebar
                     onClose={handleDrawerClose}

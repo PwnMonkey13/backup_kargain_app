@@ -134,14 +134,14 @@ const Footer = () => {
                                         <input
                                             type="email"
                                             name="email"
-                                            placeholder={t('layout:email-address')}
-                                            ref={register({ required: 'Email required' })}
+                                            placeholder={t('layout:email_address')}
+                                            ref={register({ required: t('form_validations:required') })}
                                         />
                                         <input type="submit"
-                                               style={{
-                                                   position: 'absolute',
-                                                   left: '-9999px',
-                                               }}
+                                            style={{
+                                                position: 'absolute',
+                                                left: '-9999px'
+                                            }}
                                         />
                                         <div className="submit">
                                             <button>{t('layout:subscribe')}</button>

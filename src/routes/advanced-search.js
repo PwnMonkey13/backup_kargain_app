@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { NextSeo } from 'next-seo';
 import PropTypes from 'prop-types';
 import { useRouter} from 'next/router'
 import { Container } from 'reactstrap'

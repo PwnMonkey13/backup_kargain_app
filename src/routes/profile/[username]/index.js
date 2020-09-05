@@ -361,56 +361,39 @@ const Profile = () => {
                     </Row>
 
                     <p className="top-profile-desc">
-                        {state.profile.getDescription}
+                        {profile.getDescription}
                     </p>
 
                 </Col>
             </Row>
             <TabsContainer {...{
-                profile : state.profile,
-                isSelf : state.isSelf
+                state,
+                filterState,
+                updateFilters
             }}/>
         </Container>
     );
 };
 
-const TabsContainer = ({ profile, isSelf }) => {
+const TabsContainer = ({ state, filterState, updateFilters }) => {
     const { t } = useTranslation();
     const [refWidth, { width }] = useDimensions();
     const [filtersOpened] = useState(false);
-    const [state, setState] = useState({
-        searchLength : profile.getGarage.length,
-        loading: false,
-        sorter: {},
-        filters: {},
-        page: 1,
-        announces: [],
-        total: 0
-    });
-
-    const updateFilters = (filters) => {
-        setState(state => ({
-            ...state,
-            filters
-        }))
-    }
+    const { profile, isSelf } = state;
 
     return (
         <Container>
-            <div ref={refWidth}>
-                <Tabs
-                    defaultActive={0}
-                    className="nav-tabs-profile">
-                    <Tabs.Item id="home-tab" title="Vitrine">
-                        <Row>
-                            <Col sm={12} md={4}>
-                                <Typography component="p" variant="h2">{state.searchLength} résultats de recherche</Typography>
-                                <AdvancedFilters
-                                    updateFilters={updateFilters}
-                                />
-
-                            </Col>
-                            <Col sm={12} md={8}>
+            <Row>
+                <Col sm={12} md={4}>
+                    <Typography component="p" variant="h2">
+                        {t('vehicles:{count}_results_search', { count : filterState.total})}
+                    </Typography>
+                    <AdvancedFilters updateFilters={updateFilters}/>
+                </Col>
+                <Col sm={12} md={8}>
+                    <div ref={refWidth}>
+                        <Tabs defaultActive={0} className="nav-tabs-profile">
+                            <Tabs.Item id="home-tab" title="Vitrine">
                                 <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
                                     <Row className="my-2 d-flex justify-content-center">
                                         {profile.getGarage.length ? profile.getGarage.map((announceRaw, index) => (
@@ -435,67 +418,67 @@ const TabsContainer = ({ profile, isSelf }) => {
                                         )}
                                     </Row>
                                 </section>
-                            </Col>
-                        </Row>
-                    </Tabs.Item>
+                            </Tabs.Item>
 
-                    {isSelf && (
-                        <Tabs.Item id="favoris-tab" title={t('vehicles:garage')}>
-                            <Row className="my-2 d-flex justify-content-center">
-                                {profile.getHiddenGarage.length ? profile.getHiddenGarage.map((announceRaw, index) => (
-                                    <Col key={index} sm={12} md={12} lg={6} xl={6} className="my-2">
-                                        <AnnounceCard announceRaw={announceRaw}/>
-                                    </Col>
-                                )) : (
-                                    <div className="d-flex flex-column align-items-center smy-2">
-                                        <p>{t('vehicles:no-hidden-announces')}</p>
+                            {isSelf && (
+                                <Tabs.Item id="favoris-tab" title={t('vehicles:garage')}>
+                                    <Row className="my-2 d-flex justify-content-center">
+                                        {profile.getHiddenGarage.length ? profile.getHiddenGarage.map((announceRaw, index) => (
+                                            <Col key={index} sm={12} md={12} lg={6} xl={6} className="my-2">
+                                                <AnnounceCard announceRaw={announceRaw}/>
+                                            </Col>
+                                        )) : (
+                                            <div className="d-flex flex-column align-items-center smy-2">
+                                                <p>{t('vehicles:no-hidden-announces')}</p>
 
-                                        <CTALink
-                                            title={t('vehicles:create-my-first-ad')}
-                                            href="/deposer-une-annonce"
-                                            className="cta_nav_link my-2"
-                                        />
+                                                <CTALink
+                                                    title={t('vehicles:create-my-first-ad')}
+                                                    href="/deposer-une-annonce"
+                                                    className="cta_nav_link my-2"
+                                                />
 
-                                        <CTALink
-                                            title={t('vehicles:explore-ads')}
-                                            href="/"
-                                            className="cta_nav_link my-2"
-                                        />
-                                    </div>
-                                )}
-                            </Row>
-                        </Tabs.Item>
-                    )}
+                                                <CTALink
+                                                    title={t('vehicles:explore-ads')}
+                                                    href="/"
+                                                    className="cta_nav_link my-2"
+                                                />
+                                            </div>
+                                        )}
+                                    </Row>
+                                </Tabs.Item>
+                            )}
 
-                    {isSelf && (
-                        <Tabs.Item id="favoris-tab" title={t('vehicles:favorites')}>
-                            <Row className="my-2 d-flex justify-content-center">
-                                {profile.getFavorites.length ? profile.getFavorites.map((announceRaw, index) => (
-                                    <Col key={index} sm={12} md={12} lg={6} xl={6} className="my-2">
-                                        <AnnounceCard announceRaw={announceRaw}/>
-                                    </Col>
-                                )) : (
-                                    <div className="d-flex flex-column align-items-center smy-2">
-                                        <p>{(t('vehicles:no-favorite-announces'))}</p>
+                            {isSelf && (
+                                <Tabs.Item id="favoris-tab" title={t('vehicles:favorites')}>
+                                    <Row className="my-2 d-flex justify-content-center">
+                                        {profile.getFavorites.length ? profile.getFavorites.map((announceRaw, index) => (
+                                            <Col key={index} sm={12} md={12} lg={6} xl={6} className="my-2">
+                                                <AnnounceCard announceRaw={announceRaw}/>
+                                            </Col>
+                                        )) : (
+                                            <div className="d-flex flex-column align-items-center smy-2">
+                                                <p>{(t('vehicles:no-favorite-announces'))}</p>
 
-                                        <CTALink
-                                            title={t('vehicles:create-my-first-ad')}
-                                            href="/deposer-une-annonce"
-                                            className="cta_nav_link my-2"
-                                        />
+                                                <CTALink
+                                                    title={t('vehicles:create-my-first-ad')}
+                                                    href="/deposer-une-annonce"
+                                                    className="cta_nav_link my-2"
+                                                />
 
-                                        <CTALink
-                                            title={t('vehicles:explore-ads')}
-                                            href="/"
-                                            className="cta_nav_link my-2"
-                                        />
-                                    </div>
-                                )}
-                            </Row>
-                        </Tabs.Item>
-                    )}
-                </Tabs>
-            </div>
+                                                <CTALink
+                                                    title={t('vehicles:explore-ads')}
+                                                    href="/"
+                                                    className="cta_nav_link my-2"
+                                                />
+                                            </div>
+                                        )}
+                                    </Row>
+                                </Tabs.Item>
+                            )}
+                        </Tabs>
+                    </div>
+                </Col>
+            </Row>
         </Container>
     );
 };

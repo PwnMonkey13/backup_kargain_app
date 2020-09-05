@@ -6,44 +6,23 @@ import differenceInDays from 'date-fns/differenceInDays';
 import differenceInMonths from 'date-fns/differenceInMonths';
 import differenceInYears from 'date-fns/differenceInYears';
 import {inflate, flatten} from 'flattenjs'
+import queryString from 'query-string';
 
-export function getLogo () {
-    return '/images/Kargain_logo.png';
-}
+export const getLogo = () => '/images/Kargain_logo.png'
 
-export function getLogoWhite () {
-    return '/images/kargain-logo-white.png';
-}
-
-const dirMap = {
-    // greater-than
-    gt: {
-        asc: 1,
-        desc: -1
-    },
-    // less-than
-    lt: {
-        asc: -1,
-        desc: 1
-    }
-};
-
-const doSort = (A, B, property, direction = 'ASC') => {
-    const a = A[property];
-    const b = B[property];
-
-    if (a < b) {
-        return dirMap.lt[direction.toLowerCase()];
-    }
-    if (a > b) {
-        return dirMap.gt[direction.toLowerCase()];
-    }
-    return 0;
-};
+export const getLogoWhite = () => '/images/kargain-logo-white.png'
 
 export const cleanObj = (obj) => inflate(Object.entries(flatten(obj)).reduce((a,[k,v]) => (v ? (a[k]=v, a) : a), {}))
 
 export const cleanObjFlat = (obj) => Object.entries(flatten(obj)).reduce((a,[k,v]) => (v ? (a[k]=v, a) : a), {})
+
+export const buildUrl = (url, params = {}) => {
+    return Object.keys(params).length !== 0 ? `${url}?${queryString.stringify(params, {
+        arrayFormat: 'comma',
+        skipNull: true,
+        skipEmptyString: true
+    })}` : url
+}
 
 export const getTimeAgo = (isoTime, lang) => {
     const fr = lang === 'fr'

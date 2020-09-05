@@ -6,46 +6,49 @@ import AuthService from '../../services/AuthService';
 import { ModalDialogContext } from '../../context/ModalDialogContext';
 import CTAButton from '../../components/CTAButton';
 import { useAuth } from '../../context/AuthProvider';
+import useTranslation from 'next-translate/useTranslation'
 
 const ForgottenForm = () => {
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { t } = useTranslation()
     const { authenticatedUser } = useAuth();
+    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
-        defaultValues: authenticatedUser.getRaw,
+        defaultValues: authenticatedUser.getRaw
     });
 
     const onSubmit = (form) => {
         AuthService.forgotPassword(form.email)
             .then(() => {
                 dispatchModal({
-                    msg: `An email had been sent to ${form.email}`,
-                    persist: true,
+                    msg: t('vehicles:email_had_been_sent_to_{email}', {email : form.email}),
+                    persist: true
                 });
             }).catch(err => {
                 dispatchModalError({ err });
-            },
-        );
+            });
     };
 
     return (
         <main>
-            <h1>Mot de passe oublié</h1>
-            <form className="mt-3 mx-auto" style={{ maxWidth: '500px' }} onSubmit={handleSubmit(onSubmit)}>
+            <h1>{t('vehicles:password-forgotten')}</h1>
+            <form className="mt-3 mx-auto"
+                onSubmit={handleSubmit(onSubmit)}
+                style={{ maxWidth: '500px' }}>
 
-                <FieldWrapper label="Email" required center>
+                <FieldWrapper label={t('vehicles:email_address')} center>
                     <EmailInput
                         name="email"
-                        disabled
                         errors={errors}
                         control={control}
+                        rules={{ required: t('form_validations:required')}}
                     />
                 </FieldWrapper>
 
                 <div className="submit">
                     <CTAButton
-                        title="Demander un nouveau mot de passe"
+                        title={t('vehicles:ask_new_password')}
                         submit
                     />
                 </div>

@@ -60,7 +60,7 @@ const Step = ({ handleSubmitForm, prevStep }) => {
                                 required: t('vehicles:field-is-required'),
                                 minLength: {
                                     value: 5,
-                                    message: 'Min length : 5 '
+                                    message: t('vehicles:min_length_{min}', { min : 5})
                                 }
                             }}
                         />
@@ -74,11 +74,11 @@ const Step = ({ handleSubmitForm, prevStep }) => {
                             errors={errors}
                             control={control}
                             rules={{
-                                required: 'Price is required',
+                                required: t('form_validations:required'),
                                 validate: val => {
                                     const value = Number(val);
-                                    if (value < 500) return 'Min 500€';
-                                    if (value > 200000) return 'Max 200 000€';
+                                    if (value < 500) return t('vehicles:min_price_{min}{currency}', { min : 500});
+                                    if (value > 200000) return t('vehicles:max_price_{min}{currency}', { max : 200000});
                                 }
                             }}
                         />
@@ -109,7 +109,7 @@ const Step = ({ handleSubmitForm, prevStep }) => {
                     country={countrySelect?.value}
                     control={control}
                     errors={errors}
-                    rules={{ required: 'Required' }}>
+                    rules={{ required: t('form_validations:required') }}>
                 </SearchLocationInput>
             </FieldWrapper>
 

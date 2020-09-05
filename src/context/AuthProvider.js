@@ -3,21 +3,23 @@ import useTranslation from 'next-translate/useTranslation'
 import AuthService from '../services/AuthService';
 import UserModel from '../models/user.model';
 
-const AuthContext = createContext({
+const defaultContext = {
+    isAuthReady: false,
     isLoading: false,
-    authenticatedUser: null,
+    authenticatedUser: new UserModel(),
     isAuthenticated: false,
     isAuthenticatedUserAdmin: false
-});
+}
+
+const AuthContext = createContext(defaultContext);
 
 export const AuthProvider = ({ children }) => {
-    const [authState, setAuthState] = useState({
-        isAuthReady: false,
-        forceLoginModal: false,
-        isAuthenticated: false,
-        authenticatedUser: new UserModel(),
-        isAuthenticatedUserAdmin: false
-    });
+    const { lang } = useTranslation()
+    const [authState, setAuthState] = useState(defaultContext);
+
+    useEffect(() => {
+        initializeAuth();
+    }, []);
 
     const updateAuthenticatedRawUser = (rawUser) => {
         setAuthState(authState => ({
@@ -26,17 +28,9 @@ export const AuthProvider = ({ children }) => {
         }));
     };
 
-    useEffect(() => {
-        initializeAuth();
-    }, []);
-
-    Router.events.on('routeChangeStart', () => {
-        initializeAuth();
-    });
-
     const initializeAuth = async () => {
         try {
-            const user = await AuthService.authorize();
+            const user = await AuthService.authorize(lang);
             const User = new UserModel(user);
 
             setAuthState(authState => ({
@@ -61,6 +55,7 @@ export const AuthProvider = ({ children }) => {
             updateAuthenticatedRawUser(null);
         }
     };
+
     return (
         <AuthContext.Provider value={{
             isAuthReady: authState.isAuthReady,

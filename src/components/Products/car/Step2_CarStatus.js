@@ -36,7 +36,7 @@ const Step = ({ onSubmitStep, prevStep }) => {
         <form className="form_wizard" onSubmit={handleSubmit(onSubmitStep)}>
             <Header text={t('vehicles:vehicle-state')}/>
 
-            <FieldWrapper label={t('vehicles:vehicle-general-state')}>
+            <FieldWrapper label={t('vehicles:vehicle_general_state')}>
                 <SelectInput
                     name="vehicleGeneralState"
                     options={formData?.RadioVehicleGeneralState}
@@ -45,10 +45,10 @@ const Step = ({ onSubmitStep, prevStep }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label={t('vehicles:owners-quantity')}>
+            <FieldWrapper label={t('vehicles:owners_quantity')}>
                 <SelectInput
                     name="ownersCount"
-                    options={SelectOptionsUtils([2, 3, 4, 5])}
+                    options={SelectOptionsUtils([2,3,4,5,6,7,8,9])}
                     placeholder="Select number of owners"
                     control={control}
                     errors={errors}

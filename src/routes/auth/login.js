@@ -15,10 +15,10 @@ import { useAuth } from '../../context/AuthProvider';
 
 export default ({ forceLogout }) => {
     const router = useRouter();
-    const { redirect } = router.query;
     const { logout } = useAuth();
-    const { dispatchModalError } = useContext(ModalDialogContext);
     const { t } = useTranslation();
+    const { redirect } = router.query;
+    const { dispatchModalError } = useContext(ModalDialogContext);
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all'
@@ -72,7 +72,7 @@ export default ({ forceLogout }) => {
                                 inline
                                 errors={errors}
                                 control={control}
-                                rules={{ required: 'Required' }}
+                                rules={{ required: t('form_validations:required') }}
                             />
                         </FieldWrapper>
 
@@ -82,13 +82,14 @@ export default ({ forceLogout }) => {
                                 errors={errors}
                                 control={control}
                                 rules={{
-                                    required: 'Required',
-                                    minLength: {
-                                        value: 6,
-                                        message: 'Min 6 chars'
-                                    }
-                                    // pattern: { value : /^(?=.*\d).{4,8}$/, message : 'Invalid password : Min must length 4 - 8 and include 1 number at least' }
-                                }}
+                                    required: t('form_validations:required'),
+                                    pattern: {
+                                        value : /^(?=.*\d).{4,16}$/,
+                                        message : t('form_validations:regexPwd{min}{max}',{
+                                            min : 4, max : 16
+                                        })
+                                    }}
+                                }
                             />
                         </FieldWrapper>
 

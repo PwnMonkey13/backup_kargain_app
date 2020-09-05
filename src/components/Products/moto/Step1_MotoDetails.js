@@ -207,7 +207,7 @@ const Step1MotoDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:external-color')}>
+                    <FieldWrapper label={t('vehicles:external_color')}>
                         <SelectInput
                             name="externalColor"
                             options={RadioChoicesExternalColor}

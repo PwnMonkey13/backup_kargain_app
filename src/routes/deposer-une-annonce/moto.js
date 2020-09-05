@@ -15,27 +15,30 @@ const MotorCyclesForm = (props) => {
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const { t } = useTranslation();
 
-    const onFinalSubmit = data => {
-        AnnounceService.createAnnounce(data, props.token)
-            .then(doc => {
-                const link = `/announces/${doc.slug}`;
-                dispatchModal({
-                    type: 'success',
-                    msg: 'Announce created successfully',
-                    link
-                });
-                router.push(link);
-            }).catch(err => {
-                dispatchModalError({ err });
+    const onFinalSubmit = async data => {
+        try {
+            const announce = await AnnounceService.createAnnounce(data, props.token)
+            const link = `/announces/${announce?.slug}`;
+
+            dispatchModal({
+                msg: t('vehicles:announce_created_successfully'),
+                persist: true,
+                link
             });
+
+            router.push(link);
+        }
+        catch(err){
+            dispatchModalError({ err });
+        }
     };
 
     return (
         <FormWizard
             formKey={props.formKey}
             prevRoute="/deposer-une-annonce"
-            // resumeModel={[]}
             onFinalSubmit={onFinalSubmit}>
+
             <Step0_DynVehicleManufacturer
                 vehicleType={vehicleTypes.moto}
                 title={t('vehicles:vehicle-selection')}

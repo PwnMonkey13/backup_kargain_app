@@ -28,8 +28,7 @@ const getConversationWithProfile = (profileId) => {
         .then(json => json.data)
         .catch(err => {
             throw err;
-        }
-        );
+        });
 };
 
 const postConversationMessage = (message, recipientId) => {
@@ -49,8 +48,7 @@ const postConversationMessage = (message, recipientId) => {
         .then(json => json.data)
         .catch(err => {
             throw err;
-        }
-        );
+        });
 };
 
 export default {

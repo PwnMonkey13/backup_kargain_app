@@ -353,7 +353,7 @@ const ProfilePartialForm = ({ control, watch, errors }) => {
                         name="firstname"
                         errors={errors}
                         control={control}
-                        rules={{ required: 'Required' }}
+                        rules={{ required: t('form_validations:required') }}
                     />
                 </FieldWrapper>
 
@@ -362,7 +362,7 @@ const ProfilePartialForm = ({ control, watch, errors }) => {
                         name="lastname"
                         errors={errors}
                         control={control}
-                        rules={{ required: 'Required' }}
+                        rules={{ required: t('form_validations:required') }}
                     />
                 </FieldWrapper>
             </div>
@@ -373,7 +373,7 @@ const ProfilePartialForm = ({ control, watch, errors }) => {
                     errors={errors}
                     control={control}
                     disabled
-                    rules={{ required: 'Required' }}
+                    rules={{ required: t('form_validations:required') }}
                 />
             </FieldWrapper>
 
@@ -399,7 +399,7 @@ const ProfilePartialForm = ({ control, watch, errors }) => {
                     country={countrySelect?.value}
                     control={control}
                     errors={errors}
-                    rules={{ required: 'Required' }}>
+                    rules={{ required: t('form_validations:required') }}>
                 </SearchLocationInput>
             </FieldWrapper>
 

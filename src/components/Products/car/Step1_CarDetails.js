@@ -54,7 +54,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:vehicle-function')}>
+                    <FieldWrapper label={t('vehicles:vehicle_function')}>
                         <SelectInput
                             name="vehicleFunction"
                             options={formData.RadioFunctionVehicle}
@@ -183,7 +183,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep }) => {
 
             <Row>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:class-emission')}>
+                    <FieldWrapper label={t('vehicles:class_emission')}>
                         <SelectInput
                             name="emission"
                             options={formData.RadioChoicesEmission}
@@ -197,7 +197,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep }) => {
             <Header text={t('vehicles:vehicle-informations')}/>
             <Row>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:doors-quantity')}>
+                    <FieldWrapper label={t('vehicles:doors_quantity')}>
                         <SelectInput
                             name="doors"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
@@ -208,11 +208,11 @@ const Step1CarDetails = ({ onSubmitStep, prevStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:seats-quantity')}>
+                    <FieldWrapper label={t('vehicles:seats_quantity')}>
                         <SelectInput
                             name="seats"
-                            options={SelectOptionsUtils([2, 3, 4, 5])}
-                            placeholder="Select number of seats"
+                            options={SelectOptionsUtils([2,3,4,5,6,7,8,9])}
+                            placeholder={t('vehicles:select_seats_quantity')}
                             control={control}
                             errors={errors}
                         />
@@ -243,7 +243,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:external-color')}>
+                    <FieldWrapper label={t('vehicles:external_color')}>
                         <SelectInput
                             name="externalColor"
                             options={formData.RadioChoicesExternalColor}
@@ -253,7 +253,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label={t('vehicles:internal-color')}>
+                    <FieldWrapper label={t('vehicles:internal_color')}>
                         <SelectInput
                             name="internalColor"
                             options={formData.RadioChoicesExternalColor}

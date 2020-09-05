@@ -33,8 +33,7 @@ const AvatarPreviewUpload = () => {
                 dispatchModal({ msg: 'Upload Successful'});
             }).catch(err => {
                 dispatchModalError({ err, persist : true });
-            },
-        );
+            });
     };
 
     useEffect(() => {

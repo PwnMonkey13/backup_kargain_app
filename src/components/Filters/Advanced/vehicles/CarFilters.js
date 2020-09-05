@@ -128,7 +128,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label={t('vehicles:class-emission')}>
+            <FieldWrapper label={t('vehicles:class_emission')}>
                 <SelectInput
                     name="emission"
                     options={RadioChoicesEmission}
@@ -149,7 +149,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label={t('vehicles:doors-quantity')}>
+            <FieldWrapper label={t('vehicles:doors_quantity')}>
                 <SliderInput
                     name="doors"
                     min={1}
@@ -160,7 +160,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label={t('vehicles:seats-quantity')}>
+            <FieldWrapper label={t('vehicles:seats_quantity')}>
                 <SliderInput
                     name="seats"
                     min={1}
@@ -181,7 +181,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label={t('vehicles:external-color')}>
+            <FieldWrapper label={t('vehicles:external_color')}>
                 <SelectInput
                     name="externalColor"
                     options={RadioChoicesExternalColor}
@@ -190,7 +190,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 />
             </FieldWrapper>
 
-            <FieldWrapper label={t('vehicles:internal-color')}>
+            <FieldWrapper label={t('vehicles:internal_color')}>
                 <SelectInput
                     name="internalColor"
                     options={RadioChoicesExternalColor}

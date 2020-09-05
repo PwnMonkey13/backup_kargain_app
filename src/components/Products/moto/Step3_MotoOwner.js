@@ -111,7 +111,7 @@ const Step = ({ prevStep, handleSubmitForm }) => {
                     country={countrySelect?.value}
                     control={control}
                     errors={errors}
-                    rules={{ required: 'Required' }}>
+                    rules={{ required: t('form_validations:required') }}>
                 </SearchLocationInput>
             </FieldWrapper>
 
