@@ -1,10 +1,10 @@
 import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Grid from '@material-ui/core/Grid';
-import Budget from '../../components/Admin/components/Budget';
-import TotalUsers from '../../components/Admin/components/TotalUsers';
-import TasksProgress from '../../components/Admin/components/TasksProgress/TasksProgress';
-import TotalProfit from '../../components/Admin/components/TotalProfit';
+import Budget from '../../components/Admin/temp/Budget';
+import TotalUsers from '../../components/Admin/temp/TotalUsers';
+import TasksProgress from '../../components/Admin/temp/TasksProgress/TasksProgress';
+import TotalProfit from '../../components/Admin/temp/TotalProfit';
 
 
 const useStyles = makeStyles(theme => ({

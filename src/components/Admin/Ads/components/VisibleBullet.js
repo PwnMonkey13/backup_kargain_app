@@ -1,12 +1,13 @@
 import React, { useContext, useState } from 'react';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
-import AnnounceService from '../../services/AnnounceService';
+import { ModalDialogContext } from '../../../../context/ModalDialogContext';
+import AnnounceService from '../../../../services/AnnounceService';
 import NiceSelect, { components } from 'react-select';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import CloseIcon from '@material-ui/icons/Close';
-import BulletPoint from '../BulletPoint';
+import BulletPoint from '../../../BulletPoint';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import BooleanBullet from '../../BooleanBullet';
 
 const useStyles = makeStyles((theme) => ({
     editSelectPop: {
@@ -35,60 +36,34 @@ const CustomSelectValue = (props) => (
     </div>
 );
 
-const StatusBullet = ({ slug, status: statusProps }) => {
+const VisibleBullet = ({ slug, visible: visibleProps }) => {
     const classes = useStyles();
-    const [status, setStatus] = useState(statusProps);
+    const [visible, setVisible] = useState(visibleProps);
     const [clicked, setClicked] = useState(false);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [selectedOption, setSelectedOption] = useState(null);
     const options = [
         {
-            value: 'rejected',
-            label: 'Reject',
-            tooltipHelper: 'Rejected',
-            color: 'red'
-        },
-        {
-            value: 'deleted',
-            label: 'Delete',
-            tooltipHelper: 'Deleted',
-            color: 'black'
-        },
-        {
-            value: 'archived',
-            label: 'Archive',
-            tooltipHelper: 'Archived',
-            color: 'orange'
-        },
-        {
-            value: 'active',
-            label: 'Active',
-            tooltipHelper: 'Active',
-            color: 'blue'
-        },
-        {
-            value: 'paid',
-            label: 'Close',
-            tooltipHelper: 'Payé',
+            label: 'Visible',
+            value: true,
             color: 'green'
+        },
+        {
+            label: 'Hidden',
+            value: false,
+            color: 'red'
         }
-    ];
-
-    const params = options.find(option => option.value === status);
-
-    const optionsGood = options
-        .filter(option => option.value !== status)
-        .map(option => ({
-            ...option,
-            icon: <BulletPoint color={option.color}/>
-        }));
+    ].map(option => ({
+        ...option,
+        icon: <BulletPoint color={option.color}/>
+    }));
 
     const handleUpdate = async () => {
         try {
             await AnnounceService.updateAdminAnnounce(slug, {
-                status: selectedOption
+                visible: selectedOption
             });
-            setStatus(status => !status);
+            setVisible(visible => !visible);
             dispatchModal({ msg: 'updated' });
         } catch (err) {
             dispatchModalError({ err });
@@ -100,13 +75,13 @@ const StatusBullet = ({ slug, status: statusProps }) => {
             {clicked ? (
                 <div className={classes.editSelectPop}>
                     <NiceSelect
+                        defaultValue={options.find(option => option.value === visible)}
+                        onChange={(option) => setSelectedOption(option.value)}
+                        options={options}
                         components={{
                             Option: CustomSelectOption,
                             SingleValue: CustomSelectValue
                         }}
-                        defaultValue={options.find(option => option.value === status)}
-                        onChange={(option) => setSelectedOption(option.value)}
-                        options={optionsGood}
                     />
                     <Button
                         startIcon={<CloseIcon/>}
@@ -124,15 +99,13 @@ const StatusBullet = ({ slug, status: statusProps }) => {
                     />
                 </div>
             ) : (
-                <BulletPoint
-                    {...params}
-                    onClick={() => {
-                        setClicked(true);
-                    }}
+                <BooleanBullet
+                    bool={visible}
+                    onClick={() => setClicked(true)}
                 />
             )}
         </div>
     );
 };
 
-export default StatusBullet;
+export default VisibleBullet;

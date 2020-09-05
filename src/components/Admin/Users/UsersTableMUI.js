@@ -3,11 +3,13 @@ import { useRouter } from 'next/router';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import UsersService from '../../../services/UsersService';
+import UserModel from '../../../models/user.model'
 import TableMUI from '../TableMUI';
 import BulletPoint from '../../BulletPoint';
 import TablePaginationActions from '../TablePaginationActions';
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
-import UserModel from '../../../models/user.model';
+import ActivatedBullet from './components/ActivatedBullet'
+import IsProBullet from './components/IsProBullet'
 
 const BooleanBullet = (value) => {
     if (value) return <BulletPoint tooltipHelper="Payé" color="green"/>;
@@ -15,11 +17,11 @@ const BooleanBullet = (value) => {
 };
 
 const UsersTable = () => {
+    const rowsLength = 60;
     const router = useRouter();
     const { dispatchModalError } = useContext(ModalDialogContext);
     const [loading, setLoading] = useState(false);
     const [pageIndex, setPageIndex] = useState(0);
-    const [rowsLength, setRowsLength] = useState(60);
     const [resultFetch, setResultsFetch] = useState({
         rows: [],
         total: 0
@@ -68,23 +70,18 @@ const UsersTable = () => {
 
         },
         {
-            title: 'Validé',
-            type: 'boolean',
-            filtering: false,
-            grouping: false,
-            searchable: true,
-            sorting: true,
-            render: userModel => BooleanBullet(userModel.getIsActivated)
-        },
-        {
-            title: 'Activé',
+            title: 'Activated',
             field: 'status',
             type: 'boolean',
             filtering: false,
             grouping: false,
             searchable: true,
             sorting: true,
-            render: userModel => BooleanBullet(userModel.getIsEmailValidated)
+            // eslint-disable-next-line react/display-name
+            render: UserModel => <ActivatedBullet
+                username={UserModel.getUsername}
+                value={UserModel.getIsActivated}
+            />
         },
         {
             title: 'Pro',
@@ -93,7 +90,11 @@ const UsersTable = () => {
             grouping: true,
             sorting: true,
             searchable: true,
-            render: userModel => BooleanBullet(userModel.getIsPro)
+            // eslint-disable-next-line react/display-name
+            render: UserModel => <IsProBullet
+                username={UserModel.getUsername}
+                value={UserModel.getIsPro}
+            />
         },
         {
             title: 'Premium',
@@ -152,7 +153,7 @@ const UsersTable = () => {
 
     useEffect(() => {
         fetchData();
-    }, [pageIndex]);
+    }, [fetchData]);
 
     return (
         <>

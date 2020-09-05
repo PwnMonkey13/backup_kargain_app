@@ -8,16 +8,16 @@ import AnnounceModel from '../../../models/announce.model'
 import { ModalDialogContext } from '../../../context/ModalDialogContext';
 import TablePaginationActions from '../TablePaginationActions';
 import { getTimeAgo } from '../../../libs/utils';
-import StatusBullet from '../StatusBullet';
-import VisibleBullet from '../VisibleBullet';
-import ActivatedBullet from '../ActivatedBullet';
+import StatusBullet from './components/StatusBullet';
+import VisibleBullet from './components/VisibleBullet';
+import ActivatedBullet from './components/ActivatedBullet';
 
 const AdsTable = () => {
+    const rowsLength = 60;
     const router = useRouter();
     const { dispatchModalError } = useContext(ModalDialogContext);
     const [loading, setLoading] = useState(false);
     const [pageIndex, setPageIndex] = useState(0);
-    const [rowsLength, setRowsLength] = useState(60);
     const [resultFetch, setResultsFetch] = React.useState({
         rows: [],
         total: 0

@@ -5,7 +5,7 @@ const Loader = ({ fullscreen }) => {
     const RenderLoader = () => {
         return (
             <span className={fullscreen ? 'circle_loader_fullscreen' : 'circle_loader'}>
-                 <svg className="circle" width="60" height="60" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <svg className="circle" width="60" height="60" version="1.1" xmlns="http://www.w3.org/2000/svg">
                     <circle className="path" cx="30" cy="30" r="15"/>
                 </svg>
             </span>

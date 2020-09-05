@@ -1,22 +1,22 @@
-import React, { useContext, useState } from 'react';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
-import AnnounceService from '../../services/AnnounceService';
+import React, { useContext,  useState } from 'react';
+import { ModalDialogContext } from '../../../../context/ModalDialogContext';
+import UsersService from '../../../../services/UsersService';
 import NiceSelect, { components } from 'react-select';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import CloseIcon from '@material-ui/icons/Close';
-import BulletPoint from '../BulletPoint';
+import BulletPoint from '../../../BulletPoint';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import BooleanBullet from './BooleanBullet';
+import BooleanBullet from '../../BooleanBullet';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     editSelectPop: {
         position: 'absolute',
         width: '300px',
         padding: '1rem',
         border: '1px solid gainsboro',
-        backgroundColor: 'antiquewhite',
-    },
+        backgroundColor: 'antiquewhite'
+    }
 }));
 
 const { Option } = components;
@@ -36,51 +36,51 @@ const CustomSelectValue = (props) => (
     </div>
 );
 
-const VisibleBullet = ({ slug, visible: visibleProps }) => {
+const ActivatedBullet = ({ username, value }) => {
     const classes = useStyles();
-    const [visible, setVisible] = useState(visibleProps);
+    const [activated, setActivated] = useState(value);
     const [clicked, setClicked] = useState(false);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [selectedOption, setSelectedOption] = useState(null);
     const options = [
         {
-            label: 'Visible',
+            label: 'Enable',
             value: true,
-            color: 'green',
+            color: 'green'
         },
         {
-            label: 'Hidden',
+            label: 'Disable',
             value: false,
-            color: 'red',
-        },
+            color: 'red'
+        }
     ].map(option => ({
         ...option,
-        icon: <BulletPoint color={option.color}/>,
+        icon: <BulletPoint color={option.color}/>
     }));
 
     const handleUpdate = async () => {
         try {
-            const data = await AnnounceService.updateAdminAnnounce(slug, {
-                visible: selectedOption,
+            const document = await UsersService.updateAdminUser(username, {
+                activated: selectedOption
             });
-            setVisible(visible => !visible);
-            dispatchModal({ msg: 'updated' });
+            setActivated(activated => !activated);
+            dispatchModal({ msg: `updated. Mail sent to ${document?.user?.email}` });
         } catch (err) {
             dispatchModalError({ err });
         }
-    };
+    }
 
     return (
         <div className="edit">
             {clicked ? (
                 <div className={classes.editSelectPop}>
                     <NiceSelect
-                        defaultValue={options.find(option => option.value === visible)}
+                        defaultValue={options.find(option => option.value === activated)}
                         onChange={(option) => setSelectedOption(option.value)}
                         options={options}
                         components={{
                             Option: CustomSelectOption,
-                            SingleValue: CustomSelectValue,
+                            SingleValue: CustomSelectValue
                         }}
                     />
                     <Button
@@ -94,13 +94,13 @@ const VisibleBullet = ({ slug, visible: visibleProps }) => {
                         startIcon={<SaveIcon/>}
                         onClick={async () => {
                             setClicked(false);
-                            await handleUpdate();
+                            await handleUpdate()
                         }}
                     />
                 </div>
             ) : (
                 <BooleanBullet
-                    bool={visible}
+                    bool={value}
                     onClick={() => {
                         setClicked(true);
                     }}/>
@@ -109,4 +109,4 @@ const VisibleBullet = ({ slug, visible: visibleProps }) => {
     );
 };
 
-export default VisibleBullet;
+export default ActivatedBullet;

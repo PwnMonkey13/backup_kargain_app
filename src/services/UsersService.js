@@ -76,6 +76,22 @@ function updateUser (updates) {
         });
 }
 
+function updateAdminUser (username, updates) {
+    const requestOptions = {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+    };
+
+    return fetch(`${config.api}/users/update-admin/${username}`, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+            throw err;
+        });
+}
+
 function removeUser (username) {
     const requestOptions = {
         method: 'DELETE',
@@ -195,6 +211,7 @@ export default {
     getUserByUsername,
     getUserByUsernameSSR,
     updateUser,
+    updateAdminUser,
     removeUser,
     uploadAvatar,
     followUser,

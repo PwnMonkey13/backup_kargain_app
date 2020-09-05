@@ -1,15 +1,15 @@
 import React, { useContext,  useState } from 'react';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
-import AnnounceService from '../../services/AnnounceService';
+import { ModalDialogContext } from '../../../../context/ModalDialogContext';
+import UsersService from '../../../../services/UsersService';
 import NiceSelect, { components } from 'react-select';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import CloseIcon from '@material-ui/icons/Close';
-import BulletPoint from '../BulletPoint';
+import BulletPoint from '../../../BulletPoint';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import BooleanBullet from './BooleanBullet';
+import BooleanBullet from '../../BooleanBullet';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     editSelectPop: {
         position: 'absolute',
         width: '300px',
@@ -36,20 +36,20 @@ const CustomSelectValue = (props) => (
     </div>
 );
 
-const ActivatedBullet = ({ slug, activated: activatedProps }) => {
+const ActivatedBullet = ({ username, value }) => {
     const classes = useStyles();
-    const [activated, setActivated] = useState(activatedProps);
+    const [activated, setActivated] = useState(value);
     const [clicked, setClicked] = useState(false);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [selectedOption, setSelectedOption] = useState(null);
     const options = [
         {
-            label: 'Enable',
+            label: 'Yes',
             value: true,
             color: 'green'
         },
         {
-            label: 'Disable',
+            label: 'No',
             value: false,
             color: 'red'
         }
@@ -60,10 +60,9 @@ const ActivatedBullet = ({ slug, activated: activatedProps }) => {
 
     const handleUpdate = async () => {
         try {
-            const data = await AnnounceService.updateAdminAnnounce(slug, {
-                activated: selectedOption
+            const document = await UsersService.updateAdminUser(username, {
+                pro: selectedOption
             });
-            const { document } = data;
             setActivated(activated => !activated);
             dispatchModal({ msg: `updated. Mail sent to ${document?.user?.email}` });
         } catch (err) {
@@ -101,7 +100,7 @@ const ActivatedBullet = ({ slug, activated: activatedProps }) => {
                 </div>
             ) : (
                 <BooleanBullet
-                    bool={activated}
+                    bool={value}
                     onClick={() => {
                         setClicked(true);
                     }}/>
