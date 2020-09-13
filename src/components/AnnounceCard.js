@@ -1,24 +1,27 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
+import Link from 'next-translate/Link';
+import useDimensions from 'react-use-dimensions'
+import clsx from 'clsx'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import IconButton from '@material-ui/core/IconButton';
 import { PhotoCamera } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import useTranslation from 'next-translate/useTranslation';
-import Link from 'next-translate/Link';
-import useDimensions from 'react-use-dimensions'
-import clsx from 'clsx'
 import { ReactComponent as StarSVG } from '../../public/images/svg/star.svg';
 import { ReactComponent as StarSVGYellow } from '../../public/images/svg/star-yellow.svg';
 import { ModalDialogContext } from '../context/ModalDialogContext';
 import CommentsListLight from './Comments/CommentsList';
 import AnnounceService from '../services/AnnounceService';
-import AnnounceClass from '../models/announce.model';
+
 import { useAuth } from '../context/AuthProvider';
 import { getTimeAgo } from '../libs/utils';
 import TagsList from './Tags/TagsList';
 import CTALink from './CTALink';
+import { ModalContext } from '../context/ModalContext'
+import AnnounceModel from '../models/announce.model'
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -26,9 +29,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
         height: '100%',
         padding: 0,
-        border: '1px solid $grey',
-        //border-radius : 10px;
-        //box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        border: '1px solid gainsboro',
         transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)',
         fontSize: '13px'
     },
@@ -56,35 +57,38 @@ const useStyles = makeStyles((theme) => ({
 
 const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
     const classes = useStyles();
-    const announce = new AnnounceClass(announceRaw);
+    const { t } = useTranslation();
+    const announce = new AnnounceModel(announceRaw);
     const [refWidth, { width }] = useDimensions();
-    const { dispatchModalError } = useContext(ModalDialogContext);
-    const [likesCounter, setLikesCounter] = useState(announce.getLikesLength);
+    const { dispatchModalError } = useContext(MessageContext);
+    const { dispatchModalState } = useContext(ModalContext);
+    const [likesCounter, setLikesCounter] = useState(announce.getCountLikes);
     const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
     const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
-    const { t } = useTranslation();
-
-    const alreadyLikeCurrentUser = () => {
-        const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite.id === announce.getID);
-        const matchAnnounceLike = announce.getLikes.find(like => like.user === authenticatedUser.getID);
+   
+    const checkIfAlreadyLike = () => {
+        const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite.getID === announce.getID);
+        const matchAnnounceLike = announce.getLikes.find(like => like.getAuthor.getID === authenticatedUser.getID);
         return !!matchUserFavorite || !!matchAnnounceLike;
     };
-
+    
+    const alreadyLikeCurrentUser = checkIfAlreadyLike();
+    
     const handleClickLikeButton = async () => {
         if (!isAuthenticated) return setForceLoginModal(true);
         try {
-            if (alreadyLikeCurrentUser()) {
+            if (alreadyLikeCurrentUser) {
                 await AnnounceService.addLikeLoggedInUser(announce.getID);
                 setLikesCounter(likesCount => likesCount + 1);
             } else {
                 await AnnounceService.removeLikeLoggedInUser(announce.getID);
-                setLikesCounter(likesCount => likesCount - 1);
+                setLikesCounter(likesCount => Math.max(likesCount - 1));
             }
         } catch (err) {
             dispatchModalError({ err });
         }
     };
-
+    
     return (
         <div className="objava-wrapper cardAd" ref={refWidth}>
             <div className={classes.cardTop}>
@@ -152,38 +156,56 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                 <div className="price-stars-wrapper">
                     <div className="icons-profile-wrapper">
                         <div style={{ flex: 2, display: 'flex' }}>
-                            <div className="icons-star-prof icons-star-current"
+                            
+                            <div className="icons-star-prof icons-star-current svgStarYellow"
                                 title={t('vehicles:i-like')}
-                                onClick={handleClickLikeButton}>
-                                {alreadyLikeCurrentUser() ? <StarSVGYellow/> : <StarSVG/>}
+                                onClick={() => handleClickLikeButton()}>
+                                {alreadyLikeCurrentUser ? <StarSVGYellow/> : <StarSVG/>}
                                 <span>{likesCounter}</span>
                             </div>
+                            
                             <div className="icons-star-prof"
                                 title={t('vehicles:comment_plural')}>
                                 <img src="/images/svg/comment.svg" alt=""/>
                                 <span>{announce.getCountComments}</span>
                             </div>
+    
+                            <div className="icons-star-prof"
+                                onClick={() => dispatchModalState({
+                                    openModalMessaging : true,
+                                    modalMessagingProfile : announce.getAuthor
+                                })}>
+                                <MailOutlineIcon/>
+                            </div>
+                            
                         </div>
+                        
                         <div style={{ flex: 3 }}>
                             <div className="price-announce">
-                                {announce.getPrice} €TTC
-                                <span> {announce.getPriceHT} €HT</span>
+                                {(isAuthenticated && authenticatedUser.getIsPro) ? (
+                                    <>
+                                        <span className="mx-1">
+                                            <strong>
+                                                {announce.getPriceHT}€ HT
+                                            </strong>
+                                        </span>
+                                        <span> - </span>
+                                        <span className="mx-1">
+                                            <small>{announce.getPrice}€</small>
+                                        </span>
+                                    </>
+                                ) : (
+                                    <span>{announce.getPrice} €</span>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="cardAd_Title">
-                    <Link href={`/announces/${announce.getSlug}`} prefetch={false}>
-                        <a className="decoration-none">
-                            <Typography component="p" variant="h3">
-                                {announce.getTitle}
-                            </Typography>
-                        </a>
-                    </Link>
-                    <div className="d-flex align-items-center">
-                        <span className="mr-2">{announce.getManufacturerFormated}</span>
-                    </div>
+                    <Typography component="p" variant="h3">
+                        {announce.getAnnounceTitle}
+                    </Typography>
                 </div>
 
                 <TagsList tags={announce.getTags}/>
@@ -213,16 +235,27 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
 const CardTopSubInfos = ({width, announce}) => {
     const classes = useStyles()
     const { lang } = useTranslation()
-
+    const { dispatchModalState } = useContext(ModalContext);
+    
     return(
         <div className={clsx(classes.cardTopSubInfos, width <= 500 && 'flex-column')}>
             {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country']) && (
                 <div className="top-profile-location">
-                    <img className="mx-1" src="/images/location.png" alt=""/>
-                    {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country'])}
+                    <a href={announce.buildAddressGoogleMapLink()}
+                        target="_blank"
+                        rel="noreferrer">
+                        <span className="top-profile-location">
+                            <img className="mx-1" src="/images/location.png" alt=""/>
+                            {announce.getAdOrAuthorCustomAddress()}
+                        </span>
+                    </a>
                 </div>
             )}
-            <div>
+            <div className="icons-star-prof"
+                onClick={() => dispatchModalState({
+                    openModalShare : true,
+                    modalShareAnnounce : announce
+                })}>
                 <small className="mx-2"> {getTimeAgo(announce.getCreationDate.raw, lang)}</small>
                 <img src="/images/share.png" alt=""/>
             </div>
@@ -235,7 +268,8 @@ AnnounceCard.propTypes = {
     featuredImgHeight: PropTypes.number
 };
 
-AnnounceService.defaultProps = {
+AnnounceCard.defaultProps = {
     featuredImgHeight: 500
 };
+
 export default AnnounceCard;

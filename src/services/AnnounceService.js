@@ -194,6 +194,24 @@ const removeLikeLoggedInUser = (announceId) => {
         });
 };
 
+const mailtoAnnounceLink = (slug, email) => {
+    const requestOptions = {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            email
+        })
+    };
+    
+    return fetch(`${baseRoute}/mailto/${slug}`, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+            throw err;
+        });
+};
+
 export default {
     getFeedAnnounces,
     getProfileAnnounces,
@@ -207,5 +225,6 @@ export default {
     removeAnnounce,
     uploadImages,
     addLikeLoggedInUser,
-    removeLikeLoggedInUser
+    removeLikeLoggedInUser,
+    mailtoAnnounceLink
 };

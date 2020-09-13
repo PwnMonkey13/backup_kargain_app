@@ -25,70 +25,82 @@ const CarInfos = ({ announce, enableThirdColumn }) => {
     const classes = useStyles();
     const { t } = useTranslation()
     const cols = enableThirdColumn ? 4 : 6;
-
+    
     return (
         <Row className="specs my-2 p-2">
             <Col sm={12} md={cols}>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>{t('vehicles:make')}: </span>{announce.getManufacturer.make}
+                        <span>{t('vehicles:make')}: </span>
+                        {announce.getManufacturer.make}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>{t('vehicles:model')}: </span>{announce.getManufacturer.model}
+                        <span>{t('vehicles:model')}: </span>
+                        {announce.getManufacturer.model}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>{t('vehicles:year')}: </span>{announce.getManufacturer.year}
+                        <span>{t('vehicles:year')}: </span>
+                        {announce.getManufacturer.year}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>{t('vehicles:version')}: </span>{announce.getManufacturer.version}
+                        <span>{t('vehicles:version')}: </span>
+                        {announce.getManufacturer.version}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>{t('vehicles:mileage')}: </span>{announce.getMileage} km
+                        <span>{t('vehicles:mileage')}: </span>
+                        {announce.getMileage} km
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>{t('vehicles:gas')}: </span>{announce.geVehicleEngineGas}
+                        <span>{t('vehicles:gas')}: </span>
+                        {announce.geVehicleEngineGas}
                     </Typography>
                 </div>
             </Col>
             <Col sm={12} md={cols}>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>{t('vehicles:engine_type')}: </span>{announce.geVehicleEngineType}
+                        <span>{t('vehicles:engine_type')}: </span>
+                        {announce.geVehicleEngineType}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>{t('vehicles:cylinder')}: </span>{announce.geVehicleEngineCylinder}
+                        <span>{t('vehicles:cylinder')}: </span>
+                        {announce.geVehicleEngineCylinder}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>{t('vehicles:power')}: </span>{announce.getVehiclePowerCh}
+                        <span>{t('vehicles:power')}: </span>
+                        {announce.getVehiclePowerCh}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>Carte grise: </span>{announce.getNationality}
+                        <span>Carte grise: </span>
+                        {announce.getNationality}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>{t('vehicles:vehicle_function')}: </span>{announce.getVehicleFunction}
+                        <span>{t('vehicles:vehicle_function')}: </span>
+                        {announce.getVehicleFunction}
                     </Typography>
                 </div>
                 <div className={classes.spec}>
                     <Typography>
-                        <span>{t('vehicles:class_emission')}: </span>{announce.getVehicleEmissionClass}
+                        <span>{t('vehicles:class_emission')}: </span>
+                        {announce.getVehicleEmissionClass}
                     </Typography>
                 </div>
             </Col>
@@ -97,41 +109,50 @@ const CarInfos = ({ announce, enableThirdColumn }) => {
                 <Col sm={12} md={cols}>
                     <div className={classes.spec}>
                         <Typography>
-                            <span>{t('vehicles:vehicle_general_state')}: </span>{announce.getVehicleGeneralState}
+                            <span>{t('vehicles:vehicle_general_state')}: </span>
+                            {announce.getVehicleGeneralState}
                         </Typography>
                     </div>
                     <div className={classes.spec}>
                         <Typography>
-                            <span>{t('vehicles:doors_quantity')}: </span>{announce.getVehicleDoors}
+                            <span>{t('vehicles:doors_quantity')}: </span>
+                            {announce.getVehicleDoors}
                         </Typography>
                     </div>
                     <div className={classes.spec}>
                         <Typography>
-                            <span>{t('vehicles:seats_quantity')}: </span>{announce.getVehicleSeats}
+                            <span>{t('vehicles:seats_quantity')}: </span>
+                            {announce.getVehicleSeats}
                         </Typography>
                     </div>
                     <div className={classes.spec}>
                         <Typography>
-                            <span>{t('vehicles:external_color')}: </span>{announce.getVehicleExternalColor}
+                            <span>{t('vehicles:external_color')}: </span>
+                            {announce.getVehicleExternalColor}
                         </Typography>
                     </div>
                     <div className={classes.spec}>
                         <Typography>
-                            <span>{t('vehicles:internal_color')}: </span>{announce.getVehicleInternalColor}
+                            <span>{t('vehicles:internal_color')}: </span>
+                            {announce.getVehicleInternalColor}
                         </Typography>
                     </div>
                     <div className={classes.spec}>
                         <Typography>
-                            <span>{t('vehicles:paint')}: </span>{announce.getVehiclePaintColor}
+                            <span>{t('vehicles:paint')}: </span>
+                            {announce.getVehiclePaintColor}
                         </Typography>
                     </div>
                     <div className={classes.spec}>
                         <Typography>
-                            <span>{t('vehicles:owners_quantity')}: </span>{announce.getVehicleCountOwners}
+                            <span>{t('vehicles:owners_quantity')}: </span>
+                            {announce.getVehicleCountOwners}
                         </Typography>
                     </div>
                     <div className={classes.spec}>
-                        <Typography> <span>{t('vehicles:materials')}: </span></Typography>
+                        <Typography>
+                            <span>{t('vehicles:materials')}: </span>
+                        </Typography>
                         <ul>
                             {announce.getVehicleMaterials && announce.getVehicleMaterials.map((material, i) => {
                                 return (

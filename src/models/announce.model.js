@@ -27,6 +27,10 @@ export default class AnnounceModel {
     get getAnnounceLink () {
         return this.getSlug ? `/announces/${this.getSlug}` : '/';
     }
+    
+    get getAnnounceShareLink () {
+        return this.getSlug ? `https://kargain.com/announces/announces/${this.getSlug}` : null
+    }
 
     get getAnnounceEditLink () {
         return this.getSlug ? `/announces/${this.getSlug}/edit` : '/';

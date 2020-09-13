@@ -5,19 +5,8 @@ import useTranslation from 'next-translate/useTranslation';
 import {  SelectInput, SliderInput } from '../../../Form/Inputs';
 import SelectCountryFlags from '../../../Form/Inputs/SelectCountryFlags';
 import SearchLocationInput from '../../../Form/Inputs/SearchLocationInput';
-import { SelectOptionsUtils } from '../../../../libs/formFieldsUtils';
-import {
-    CheckboxOptionsEquipments,
-    RadioChoicesEmission,
-    RadioChoicesEngine,
-    RadioChoicesExternalColor,
-    RadioChoicesGas,
-    RadioChoicesMaterials,
-    RadioChoicesPaints,
-    RadioTypeFunction,
-    RadioVehicleGeneralState
-} from '../../../Products/camper/form.data';
-import CarFilters from './CarFilters'
+
+import FieldWrapper from '../../../Form/FieldWrapper'
 
 const CamperFilters = ({control, watch, errors }) => {
     const { t } = useTranslation();
@@ -140,25 +129,31 @@ const CamperFilters = ({control, watch, errors }) => {
                 suffix="km"
             />
 
-            <Typography component="span">{t('vehicles:equipments')}</Typography>
+            <Typography component="span">
+                {t('vehicles:equipments')}
+            </Typography>
             <SelectInput
                 name="equipments"
-                options={CheckboxOptionsEquipments}
+                options={formData.CheckboxOptionsEquipments}
                 isMulti
                 defaultChecked={['ABS', 'ESP']}
                 control={control}
                 errors={errors}
             />
 
-            <Typography component="span">{t('vehicles:class_emission')}</Typography>
+            <Typography component="span">
+                {t('vehicles:class_emission')}
+            </Typography>
             <SelectInput
                 name="emission"
-                options={RadioChoicesEmission}
+                options={formData.RadioChoicesEmission}
                 control={control}
                 errors={errors}
             />
 
-            <Typography component="span" gutterBottom>{t('vehicles:co2-consumption')}</Typography>
+            <Typography component="span" gutterBottom>
+                {t('vehicles:co2-consumption')}
+            </Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="consumptionGkm"
@@ -171,7 +166,9 @@ const CamperFilters = ({control, watch, errors }) => {
                 suffix="kw"
             />
 
-            <Typography component="span" gutterBottom>{t('vehicles:doors_quantity')}</Typography>
+            <Typography component="span" gutterBottom>
+                {t('vehicles:doors_quantity')}
+            </Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="seats"
@@ -207,7 +204,9 @@ const CamperFilters = ({control, watch, errors }) => {
                 control={control}
             />
 
-            <Typography component="span">{t('seats:beds-quantity')}</Typography>
+            <Typography component="span">
+                {t('seats:beds-quantity')}
+            </Typography>
             <SliderInput
                 classNames="my-4 mt-2"
                 name="beds"
@@ -219,38 +218,45 @@ const CamperFilters = ({control, watch, errors }) => {
                 control={control}
             />
 
-            <Typography component="span">{t('vehicles:beds-type')}</Typography>
+            <Typography component="span">
+                {t('vehicles:beds-type')}
+            </Typography>
             <SelectInput
                 name="bedType"
-                options={SelectOptionsUtils(['simple', 'double', 'depliant', 'gonflable'])}
+                options={formData.RadioChoiceBeds}
                 control={control}
                 errors={errors}
             />
 
-            <Typography component="span">{t('vehicles:paint')}</Typography>
+            <Typography component="span">
+                {t('vehicles:paint')}
+            </Typography>
             <SelectInput
                 name="paint"
-                options={RadioChoicesPaints}
+                options={formData.RadioChoicesPaints}
                 control={control}
                 errors={errors}
             />
 
-            <Typography component="span">{t('vehicles:external_color')}</Typography>
+            <Typography component="span">
+                {t('vehicles:external_color')}
+            </Typography>
             <SelectInput
                 name="externalColor"
-                options={RadioChoicesMaterials}
+                options={formData.RadioChoicesMaterials}
                 control={control}
                 errors={errors}
             />
 
-            <Typography component="span">{t('vehicles:internal_color')}</Typography>
+            <Typography component="span">
+                {t('vehicles:internal_color')}
+            </Typography>
             <SelectInput
                 name="internalColor"
-                options={RadioChoicesExternalColor}
+                options={formData.RadioChoicesExternalColor}
                 control={control}
                 errors={errors}
             />
-
         </>
     );
 };
@@ -260,9 +266,5 @@ CamperFilters.propTypes = {
     errors: PropTypes.object.isRequired,
     watch: PropTypes.func
 };
-
-CarFilters.defaultProps = {
-    vehicleType : "campers"
-}
 
 export default CamperFilters;
