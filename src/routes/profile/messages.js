@@ -1,8 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Link from 'next-translate/Link';
+import { useForm } from 'react-hook-form';
 import parseISO from 'date-fns/parseISO';
 import { format } from 'date-fns';
 import clsx from 'clsx';
+import useTranslation from 'next-translate/useTranslation';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
@@ -10,35 +12,32 @@ import UserModel from '../../models/user.model';
 import { useAuth } from '../../context/AuthProvider';
 import ConversationsService from '../../services/ConversationsService';
 import useStyles from '../../components/Conversations/conversation.styles';
-import { useForm } from 'react-hook-form';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { MessageContext } from '../../context/MessageContext';
 import ValidationError from '../../components/Form/Validations/ValidationError';
-import useTranslation from 'next-translate/useTranslation';
 
 const Messages = () => {
-    const classes = useStyles();
     const theme = useTheme();
+    const contentRef = useRef()
+    const classes = useStyles();
     const { t } = useTranslation()
+    const { isAuthenticated, authenticatedUser } = useAuth();
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const [conversations, setConversations] = useState([]);
     const [selectedConversation, setSelectedConversation] = useState(null);
     const [openedConversation, setOpenedConversation] = useState(false);
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
-    const [recipient, setRecipient] = useState(null);
-    const { authenticatedUser } = useAuth();
-
-    const { register, errors, handleSubmit } = useForm({
+    const [selectedRecipient, setSelectedRecipient] = useState(null);
+    const { reset, register, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all'
     });
-
+    
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'), {
         defaultMatches: true
     });
-
+    
     const loadConversations = async () => {
         try {
             const conversations = await ConversationsService.getCurrentUserConversations();
-            console.log(conversations)
             setConversations(conversations);
         } catch (err) {
             dispatchModalError({ err });
@@ -46,11 +45,16 @@ const Messages = () => {
     };
 
     const onSubmitMessage = async (form) => {
+        console.log(form)
         const { message } = form;
         try {
-            const conversation = await ConversationsService.postConversationMessage(message, recipient.getID);
+            const conversation = await ConversationsService.postConversationMessage(message, selectedRecipient.getID);
             setSelectedConversation(conversation);
             dispatchModal({ msg: 'Message posted' });
+            if(contentRef.current){
+                contentRef.current.scrollTop = contentRef.current?.scrollHeight
+            }
+            reset()
         } catch (err) {
             dispatchModalError({
                 err,
@@ -62,37 +66,45 @@ const Messages = () => {
     const handleSelectConversation = (index) => {
         const conversation = conversations[index];
         setSelectedConversation(conversation);
-        setRecipient(new UserModel(conversation.to));
+        const to = new UserModel(conversation.to);
+        const from = new UserModel(conversation.from);
+        const recipient = from.getID === authenticatedUser.getID ? to : from;
+        setSelectedRecipient(recipient);
         setOpenedConversation(true);
     };
 
     const closeConversation = () => {
         setOpenedConversation(false);
     };
+    
+    useEffect(() => {
+        if(isAuthenticated) loadConversations();
+    }, [isAuthenticated]);
 
     useEffect(() => {
-        loadConversations();
-    }, []);
-
-    useEffect(() => {
-        if (conversations.length) handleSelectConversation(0);
+        if (conversations.length){
+            handleSelectConversation(0);
+        }
     }, []);
 
     return (
         <>
-            <h2>{t('vehicles:messaging')}</h2>
             <div className={classes.conversations}>
                 <div className={classes.conversationsList}>
                     <div className={classes.styleScroller}>
+                        <h2>{t('vehicles:messaging')}</h2>
                         <div className={classes.scrollerContainer}>
                             <div style={{ width: '100%' }}>
                                 {conversations.length > 0 ? conversations.map((conversation, index) => {
-                                    const recipient = new UserModel(conversation.to);
+                                    const to = new UserModel(conversation.to);
+                                    const from = new UserModel(conversation.from);
+                                    const recipient = from.getID === authenticatedUser.getID ? to : from;
+                            
                                     return (
                                         <div key={index}
                                             className={classes.conversationListItem}
                                             onClick={() => handleSelectConversation(index)}>
-
+                                    
                                             <img className="dropdown-toggler rounded-circle mx-2"
                                                 width="30"
                                                 height="30"
@@ -100,7 +112,7 @@ const Messages = () => {
                                                 title={recipient.getFullName}
                                                 alt={recipient.getUsername}
                                             />
-
+                                    
                                             <div className={classes.itemDetails}>
                                                 <p className="mt-0">
                                                     {recipient.getFullName}
@@ -121,7 +133,7 @@ const Messages = () => {
                         </div>
                     </div>
                 </div>
-
+        
                 {selectedConversation && (
                     <div className={clsx(
                         classes.conversation,
@@ -130,14 +142,15 @@ const Messages = () => {
                         <div className={classes.conversationHeader}>
                             <div className={classes.headerUsername}>
                                 <div style={{ maxWidth: '70%' }}>
-                                    <Link href={recipient.getProfileLink} prefetch={false}>
+                                    <Link href={selectedRecipient.getProfileLink} prefetch={false}>
                                         <a>
                                             <img className="rounded-circle"
-                                                src={recipient.getAvatar}
-                                                alt={recipient.getUsername}
-                                                width={50}
+                                                src={selectedRecipient.getAvatar}
+                                                alt={selectedRecipient.getUsername}
+                                                width={30}
+                                                height={30}
                                             />
-                                            <span className="mx-2">{recipient.getFullName}</span>
+                                            <span className="mx-2">{selectedRecipient.getFullName}</span>
                                         </a>
                                     </Link>
                                 </div>
@@ -148,8 +161,7 @@ const Messages = () => {
                                 )}
                             </div>
                         </div>
-
-                        <div className={classes.conversationContent}>
+                        <div className={classes.conversationContent} ref={contentRef}>
                             <div className={classes.messageContainer}>
                                 {selectedConversation.createdAt && format(parseISO(selectedConversation.createdAt), 'MM/dd/yyyy')}
                                 {selectedConversation?.messages.map((message, index) => {
@@ -170,16 +182,18 @@ const Messages = () => {
                                                 </div>
                                             </div>
                                         );
-                                    } else {
+                                    }
+                                    
+                                    else {
                                         return (
                                             <div key={index} className={classes.textJustifiedStart}>
                                                 <div className={classes.basicMessage}>
                                                     <img className="dropdown-toggler rounded-circle mx-2"
                                                         width="30"
                                                         height="30"
-                                                        src={recipient.getAvatar}
-                                                        title={recipient.getFullName}
-                                                        alt={recipient.getUsername}
+                                                        src={selectedRecipient.getAvatar}
+                                                        title={selectedRecipient.getFullName}
+                                                        alt={selectedRecipient.getUsername}
                                                     />
                                                     <div className={classes.messageBubbleLeft}>
                                                         {message?.content}
@@ -200,8 +214,8 @@ const Messages = () => {
                                     name="message"
                                     ref={register({ required: t('form_validations:required') })}
                                     placeholder={t('vehicles:write_your_message')}
-                                    maxLength="30000"
-                                    rows="3"
+                                    maxLength={30000}
+                                    rows={2}
                                 />
                                 {errors && <ValidationError errors={errors} name={name}/>}
                                 <button className={classes.conversationInputButton} type="submit">

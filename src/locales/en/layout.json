@@ -35,5 +35,11 @@
   "close" : "Close",
   "premium" : "Premium",
   "pricing" : "Pricing",
-  "form" : "Form"
+  "form" : "Form",
+  "see-announce" : "Check out announce",
+  "write_your_message": "Write your message",
+  "send" : "Send",
+  "email_had_been_sent_to_{email}" : "An email had been sent to {{email}}",
+  "copy_link" : "Copy link",
+  "copy_link_copied" : "Copy link (copied)"
 }

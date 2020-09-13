@@ -14,8 +14,13 @@ export default makeStyles(theme => ({
         boxShadow: theme.shadows[5],
         padding: '.5rem',
         width: '100%',
-        maxWidth: '600px',
-
+        maxWidth: '80vw',
+        height : '90vh',
+    
+        [theme.breakpoints.up('xl')]: {
+            maxWidth: '60%'
+        },
+        
         [theme.breakpoints.down('xs')]: {
             width: '350px'
         }
@@ -35,7 +40,7 @@ export default makeStyles(theme => ({
         width: '100%',
         borderRight: '1px solid',
         border: '1px solid gainsboro',
-
+    
         [theme.breakpoints.up('md')]: {
             width: '30%',
             borderRight: '1px solid #e6ebef'
@@ -141,7 +146,6 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         alignSelf: 'center',
         width: '100%',
-        height: '5.6rem',
         padding: '0 2.4rem',
         justifyContent: 'space-between',
 

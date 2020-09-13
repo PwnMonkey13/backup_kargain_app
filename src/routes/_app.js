@@ -22,27 +22,31 @@ import appWithI18n from '../components/Locales/appWithI18n';
 
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;
-
+    
     useEffect(() => {
         const jssStyles = document.querySelector('#jss-server-side');
         if (jssStyles && jssStyles.parentNode) {
             jssStyles.parentNode.removeChild(jssStyles);
         }
     }, []);
-
+    
     return (
         <ThemeProvider theme={theme}>
-            <ModalDialogContextProvider>
+            <MessageContextProvider>
                 <AuthProvider>
                     <FormContextProvider formKey={formKey}>
-                        <NextProgress/>
-                        <DefaultSeo {...SEO} />
-                        <ProtectedRouter pageProps={pageProps}>
-                            <Component {...pageProps}/>
-                        </ProtectedRouter>
+                        <SearchContextProvider>
+                            <ModalContextProvider>
+                                <NextProgress/>
+                                <DefaultSeo {...SEO} />
+                                <ProtectedRouter pageProps={pageProps}>
+                                    <Component {...pageProps}/>
+                                </ProtectedRouter>
+                            </ModalContextProvider>
+                        </SearchContextProvider>
                     </FormContextProvider>
                 </AuthProvider>
-            </ModalDialogContextProvider>
+            </MessageContextProvider>
         </ThemeProvider>
     );
 };
@@ -52,14 +56,17 @@ const ProtectedRouter = ({ children, pageProps }) => {
     const { requiredAuth } = pageProps
     const isAdminRoute = router.route.split('/').includes('admin');
     const { isAuthReady, forceLoginModal, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
-    const showLoginModal = (pageProps.requiredAuth && !isAuthenticated) || forceLoginModal;
-
+    const showLoginModal = (requiredAuth && !isAuthenticated) || forceLoginModal;
+    const { searchStateContext }  = useContext(SearchContext);
+    const { modalStateContext } = useContext(ModalContext);
+    
     if (isAdminRoute) {
         if (isAuthReady) {
             if (!isAuthenticatedUserAdmin) {
                 return <Forbidden403Page/>;
             }
         }
+        
         return (
             <AdminLayout>
                 <PopupAlert/>
@@ -67,7 +74,7 @@ const ProtectedRouter = ({ children, pageProps }) => {
             </AdminLayout>
         );
     }
-
+    
     return (
         <DynamicNamespaces
             dynamic={(lang, ns) => import(`../locales/${lang}/${ns}.json`).then((m) => m.default)}
@@ -77,7 +84,12 @@ const ProtectedRouter = ({ children, pageProps }) => {
                 'form_validations'
             ]}
         >
-            {showLoginModal && <PopupLogin/>}
+            {(isAuthReady && showLoginModal) && <PopupLogin/>}
+            {searchStateContext?.openModalSearch && <ModalSearchResults/>}
+            {modalStateContext.openModalMessaging && <ModalMessaging/>}
+            {modalStateContext.openModalFollowers && <ModalFollowers/>}
+            {modalStateContext.openModalShare && <ModalShare/>}
+    
             <Layout>
                 <PopupAlert/>
                 {children}
