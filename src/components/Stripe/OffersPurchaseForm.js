@@ -11,7 +11,7 @@ const OffersPurchaseForm = ({ offer: defaultOffer }) => {
     const { authenticatedUser } = useAuth();
     const [selectedOffer, setSelectedOffer] = useState(null);
     const [isSelectedOffer, setIsSelectedOffer] = useState(false);
-    const [enableSubscribe, setEnableSubscribe] = useState(false);
+    const [enableSubscribe, setEnableSubscribe] = useState(true);
 
     return (
         <Container>
@@ -46,7 +46,7 @@ const OffersPurchaseForm = ({ offer: defaultOffer }) => {
                             <OffersSelect {...{
                                 defaultOffer,
                                 setSelectedOffer,
-                                setIsSelectedOffer,
+                                setIsSelectedOffer
                             }} />
 
                             {isSelectedOffer && (
