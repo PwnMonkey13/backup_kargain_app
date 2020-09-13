@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import clsx from 'clsx';
 import Link from 'next-translate/Link';
 import useTranslation from 'next-translate/useTranslation';
@@ -61,25 +61,25 @@ const NavbarClient = () => {
                         />
                         <Collapse isOpen={isOpen} navbar>
                             {(!isMobile || isOpen) && (
-                            <>
-                                {isMobile ? (
-                                    <div className={clsx("sidebar", isOpen && 'open')}>
-                                        <div className="sidebar_controls">
-                                            <Button
-                                                startIcon={<CloseIcon/>}
-                                                onClick={toggleNavbar}
-                                            />
+                                <>
+                                    {isMobile ? (
+                                        <div className={clsx("sidebar", isOpen && 'open')}>
+                                            <div className="sidebar_controls">
+                                                <Button
+                                                    startIcon={<CloseIcon/>}
+                                                    onClick={toggleNavbar}
+                                                />
+                                            </div>
+                                            <NavbarAction vertical={true}/>
+                                            {isAuthenticated ? <LoggedInUserNav/> : <VisitorNav/>}
                                         </div>
-                                        <NavbarAction vertical={true}/>
-                                        {isAuthenticated ? <LoggedInUserNav/> : <VisitorNav/>}
-                                    </div>
-                                ) : (
-                                    <div className={clsx("d-flex", "navbar-menu")}>
-                                        <NavbarAction/>
-                                        {isAuthenticated ? <LoggedInUserNav/> : <VisitorNav/>}
-                                    </div>
-                                )}
-                            </>
+                                    ) : (
+                                        <div className={clsx("d-flex", "navbar-menu")}>
+                                            <NavbarAction/>
+                                            {isAuthenticated ? <LoggedInUserNav/> : <VisitorNav/>}
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </Collapse>
                     </Navbar>
@@ -105,7 +105,15 @@ const NewAdButtonCTA = ({isDesktop}) => {
 const NavbarAction = ({ vertical }) => {
     const { t } = useTranslation();
     const classes = useStyles();
-
+    const {register, handleSubmit } = useForm();
+    const { dispatchSearchQuery } = useContext(SearchContext);
+    
+    const onSubmitSearch = (form) => {
+        if (form.query) {
+            dispatchSearchQuery(form.query)
+        }
+    }
+    
     return (
         <Nav navbar className={clsx("my-2", vertical ? "flex-column" : "flex-row-nav")}>
             <NavItem className="p-2">
@@ -113,8 +121,9 @@ const NavbarAction = ({ vertical }) => {
             </NavItem>
 
             <NavItem className="p-2">
-                <form className="search-form" method="GET" action="/search">
+                <form className="search-form" onSubmit={handleSubmit(onSubmitSearch)}>
                     <input
+                        ref={register}
                         name="query"
                         type="search"
                         placeholder={t('layout:search')}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react'
 import { Router, useRouter } from 'next/router';
 import { DefaultSeo } from 'next-seo';
 import withGA from 'next-ga'
@@ -19,6 +19,12 @@ import theme from '../theme';
 import '../scss/theme.scss';
 import i18nConfig from '../../i18n.json';
 import appWithI18n from '../components/Locales/appWithI18n';
+import { SearchContext, SearchContextProvider } from '../context/SearchContext'
+import { ModalContext, ModalContextProvider } from '../context/ModalContext'
+import ModalSearchResults from '../components/Search/ModalSearchResults'
+import ModalMessaging from '../components/ModalMessaging'
+import ModalFollowers from '../components/ModalFollowers'
+import ModalShare from '../components/ModalShare'
 
 const MyApp = ({ Component, pageProps }) => {
     const { formKey } = pageProps;

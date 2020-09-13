@@ -7,12 +7,13 @@ import Typography from '@material-ui/core/Typography';
 import FindInPageIcon from '@material-ui/icons/FindInPage';
 import PaginateResults from './PaginateResults';
 import Sorters from './Sorters/Sorters';
-import AnnounceCard from './AnnounceCard';
+import AnnounceCard from '../components/AnnounceCard'
 import AnnounceService from '../services/AnnounceService'
 import { MessageContext } from '../context/MessageContext';
 import { useAuth } from '../context/AuthProvider';
 import AdvancedFilters from './Filters/Advanced/AdvancedFilters'
 import Loader from '../components/Loader'
+import CTALink from './CTALink'
 
 const SearchPage = ({fetchFeed, ...props}) => {
     const { t } = useTranslation()
@@ -39,8 +40,6 @@ const SearchPage = ({fetchFeed, ...props}) => {
             page,
             size
         };
-
-        console.log(params)
 
         setState(state => ({
             ...state,
@@ -90,9 +89,11 @@ const SearchPage = ({fetchFeed, ...props}) => {
     };
 
     useEffect(() => {
-        fetchAnnounces();
-        window.scrollTo(0, 0);
-    }, [fetchAnnounces]);
+        if(isAuthenticated){
+            fetchAnnounces();
+            window.scrollTo(0, 0);
+        }
+    }, [isAuthenticated, fetchAnnounces]);
 
     return (
         <Container>
@@ -118,28 +119,37 @@ const SearchPage = ({fetchFeed, ...props}) => {
                     <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
                         {state.loading ? <Loader/> : (
                             <>
-                                {state.announces.length ? (
+                                {state.announces.length !== 0 ? (
                                     <Row className="my-2 d-flex justify-content-center">
-                                        {state.announces.map((announceRaw, index) => (
-                                            <Col key={index} sm={12} md={12} className="my-2">
-                                                <AnnounceCard {...{
-                                                    announceRaw,
-                                                    isAuthenticated,
-                                                    detailsFontSize: '13px'
-                                                }}/>
-                                            </Col>
-                                        ))}
+                                        {state.announces.map((announceRaw, index) => {
+                                            return(
+                                                <Col key={index} sm={12} md={12} className="my-2">
+                                                    <AnnounceCard
+                                                        announceRaw={announceRaw}
+                                                        detailsFontSize={'13px'}
+                                                    />
+                                                </Col>
+                                            )})}
                                     </Row>
                                 ) : (
-                                    <div className="d-flex flex-column my-2 mx-auto">
-                                        <FindInPageIcon fontSize="large"/>
-                                        <Typography variant="h3">
-                                            No result found
-                                        </Typography>
-                                        <p>
-                                            Try to change filters
-                                        </p>
-                                    </div>
+                                    <>
+                                        {!isAuthenticated ? (
+                                            <CTALink
+                                                title={t('layout:login')}
+                                                href="/auth/login">
+                                            </CTALink>
+                                        ) : (
+                                            <div className="d-flex flex-column my-2 mx-auto">
+                                                <FindInPageIcon fontSize="large"/>
+                                                <Typography variant="h3">
+                                                    No result found
+                                                </Typography>
+                                                <p>
+                                                    Try to change filters
+                                                </p>
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                             </>
                         )}
