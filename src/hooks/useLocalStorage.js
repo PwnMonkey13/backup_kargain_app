@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import window from 'global';
 
-function useLocalStorage (key, initialValue = {}, listen = false) {
+function useLocalStorage (key, initialValue = {}) {
     const [storedValue, setStoredValue] = useState(get);
 
     function get () {
@@ -14,13 +14,9 @@ function useLocalStorage (key, initialValue = {}, listen = false) {
     }
 
     const set = value => {
-        try {
-            const valueToStore = value instanceof Function ? value(storedValue) : value;
-            setStoredValue(valueToStore);
-            window.localStorage.setItem(key, JSON.stringify(value));
-        } catch (err) {
-            throw err;
-        }
+        const valueToStore = value instanceof Function ? value(storedValue) : value;
+        setStoredValue(valueToStore);
+        window.localStorage.setItem(key, JSON.stringify(value));
     };
 
     const clear = () => {

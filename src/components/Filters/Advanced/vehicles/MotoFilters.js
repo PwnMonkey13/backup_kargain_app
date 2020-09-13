@@ -154,8 +154,4 @@ MotoFilters.propTypes = {
     watch: PropTypes.func
 };
 
-CarFilters.defaultProps = {
-    vehicleType : "motorcycles"
-}
-
 export default memo(MotoFilters);

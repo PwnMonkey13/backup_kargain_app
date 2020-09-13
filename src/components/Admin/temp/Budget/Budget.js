@@ -1,9 +1,7 @@
 import React from "react";
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import {makeStyles} from "@material-ui/styles";
 import {Avatar, Card, CardContent, Grid, Typography} from "@material-ui/core";
-
 import MoneyIcon from '@material-ui/icons/Money';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
@@ -62,8 +60,7 @@ const Budget = props => {
                             variant="body2">
                             BUDGET
                         </Typography>
-                        <Typography variant="h3">TODO</Typography>
-                        {/*<Typography variant="h3">$24,000</Typography>*/}
+                        <Typography>TODO</Typography>
                     </Grid>
                     <Grid item>
                         <Avatar className={classes.avatar}>
@@ -86,10 +83,6 @@ const Budget = props => {
             </CardContent>
         </Card>
     );
-};
-
-Budget.propTypes = {
-    className: PropTypes.string
 };
 
 export default Budget;

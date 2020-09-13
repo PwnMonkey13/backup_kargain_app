@@ -2,11 +2,12 @@ import React, { createContext, useEffect, useReducer } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 const FormContext = createContext({});
+
 const reducer = (state, action) => {
     if (action.type === 'update') {
         return {
             ...state,
-            ...action.payload,
+            ...action.payload
         };
     } else if (action.type === 'clear') {
         return {};
@@ -23,14 +24,14 @@ const FormContextProvider = ({ formKey, children }) => {
     const dispatchFormUpdate = (updates) => {
         dispatchFormDataContext({
             type: 'update',
-            payload: updates,
+            payload: updates
         });
     };
 
     const dispatchFormClear = () => {
         dispatchFormDataContext({
             type: 'clear',
-            payload: {},
+            payload: {}
         });
         clearFormData();
     };
@@ -45,7 +46,7 @@ const FormContextProvider = ({ formKey, children }) => {
         <FormContext.Provider value={{
             formDataContext,
             dispatchFormUpdate,
-            dispatchFormClear,
+            dispatchFormClear
         }}>
             {children}
         </FormContext.Provider>
@@ -53,7 +54,7 @@ const FormContextProvider = ({ formKey, children }) => {
 };
 
 FormContextProvider.defaultProps = {
-    formKey: '',
+    formKey: ''
 };
 
 export { FormContext, FormContextProvider };

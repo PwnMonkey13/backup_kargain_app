@@ -49,6 +49,7 @@ const MyApp = ({ Component, pageProps }) => {
 
 const ProtectedRouter = ({ children, pageProps }) => {
     const router = useRouter();
+    const { requiredAuth } = pageProps
     const isAdminRoute = router.route.split('/').includes('admin');
     const { isAuthReady, forceLoginModal, isAuthenticated, isAuthenticatedUserAdmin } = useAuth();
     const showLoginModal = (pageProps.requiredAuth && !isAuthenticated) || forceLoginModal;

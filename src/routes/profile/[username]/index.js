@@ -123,7 +123,6 @@ const Profile = () => {
     const fetchAnnounces = useCallback(async () => {
         try{
             const { sorter, filters, page } = filterState;
-
             setFilterState(filterState => ({
                 ...filterState,
                 loading: true

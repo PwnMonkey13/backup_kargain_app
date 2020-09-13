@@ -40,25 +40,6 @@ function getUserByUsername (username) {
         });
 }
 
-function getUserByUsernameSSR (username, headers) {
-    const requestOptions = {
-        method: 'GET',
-        credentials: 'include',
-        headers
-    };
-
-    if (!username) throw 'missing username during fetch user';
-    let url = `${config.api}/users/username/${username}`;
-
-    return fetch(url, requestOptions)
-        .then(handleResponse)
-        .then(json => json.data)
-        .catch(err => {
-            throw err;
-        }
-        );
-}
-
 function updateUser (updates) {
     const requestOptions = {
         method: 'PUT',
@@ -209,7 +190,6 @@ const origin = () => {
 export default {
     getUsers,
     getUserByUsername,
-    getUserByUsernameSSR,
     updateUser,
     updateAdminUser,
     removeUser,

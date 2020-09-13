@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types';
 import { Container } from 'reactstrap'
 import { useRouter} from 'next/router'
-import useTranslation from 'next-translate/useTranslation'
+
 import { makeStyles } from '@material-ui/core/styles'
 import useIsMounted from '../hooks/useIsMounted';
 import AnnounceService from '../services/AnnounceService';
