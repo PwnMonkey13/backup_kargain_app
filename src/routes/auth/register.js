@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Col, Container, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import useTranslation from 'next-translate/useTranslation';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { MessageContext } from '../../context/MessageContext';
 import AuthService from '../../services/AuthService';
 import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../components/Form/Inputs';
 import FieldWrapper from '../../components/Form/FieldWrapper';
@@ -17,7 +17,7 @@ const formConfig = {
 };
 
 const RegisterPage = () => {
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const { control, errors, getValues, handleSubmit } = useForm(formConfig);
     const { t } = useTranslation();
     const router = useRouter();

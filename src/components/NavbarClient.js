@@ -22,6 +22,8 @@ import IconButton from '@material-ui/core/IconButton';
 import { getLogo } from '../libs/utils';
 import { useAuth } from '../context/AuthProvider';
 import CTALink from './CTALink';
+import { useForm } from 'react-hook-form'
+import { SearchContext } from '../context/SearchContext'
 
 const useStyles = makeStyles(theme => ({
     navBarClient: {

@@ -22,7 +22,7 @@ import AvatarPreviewUpload from '../../../components/Avatar/AvatarPreviewUpload'
 import OffersPurchaseForm from '../../../components/Stripe/OffersPurchaseForm';
 import FieldWrapper from '../../../components/Form/FieldWrapper';
 import CTALink from '../../../components/CTALink';
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import { MessageContext } from '../../../context/MessageContext';
 import { useAuth } from '../../../context/AuthProvider';
 import UsersService from '../../../services/UsersService';
 import { themeColors } from '../../../theme/palette';
@@ -96,7 +96,7 @@ const Edit = () => {
     const { offer } = router.query;
     const { t } = useTranslation();
     const classes = useStyles();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const [activeTab, setActiveTab] = useState(0);
     const [state, setState] = useState({
         err : null,
@@ -263,7 +263,7 @@ const MultiTabsForm = ({offer, activeTab, formRef, defaultValues, triggerSubmit,
     const theme = useTheme();
     const classes = useStyles();
     const { t } = useTranslation();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true
     });

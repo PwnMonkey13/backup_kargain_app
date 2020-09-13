@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { MessageContext } from '../../context/MessageContext';
+import Step0_Manufacturer from '../../components/Products/Step0_Manufacturer';
 import Step1CarDetails from '../../components/Products/car/Step1_CarDetails';
 import Step2CarStatus from '../../components/Products/car/Step2_CarStatus';
 import Step3CarOwner from '../../components/Products/car/Step3_CarOwner';
@@ -13,7 +14,7 @@ import { vehicleTypes } from '../../business/vehicleTypes.js'
 const CarForm = (props) => {
     const router = useRouter();
     const { t } = useTranslation();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
 
     const onFinalSubmit = form => {
         const { images, ...body } = form;

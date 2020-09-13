@@ -14,7 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import useTranslation from 'next-translate/useTranslation';
 import AuthService from '../services/AuthService';
 import { useAuth } from '../context/AuthProvider';
-import { ModalDialogContext } from '../context/ModalDialogContext';
+import { MessageContext } from '../context/MessageContext';
 import { CheckBoxInput, EmailInput, PasswordInput } from './Form/Inputs';
 import SSOProviders from './SSOProviders';
 import { themeColors } from '../theme/palette';
@@ -91,7 +91,7 @@ export default () => {
     const { t } = useTranslation();
     const { isAuthenticated, avoidCloseLoginModal } = useAuth();
     const { control, errors, handleSubmit } = useForm(formConfig);
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const [openLoginModal, toggleLoginModal] = useState(!isAuthenticated);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true

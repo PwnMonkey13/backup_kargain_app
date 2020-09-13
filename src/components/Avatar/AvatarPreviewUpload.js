@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import EditIcon from '@material-ui/icons/Edit';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { MessageContext } from '../../context/MessageContext';
 import { useAuth } from '../../context/AuthProvider';
 import UsersService from '../../services/UsersService';
 
@@ -19,7 +19,7 @@ const FileInput = ({ value, onChange = noop, ...rest }) => (
 
 const AvatarPreviewUpload = () => {
     const { authenticatedUser, updateAuthenticatedRawUser, isAuthenticated } = useAuth();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const [avatarLocation, setAvatarLocation] = useState(authenticatedUser.getAvatar);
 
     const onChangeFile = (files) => {

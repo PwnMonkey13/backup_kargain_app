@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next-translate/Link';
 import { Modal } from 'reactstrap';
-import { ModalDialogContext } from '../context/ModalDialogContext';
+import { MessageContext } from '../context/MessageContext';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { themeColors } from '../theme/palette';
 import useTranslation from 'next-translate/useTranslation'
@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
 const PopupAlert = () => {
     const { t } = useTranslation()
     const classes = useStyles();
-    const { modalState } = useContext(ModalDialogContext);
+    const { modalState } = useContext(MessageContext);
     const [state, setState] = useState({});
 
     useEffect(() => {

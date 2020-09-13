@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import FormWizard from '../../components/Form/FormWizard';
 import AnnounceService from '../../services/AnnounceService';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
-import Step0_DynVehicleManufacturer from '../../components/Products/Step0_DynVehicleManufacturer';
+import { MessageContext } from '../../context/MessageContext';
+import Step0_Manufacturer from '../../components/Products/Step0_Manufacturer';
 import Step1MotoDetails from '../../components/Products/moto/Step1_MotoDetails';
 import Step2MotoStatus from '../../components/Products/moto/Step2_MotoStatus';
 import Step3MotoOwner from '../../components/Products/moto/Step3_MotoOwner';
@@ -12,7 +12,7 @@ import {vehicleTypes} from '../../business/vehicleTypes'
 
 const MotorCyclesForm = (props) => {
     const router = useRouter();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const { t } = useTranslation();
 
     const onFinalSubmit = async data => {

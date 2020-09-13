@@ -10,7 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import { useAuth } from '../../../context/AuthProvider';
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import { MessageContext } from '../../../context/MessageContext';
+import { ModalContext } from '../../../context/ModalContext'
 import UsersService from '../../../services/UsersService';
 import AvatarPreview from '../../../components/Avatar/AvatarPreview';
 import AnnounceCard from '../../../components/AnnounceCard';
@@ -31,24 +32,8 @@ const Profile = () => {
     const router = useRouter();
     const { username } = router.query
     const { authenticatedUser, isAuthenticated, setForceLoginModal } = useAuth();
-    const { dispatchModalError } = useContext(ModalDialogContext);
-    const [state, setState] = useState({
-        err: null,
-        stateReady: false,
-        isSelf: false,
-        isAdmin: false,
-        profile: new UserModel()
-    });
-
-    const [filterState, setFilterState] = useState({
-        loading: false,
-        sorter: {},
-        filters: {},
-        page: 1,
-        total: 0
-    });
-
-    const profile = state.profile
+    const { dispatchModalError } = useContext(MessageContext);
+    const { dispatchModalState } = useContext(ModalContext);
     const [followerCounter, setFollowersCounter] = useState(0);
     const [alreadyFollowProfile, setAlreadyFollowProfile] = useState(false);
     const [openModalContact, setOpenModalContact] = useState(false);

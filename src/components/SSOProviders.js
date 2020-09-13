@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import GoogleLogin from 'react-google-login';
 import useTranslation from 'next-translate/useTranslation';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-import { ModalDialogContext } from '../context/ModalDialogContext';
+import { MessageContext } from '../context/MessageContext';
 import AuthService from '../services/AuthService';
 import Loader from './Loader';
 import config from '../config/config';
@@ -15,7 +15,7 @@ const SSOProviders = ({ col }) => {
     const { redirect } = router.query;
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
-    const { dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModalError } = useContext(MessageContext);
 
     const startAuth = async (provider, data) => {
         setIsLoading(true);

@@ -5,7 +5,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import TableMUI from '../TableMUI';
 import AnnounceService from '../../../services/AnnounceService';
 import AnnounceModel from '../../../models/announce.model'
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import { MessageContext } from '../../../context/MessageContext';
 import TablePaginationActions from '../TablePaginationActions';
 import { getTimeAgo } from '../../../libs/utils';
 import StatusBullet from './components/StatusBullet';
@@ -15,7 +15,7 @@ import ActivatedBullet from './components/ActivatedBullet';
 const AdsTable = () => {
     const rowsLength = 60;
     const router = useRouter();
-    const { dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModalError } = useContext(MessageContext);
     const [loading, setLoading] = useState(false);
     const [pageIndex, setPageIndex] = useState(0);
     const [resultFetch, setResultsFetch] = React.useState({

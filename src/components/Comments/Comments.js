@@ -3,14 +3,14 @@ import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import AnnounceClass from '../../models/announce.model';
 import { useAuth } from '../../context/AuthProvider';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { MessageContext } from '../../context/MessageContext';
 import commentsService from '../../services/CommentsService';
 import CommentsList from './CommentsList'
 
 const Comments = ({ announceRaw }) => {
     const router = useRouter();
     const { isAuthenticated } = useAuth();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const textareaCommentRef = useRef();
     const announce = new AnnounceClass(announceRaw);
     const [comments, setComments] = useState(announce.getComments);

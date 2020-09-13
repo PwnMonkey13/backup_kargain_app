@@ -7,7 +7,7 @@ import UserModel from '../../../models/user.model'
 import TableMUI from '../TableMUI';
 import BulletPoint from '../../BulletPoint';
 import TablePaginationActions from '../TablePaginationActions';
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import { MessageContext } from '../../../context/MessageContext';
 import ActivatedBullet from './components/ActivatedBullet'
 import IsProBullet from './components/IsProBullet'
 
@@ -19,7 +19,7 @@ const BooleanBullet = (value) => {
 const UsersTable = () => {
     const rowsLength = 60;
     const router = useRouter();
-    const { dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModalError } = useContext(MessageContext);
     const [loading, setLoading] = useState(false);
     const [pageIndex, setPageIndex] = useState(0);
     const [resultFetch, setResultsFetch] = useState({

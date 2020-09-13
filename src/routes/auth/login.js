@@ -6,7 +6,7 @@ import nextCookies from 'next-cookies';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { EmailInput, PasswordInput } from '../../components/Form/Inputs';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { MessageContext } from '../../context/MessageContext';
 import FieldWrapper from '../../components/Form/FieldWrapper';
 import SSOProviders from '../../components/SSOProviders';
 import CTAButton from '../../components/CTAButton';
@@ -18,7 +18,7 @@ export default ({ forceLogout }) => {
     const { logout } = useAuth();
     const { t } = useTranslation();
     const { redirect } = router.query;
-    const { dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModalError } = useContext(MessageContext);
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all'

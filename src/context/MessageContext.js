@@ -1,8 +1,8 @@
 import React, { createContext, useEffect, useState } from 'react';
 
-const ModalDialogContext = createContext({});
+const MessageContext = createContext({});
 
-const ModalDialogContextProvider = ({ children }) => {
+const MessageContextProvider = ({ children }) => {
     const [state, setState] = useState({
         active: false,
         type: null,
@@ -53,16 +53,14 @@ const ModalDialogContextProvider = ({ children }) => {
     }
 
     return (
-        <ModalDialogContext.Provider value={{
+        <MessageContext.Provider value={{
             modalState : state,
             dispatchModal,
             dispatchModalError
         }}>
             {children}
-        </ModalDialogContext.Provider>
+        </MessageContext.Provider>
     );
 };
 
-const ModalDialogContextConsumer = ModalDialogContext.Consumer;
-
-export { ModalDialogContext, ModalDialogContextProvider, ModalDialogContextConsumer };
+export { MessageContext, MessageContextProvider };

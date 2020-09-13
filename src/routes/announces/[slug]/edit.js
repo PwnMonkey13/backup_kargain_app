@@ -19,7 +19,7 @@ import { themeColors } from '../../../theme/palette';
 import resolveObjectKey from '../../../libs/resolveObjectKey';
 import AnnounceService from '../../../services/AnnounceService';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import { MessageContext } from '../../../context/MessageContext';
 import FieldWrapper from '../../../components/Form/FieldWrapper';
 import TextInput from '../../../components/Form/Inputs/TextInput';
 import NumberInput from '../../../components/Form/Inputs/NumberInput';
@@ -302,8 +302,9 @@ const AnnounceEdit = () => {
 const MultiTabsForm = ({ announce, formRef, activeTab, slug, defaultValues }) => {
     const refImg = useRef();
     const theme = useTheme();
-    const { t } = useTranslation();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { t, lang } = useTranslation();
+    const vehicleType = announce.getVehicleType;
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true
     });

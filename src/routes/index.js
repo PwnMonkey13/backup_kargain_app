@@ -6,7 +6,7 @@ import { useRouter} from 'next/router'
 import { makeStyles } from '@material-ui/core/styles'
 import useIsMounted from '../hooks/useIsMounted';
 import AnnounceService from '../services/AnnounceService';
-import { ModalDialogContext } from '../context/ModalDialogContext'
+import { MessageContext } from '../context/MessageContext'
 import HomeFilters from '../components/Filters/Home/HomeFilters'
 
 const useStyles = makeStyles((theme) => ({
@@ -42,8 +42,7 @@ const SearchPage = ( ) => {
     const classes = useStyles()
     const { query } = router.query;
     const isMounted = useIsMounted()
-    const {t} = useTranslation()
-    const { dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModalError } = useContext(MessageContext);
     const [state, setState] = useState({
         loading: false,
         sorter: {},

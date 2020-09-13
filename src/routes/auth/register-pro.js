@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import useTranslation from 'next-translate/useTranslation';
 import Typography from '@material-ui/core/Typography';
 import AuthService from '../../services/AuthService';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { MessageContext } from '../../context/MessageContext';
 import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../components/Form/Inputs';
 import FieldWrapper from '../../components/Form/FieldWrapper';
 import SelectCountryFlags from '../../components/Form/Inputs/SelectCountryFlags';
@@ -19,7 +19,7 @@ const formConfig = {
 
 const RegisterPro = () => {
     const { control, errors, getValues, watch, handleSubmit} = useForm(formConfig);
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const { t } = useTranslation();
 
     const onSubmit = (form) => {

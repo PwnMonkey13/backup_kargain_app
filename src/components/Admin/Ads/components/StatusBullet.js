@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { ModalDialogContext } from '../../../../context/ModalDialogContext';
+import { MessageContext } from '../../../../context/MessageContext';
 import AnnounceService from '../../../../services/AnnounceService';
 import NiceSelect, { components } from 'react-select';
 import Button from '@material-ui/core/Button';
@@ -39,7 +39,7 @@ const StatusBullet = ({ slug, status: statusProps }) => {
     const classes = useStyles();
     const [status, setStatus] = useState(statusProps);
     const [clicked, setClicked] = useState(false);
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const [selectedOption, setSelectedOption] = useState(null);
     const options = [
         {

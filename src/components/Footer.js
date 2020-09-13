@@ -6,12 +6,12 @@ import TwitterIcon from '@material-ui/icons/Twitter'
 import InstagramIcon from '@material-ui/icons/Instagram'
 import FacebookIcon from '@material-ui/icons/Facebook'
 import { useForm } from 'react-hook-form'
-import { ModalDialogContext } from '../context/ModalDialogContext'
+import { MessageContext } from '../context/MessageContext'
 import UsersService from '../services/UsersService'
 
 const Footer = () => {
     const { t } = useTranslation()
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext)
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext)
     const { register, handleSubmit } = useForm()
 
     const onSubmitNewsletter = (data) => {

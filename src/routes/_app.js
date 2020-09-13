@@ -5,7 +5,7 @@ import withGA from 'next-ga'
 import PropTypes from 'prop-types';
 import DynamicNamespaces from 'next-translate/DynamicNamespaces';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
-import { ModalDialogContextProvider } from '../context/ModalDialogContext';
+import { MessageContextProvider } from '../context/MessageContext';
 import { AuthProvider, useAuth } from '../context/AuthProvider';
 import { FormContextProvider } from '../context/FormContext';
 import AdminLayout from '../components/Admin/Layout/AdminLayout';

@@ -23,7 +23,8 @@ import TagsList from '../../../components/Tags/TagsList';
 import CTALink from '../../../components/CTALink';
 import AnnounceService from '../../../services/AnnounceService';
 import AnnounceModel from '../../../models/announce.model';
-import { ModalDialogContext } from '../../../context/ModalDialogContext';
+import { MessageContext } from '../../../context/MessageContext';
+import { ModalContext } from '../../../context/ModalContext';
 import { useAuth } from '../../../context/AuthProvider';
 import { getTimeAgo } from '../../../libs/utils';
 import ModalContact from '../../../components/ModalContact';
@@ -64,9 +65,8 @@ const Announce = () => {
     const { slug } = router.query
     const { t, lang } = useTranslation();
     const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
-    const { dispatchModalError } = useContext(ModalDialogContext);
-    const [openModalContact, setOpenModalContact] = useState(false);
-    const [openModalFollowers, setOpenModalFollowers] = useState(false);
+    const { dispatchModalError } = useContext(MessageContext);
+    const { dispatchModalState } = useContext(ModalContext);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true
     });

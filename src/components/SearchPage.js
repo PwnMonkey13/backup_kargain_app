@@ -9,14 +9,14 @@ import PaginateResults from './PaginateResults';
 import Sorters from './Sorters/Sorters';
 import AnnounceCard from './AnnounceCard';
 import AnnounceService from '../services/AnnounceService'
-import { ModalDialogContext } from '../context/ModalDialogContext';
+import { MessageContext } from '../context/MessageContext';
 import { useAuth } from '../context/AuthProvider';
 import AdvancedFilters from './Filters/Advanced/AdvancedFilters'
 import Loader from '../components/Loader'
 
 const SearchPage = ({fetchFeed, ...props}) => {
     const { t } = useTranslation()
-    const { dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModalError } = useContext(MessageContext);
     const { isAuthenticated } = useAuth();
     const [filtersOpened] = useState(false);
     const [state, setState] = useState({

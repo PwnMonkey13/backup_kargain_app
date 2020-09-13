@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { ModalDialogContext } from '../../../../context/ModalDialogContext';
+import { MessageContext } from '../../../../context/MessageContext';
 import AnnounceService from '../../../../services/AnnounceService';
 import NiceSelect, { components } from 'react-select';
 import Button from '@material-ui/core/Button';
@@ -40,7 +40,7 @@ const VisibleBullet = ({ slug, visible: visibleProps }) => {
     const classes = useStyles();
     const [visible, setVisible] = useState(visibleProps);
     const [clicked, setClicked] = useState(false);
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const [selectedOption, setSelectedOption] = useState(null);
     const options = [
         {

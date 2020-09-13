@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { EmailInput } from '../../components/Form/Inputs';
 import FieldWrapper from '../../components/Form/FieldWrapper';
 import AuthService from '../../services/AuthService';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { MessageContext } from '../../context/MessageContext';
 import CTAButton from '../../components/CTAButton';
 import { useAuth } from '../../context/AuthProvider';
 import useTranslation from 'next-translate/useTranslation'
@@ -11,7 +11,7 @@ import useTranslation from 'next-translate/useTranslation'
 const ForgottenForm = () => {
     const { t } = useTranslation()
     const { authenticatedUser } = useAuth();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',

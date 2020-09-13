@@ -7,7 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import AuthService from '../../services/AuthService';
 import FieldWrapper from '../../components/Form/FieldWrapper';
 import { EmailInput } from '../../components/Form/Inputs';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { MessageContext } from '../../context/MessageContext';
 import Loader from '../../components/Loader';
 import CTALink from '../../components/CTALink';
 
@@ -15,7 +15,7 @@ const ConfirmAccount = () => {
     const router = useRouter();
     const { token } = router.query;
     const { t } = useTranslation()
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const [activated, setActivated] = useState(false);
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',

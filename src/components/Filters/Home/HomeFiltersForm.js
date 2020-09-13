@@ -9,7 +9,7 @@ import SearchLocationInput from '../../Form/Inputs/SearchLocationInput';
 import { RadioChoicesGas } from '../../Products/car/form.data';
 import useAddress from '../../../hooks/useAddress';
 import VehiclesService from '../../../services/VehiclesService'
-import { ModalDialogContext } from '../../../context/ModalDialogContext'
+import { MessageContext } from '../../../context/MessageContext'
 import {vehicleTypeRefModels} from '../../../business/vehicleTypes'
 
 // const popularMakesOptions = [
@@ -77,7 +77,7 @@ const HomeFiltersForm = ({ vehicleType, methods }) => {
     const countrySelect = watch('countrySelect');
     const selectedMake = watch('manufacturer.make')
     const selectedModel = watch('manufacturer.model')
-    const { dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModalError } = useContext(MessageContext);
     const [manufacturersData, setManufacturersData] = useState({
         makes: [],
         models: [],

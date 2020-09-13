@@ -10,12 +10,12 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography';
 import Comment from '../../models/comment.model';
 import { useAuth } from '../../context/AuthProvider'
-import { ModalDialogContext } from '../../context/ModalDialogContext'
+import { MessageContext } from '../../context/MessageContext'
 import CommentsService from '../../services/CommentsService'
 
 const CommentsList = ({ comments }) => {
     const { authenticatedUser } = useAuth();
-    const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
     const [openDialogRemove, setOpenDialogRemove] = useState(false);
     const [selectCommentID, setSelectedCommentID] = useState()
 

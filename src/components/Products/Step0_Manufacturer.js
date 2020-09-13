@@ -8,7 +8,7 @@ import StepNavigation from '../Form/StepNavigation';
 import { SelectInput } from '../Form/Inputs';
 import useIsMounted from '../../hooks/useIsMounted';
 import { FormContext } from '../../context/FormContext';
-import { ModalDialogContext } from '../../context/ModalDialogContext';
+import { MessageContext } from '../../context/MessageContext';
 import VehiclesService from '../../services/VehiclesService';
 import { vehicleTypeRefModels } from '../../business/vehicleTypes'
 
@@ -20,7 +20,7 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
     const isCar = vehicleType === "car"
 
     const vehicleTypeModel = vehicleTypeRefModels[vehicleType]
-    const { dispatchModalError } = useContext(ModalDialogContext);
+    const { dispatchModalError } = useContext(MessageContext);
     const { formDataContext } = useContext(FormContext);
     const { watch, control, errors, setValue, handleSubmit } = useForm({
         mode: 'onChange',

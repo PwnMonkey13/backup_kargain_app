@@ -12,7 +12,7 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import useTranslation from 'next-translate/useTranslation';
 import { ReactComponent as StarSVG } from '../../public/images/svg/star.svg';
 import { ReactComponent as StarSVGYellow } from '../../public/images/svg/star-yellow.svg';
-import { ModalDialogContext } from '../context/ModalDialogContext';
+import { MessageContext } from '../context/MessageContext';
 import CommentsListLight from './Comments/CommentsList';
 import AnnounceService from '../services/AnnounceService';
 
