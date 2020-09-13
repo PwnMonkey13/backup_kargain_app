@@ -8,7 +8,7 @@ import AuthService from '../../services/AuthService';
 import FieldWrapper from '../../components/Form/FieldWrapper';
 import { EmailInput } from '../../components/Form/Inputs';
 import { MessageContext } from '../../context/MessageContext';
-import Loader from '../../components/Loader';
+import Loading from '../../components/Loading';
 import CTALink from '../../components/CTALink';
 
 const ConfirmAccount = () => {
@@ -84,7 +84,7 @@ const ConfirmAccount = () => {
             </Container>
         );
     }
-    return <Loader/>;
+    return <Loading/>;
 };
 
 export default ConfirmAccount;

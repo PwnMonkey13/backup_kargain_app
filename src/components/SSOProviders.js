@@ -7,7 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { MessageContext } from '../context/MessageContext';
 import AuthService from '../services/AuthService';
-import Loader from './Loader';
+import Loading from './Loading';
 import config from '../config/config';
 
 const SSOProviders = ({ col }) => {
@@ -70,7 +70,7 @@ const SSOProviders = ({ col }) => {
 
     return (
         <div className={clsx('sso d-flex', col && 'flex-column', 'justify-content-center mx-auto my-2')}>
-            {isLoading && <Loader fullscreen/>}
+            {isLoading && <Loading fullscreen/>}
 
             <GoogleLogin
                 clientId={config.google.sso.CLIENT_ID}

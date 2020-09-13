@@ -5,7 +5,7 @@ import { Col } from 'reactstrap'
 import Typography from '@material-ui/core/Typography'
 import Modal from '@material-ui/core/Modal'
 import Fade from '@material-ui/core/Fade'
-import Loader from '../../components/Loader'
+import Loading from '../../components/Loading'
 import UserModel from '../../models/user.model'
 import { SearchContext } from '../../context/SearchContext'
 import AnnounceCardLight from '../AnnounceCardLight'
@@ -74,7 +74,7 @@ const ModalSearchResults = () => {
                     <div className={classes.popupContent}>
                         <Col sm={12} md={5}>
                             <div className={classes.wrapperLeft}>
-                                {loading && <Loader/>}
+                                {loading && <Loading/>}
                                 <Typography variant="h3">
                                     Membres ({results?.users?.length})
                                 </Typography>
@@ -104,7 +104,7 @@ const ModalSearchResults = () => {
                                 Announces ({results?.announces?.length})
                             </Typography>
                             <div className={classes.listRows}>
-                                {loading && <Loader/>}
+                                {loading && <Loading/>}
                                 {results?.announces?.length !== 0 ? results.announces.map((announceRaw, index) => {
                                     return(
                                         <div key={index} className="m-1">

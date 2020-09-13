@@ -20,7 +20,7 @@ import AvatarPreview from '../../../components/Avatar/AvatarPreview';
 import AnnounceCard from '../../../components/AnnounceCard';
 import CTALink from '../../../components/CTALink';
 import Tabs from '../../../components/Tabs/Tabs';
-import Loader from '../../../components/Loader';
+import Loading from '../../../components/Loading';
 import AdvancedFilters from '../../../components/Filters/Advanced/AdvancedFilters'
 import { ReactComponent as StarSVGYellow } from '../../../../public/images/svg/star-yellow.svg'
 import { ReactComponent as StarSVG } from '../../../../public/images/svg/star.svg'
@@ -157,7 +157,7 @@ const Profile = () => {
     }, [fetchAnnounces]);
 
     if (!state.stateReady) return null;
-    if(filterState.loading) return <Loader/>
+    if(filterState.loading) return <Loading/>
     if (state.err) return <Error statusCode={state.err?.statusCode}/>;
 
     return (

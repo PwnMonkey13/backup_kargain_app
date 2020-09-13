@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Loader from '../../components/Loader'
+import Loading from '../../components/Loading'
 
 const Callback = () => {
     const router = useRouter()
@@ -14,7 +14,7 @@ const Callback = () => {
 
     return (
         <div className="flex flex-colmun">
-            <Loader fullscreen={false}/>
+            <Loading fullscreen={false}/>
             <a>Redirection...</a>
         </div>
     )

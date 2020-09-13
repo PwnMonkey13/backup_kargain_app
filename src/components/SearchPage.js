@@ -12,7 +12,7 @@ import AnnounceService from '../services/AnnounceService'
 import { MessageContext } from '../context/MessageContext';
 import { useAuth } from '../context/AuthProvider';
 import AdvancedFilters from './Filters/Advanced/AdvancedFilters'
-import Loader from '../components/Loader'
+import Loading from '../components/Loading'
 import CTALink from './CTALink'
 
 const SearchPage = ({fetchFeed, ...props}) => {
@@ -117,7 +117,7 @@ const SearchPage = ({fetchFeed, ...props}) => {
                     </section>
 
                     <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
-                        {state.loading ? <Loader/> : (
+                        {state.loading ? <Loading/> : (
                             <>
                                 {state.announces.length !== 0 ? (
                                     <Row className="my-2 d-flex justify-content-center">
