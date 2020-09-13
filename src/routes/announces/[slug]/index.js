@@ -39,10 +39,13 @@ const useStyles = makeStyles(() => ({
             flex: 1
         }
     },
-    priceRow : {
-        display: 'flex',
-        justifyContent : "space-between"
+    
+    cardTopInfos: {
+        display : 'flex',
+        justifyContent : 'space-between',
+        margin: '1rem 0'
     },
+    
     priceStarsWrapper: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -51,8 +54,7 @@ const useStyles = makeStyles(() => ({
         borderBottom : '1px solid'
     },
     wysiwyg: {
-        margin: '1rem',
-        padding: '1rem'
+        margin: '1rem'
     }
 }));
 
@@ -89,8 +91,8 @@ const Announce = () => {
     };
 
     const checkIfAlreadyLike = () => {
-        const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite?.id === state.announce.getID);
-        const matchAnnounceLike = state.announce.getLikes.find(like => like?.user?.id === authenticatedUser.getID);
+        const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite.getID === announce.getID);
+        const matchAnnounceLike = announce.getLikes.find(like => like.getAuthor.getID === authenticatedUser.getID);
         return !!matchUserFavorite || !!matchAnnounceLike;
     };
 
@@ -102,11 +104,17 @@ const Announce = () => {
         
         try {
             if (alreadyLikeCurrentUser) {
-                await AnnounceService.removeLikeLoggedInUser(state.announce.getID);
-                counter -= 1;
+                await AnnounceService.removeLikeLoggedInUser(announce.getID);
+                setState(state => ({
+                    ...state,
+                    likesCounter : Math.max(0, counter - 1)
+                }))
             } else {
-                await AnnounceService.addLikeLoggedInUser(state.announce.getID);
-                counter += 1;
+                await AnnounceService.addLikeLoggedInUser(announce.getID);
+                setState(state => ({
+                    ...state,
+                    likesCounter : counter + 1
+                }))
             }
         } catch (err) {
             dispatchModalError({ err });
@@ -117,6 +125,8 @@ const Announce = () => {
         try{
             const result = await AnnounceService.getAnnounceBySlug(slug);
             const { announce, isAdmin, isSelf } = result
+            console.log(result)
+            
             setState(state => ({
                 ...state,
                 stateReady : true,
@@ -140,8 +150,6 @@ const Announce = () => {
     if (!state.stateReady) return null;
     if (state.err) return <Error statusCode={state.err?.statusCode}/>;
 
-    console.log(state)
-
     return (
         <Container>
     
@@ -157,18 +165,13 @@ const Announce = () => {
             )}
 
             <div className="objava-wrapper">
-                <NextSeo
-                    title={`${state.announce.getTitle} - Kargain`}
-                    description={state.announce.getTheExcerpt()}
-                />
-
-                {!state.announce.getIsActivated && (
+                {!announce.getIsActivated && (
                     <Alert severity="warning">
                         Your announce is hidden from public & waiting for moderator activation
                     </Alert>
                 )}
 
-                {!state.announce.getIsVisible && (
+                {!announce.getIsVisible && (
                     <Alert color="warning">
                         Your announce is currently not published (draft mode)
                     </Alert>
@@ -178,39 +181,47 @@ const Announce = () => {
                     <Col sm={12} md={6}>
                         <div className="top">
                             <Typography as="h2" variant="h2">
-                                {state.announce.getTitle}
+                                {announce.getAnnounceTitle}
                             </Typography>
-                            <Typography as="h2" variant="h3">
-                                {state.announce.getManufacturerFormated}
-                            </Typography>
-
-                            <div className={classes.priceRow}>
-                                <p className="price-announce">
-                                    {state.announce.getPrice} €TTC
-                                    <span> {state.announce.getPriceHT} €HT</span>
-                                </p>
-
-                                <p>
-                                    <small>{getTimeAgo(state.announce.getCreationDate.raw, lang)}</small>
-                                    <img
-                                        className="mx-1"
-                                        src='/images/share.png'
-                                        alt="share"
-                                        onClick={() => {
-                                            console.log('TODO SHARE')
-                                        }}
-                                    />
-                                </p>
+    
+                            <div className={classes.cardTopInfos}>
+                                <div className="price-announce">
+                                    {(isAuthenticated && authenticatedUser.getIsPro) ? (
+                                        <>
+                                            <span className="mx-1">
+                                                <strong>
+                                                    {announce.getPriceHT}€ HT
+                                                </strong>
+                                            </span>
+                                            <span> - </span>
+                                            <span className="mx-1">
+                                                <small>{announce.getPrice}€</small>
+                                            </span>
+            
+                                        </>
+                                    ) : (
+                                        <span>{announce.getPrice} €</span>
+                                    )}
+                                </div>
+    
+                                <div className="icons-star-prof"
+                                    onClick={() => dispatchModalState({
+                                        openModalShare : true,
+                                        modalShareAnnounce : announce
+                                    })}>
+                                    <small className="mx-2"> {getTimeAgo(announce.getCreationDate.raw, lang)}</small>
+                                    <img src="/images/share.png" alt=""/>
+                                </div>
                             </div>
                         </div>
 
                         <div className="pics">
-                            {state.announce.getCountImages > 0 && (
+                            {announce.getCountImages > 0 && (
                                 <>
-                                    <GalleryViewer images={state.announce.getImages} ref={refImg}/>
+                                    <GalleryViewer images={announce.getImages} ref={refImg}/>
                                     {isDesktop && (
                                         <GalleryImgsLazy
-                                            images={state.announce.getImages}
+                                            images={announce.getImages}
                                             handleCLickImg={handleCLickImg}
                                         />
                                     )}
@@ -223,39 +234,39 @@ const Announce = () => {
                         <div className={classes.formRow}>
                             <div className="pic" style={{ flex: 1 }}>
                                 <img
-                                    src={state.announce.getAuthor.getAvatar}
+                                    src={announce.getAuthor.getAvatar}
                                     className="img-profile-wrapper avatar-preview"
                                     width={80}
-                                    alt={state.announce.getTitle}
+                                    alt={announce.getTitle}
                                 />
                             </div>
 
                             <div style={{ flex: 4 }}>
-                                <Link href={`/profile/${state.announce.getAuthor.getUsername}`}>
+                                <Link href={`/profile/${announce.getAuthor.getUsername}`}>
                                     <a>
                                         <Typography variant="h3" component="h2">
-                                            {state.announce.getAuthor.getFullName}
+                                            {announce.getAuthor.getFullName}
                                         </Typography>
                                     </a>
                                 </Link>
 
-                                {state.announce.getAdOrAuthorCustomAddress(['city', 'postCode']) && (
-                                    <div className="top-profile-data-wrapper">
-                                        <a href={state.announce.buildAddressGoogleMapLink()}
+                                {announce.getAdOrAuthorCustomAddress(['city', 'postCode', 'country']) && (
+                                    <div className="top-profile-location">
+                                        <a href={announce.buildAddressGoogleMapLink()}
                                             target="_blank"
                                             rel="noreferrer">
                                             <span className="top-profile-location">
                                                 <img className="mx-1" src="/images/location.png" alt=""/>
-                                                {state.announce.getAdOrAuthorCustomAddress()}
+                                                {announce.getAdOrAuthorCustomAddress()}
                                             </span>
                                         </a>
                                     </div>
                                 )}
-                                {state.announce.showCellPhone && <p> {state.announce.getAuthor.getPhone} </p> }
+                                {announce.showCellPhone && <p> {announce.getAuthor.getPhone} </p> }
                             </div>
                         </div>
 
-                        <TagsList tags={state.announce.getTags}/>
+                        <TagsList tags={announce.getTags}/>
 
                         <div className={clsx('price-stars-wrapper', classes.priceStarsWrapper)}>
                             <div className="icons-profile-wrapper">
@@ -263,41 +274,52 @@ const Announce = () => {
                                     <span onClick={()=>handleClickLikeButton()}>
                                         {alreadyLikeCurrentUser ? <StarSVGYellow/> : <StarSVG/>}
                                     </span>
-                                    <span onClick={() => handleOpenModalFollowers()}>
-                                        {state.likesCounter}
-                                    </span>
+                                    <div className="mx-1">
+                                        <span>
+                                            {announce.getCountLikes} {t('vehicles:like', { count : state.likesCounter})}
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <div className="icons-star-prof">
                                     <CommentIcon/>
-                                    <span>{state.announce.getCountComments}</span>
+                                    <div className="mx-1">
+                                        <span>
+                                            {announce.getCountComments} {t('vehicles:comment', { count : announce.getCountComments })}
+                                        </span>
+                                    </div>
                                 </div>
-
-                                {state.isSelf ? (
+    
+                                {(state.isAdmin || state.isSelf) ? (
                                     <div className="mx-2">
                                         <CTALink
-                                            href={state.announce.getAnnounceEditLink}
+                                            href={announce.getAnnounceEditLink}
                                             title={t('vehicles:edit-announce')}
                                         />
                                     </div>
                                 ) : (
                                     <div
                                         className="icons-star-prof mx-2"
-                                        onClick={()=>handleOpenModalContact(true)}>
+                                        onClick={() => dispatchModalState({
+                                            openModalMessaging : true,
+                                            modalMessagingProfile : announce.getAuthor
+                                        })}>
                                         <MailOutlineIcon/>
                                     </div>
                                 )}
                             </div>
                         </div>
 
-                        <Comments announceRaw={state.announce.getRaw}/>
+                        <Comments announceRaw={announce.getRaw}/>
                     </Col>
                 </Row>
 
                 <section className="my-2">
-                    <Typography component="h3" variant="h3">{t('vehicles:vehicle-data')}</Typography>
+                    <Typography component="h3" variant="h3">
+                        {t('vehicles:vehicle-data')}
+                    </Typography>
                     <CarInfos
-                        announce={state.announce}
+                        announce={announce}
                         enableThirdColumn
                     />
                 </section>
@@ -305,7 +327,7 @@ const Announce = () => {
                 <section className="my-2">
                     <Typography component="h3" variant="h3">{t('vehicles:equipments')}</Typography>
                     <Row>
-                        {state.announce.getVehicleEquipments && state.announce.getVehicleEquipments.map((equipment, index) => {
+                        {announce.getVehicleEquipments.map((equipment, index) => {
                             return (
                                 <Col sm={6} md={3} key={index}>
                                     <div className="equipment m-3">
@@ -320,17 +342,19 @@ const Announce = () => {
                 <section className="my-2">
                     <Typography component="h3" variant="h3">{t('vehicles:description')}</Typography>
                     <div className={classes.wysiwyg}>
-                        {state.announce.getDescription}
+                        <Typography>
+                            {announce.getDescription}
+                        </Typography>
                     </div>
                 </section>
 
                 <section className="my-2">
                     <Typography component="h3" variant="h3">
-                        {t('vehicles:data-sheet')} ({state.announce.getCountDamages})
+                        {t('vehicles:data-sheet')}
                     </Typography>
                     <DamageViewerTabs
-                        tabs={state.announce.getDamagesTabs}
-                        vehicleType={state.announce.getVehicleType}
+                        tabs={announce.getDamagesTabs}
+                        vehicleType={announce.getVehicleType}
                     />
                 </section>
             </div>

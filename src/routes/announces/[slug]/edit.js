@@ -30,27 +30,15 @@ import AnnounceImagesAutoUpload from '../../../components/Uploads/AnnounceImages
 import DamageSelectorControlled from '../../../components/Damages/DamageSelectorControlled';
 import GalleryViewer from '../../../components/Gallery/GalleryViewer';
 import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy';
-import NumberInputMUI from '../../../components/Form/Inputs/NumberInputMUI';
 import CheckboxGroup from '../../../components/Form/Inputs/CheckboxGroup';
 import CheckboxMUI from '../../../components/Form/Inputs/CheckboxMUI';
 import CTALink from '../../../components/CTALink';
 import ValidationErrors from '../../../components/Form/Validations/ValidationErrors';
 import AnnounceModel from '../../../models/announce.model'
-import Error from '../../_error';
-import {
-    CheckboxOptionsEquipments,
-    RadioChoicesEmission,
-    RadioChoicesEngine,
-    RadioChoicesExternalColor,
-    RadioChoicesGas,
-    RadioChoicesMaterials,
-    RadioChoicesPaints,
-    RadioFunctionVehicle,
-    RadioTypeFunction,
-    RadioVehicleGeneralState
-} from '../../../components/Products/car/form.data';
+import {vehicleTypes} from '../../../business/vehicleTypes'
 import { SelectCountryFlags } from '../../../components/Form/Inputs'
 import SearchLocationInput from '../../../components/Form/Inputs/SearchLocationInput'
+import Error from '../../_error';
 
 const useStyles = makeStyles(() => ({
 
@@ -199,7 +187,6 @@ const AnnounceEdit = () => {
         isAdmin : false,
         announce : new AnnounceModel(),
         likesCounter : 0
-
     });
 
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
@@ -221,6 +208,9 @@ const AnnounceEdit = () => {
         try{
             const result = await AnnounceService.getAnnounceBySlug(slug);
             const { announce, isAdmin, isSelf } = result
+    
+            console.log(result)
+            
             setState(state => ({
                 ...state,
                 stateReady : true,
@@ -314,7 +304,31 @@ const MultiTabsForm = ({ announce, formRef, activeTab, slug, defaultValues }) =>
         validateCriteriaMode: 'all',
         defaultValues
     });
-
+    
+    const [formData, setFormData] = useState({
+        RadioVehicleGeneralState: [],
+        CheckboxOptionsEquipments: [],
+        RadioChoicesGas: [],
+        RadioFunctionVehicle: [],
+        RadioTypeFunction: [],
+        RadioChoicesEngine: [],
+        RadioChoicesEmission: [],
+        RadioChoicesPaints: [],
+        RadioChoicesMaterials: [],
+        RadioChoicesExternalColor: [],
+    });
+    
+    const getData = useCallback(async () => {
+        if(vehicleType){
+            const data = lang === "fr" ? await import(`../../../components/Products/${vehicleType}/form.data.js`) : await import('../../../components/Products/car/form.data_en.js')
+            setFormData(data);
+        }
+    },[vehicleType, lang]);
+    
+    useEffect(() => {
+        getData();
+    }, [getData]);
+    
     const onSubmit = (form) => {
         const updates = inflate(Object.keys(allowedFields).reduce((carry, key) => {
             const value = resolveObjectKey(form, key);
@@ -361,10 +375,13 @@ const MultiTabsForm = ({ announce, formRef, activeTab, slug, defaultValues }) =>
             <TabContent activeTab={activeTab}>
                 <TabPane tabId={0}>
                     <VehicleInfosPartialForm {...{
+                        vehicleType,
+                        formData,
                         control,
                         errors
                     }} />
                 </TabPane>
+                
                 <TabPane tabId={1}>
                     <div className="form-fields">
                         <Typography component="h3" variant="h3" className="text-center" gutterBottom>
@@ -372,7 +389,7 @@ const MultiTabsForm = ({ announce, formRef, activeTab, slug, defaultValues }) =>
                         </Typography>
                         <CheckboxGroup
                             name="equipments"
-                            options={CheckboxOptionsEquipments}
+                            options={formData.CheckboxOptionsEquipments}
                             defaultOptions={['ABS', 'ESP']}
                             control={control}
                             errors={errors}
@@ -386,6 +403,7 @@ const MultiTabsForm = ({ announce, formRef, activeTab, slug, defaultValues }) =>
                     </Typography>
                     <DamageSelectorControlled
                         name="damages"
+                        vehicleType={vehicleType}
                         control={control}
                         defaultValues={announce.getDamagesTabs}
                         selectorFullWidth
@@ -429,8 +447,9 @@ const MultiTabsForm = ({ announce, formRef, activeTab, slug, defaultValues }) =>
     )
 }
 
-const VehicleInfosPartialForm = ({ control, errors }) => {
+const VehicleInfosPartialForm = ({ vehicleType, formData, control, errors }) => {
     const { t } = useTranslation();
+    
     return (
         <div className="form-fields">
             <Typography component="h3" variant="h3" className="text-center" gutterBottom>
@@ -496,8 +515,8 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
             <Row>
                 <Col>
                     <FieldWrapper label={t('vehicles:gas')}>
-                        <SelectInput name="vehicleEngine.gas"
-                            options={RadioChoicesGas}
+                        <SelectInput name="vehicleEngineGas"
+                            options={formData.RadioChoicesGas}
                             control={control}
                             errors={errors}
                         />
@@ -507,7 +526,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     <FieldWrapper label={t('vehicles:gear-box')}>
                         <SelectInput
                             name="vehicleEngineType"
-                            options={RadioChoicesEngine}
+                            options={formData.RadioChoicesEngine}
                             control={control}
                             errors={errors}
                         />
@@ -517,8 +536,9 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
 
             <Row>
                 <Col>
-                    <FieldWrapper label="Puissance kW">
-                        <NumberInput name="powerKw"
+                    <FieldWrapper label={t('vehicles:power')}>
+                        <NumberInput
+                            name="powerKw"
                             control={control}
                             errors={errors}
                             placeholder={0}
@@ -528,8 +548,9 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     </FieldWrapper>
                 </Col>
                 <Col>
-                    <FieldWrapper label="Puissance CH">
-                        <NumberInput name="powerCh"
+                    <FieldWrapper label={t('vehicles:power_ch')}>
+                        <NumberInput
+                            name="powerCh"
                             control={control}
                             errors={errors}
                             placeholder={0}
@@ -543,9 +564,10 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
             </Typography>
             <Row>
                 <Col>
-                    <FieldWrapper label="Type">
-                        <SelectInput name="vehicleFunctionType"
-                            options={RadioTypeFunction}
+                    <FieldWrapper label={t('vehicles:type')}>
+                        <SelectInput
+                            name="vehicleFunctionType"
+                            options={formData.RadioTypeFunction}
                             control={control}
                             errors={errors}
                         />
@@ -555,7 +577,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     <FieldWrapper label={t('vehicles:vehicle_function')}>
                         <SelectInput
                             name="vehicleFunction"
-                            options={RadioFunctionVehicle}
+                            options={formData.RadioFunctionVehicle}
                             control={control}
                             errors={errors}
                         />
@@ -566,7 +588,8 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
             <Row>
                 <Col>
                     <FieldWrapper label={t('vehicles:mileage')}>
-                        <NumberInput name="mileage"
+                        <NumberInput
+                            name="mileage"
                             placeholder="20000 km"
                             control={control}
                             errors={errors}
@@ -578,7 +601,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     <FieldWrapper label={t('vehicles:vehicle-state')}>
                         <SelectInput
                             name="vehicleGeneralState"
-                            options={RadioVehicleGeneralState}
+                            options={formData.RadioVehicleGeneralState}
                             control={control}
                             errors={errors}
                         />
@@ -591,15 +614,13 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     <FieldWrapper label={t('vehicles:owners_quantity')}>
                         <SelectInput
                             name="ownersCount"
-                            options={SelectOptionsUtils([2, 3, 4, 5])}
+                            options={SelectOptionsUtils([2,3,4,5,6,7,8,9])}
                             placeholder="Select number of owners"
                             control={control}
                             errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
-
-
             </Row>
 
             <Typography component="h3" variant="h3" className="text-center" gutterBottom>
@@ -660,7 +681,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                     <FieldWrapper label={t('vehicles:class_emission')}>
                         <SelectInput
                             name="emission"
-                            options={RadioChoicesEmission}
+                            options={formData.RadioChoicesEmission}
                             control={control}
                             errors={errors}
                         />
@@ -671,37 +692,40 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
             <Typography component="h3" variant="h3" className="text-center" gutterBottom>
                 {t('vehicles:additional-data')}
             </Typography>
-            <Row>
-                <Col>
-                    <FieldWrapper label={t('vehicles:doors_quantity')}>
-                        <SelectInput
-                            name="doors"
-                            options={SelectOptionsUtils([2, 3, 4, 5])}
-                            placeholder="Select number of doors"
-                            control={control}
-                            errors={errors}
-                        />
-                    </FieldWrapper>
-                </Col>
-                <Col>
-                    <FieldWrapper label={t('vehicles:seats_quantity')}>
-                        <SelectInput
-                            name="seats"
-                            options={SelectOptionsUtils([2, 3, 4, 5])}
-                            placeholder="Select number of seats"
-                            control={control}
-                            errors={errors}
-                        />
-                    </FieldWrapper>
-                </Col>
-            </Row>
+            
+            {vehicleType !== vehicleTypes.moto && (
+                <Row>
+                    <Col>
+                        <FieldWrapper label={t('vehicles:doors_quantity')}>
+                            <SelectInput
+                                name="doors"
+                                options={SelectOptionsUtils([2,3,4,5,6,7,8,9])}
+                                placeholder="Select number of doors"
+                                control={control}
+                                errors={errors}
+                            />
+                        </FieldWrapper>
+                    </Col>
+                    <Col>
+                        <FieldWrapper label={t('vehicles:seats_quantity')}>
+                            <SelectInput
+                                name="seats"
+                                options={SelectOptionsUtils([2,3,4,5,6,7,8,9])}
+                                placeholder={t('vehicles:select_seats_quantity')}
+                                control={control}
+                                errors={errors}
+                            />
+                        </FieldWrapper>
+                    </Col>
+                </Row>
+            )}
 
             <Row>
                 <Col>
                     <FieldWrapper label={t('vehicles:paint')}>
                         <SelectInput
                             name="paint"
-                            options={RadioChoicesPaints}
+                            options={formData.RadioChoicesPaints}
                             control={control}
                             errors={errors}
                         />
@@ -712,7 +736,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
                         <SelectInput
                             name="materials"
                             isMulti
-                            options={RadioChoicesMaterials}
+                            options={formData.RadioChoicesMaterials}
                             control={control}
                             errors={errors}
                         />
@@ -721,21 +745,24 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
             </Row>
 
             <Row>
-                <Col>
-                    <FieldWrapper label={t('vehicles:internal_color')}>
-                        <SelectInput
-                            name="externalColor"
-                            options={RadioChoicesExternalColor}
-                            control={control}
-                            errors={errors}
-                        />
-                    </FieldWrapper>
-                </Col>
+                {vehicleType !== vehicleTypes.moto && (
+                    <Col>
+                        <FieldWrapper label={t('vehicles:internal_color')}>
+                            <SelectInput
+                                name="externalColor"
+                                options={formData.RadioChoicesExternalColor}
+                                control={control}
+                                errors={errors}
+                            />
+                        </FieldWrapper>
+                    </Col>
+                )}
+                
                 <Col>
                     <FieldWrapper label={t('vehicles:external_color')}>
                         <SelectInput
                             name="internalColor"
-                            options={RadioChoicesExternalColor}
+                            options={formData.RadioChoicesExternalColor}
                             control={control}
                             errors={errors}
                         />
@@ -746,7 +773,7 @@ const VehicleInfosPartialForm = ({ control, errors }) => {
     );
 };
 
-const PublicationInfosPartialForm = ({ watch, register, control, errors, handleRemove }) => {
+const PublicationInfosPartialForm = ({ watch, control, errors, handleRemove }) => {
     const classes = useStyles();
     const { t } = useTranslation();
     const [openDialogRemove, setOpenDialogRemove] = React.useState(false);
@@ -767,54 +794,47 @@ const PublicationInfosPartialForm = ({ watch, register, control, errors, handleR
                 Données de publication
             </Typography>
 
-            <FieldWrapper label="Titre de l'annonce">
-                <TextInput
-                    name="title"
+            {/*<FieldWrapper label="Titre de l'annonce">*/}
+            {/*    <TextInput*/}
+            {/*        name="title"*/}
+            {/*        control={control}*/}
+            {/*        disabled*/}
+            {/*    />*/}
+            {/*</FieldWrapper>*/}
+
+            <FieldWrapper label={t('vehicles:ad-price')}>
+                <NumberInput
+                    name="price"
+                    placeholder="15000€"
+                    errors={errors}
                     control={control}
                     rules={{
-                        required: t('vehicles:field-is-required')
+                        required: t('form_validations:required'),
+                        validate: val => {
+                            const value = Number(val);
+                            if (value < 500) return t('form_validations:min_price_{min}{currency}', { min : 500, currency : '€'});
+                            if (value > 200000) return t('form_validations:max_price_{max}{currency}', { max : 200000, currency : '€'});
+                        }
                     }}
                 />
             </FieldWrapper>
-
-            <FieldWrapper label="Description de l'annonce">
+    
+            <FieldWrapper label={t('vehicles:description')}>
                 <TextareaInput
                     name="description"
                     control={control}
                     errors={errors}
                 />
             </FieldWrapper>
-
-            <FieldWrapper label="Prix de l'annonce">
-                <NumberInputMUI
-                    name="price"
-                    control={control}
-                    errors={errors}
-                    rules={{
-                        required: 'Price is required',
-                        validate: val => {
-                            const value = Number(val);
-                            if (value < 500) return 'Min 500€';
-                            if (value > 200000) return 'Max 200 000€';
-                        }
-                    }}
-                />
-            </FieldWrapper>
-
+    
             <FieldWrapper label="Tags">
                 <TagsControlled
                     name="tags"
                     control={control}
-                    register={register}
-                    rules={{
-                        validate: {
-                            maxItems: (v) => v.length > 5 ? 'max 5' : null
-                        }
-                    }}
                     errors={errors}
                 />
             </FieldWrapper>
-
+    
             <FieldWrapper label={t('vehicles:country')}>
                 <SelectCountryFlags
                     name="countrySelect"
@@ -837,7 +857,16 @@ const PublicationInfosPartialForm = ({ watch, register, control, errors, handleR
                 <Typography component="h3" variant="h3" className="text-center" gutterBottom>
                     {t('vehicles:announce-management')}
                 </Typography>
-
+    
+                <FieldWrapper >
+                    <CheckboxMUI
+                        name="showCellPhone"
+                        label={t('vehicles:show-cell-phone')}
+                        control={control}
+                        errors={errors}
+                    />
+                </FieldWrapper>
+                
                 <CheckboxMUI
                     name="status"
                     value="active"
@@ -860,8 +889,6 @@ const PublicationInfosPartialForm = ({ watch, register, control, errors, handleR
             <Dialog
                 open={openDialogRemove}
                 onClose={handleCloseDialogRemove}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title" disableTypography>
                     {t('vehicles:confirm-suppression')}

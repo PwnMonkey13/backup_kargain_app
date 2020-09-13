@@ -56,14 +56,12 @@ const SearchPage = ( ) => {
     const fetchSearch = useCallback(async () => {
         try{
             const result = await AnnounceService.getSearchAnnouncesCount(state.filters);
-
             setState(state => ({
                 ...state,
                 announces: result.rows || [],
                 total: result.total || 0,
                 loading: false
             }))
-
         } catch (err) {
             setState(state => ({
                 ...state,
@@ -74,7 +72,7 @@ const SearchPage = ( ) => {
     },[state.filters])
 
     useEffect(()=> {
-        if (isMounted) fetchSearch()
+        fetchSearch()
     },[fetchSearch, isMounted])
 
     return (
