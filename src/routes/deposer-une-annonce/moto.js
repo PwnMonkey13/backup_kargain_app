@@ -7,7 +7,7 @@ import { MessageContext } from '../../context/MessageContext';
 import Step0_Manufacturer from '../../components/Products/Step0_Manufacturer';
 import Step1MotoDetails from '../../components/Products/moto/Step1_MotoDetails';
 import Step2MotoStatus from '../../components/Products/moto/Step2_MotoStatus';
-import Step3MotoOwner from '../../components/Products/moto/Step3_MotoOwner';
+import Step3PublishAnnounce from '../../components/Products/Step3_Publish';
 import {vehicleTypes} from '../../business/vehicleTypes'
 
 const MotorCyclesForm = (props) => {
@@ -39,13 +39,13 @@ const MotorCyclesForm = (props) => {
             prevRoute="/deposer-une-annonce"
             onFinalSubmit={onFinalSubmit}>
 
-            <Step0_DynVehicleManufacturer
+            <Step0_Manufacturer
                 vehicleType={vehicleTypes.moto}
                 title={t('vehicles:vehicle-selection')}
             />
             <Step1MotoDetails title={t('vehicles:vehicle-description')}/>
             <Step2MotoStatus title={t('vehicles:vehicle-state')}/>
-            <Step3MotoOwner title={t('vehicles:your-announce')}/>
+            <Step3PublishAnnounce title={t('vehicles:your-announce')}/>
         </FormWizard>
     );
 };

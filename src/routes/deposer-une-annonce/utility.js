@@ -7,7 +7,7 @@ import { MessageContext } from '../../context/MessageContext';
 import Step0_Manufacturer from '../../components/Products/Step0_Manufacturer'
 import Step1CamperDetails from '../../components/Products/utility/Step1_UtiilityDetails';
 import Step2UtilityStatus from '../../components/Products/utility/Step2_UtiliyStatus';
-import Step3CarOwner from '../../components/Products/car/Step3_CarOwner';
+import Step3_PublishAnnounce from '../../components/Products/Step3_Publish';
 import {vehicleTypes} from '../../business/vehicleTypes'
 
 const UtilityForm = (props) => {
@@ -39,13 +39,13 @@ const UtilityForm = (props) => {
             prevRoute="/deposer-une-annonce"
             onFinalSubmit={onFinalSubmit}
         >
-            <Step0_DynVehicleManufacturer
+            <Step0_Manufacturer
                 vehicleType={vehicleTypes.utility}
                 title={t('vehicles:vehicle-selection')}
             />
             <Step1CamperDetails title={t('vehicles:vehicle-description')}/>
             <Step2UtilityStatus title={t('vehicles:vehicle-state')}/>
-            <Step3CarOwner title={t('vehicles:your-announce')}/>
+            <Step3_PublishAnnounce title={t('vehicles:your-announce')}/>
         </FormWizard>
     );
 };

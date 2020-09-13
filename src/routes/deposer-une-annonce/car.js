@@ -7,8 +7,7 @@ import { MessageContext } from '../../context/MessageContext';
 import Step0_Manufacturer from '../../components/Products/Step0_Manufacturer';
 import Step1CarDetails from '../../components/Products/car/Step1_CarDetails';
 import Step2CarStatus from '../../components/Products/car/Step2_CarStatus';
-import Step3CarOwner from '../../components/Products/car/Step3_CarOwner';
-import Step0_DynVehicleManufacturer from '../../components/Products/Step0_DynVehicleManufacturer';
+import Step3PublishAnnounce from '../../components/Products/Step3_Publish';
 import { vehicleTypes } from '../../business/vehicleTypes.js'
 
 const CarForm = (props) => {
@@ -61,13 +60,13 @@ const CarForm = (props) => {
             prevRoute="/deposer-une-annonce"
             onFinalSubmit={onFinalSubmit}>
 
-            <Step0_DynVehicleManufacturer
+            <Step0_Manufacturer
                 vehicleType={vehicleTypes.car}
                 title={t('vehicles:vehicle-selection')}
             />
             <Step1CarDetails title={t('vehicles:vehicle-description')}/>
             <Step2CarStatus title={t('vehicles:vehicle-state')}/>
-            <Step3CarOwner title={t('vehicles:your-announce')}/>
+            <Step3PublishAnnounce title={t('vehicles:your-announce')}/>
         </FormWizard>
     );
 };

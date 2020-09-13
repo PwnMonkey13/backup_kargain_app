@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { Col, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import useTranslation from 'next-translate/useTranslation';
@@ -13,24 +13,34 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
     const formRef = useRef(null);
     const { formDataContext } = useContext(FormContext);
     const { t, lang } = useTranslation();
-    const [formData, setFormData] = useState({
-        RadioVehicleGeneralState: [],
-        CheckboxOptionsEquipments: []
-    });
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: formDataContext
     });
-
-    const getData = async () => {
-        const data = lang === 'fr' ? await import('./form.data.js') : await import('./form.data_en.js');
+    
+    const [formData, setFormData] = useState({
+        RadioVehicleGeneralState: [],
+        CheckboxOptionsEquipments: [],
+        RadioChoicesGas: [],
+        RadioFunctionVehicle: [],
+        RadioTypeFunction: [],
+        RadioChoicesEngine: [],
+        RadioChoicesEmission: [],
+        RadioChoicesBeds: [],
+        RadioChoicesPaints: [],
+        RadioChoicesMaterials: [],
+        RadioChoicesExternalColor: []
+    });
+    
+    const getData = useCallback(async () => {
+        const data = lang === 'fr' ? await import('./form.data.js') : await import('./form.data.js');
         setFormData(data);
-    };
-
+    },[lang]);
+    
     useEffect(() => {
         getData();
-    }, []);
+    }, [getData]);
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
@@ -51,7 +61,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                             name="vehicleFunction"
                             options={formData.RadioFunctionVehicle}
                             control={control}
-                            rules={{ required: t('vehicles:field-is-required') }}
+                            rules={{ required: t('form_validations:field-is-required') }}
                             errors={errors}
                         />
                     </FieldWrapper>
@@ -106,7 +116,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
 
             <Row>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Puissance kW">
+                    <FieldWrapper label={t('vehicles:power')}>
                         <NumberInput
                             name="powerKw"
                             control={control}
@@ -115,7 +125,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Puissance CH">
+                    <FieldWrapper label={t('vehicles:power_ch')}>
                         <NumberInput
                             name="powerCh"
                             control={control}
@@ -190,7 +200,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                     <FieldWrapper label={t('vehicles:doors_quantity')}>
                         <SelectInput
                             name="doors"
-                            options={SelectOptionsUtils([2, 3, 4, 5])}
+                            options={SelectOptionsUtils([2,3,4,5,6,7,8,9])}
                             placeholder="Select number of doors"
                             control={control}
                             errors={errors}
@@ -201,8 +211,8 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                     <FieldWrapper label={t('vehicles:seats_quantity')}>
                         <SelectInput
                             name="seats"
-                            options={SelectOptionsUtils([2, 3, 4, 5])}
-                            placeholder="Select number of seats"
+                            options={SelectOptionsUtils([2,3,4,5,6,7,8,9])}
+                            placeholder={t('vehicles:select_seats_quantity')}
                             control={control}
                             errors={errors}
                         />
@@ -211,7 +221,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
             </Row>
             <Row>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Nombre de couchettes">
+                    <FieldWrapper label={t('vehicles:bunks-quantity')}>
                         <NumberInput
                             name="bunks"
                             control={control}
@@ -220,11 +230,11 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Type de lit">
+                    <FieldWrapper label={t('vehicles:beds-quantity')}>
                         <SelectInput
                             name="bedType"
                             className="mb-2"
-                            options={SelectOptionsUtils(['simple', 'double', 'depliant', 'gonflable'])}
+                            options={formData.RadioChoiceBeds}
                             control={control}
                             errors={errors}
                         />

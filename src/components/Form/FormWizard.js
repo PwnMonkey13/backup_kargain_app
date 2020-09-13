@@ -24,29 +24,6 @@ const FormWizard = ({ debug, formKey, onFinalSubmit, children }) => {
     const [pourcent, setPourcent] = useState(() => calculatePourcent(activeStep, steps.length));
     const [endForm, setEndForm] = useState(false);
 
-    useEffect(()=>{
-        dispatchFormUpdate({
-            vehicleType : formKey.toLowerCase()
-        });
-    },[])
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-        if (isMounted) {
-            setMaxActiveStep(maxStep => Math.max(maxStep, Number(activeStep)));
-            dispatchFormUpdate({ currentStep: activeStep });
-            setPourcent(calculatePourcent(activeStep, steps.length));
-        }
-    }, [activeStep]);
-
-    useEffect(() => {
-        if (isMounted && endForm) {
-            console.log('end form reached');
-            onFinalSubmit(formDataContext);
-            setEndForm(false);
-        }
-    }, [endForm]);
-
     const setStep = useCallback((index) => {
         setActiveStep(index);
     }, []);
@@ -72,7 +49,30 @@ const FormWizard = ({ debug, formKey, onFinalSubmit, children }) => {
         triggerDispatchFormData(data);
         setEndForm(true);
     };
-
+    
+    useEffect(() => {
+        dispatchFormUpdate({
+            vehicleType : formKey.toLowerCase()
+        });
+    },[])
+    
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        if (isMounted) {
+            setMaxActiveStep(maxStep => Math.max(maxStep, Number(activeStep)));
+            dispatchFormUpdate({ currentStep: activeStep });
+            setPourcent(calculatePourcent(activeStep, steps.length));
+        }
+    }, [activeStep]);
+    
+    useEffect(() => {
+        if (isMounted && endForm) {
+            console.log('end form reached');
+            onFinalSubmit(formDataContext);
+            setEndForm(false);
+        }
+    }, [endForm]);
+    
     return (
         <div className="formWizardContainer">
             <BreadcrumbSteps activeStepIndex={activeStep}

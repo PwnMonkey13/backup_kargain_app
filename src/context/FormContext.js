@@ -37,7 +37,7 @@ const FormContextProvider = ({ formKey, children }) => {
     };
 
     useEffect(() => {
-        if (formKey) {
+        if(formKey){
             storeFormData(formDataContext);
         }
     }, [formDataContext]);

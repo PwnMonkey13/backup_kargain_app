@@ -1,22 +1,35 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types';
 import useTranslation from 'next-translate/useTranslation';
 import { SearchLocationInput, SelectCountryFlags, SelectInput, SliderInput } from '../../../Form/Inputs';
-import {
-    CheckboxOptionsEquipments,
-    RadioChoicesEmission,
-    RadioChoicesEngine,
-    RadioChoicesExternalColor,
-    RadioChoicesGas,
-    RadioChoicesPaints,
-    RadioVehicleGeneralState
-} from '../../../Products/car/form.data';
 import FieldWrapper from '../../../Form/FieldWrapper'
 
 const CarFilters = ({ control, watch, errors }) => {
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     const countrySelect = watch('countrySelect');
-
+    const [formData, setFormData] = useState({
+        RadioVehicleGeneralState: [],
+        CheckboxOptionsEquipments: [],
+        RadioChoicesGas: [],
+        RadioFunctionVehicle: [],
+        RadioTypeFunction: [],
+        RadioChoicesEngine: [],
+        RadioChoicesEmission: [],
+        RadioChoiceBeds: [],
+        RadioChoicesPaints: [],
+        RadioChoicesMaterials: [],
+        RadioChoicesExternalColor: []
+    });
+    
+    const getData = useCallback(async () => {
+        const data = lang === 'fr' ? await import('../../../Products/car/form.data.js') : await import('../../../Products/car/form.data.js');
+        setFormData(data);
+    },[lang]);
+    
+    useEffect(() => {
+        getData();
+    }, [getData]);
+    
     return (
         <>
             <FieldWrapper label={t('vehicles:price')}>
@@ -35,7 +48,7 @@ const CarFilters = ({ control, watch, errors }) => {
             <FieldWrapper label={t('vehicles:gear-box')}>
                 <SelectInput
                     name="vehicleEngineType"
-                    options={RadioChoicesEngine}
+                    options={formData.RadioTypeFunction}
                     control={control}
                     errors={errors}
                 />
@@ -45,7 +58,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 <SelectInput
                     name="vehicleEngineGas"
                     className="mb-2"
-                    options={RadioChoicesGas}
+                    options={formData.RadioChoicesGas}
                     control={control}
                     errors={errors}
                 />
@@ -120,7 +133,7 @@ const CarFilters = ({ control, watch, errors }) => {
             <FieldWrapper label={t('vehicles:equipments')}>
                 <SelectInput
                     name="equipments"
-                    options={CheckboxOptionsEquipments}
+                    options={formData.CheckboxOptionsEquipments}
                     isMulti
                     defaultChecked={['ABS', 'ESP']}
                     control={control}
@@ -131,7 +144,7 @@ const CarFilters = ({ control, watch, errors }) => {
             <FieldWrapper label={t('vehicles:class_emission')}>
                 <SelectInput
                     name="emission"
-                    options={RadioChoicesEmission}
+                    options={formData.RadioChoicesEmission}
                     control={control}
                     errors={errors}
                 />
@@ -175,7 +188,7 @@ const CarFilters = ({ control, watch, errors }) => {
                 <SelectInput
                     name="paint"
                     control={control}
-                    options={RadioChoicesPaints}
+                    options={formData.RadioChoicesPaints}
                     citycontrol={control}
                     errors={errors}
                 />
@@ -184,7 +197,7 @@ const CarFilters = ({ control, watch, errors }) => {
             <FieldWrapper label={t('vehicles:external_color')}>
                 <SelectInput
                     name="externalColor"
-                    options={RadioChoicesExternalColor}
+                    options={formData.RadioChoicesMaterials}
                     control={control}
                     errors={errors}
                 />
@@ -193,7 +206,7 @@ const CarFilters = ({ control, watch, errors }) => {
             <FieldWrapper label={t('vehicles:internal_color')}>
                 <SelectInput
                     name="internalColor"
-                    options={RadioChoicesExternalColor}
+                    options={formData.RadioChoicesMaterials}
                     control={control}
                     errors={errors}
                 />
@@ -202,7 +215,7 @@ const CarFilters = ({ control, watch, errors }) => {
             <FieldWrapper label={t('vehicles:vehicle-state')}>
                 <SelectInput
                     name="vehicleGeneralState"
-                    options={RadioVehicleGeneralState}
+                    options={formData.RadioVehicleGeneralState}
                     control={control}
                     errors={errors}
                 />

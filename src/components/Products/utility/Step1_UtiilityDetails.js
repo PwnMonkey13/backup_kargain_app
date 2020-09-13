@@ -8,15 +8,8 @@ import { NumberInput, SelectInput } from '../../Form/Inputs';
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
 import { FormContext } from '../../../context/FormContext';
 import Header from '../../Header';
-import {
-    RadioChoicesEngine,
-    RadioChoicesExternalColor,
-    RadioChoicesGas,
-    RadioChoicesMaterials,
-    RadioChoicesPaints
-} from './form.data.js';
 
-const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
+const Step1UtilityDetails = ({ onSubmitStep, prevStep }) => {
     const formRef = useRef(null);
     const { formDataContext } = useContext(FormContext);
     const { t, lang } = useTranslation();
@@ -81,14 +74,13 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                             placeholder="20000 km"
                             control={control}
                             errors={errors}
-
                         />
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:cylinder')}>
                         <NumberInput
-                            name="cylinder"
+                            name="vehicleEngineCylinder"
                             control={control}
                             errors={errors}
                         />
@@ -101,7 +93,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     <FieldWrapper label={t('vehicles:gas')}>
                         <SelectInput
                             name="vehicleEngineGas"
-                            options={RadioChoicesGas}
+                            options={formData.RadioChoicesGas}
                             control={control}
                             errors={errors}
                         />
@@ -110,11 +102,10 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:gear-box')}>
                         <SelectInput
-                            name="engine"
-                            options={RadioChoicesEngine}
+                            name="vehicleEngineType"
+                            options={formData.RadioChoicesEngine}
                             control={control}
                             errors={errors}
-                            rules={{ required: 'Title is required!' }}
                         />
                     </FieldWrapper>
                 </Col>
@@ -122,19 +113,22 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
 
             <Row>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Puissance kW">
-                        <NumberInput name="powerKw"
+                    <FieldWrapper label={t('vehicles:power')}>
+                        <NumberInput
+                            name="powerKw"
                             control={control}
                             errors={errors}
-
+                            placeholder={0}
                         />
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Puissance CH">
-                        <NumberInput name="powerCh"
+                    <FieldWrapper label={t('vehicles:power_ch')}>
+                        <NumberInput
+                            name="powerCh"
                             control={control}
                             errors={errors}
+                            placeholder={0}
                         />
                     </FieldWrapper>
                 </Col>
@@ -149,7 +143,6 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
-
                         />
                     </FieldWrapper>
                 </Col>
@@ -189,20 +182,20 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
 
             <Row>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Nombre d'essieux">
+                    <FieldWrapper label={t('vehicles:axles')}>
                         <SelectInput
                             name="vehicleEngineType"
                             className="mb-2"
-                            options={RadioChoicesEngine}
+                            options={SelectOptionsUtils([2, 3, 4, 5])}
                             control={control}
                             errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Cabines conducteur">
+                    <FieldWrapper label={t('vehicles:driver-cabins')}>
                         <SelectInput
-                            name="driverCabin"
+                            name="driverCabins"
                             options={SelectOptionsUtils([2, 3, 4, 5])}
                             control={control}
                             errors={errors}
@@ -216,7 +209,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     <FieldWrapper label={t('vehicles:doors_quantity')}>
                         <SelectInput
                             name="doors"
-                            options={SelectOptionsUtils([2, 3, 4, 5])}
+                            options={SelectOptionsUtils([2,3,4,5,6,7,8,9])}
                             placeholder="Select number of doors"
                             control={control}
                             errors={errors}
@@ -227,7 +220,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     <FieldWrapper label={t('vehicles:seats_quantity')}>
                         <SelectInput
                             name="seats"
-                            options={SelectOptionsUtils([2, 3, 4, 5])}
+                            options={SelectOptionsUtils([2,3,4,5,6,7,8,9])}
                             placeholder="Select number of seats"
                             control={control}
                             errors={errors}
@@ -241,7 +234,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     <FieldWrapper label={t('vehicles:paint')}>
                         <SelectInput
                             name="paint"
-                            options={RadioChoicesPaints}
+                            options={formData.RadioChoicesPaints}
                             control={control}
                             errors={errors}
                         />
@@ -251,7 +244,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     <FieldWrapper label={t('vehicles:materials')}>
                         <SelectInput
                             name="materials"
-                            options={RadioChoicesMaterials}
+                            options={formData.RadioChoicesMaterials}
                             control={control}
                             errors={errors}
                         />
@@ -261,7 +254,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     <FieldWrapper label={t('vehicles:external_color')}>
                         <SelectInput
                             name="externalColor"
-                            options={RadioChoicesExternalColor}
+                            options={formData.RadioChoicesExternalColor}
                             control={control}
                             errors={errors}
                         />
@@ -271,7 +264,7 @@ const Step1UtilityDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     <FieldWrapper label={t('vehicles:internal_color')}>
                         <SelectInput
                             name="internalColor"
-                            options={RadioChoicesExternalColor}
+                            options={formData.RadioChoicesExternalColor}
                             control={control}
                             errors={errors}
                         />

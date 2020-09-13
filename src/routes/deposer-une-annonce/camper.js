@@ -7,7 +7,7 @@ import { MessageContext } from '../../context/MessageContext';
 import Step0_Manufacturer from '../../components/Products/Step0_Manufacturer'
 import Step1CamperDetails from '../../components/Products/camper/Step1_CamperDetails';
 import Step2CamperStatus from '../../components/Products/camper/Step2_CamperStatus';
-import Step3CarOwner from '../../components/Products/car/Step3_CarOwner';
+import Step3PublishAnnounce from '../../components/Products/Step3_Publish';
 import {vehicleTypes} from '../../business/vehicleTypes'
 
 const CarForm = (props) => {
@@ -41,13 +41,13 @@ const CarForm = (props) => {
             prevRoute="/deposer-une-annonce"
             onFinalSubmit={onFinalSubmit}>
 
-            <Step0_DynVehicleManufacturer
+            <Step0_Manufacturer
                 vehicleType={vehicleTypes.camper}
                 title={t('vehicles:vehicle-selection')}
             />
             <Step1CamperDetails title={t('vehicles:vehicle-description')}/>
             <Step2CamperStatus title={t('vehicles:vehicle-state')}/>
-            <Step3CarOwner title={t('vehicles:your-announce')}/>
+            <Step3PublishAnnounce title={t('vehicles:your-announce')}/>
         </FormWizard>
     );
 };

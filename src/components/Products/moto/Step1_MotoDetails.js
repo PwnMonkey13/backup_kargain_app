@@ -1,52 +1,65 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Col, Row } from 'reactstrap';
 import useTranslation from 'next-translate/useTranslation';
 import FieldWrapper from '../../Form/FieldWrapper';
 import { NumberInput, SelectInput } from '../../Form/Inputs';
 import StepNavigation from '../../Form/StepNavigation';
-import { RadioChoicesEmission, RadioChoicesGas } from '../car/form.data';
+
 import { FormContext } from '../../../context/FormContext';
 import Header from '../../Header';
-import {
-    CheckboxOptionsEquipments,
-    RadioChoicesEngine,
-    RadioChoicesExternalColor,
-    RadioChoicesMaterials,
-    RadioChoicesPaints,
-    RadioFunctionVehicle,
-    RadioTypeFunction
-} from './form.data.js';
 
-const Step1MotoDetails = ({ onSubmitStep, prevStep, nextStep }) => {
+const Step1MotoDetails = ({ onSubmitStep, prevStep }) => {
     const formRef = useRef(null);
     const { formDataContext } = useContext(FormContext);
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: formDataContext
     });
-
+    
+    const [formData, setFormData] = useState({
+        RadioVehicleGeneralState: [],
+        CheckboxOptionsEquipments: [],
+        RadioChoicesGas: [],
+        RadioFunctionVehicle: [],
+        RadioTypeFunction: [],
+        RadioChoicesEngine: [],
+        RadioChoicesEmission: [],
+        RadioChoicesPaints: [],
+        RadioChoicesMaterials: [],
+        RadioChoicesExternalColor: []
+    });
+    
+    const getData = async () => {
+        const data = lang === 'fr' ? await import('./form.data.js') : await import('./form.data_en.js');
+        setFormData(data);
+    };
+    
+    useEffect(() => {
+        getData();
+    }, []);
+    
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
             <Row>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Type">
-                        <SelectInput name="vehicleFunctionType"
+                    <FieldWrapper label={t('vehicles:type')}>
+                        <SelectInput
+                            name="vehicleFunctionType"
+                            options={formData.RadioTypeFunction}
                             control={control}
                             errors={errors}
-                            options={RadioTypeFunction}
                         />
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Fonction du véhicule">
+                    <FieldWrapper label={t('vehicles:vehicle_function')}>
                         <SelectInput
                             name="vehicleFunction"
-                            options={RadioFunctionVehicle}
+                            options={formData.RadioFunctionVehicle}
                             control={control}
-                            rules={{ required: t('vehicles:field-is-required') }}
                             errors={errors}
                         />
                     </FieldWrapper>
@@ -55,7 +68,7 @@ const Step1MotoDetails = ({ onSubmitStep, prevStep, nextStep }) => {
 
             <Row>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Kilométrage" required>
+                    <FieldWrapper label={t('vehicles:mileage')}>
                         <NumberInput
                             name="mileage"
                             placeholder="20000 km"
@@ -65,12 +78,12 @@ const Step1MotoDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Cylindrée">
-                        <NumberInput name="vehicleEngineCylinder"
+                    <FieldWrapper label={t('vehicles:cylinder')}>
+                        <NumberInput
+                            name="vehicleEngineCylinder"
                             control={control}
                             errors={errors}
                             placeholder="150 ch"
-
                         />
                     </FieldWrapper>
                 </Col>
@@ -78,40 +91,20 @@ const Step1MotoDetails = ({ onSubmitStep, prevStep, nextStep }) => {
 
             <Row>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Carburant" required>
-                        <SelectInput name="vehicleEngineGas"
-                            options={RadioChoicesGas}
+                    <FieldWrapper label={t('vehicles:gas')}>
+                        <SelectInput
+                            name="vehicleEngineGas"
+                            options={formData.RadioChoicesGas}
                             control={control}
                             errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Boite de vitesse">
+                    <FieldWrapper label={t('vehicles:gear-box')}>
                         <SelectInput
                             name="vehicleEngineType"
-                            options={RadioChoicesEngine}
-                            control={control}
-                            errors={errors}
-                            rules={{ required: 'Title is required!' }}
-                        />
-                    </FieldWrapper>
-                </Col>
-            </Row>
-
-            <Row>
-                <Col sm={12} md={6}>
-                    <FieldWrapper label="Puissance kW">
-                        <NumberInput name="powerKw"
-                            control={control}
-                            errors={errors}
-
-                        />
-                    </FieldWrapper>
-                </Col>
-                <Col sm={12} md={6}>
-                    <FieldWrapper label="Puissance CH">
-                        <NumberInput name="powerCh"
+                            options={formData.RadioChoicesEngine}
                             control={control}
                             errors={errors}
                         />
@@ -119,20 +112,44 @@ const Step1MotoDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                 </Col>
             </Row>
 
-            <Header strong text="Consommation"/>
             <Row>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Mixte (g/km)">
+                    <FieldWrapper label={t('vehicles:power')}>
+                        <NumberInput
+                            name="powerKw"
+                            control={control}
+                            errors={errors}
+                            placeholder={0}
+                        />
+                    </FieldWrapper>
+                </Col>
+                <Col sm={12} md={6}>
+                    <FieldWrapper label={t('vehicles:power_ch')}>
+                        <NumberInput
+                            name="powerCh"
+                            control={control}
+                            errors={errors}
+                            placeholder={0}
+                        />
+                    </FieldWrapper>
+                </Col>
+            </Row>
+    
+            <Header strong text={t('vehicles:consumption')}/>
+            <Row>
+                <Col sm={12} md={6}>
+                    <FieldWrapper label={`${t('vehicles:consumption')} mixt`}>
                         <NumberInput
                             name="consumptionMixt"
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
+                
                         />
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Ville (g/km)">
+                    <FieldWrapper label={`${t('vehicles:consumption')} (g/km)`}>
                         <NumberInput
                             name="consumptionCity"
                             control={control}
@@ -142,12 +159,13 @@ const Step1MotoDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Route (g/km)">
+                    <FieldWrapper label={`${t('vehicles:road')} (g/km)`}>
                         <NumberInput
                             name="consumptionRoad"
                             control={control}
                             errors={errors}
                             placeholder="20 g/100"
+                
                         />
                     </FieldWrapper>
                 </Col>
@@ -157,60 +175,56 @@ const Step1MotoDetails = ({ onSubmitStep, prevStep, nextStep }) => {
                             name="consumptionGkm"
                             control={control}
                             errors={errors}
-                            placeholder="20 g/100"
+                            placeholder={0}
+                
                         />
                     </FieldWrapper>
                 </Col>
             </Row>
-
-            <FieldWrapper label="Classe d'émission">
-                <SelectInput
-                    name="emission"
-                    options={RadioChoicesEmission}
-                    control={control}
-                    errors={errors}
-                />
-            </FieldWrapper>
-
-            <Header text="Données du véhicule"/>
-
-            <FieldWrapper label="Equipements">
-                <SelectInput
-                    name="equipments"
-                    isMulti
-                    options={CheckboxOptionsEquipments}
-                    defaultChecked={['Topcase', 'Kickstarter']}
-                    control={control}
-                    errors={errors}
-                />
-            </FieldWrapper>
+    
+            <Row>
+                <Col sm={12} md={6}>
+                    <FieldWrapper label={t('vehicles:class_emission')}>
+                        <SelectInput
+                            name="emission"
+                            options={formData.RadioChoicesEmission}
+                            control={control}
+                            errors={errors}
+                        />
+                    </FieldWrapper>
+                </Col>
+            </Row>
+    
+            <Header text={t('vehicles:vehicle-informations')}/>
 
             <Row>
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:paint')}>
                         <SelectInput
                             name="paint"
-                            options={RadioChoicesPaints}
+                            options={formData.RadioChoicesPaints}
                             control={control}
                             errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
+                
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:materials')}>
                         <SelectInput
                             name="materials"
-                            options={RadioChoicesMaterials}
+                            options={formData.RadioChoicesMaterials}
                             control={control}
                             errors={errors}
                         />
                     </FieldWrapper>
                 </Col>
+                
                 <Col sm={12} md={6}>
                     <FieldWrapper label={t('vehicles:external_color')}>
                         <SelectInput
                             name="externalColor"
-                            options={RadioChoicesExternalColor}
+                            options={formData.RadioChoicesExternalColor}
                             control={control}
                             errors={errors}
                         />

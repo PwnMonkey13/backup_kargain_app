@@ -6,15 +6,13 @@ import useTranslation from 'next-translate/useTranslation'
 import FieldWrapper from '../Form/FieldWrapper';
 import StepNavigation from '../Form/StepNavigation';
 import { SelectInput } from '../Form/Inputs';
-import useIsMounted from '../../hooks/useIsMounted';
 import { FormContext } from '../../context/FormContext';
 import { MessageContext } from '../../context/MessageContext';
 import VehiclesService from '../../services/VehiclesService';
 import { vehicleTypeRefModels } from '../../business/vehicleTypes'
 
-const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitStep, prevStep }) => {
+const Step0_Manufacturer = ({vehicleType, triggerSkipStep, onSubmitStep, prevStep }) => {
     const { t } = useTranslation();
-    const isMounted = useIsMounted();
     const cache = useRef({});
     const formRef = useRef(null);
     const isCar = vehicleType === "car"
@@ -22,12 +20,12 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
     const vehicleTypeModel = vehicleTypeRefModels[vehicleType]
     const { dispatchModalError } = useContext(MessageContext);
     const { formDataContext } = useContext(FormContext);
-    const { watch, control, errors, setValue, handleSubmit } = useForm({
+    const { watch, control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: formDataContext
     });
-
+    
     const [manufacturersData, setManufacturersData] = useState({
         makes: [],
         models: [],
@@ -83,7 +81,7 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
             );
         }
 
-    },[vehicleTypeModel])
+    },[vehicleType])
 
     const fetchModels = useCallback(async ()=> {
         const make = selectedMake?.label;
@@ -142,14 +140,14 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
                 })
             );
         }
-    },[selectedMake])
+    },[vehicleType, isCar, selectedMake])
 
     const fetchModelsYears = useCallback(async() => {
-        const make = selectedMake?.value;
-        const model = selectedModel?.value;
+        const make = selectedMake?.label;
+        const model = selectedModel?.label;
         const cacheKey = `${vehicleType}_makes_${make}_models_${model}`;
-
-        if (!make || !model) return
+    
+        if (!isCar || !make || !model) return
         if(!cache.current[cacheKey]) {
             console.log('fetch cars models years');
             await VehiclesService.getCarsMakeModelTrimYears(make, model)
@@ -187,13 +185,13 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
                 })
             );
         }
-    },[vehicleTypeModel])
+    },[vehicleType, isCar, selectedMake, selectedModel])
 
-    useEffect(() => {
-        setValue('manufacturer.make', null)
-        setValue('manufacturer.model', null)
-        setValue('manufacturer.year', null)
-    }, [vehicleType]);
+    // useEffect(() => {
+    //     setValue('manufacturer.make', null)
+    //     setValue('manufacturer.model', null)
+    //     setValue('manufacturer.year', null)
+    // }, [vehicleType]);
 
     useEffect(() => {
         fetchMakes()
@@ -208,17 +206,26 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
     useEffect(() => {
         const model = selectedModel?.label;
         if (!model) return
+        if (!isCar) return
         fetchModelsYears()
     }, [selectedModel, fetchModelsYears]);
-
-    useEffect(() => {
-        if (isMounted) {
-            if (!isCar) {
-                if (selectedMake && selectedModel) triggerSubmit()
-            } else if (selectedMake && selectedModel && selectedYear) triggerSubmit
-        }
-    }, [selectedModel]);
-
+    
+    // useEffect(() => {
+    //     const make = selectedMake?.label;
+    //     const model = selectedModel?.label;
+    //     const year = selectedYear?.label;
+    //
+    //     if (!make) return
+    //     if (!model) return
+    //
+    //     if (!isCar){
+    //         triggerSubmit()
+    //         return;
+    //     }
+    //
+    //     if(year) triggerSubmit()
+    // }, [selectedMake, selectedModel, selectedYear]);
+    
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
             <Row>
@@ -249,7 +256,7 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
                 <Col md={4}>
                     <FieldWrapper label={t('vehicles:year')}>
                         <SelectInput
-                            name="year"
+                            name="manufacturer.year"
                             placeholder="Select year"
                             options={manufacturersData.years}
                             control={control}
@@ -265,8 +272,8 @@ const Step0_DynVehicleManufacturer = ({vehicleType, triggerSkipStep, onSubmitSte
     );
 };
 
-Step0_DynVehicleManufacturer.propTypes = {
+Step0_Manufacturer.propTypes = {
     vehicleType : PropTypes.string.isRequired
 }
 
-export default Step0_DynVehicleManufacturer;
+export default Step0_Manufacturer;

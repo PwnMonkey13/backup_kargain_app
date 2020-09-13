@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { Col, Row } from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import useTranslation from 'next-translate/useTranslation';
@@ -13,6 +13,12 @@ const Step1CarDetails = ({ onSubmitStep, prevStep }) => {
     const formRef = useRef(null);
     const { formDataContext } = useContext(FormContext);
     const { t, lang } = useTranslation();
+    const { control, errors, handleSubmit } = useForm({
+        mode: 'onChange',
+        validateCriteriaMode: 'all',
+        defaultValues: formDataContext
+    });
+    
     const [formData, setFormData] = useState({
         RadioVehicleGeneralState: [],
         CheckboxOptionsEquipments: [],
@@ -25,20 +31,15 @@ const Step1CarDetails = ({ onSubmitStep, prevStep }) => {
         RadioChoicesMaterials: [],
         RadioChoicesExternalColor: []
     });
-    const { control, errors, handleSubmit } = useForm({
-        mode: 'onChange',
-        validateCriteriaMode: 'all',
-        defaultValues: formDataContext
-    });
-
-    const getData = async () => {
-        const data = lang === 'fr' ? await import('./form.data.js') : await import('./form.data_en.js');
+    
+    const getData = useCallback(async () => {
+        const data = lang === 'fr' ? await import('./form.data.js') : await import('./form.data.js');
         setFormData(data);
-    };
-
+    },[lang]);
+    
     useEffect(() => {
         getData();
-    }, []);
+    }, [getData]);
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
@@ -123,7 +124,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep }) => {
                     </FieldWrapper>
                 </Col>
                 <Col sm={12} md={6}>
-                    <FieldWrapper label="Puissance CH">
+                    <FieldWrapper label={t('vehicles:power_ch')}>
                         <NumberInput
                             name="powerCh"
                             control={control}
@@ -200,7 +201,7 @@ const Step1CarDetails = ({ onSubmitStep, prevStep }) => {
                     <FieldWrapper label={t('vehicles:doors_quantity')}>
                         <SelectInput
                             name="doors"
-                            options={SelectOptionsUtils([2, 3, 4, 5])}
+                            options={SelectOptionsUtils([2,3,4,5,6,7,8,9])}
                             placeholder="Select number of doors"
                             control={control}
                             errors={errors}
