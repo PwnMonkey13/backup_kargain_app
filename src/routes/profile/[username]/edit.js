@@ -408,7 +408,7 @@ const ProfilePartialForm = ({ control, watch, errors }) => {
                     name="phone"
                     errors={errors}
                     control={control}
-                    rules={{ required: 'Field required' }}
+                    rules={{ required: t('form_validations:field-is-required') }}
                     innerProps={{
                         country: 'fr'
                     }}

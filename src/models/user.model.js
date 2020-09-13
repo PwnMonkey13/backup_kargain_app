@@ -79,6 +79,10 @@ export default class UserModel {
     get getEmail () {
         return this.raw?.email;
     }
+    
+    get getEmailIsGmail () {
+        return this.getEmail.includes('gmail');
+    }
 
     get getPhone () {
         return this.raw?.phone;

@@ -149,9 +149,7 @@ export default () => {
                                         placeholder="email"
                                         errors={errors}
                                         control={control}
-                                        rules={{
-                                            required: 'field required'
-                                        }}
+                                        rules={{ required: t('form_validations:field-is-required') }}
                                     />
                                 </div>
 
@@ -161,9 +159,7 @@ export default () => {
                                         placeholder="Mot de passe"
                                         errors={errors}
                                         control={control}
-                                        rules={{
-                                            required: 'field required'
-                                        }}
+                                        rules={{ required: t('form_validations:field-is-required') }}
                                     />
                                 </div>
 

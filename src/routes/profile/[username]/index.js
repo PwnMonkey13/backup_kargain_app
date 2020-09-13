@@ -378,6 +378,7 @@ const Profile = () => {
 const TabsContainer = ({ state, filterState, updateFilters }) => {
     const { t } = useTranslation();
     const [refWidth, { width }] = useDimensions();
+    const { isAuthenticated } = useAuth();
     const [filtersOpened] = useState(false);
     const { profile, isSelf } = state;
 
@@ -411,7 +412,7 @@ const TabsContainer = ({ state, filterState, updateFilters }) => {
 
                                                 <CTALink
                                                     title={t('vehicles:explore-ads')}
-                                                    href="/"
+                                                    href={isAuthenticated ? '/feed' : '/'}
                                                     className="cta_nav_link my-2"
                                                 />
                                             </div>
@@ -439,7 +440,7 @@ const TabsContainer = ({ state, filterState, updateFilters }) => {
 
                                                 <CTALink
                                                     title={t('vehicles:explore-ads')}
-                                                    href="/"
+                                                    href={isAuthenticated ? '/feed' : '/'}
                                                     className="cta_nav_link my-2"
                                                 />
                                             </div>
@@ -467,7 +468,7 @@ const TabsContainer = ({ state, filterState, updateFilters }) => {
 
                                                 <CTALink
                                                     title={t('vehicles:explore-ads')}
-                                                    href="/"
+                                                    href={isAuthenticated ? '/feed' : '/'}
                                                     className="cta_nav_link my-2"
                                                 />
                                             </div>
