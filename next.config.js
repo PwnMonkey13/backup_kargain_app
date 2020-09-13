@@ -34,7 +34,14 @@ const nextBundleAnalyzer = ({ enabled = true }) => (nextConfig = {}) => ({
 const nextConfig = {
     distDir: 'dist',
     // Have to list all the environment variables used here to make it available to the client side code
-    webpack: (config) => {
+    webpack: (config, { isServer }) => {
+    
+        if (!isServer) {
+            config.node = {
+                fs: 'empty'
+            }
+        }
+        
         config.resolve.mainFields = ['main', 'browser', 'module']
         config.module.rules.push(
             {

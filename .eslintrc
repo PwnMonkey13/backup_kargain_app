@@ -42,12 +42,7 @@
         // Indent with 4 spaces
         "indent": [
             "error",
-            4,
-            {
-                "ignoredNodes": [
-                    "TemplateLiteral"
-                ]
-            }
+            4
         ],
         "template-curly-spacing": [
             "off"
