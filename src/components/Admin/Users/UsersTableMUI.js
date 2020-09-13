@@ -119,7 +119,7 @@ const UsersTable = () => {
             grouping: false,
             searchable: false,
             sorting: true,
-            render: userModel => userModel.getGarage.length
+            render: userModel => userModel.getCountGarage
         }
     ], []);
 

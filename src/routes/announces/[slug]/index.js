@@ -124,12 +124,6 @@ const Announce = () => {
                 await AnnounceService.addLikeLoggedInUser(state.announce.getID);
                 counter += 1;
             }
-            if (counter < 0) counter = 0;
-            setState(state => ({
-                ...state,
-                counter
-            }))
-
         } catch (err) {
             dispatchModalError({ err });
         }
@@ -289,7 +283,7 @@ const Announce = () => {
 
                         <div className={clsx('price-stars-wrapper', classes.priceStarsWrapper)}>
                             <div className="icons-profile-wrapper">
-                                <div className="icons-star-prof">
+                                <div className="icons-star-prof svgStarYellow">
                                     <span onClick={()=>handleClickLikeButton()}>
                                         {alreadyLikeCurrentUser ? <StarSVGYellow/> : <StarSVG/>}
                                     </span>

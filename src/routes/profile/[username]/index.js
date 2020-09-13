@@ -171,8 +171,8 @@ const Profile = () => {
     useEffect(() => {
         setFollowersCounter(profile.getCountFollowers)
         setAlreadyFollowProfile(!!profile.getFollowers.find(follower =>
-          follower?.user?.id === authenticatedUser.getID));
-    }, [profile]);
+            follower.getID === authenticatedUser.getID));
+    }, [authenticatedUser, profile]);
 
     useEffect(() => {
         console.log('fetch profile')
@@ -309,8 +309,7 @@ const Profile = () => {
                                     <div className="my-2">
                                         <ul className="d-flex align-items-center list-style-none">
                                             {profile.getFollowers.slice(0, 3)
-                                                .map((userLike, index) => {
-                                                    const user = new UserModel(userLike?.user);
+                                                .map((user, index) => {
                                                     return (
                                                         <li key={index} className="nav-item navbar-dropdown p-1">
                                                             <img className="dropdown-toggler rounded-circle"
@@ -332,27 +331,25 @@ const Profile = () => {
                         <Col xs={12} sm={4} md={4}>
                             <div className="follow_container" onClick={() => handleOpenModalFollowings()}>
                                 <span className="top-profile-followers">
-                                    {profile.getCountFollowing} {t('vehicles:subscriptions', { count : profile.getCountFollowing})}
+                                    {profile.getCountFollowings} {t('vehicles:subscriptions', { count : profile.getCountFollowings})}
                                 </span>
 
-                                {profile.getCountFollowing !== 0 && (
+                                {profile.getCountFollowings !== 0 && (
                                     <div className="my-2">
                                         <ul className="d-flex align-items-center list-style-none">
-                                            {profile.getFollowings.slice(0, 3)
-                                                .map((userLike, index) => {
-                                                    const user = new UserModel(userLike?.user);
-                                                    return (
-                                                        <li key={index} className="nav-item navbar-dropdown p-1">
-                                                            <img className="dropdown-toggler rounded-circle"
-                                                                width="30"
-                                                                height="30"
-                                                                src={user.getAvatar}
-                                                                title={user.getFullName}
-                                                                alt={user.getUsername}
-                                                            />
-                                                        </li>
-                                                    );
-                                                })}
+                                            {profile.getFollowings.slice(0, 3).map((user, index) => {
+                                                return (
+                                                    <li key={index} className="nav-item navbar-dropdown p-1">
+                                                        <img className="dropdown-toggler rounded-circle"
+                                                            width="30"
+                                                            height="30"
+                                                            src={user.getAvatar}
+                                                            title={user.getFullName}
+                                                            alt={user.getUsername}
+                                                        />
+                                                    </li>
+                                                );
+                                            })}
                                         </ul>
                                     </div>
                                 )}
@@ -397,9 +394,9 @@ const TabsContainer = ({ state, filterState, updateFilters }) => {
                             <Tabs.Item id="home-tab" title="Vitrine">
                                 <section className={clsx('cd-gallery', filtersOpened && 'filter-is-visible')}>
                                     <Row className="my-2 d-flex justify-content-center">
-                                        {profile.getGarage.length ? profile.getGarage.map((announceRaw, index) => (
+                                        {profile.getCountGarage !== 0 ? profile.getGarage.map((announce, index) => (
                                             <Col key={index} sm={12} md={12} lg={width < 1200 ? 12 : 6} xl={width < 1200 ? 12 : 6} className="my-2">
-                                                <AnnounceCard announceRaw={announceRaw}/>
+                                                <AnnounceCard announceRaw={announce.getRaw}/>
                                             </Col>
                                         )) : (
                                             <div className="d-flex flex-column align-items-center smy-2">

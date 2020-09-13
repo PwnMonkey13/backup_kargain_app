@@ -1,10 +1,12 @@
+import AnnounceModel from './announce.model'
+
 export default class UserModel {
     constructor (raw) {
-        this.raw = raw;
+        this.raw = raw ?? {};
     }
 
     get getRaw () {
-        return this.raw ?? {};
+        return this.raw;
     }
 
     get getID () {
@@ -26,7 +28,7 @@ export default class UserModel {
     get getIsActivated () {
         return this.raw?.activated ?? false;
     }
-
+    
     get getIsEmailValidated () {
         return this.raw?.email_validated ?? false;
     }
@@ -90,21 +92,29 @@ export default class UserModel {
 
     get getGarage () {
         const garage = this.raw?.garage ?? [];
-        return garage.filter(announce => announce.visible);
+        return garage
+            .filter(announce => announce.visible)
+            .map(announce => new AnnounceModel(announce));
+    }
+    
+    get getCountGarage () {
+        return this.getGarage.length
     }
 
     get getHiddenGarage () {
-        const garage = this.raw?.garage ?? [];
-        return garage.filter(announce => !announce.visible);
+        return this.getGarage.filter(announce => !announce.getIsVisible);
     }
 
     get getFavorites () {
-        return this.raw?.favorites ?? [];
+        const favorites = this.raw?.favorites ?? [];
+        return favorites.map(favorite => new AnnounceModel(favorite))
     }
 
     get getFollowers () {
         const followers = this.raw?.followers ?? [];
-        return followers.filter(like => like.user !== null)
+        return followers
+            .filter(like => !!like.user)
+            .map(like => new UserModel(like.user))
     }
 
     get getCountFollowers () {
@@ -113,10 +123,12 @@ export default class UserModel {
 
     get getFollowings () {
         const followings = this.raw?.followings ?? [];
-        return followings.filter(like => like.user !== null)
+        return followings
+            .filter(like => !!like.user)
+            .map(like => new UserModel(like.user))
     }
 
-    get getCountFollowing () {
+    get getCountFollowings () {
         return this.getFollowings.length;
     }
 

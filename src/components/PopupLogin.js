@@ -19,9 +19,9 @@ import { CheckBoxInput, EmailInput, PasswordInput } from './Form/Inputs';
 import SSOProviders from './SSOProviders';
 import { themeColors } from '../theme/palette';
 import Divider from './Divider';
-
 import CTAButton from './CTAButton';
 import CTALink from './CTALink';
+import userModel from '../models/user.model'
 
 const formConfig = {
     mode: 'onChange',
@@ -82,7 +82,6 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         transition: 'all .5s'
     }
-
 }));
 
 export default () => {
@@ -90,14 +89,14 @@ export default () => {
     const classes = useStyles();
     const router = useRouter();
     const { t } = useTranslation();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, avoidCloseLoginModal } = useAuth();
     const { control, errors, handleSubmit } = useForm(formConfig);
     const { dispatchModal, dispatchModalError } = useContext(ModalDialogContext);
     const [openLoginModal, toggleLoginModal] = useState(!isAuthenticated);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true
     });
-
+    
     const onSubmit = (form) => {
         const { email, password } = form;
         AuthService.login({
@@ -105,19 +104,22 @@ export default () => {
             password
         })
             .then(user => {
+                const User = new userModel(user)
                 router.reload();
                 toggleLoginModal(false);
+                
                 dispatchModal({
-                    msg: `Welcome back ${user.firstname}`
+                    msg: `Welcome back ${User.getFirstname}`
                 });
             }).catch(err => {
                 dispatchModalError({ err });
                 toggleLoginModal(false);
-            }
-            );
+            });
     };
 
-    if (!openLoginModal) return null;
+    if (!openLoginModal && !avoidCloseLoginModal){
+        return null;
+    }
 
     return (
         <div className={classes.popupOverlay}>
@@ -132,11 +134,14 @@ export default () => {
 
                 <Col sm={12} md={isDesktop ? 6 : 12}>
                     <div className={classes.wrapperForm}>
-                        <div className="d-flex justify-content-end">
-                            <button type="button" onClick={() => toggleLoginModal(false)}>
-                                <CloseIcon/>
-                            </button>
-                        </div>
+                        {!avoidCloseLoginModal && (
+                            <div className="d-flex justify-content-end">
+                                <button type="button" onClick={() => toggleLoginModal(false)}>
+                                    <CloseIcon/>
+                                </button>
+                            </div>
+                        )}
+                        
                         <div className="d-flex flex-column">
                             <SSOProviders col/>
                         </div>
@@ -208,7 +213,7 @@ export default () => {
     );
 }
 
-const Left = (() => {
+const Left = () => {
     const classes = useStyles();
     return (
         <>
@@ -241,7 +246,6 @@ const Left = (() => {
             </div>
         </>
     );
-});
-
+};
 
 const LeftBlock = memo(Left)

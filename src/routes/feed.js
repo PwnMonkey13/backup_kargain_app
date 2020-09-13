@@ -8,8 +8,10 @@ const Feed = () => {
     const isMounted = useIsMounted()
 
     useEffect(()=> {
-        if(isMounted){
-            if (!isAuthenticated) return setForceLoginModal(true);
+        if(isMounted && !isAuthenticated){
+            setForceLoginModal(true, true);
+        }
+        else{
             setForceLoginModal(false);
         }
     },[isMounted, isAuthenticated])

@@ -3,8 +3,9 @@ import parseISO from 'date-fns/parseISO';
 import ImageModel from './image.model';
 
 export default class AnnounceModel {
+    
     constructor (ad) {
-        this.raw = ad;
+        this.raw = ad ?? {};
     }
 
     //accessors
@@ -13,7 +14,7 @@ export default class AnnounceModel {
     }
 
     get getID () {
-        return this.raw.id;
+        return this.raw?.id;
     }
 
     get getAuthor () {
@@ -47,12 +48,12 @@ export default class AnnounceModel {
     get getPriceHT () {
         return this.raw?.priceHT ? Number(this.raw?.priceHT) : 0;
     }
-
+    
     get getManufacturer () {
-        const make = this.raw?.manufacturer?.make?.make ?? null;
-        const model = this.raw?.manufacturer?.model?.model ?? null;
-        const year = this.raw?.manufacturer?.model?.year ?? null;
-        const version = this.raw?.manufacturer?.model?.trim ?? null;
+        const make = this.raw?.manufacturer?.make?.['make'] ?? null;
+        const model = this.raw?.manufacturer?.model?.['model'] ?? null;
+        const year = this.raw?.manufacturer?.model?.['year'] ?? null;
+        const version = this.raw?.manufacturer?.model?.['trim'] ?? null;
 
         return {
             make,
@@ -62,14 +63,13 @@ export default class AnnounceModel {
         };
     }
 
-    get getManufacturerFormated () {
-        return Object.keys(this.getManufacturer)
-            .reduce((carry, key) => {
-                const value = this.getManufacturer[key];
-                if (value) return [...carry, value];
-                return carry;
-            }, [])
-            .join(' | ');
+    get getAnnounceTitle () {
+        return [
+            ...Object.entries(this.getManufacturer)
+                .filter(([,value]) => value)
+                .map(([,value]) => value)
+            ,this.geVehicleEngineType
+        ].join(' | ')
     }
 
     get getVehicleAdType () {
@@ -117,7 +117,7 @@ export default class AnnounceModel {
     }
 
     get getVehicleEquipments () {
-        return this.raw?.equipments;
+        return this.raw?.equipments ?? [];
     }
 
     get getVehicleEmissionClass () {
@@ -218,11 +218,14 @@ export default class AnnounceModel {
     }
 
     get getLikes () {
-        return this.raw?.likes ?? [];
+        const likes = this.raw?.likes ?? [];
+        return likes.filter(like => like.user !== null).map(like => ({
+            getAuthor : new UserModel(like.user)
+        }))
     }
 
-    get getLikesLength () {
-        return this.raw?.likes ? this.raw.likes.length : 0;
+    get getCountLikes () {
+        return this.getLikes.length;
     }
 
     get getCountViews () {

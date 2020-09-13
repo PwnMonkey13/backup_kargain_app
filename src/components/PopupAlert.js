@@ -53,7 +53,7 @@ const PopupAlert = () => {
         if (state.msg) return state.msg;
         if (state.type === 'error') {
             const err = typeof state.err === 'object' ? state.err?.message : state.err
-            return t(`messages_api:${err}`);
+            return t(`messages_api: ${err}`);
         }
         return null;
     };
