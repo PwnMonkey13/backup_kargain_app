@@ -100,7 +100,7 @@
     "account_activated" : "Account successfully activated",
     "pictures": "Pictures",
     "publication": "Publication",
-    "upload-{max}-pictures": "Upload {{max}} pictures",
+    "upload-{max}-pictures": "Upload up to {{max}} pictures",
     "you-can-upload-more-after": " We will be able to upload more pics later",
     "select-your-car": "Select your car",
     "select-vehicle-make": "Select a make",

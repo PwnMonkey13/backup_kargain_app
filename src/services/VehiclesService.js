@@ -13,6 +13,16 @@ function getCarsDistinctModels (vehicleType, make) {
     return fetch(buildUrl(`${baseRoute}/cars/distinct/make/models`, { make }), requestOptions)
         .then(handleResponse)
         .then(json => json.data)
+        .then(data => {
+            if(!Array.isArray(data)){
+                return fetch(buildUrl(`${baseRoute}/cars/distinct/make/models`, { make, forceRewriteCache : true }), requestOptions)
+                    .then(handleResponse)
+                    .then(json => json.data)
+                    .catch(err => {
+                        throw err;
+                    });
+            }
+        })
         .catch(err => {
             throw err;
         });

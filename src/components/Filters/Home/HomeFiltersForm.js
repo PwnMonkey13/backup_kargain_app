@@ -290,7 +290,7 @@ const HomeFiltersForm = ({ vehicleType, methods }) => {
                 <Col md={6}>
                     <FieldWrapper label={t('vehicles:year')}>
                         <SelectInput
-                            name="year"
+                            name="manufacturer.year"
                             placeholder="Select year"
                             options={manufacturersData.years}
                             control={control}
