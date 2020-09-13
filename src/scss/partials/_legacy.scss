@@ -339,10 +339,11 @@ h1.annonce{
   font: 700 23px Quicksand;
   text-align: end;
 }
+
 .price-announce span{
   font: 400 19px Quicksand;
-  margin-left: 30px;
 }
+
 .share{
   color: #3d4248;
   font: 500 13px Quicksand;
@@ -423,13 +424,13 @@ h1.annonce{
   align-items: center;
   color: #a5a0a0;
   font: 500 16px Quicksand;
-  margin-right: 30px;
+  margin-right: 1rem;
   cursor: pointer;
 }
 .icons-star-prof img{
-  width: 26px;
+  width: 25px;
   height: auto;
-  margin-right: 7px;
+  margin-right: 5px;
 }
 .icons-star-prof-convert img{
   width: 28px;

@@ -96,7 +96,6 @@ export default makeStyles(theme => ({
         height: '100%',
         overflow: 'hidden',
         border: '1px solid gainsboro',
-        padding: '.5rem',
         background: '#fff',
 
         [theme.breakpoints.down('sm')]: {
@@ -116,7 +115,7 @@ export default makeStyles(theme => ({
         position: 'relative',
         width: '100%',
         display: 'flex',
-        height: '5rem',
+        height: '4rem',
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -124,13 +123,12 @@ export default makeStyles(theme => ({
         zIndex: 1,
         boxShadow: '0 0.2rem 0.2rem 0 rgba(0,0,0,.1)',
         borderBottom: '1px solid #cad1d9'
-        // [theme.breakpoints.down('md')]: {}
     },
 
     conversationContent: {
-        height: '60vh',
+        height: 'calc(60vh - 1rem)',
         display: 'block',
-        overflowY: 'scroll',
+        overflowY: 'auto',
         backgroundColor: 'gainsboro',
         padding : '.5rem'
     },

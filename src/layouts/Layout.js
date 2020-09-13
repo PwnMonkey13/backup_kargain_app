@@ -19,7 +19,7 @@ const Layout = ({ children }) => {
                 style={{
                     height: '30px',
                     width: '30px',
-                    border: '3px solid gainsboro',
+                    border: '3px solid gainsboro'
                 }}>
             </ScrollUpButton>
         </>

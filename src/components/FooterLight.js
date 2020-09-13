@@ -47,7 +47,7 @@ const FooterLight = () => {
         <footer>
             <div className="container">
                 <Navbar>
-                    <Nav navbar className={clsx(classes.footerLinks, 'my-4', 'py-2', 'mx-auto')}>
+                    <Nav navbar className={clsx(classes.footerLinks, 'my-2', 'py-2', 'mx-auto')}>
                         {links && links.map((link, index) => {
                             return (
                                 <li key={index} className="mx-2">

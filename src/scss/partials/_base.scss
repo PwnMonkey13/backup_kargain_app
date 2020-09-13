@@ -97,12 +97,11 @@ a {
 
 main {
     display: block;
-    margin: 1rem auto;
-    padding: 1rem;
+    margin: 0 auto;
+    padding: .5rem .5rem 0;
     position: relative;
-    min-height: 75vh;
+    min-height: calc(80vh - 1rem);
 }
-
 
 @media (max-width: 768px) {
     main {
