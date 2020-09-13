@@ -6,7 +6,7 @@ import { Col, Row, TabContent, TabPane } from 'reactstrap';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Header from '../Header';
 import DamagesNavResponsive from './DamagesNavResponsive';
-import damagesFilters from './damagesFilters'
+import toggleVehicleDamagesTabs from './ToggleVehicleDamagesTabs'
 
 const useStyles = makeStyles(() => ({
     annoInputs: {
@@ -74,14 +74,15 @@ const DamageViewerTabs = ({ vehicleType, tabs }) => {
     let annoRefs = [];
 
     useEffect(()=>{
-        const p = damagesFilters(vehicleType, tabs).map(tab => ({
-            key: tab.key,
-            countStages: tab.stages.length
-        }));
-
+        const p = toggleVehicleDamagesTabs(vehicleType, tabs)
+            .filter(tab => tab.display)
+            .map(tab => ({
+                key: tab.key,
+                countStages: tab.stages.length
+            }));
         setDamagesTabs(p)
     },[vehicleType,tabs])
-
+    
     return (
         <section className="anno">
             <DamagesNavResponsive

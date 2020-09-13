@@ -68,8 +68,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFullWidth, ...props }) => {
-    const classes = useStyles();
     let annoRefs = [];
+    const classes = useStyles();
     const { t } = useTranslation();
     const warningDamageRef = useRef(null);
     const [activeTab, setActiveTab] = useState(0);
@@ -158,18 +158,22 @@ const DamageSelectorTabs = ({ tabs, defaultMaxDamages, fireChanges, selectorFull
     return (
         <section className="anno">
             <DamagesNavResponsive
-                {...{
-                    damagesTabs: damagesTabs.map(tab => ({
-                        key: tab.key,
-                        countStages: tab.stages?.length
-                    })),
-                    activeTab,
-                    setActiveTab
+                {...{activeTab,
+                    setActiveTab,
+                    damagesTabs: damagesTabs
+                        .filter(tab => tab.display)
+                        .map(tab => ({
+                            key: tab.key,
+                            countStages: tab.stages?.length
+                        }
+                    )),
                 }}
             />
 
             <TabContent ref={warningDamageRef} activeTab={activeTab}>
-                {damagesTabs.map((damageTab, indexTab) => {
+                {damagesTabs
+                    .filter(tab => tab.display)
+                    .map((damageTab, indexTab) => {
                     if (!damageTab.stages) damageTab.stages = [];
                     const stages = damageTab.stages;
                     const max = damageTab.maxDamages || defaultMaxDamages;
