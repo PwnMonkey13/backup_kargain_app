@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Link from 'next-translate/Link';
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
-import UserModel from '../models/user.model';
 import Typography from '@material-ui/core/Typography';
+import { ModalContext } from '../context/ModalContext'
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         flexWrap: 'wrap'
     },
+    
     paper: {
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
@@ -34,40 +35,46 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function ModalFollowers ({ title, likes, open, handleClose }) {
+export default function ModalFollowers () {
     const classes = useStyles();
-
+    const { modalStateContext, dispatchModalState } = useContext(ModalContext);
+    
+    const handleClose = () => dispatchModalState({
+        openModalFollowers : false
+    })
+    
     return (
-        <Modal className={classes.modal} open={open} onClose={handleClose}>
-            <Fade in={open}>
+        <Modal
+            className={classes.modal}
+            open={modalStateContext.openModalFollowers}
+            onClose={handleClose}>
+            <Fade in={modalStateContext.openModalFollowers}>
                 <div className={classes.paper}>
                     <Typography component="h2" variant="h2">
-                        {title} ({likes.length})
+                        {modalStateContext.modalFollowersTitle} ({modalStateContext.modalFollowersProfiles.length})
                     </Typography>
                     <div className="my-2">
                         <ul className={classes.list}>
-                            {likes && likes
-                                .map((userLike, index) => {
-                                    const user = new UserModel(userLike?.user);
-                                    return (
-                                        <li key={index} className="nav-item navbar-dropdown p-1">
-                                            <Link href={user.getProfileLink}>
-                                                <a className="d-flex align-items-center">
-                                                    <img className="dropdown-toggler rounded-circle mx-2"
-                                                        width="50"
-                                                        height="50"
-                                                        src={user.getAvatar}
-                                                        title={user.getFullName}
-                                                        alt={user.getUsername}
-                                                    />
-                                                    <Typography variant="body1">
-                                                        {user.getFullName}
-                                                    </Typography>
-                                                </a>
-                                            </Link>
-                                        </li>
-                                    );
-                                })}
+                            {modalStateContext.modalFollowersProfiles.map((user, index) => {
+                                return (
+                                    <li key={index} className="nav-item navbar-dropdown p-1">
+                                        <Link href={user.getProfileLink}>
+                                            <a className="d-flex align-items-center">
+                                                <img className="dropdown-toggler rounded-circle mx-2"
+                                                    width="50"
+                                                    height="50"
+                                                    src={user.getAvatar}
+                                                    title={user.getFullName}
+                                                    alt={user.getUsername}
+                                                />
+                                                <Typography variant="body1">
+                                                    {user.getFullName}
+                                                </Typography>
+                                            </a>
+                                        </Link>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </div>
                 </div>

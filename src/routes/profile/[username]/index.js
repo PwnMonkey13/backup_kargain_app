@@ -3,6 +3,7 @@ import { Col, Container, Row } from 'reactstrap';
 import clsx from 'clsx';
 import useDimensions from 'react-use-dimensions'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import Link from 'next-translate/Link';
 import useTranslation from 'next-translate/useTranslation';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -13,16 +14,14 @@ import { useAuth } from '../../../context/AuthProvider';
 import { MessageContext } from '../../../context/MessageContext';
 import { ModalContext } from '../../../context/ModalContext'
 import UsersService from '../../../services/UsersService';
+import AnnounceService from '../../../services/AnnounceService'
+import UserModel from '../../../models/user.model';
 import AvatarPreview from '../../../components/Avatar/AvatarPreview';
 import AnnounceCard from '../../../components/AnnounceCard';
 import CTALink from '../../../components/CTALink';
 import Tabs from '../../../components/Tabs/Tabs';
-import UserModel from '../../../models/user.model';
 import Loader from '../../../components/Loader';
-import ModalContact from '../../../components/ModalContact';
-import ModalFollowers from '../../../components/ModalFollowers'
 import AdvancedFilters from '../../../components/Filters/Advanced/AdvancedFilters'
-import AnnounceService from '../../../services/AnnounceService'
 import { ReactComponent as StarSVGYellow } from '../../../../public/images/svg/star-yellow.svg'
 import { ReactComponent as StarSVG } from '../../../../public/images/svg/star.svg'
 import Error from '../../_error'
@@ -36,38 +35,24 @@ const Profile = () => {
     const { dispatchModalState } = useContext(ModalContext);
     const [followerCounter, setFollowersCounter] = useState(0);
     const [alreadyFollowProfile, setAlreadyFollowProfile] = useState(false);
-    const [openModalContact, setOpenModalContact] = useState(false);
-    const [openModalFollowers, setOpenModalFollowers] = useState(false);
-    const [openModalFollowings, setOpenModalFollowings] = useState(false);
-
-    const handleOpenModalContact = () => {
-        if (!isAuthenticated) {
-            return setForceLoginModal(true);
-        } else {
-            setOpenModalContact(true);
-        }
-    };
-
-    const handleCloseModalContact = () => {
-        setOpenModalContact(false);
-    };
-
-    const handleOpenModalFollowers = () => {
-        setOpenModalFollowers(true);
-    };
-
-    const handleCloseModalFollowers = () => {
-        setOpenModalFollowers(false);
-    };
-
-    const handleOpenModalFollowings = () => {
-        setOpenModalFollowings(true);
-    };
-
-    const handleCloseModalFollowings = () => {
-        setOpenModalFollowings(false);
-    };
-
+    const [state, setState] = useState({
+        err: null,
+        stateReady: false,
+        isSelf: false,
+        isAdmin: false,
+        profile: new UserModel()
+    });
+    
+    const [filterState, setFilterState] = useState({
+        loading: false,
+        sorter: {},
+        filters: {},
+        page: 1,
+        total: 0
+    });
+    
+    const profile = state.profile
+    
     const handleFollowProfile = async () => {
         if (!isAuthenticated) return setForceLoginModal(true);
         try {
@@ -177,32 +162,11 @@ const Profile = () => {
 
     return (
         <Container>
-            {!state.isSelf && (
-                <ModalContact
-                    recipient={profile}
-                    handleClose={handleCloseModalContact}
-                    open={openModalContact}
-                />
-            )}
-
-            <ModalFollowers
-                title={t('vehicles:followers')}
-                likes={profile.getFollowers}
-                handleClose={handleCloseModalFollowers}
-                open={openModalFollowers}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
+    
+            <NextSeo
+                title={`${profile.getFullName} - Kargain`}
             />
-
-            <ModalFollowers
-                title={t('vehicles:subscriptions')}
-                likes={profile.getFollowings}
-                handleClose={handleCloseModalFollowings}
-                open={openModalFollowings}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-            />
-
+            
             {state.isAdmin && (
                 <Alert severity="info" className="mb-2">
                     Connected as Admin
@@ -234,10 +198,10 @@ const Profile = () => {
                                     variant="contained"
                                     color="primary"
                                     startIcon={<ChatIcon/>}
-                                    onClick={() => {
-                                        handleOpenModalContact(true);
-                                    }}
-                                >
+                                    onClick={() => dispatchModalState({
+                                        openModalMessaging : true,
+                                        modalMessagingProfile : profile
+                                    })}>
                                     {t('vehicles:contact')}
                                 </Button>
                             </div>
@@ -263,7 +227,13 @@ const Profile = () => {
                         )}
 
                         <Col xs={12} sm={4} md={4}>
-                            <div className="follow_container" onClick={() => handleOpenModalFollowers()}>
+                            <div className="follow_container"
+                                onClick={() => dispatchModalState({
+                                    openModalFollowers : true,
+                                    modalFollowersProfiles : profile.getFollowers,
+                                    modalFollowersTitle : t('vehicles:followers')
+                                    
+                                })}>
                                 <div className="top-profile-followers">
                                     {state.isSelf ? (
                                         <>
@@ -313,7 +283,13 @@ const Profile = () => {
                         </Col>
 
                         <Col xs={12} sm={4} md={4}>
-                            <div className="follow_container" onClick={() => handleOpenModalFollowings()}>
+                            <div className="follow_container"
+                                onClick={() => dispatchModalState({
+                                    openModalFollowers : true,
+                                    modalFollowersProfiles : profile.getFollowings,
+                                    modalFollowersTitle : t('vehicles:subscriptions')
+                                })}>
+                                
                                 <span className="top-profile-followers">
                                     {profile.getCountFollowings} {t('vehicles:subscriptions', { count : profile.getCountFollowings})}
                                 </span>

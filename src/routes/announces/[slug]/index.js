@@ -27,8 +27,7 @@ import { MessageContext } from '../../../context/MessageContext';
 import { ModalContext } from '../../../context/ModalContext';
 import { useAuth } from '../../../context/AuthProvider';
 import { getTimeAgo } from '../../../libs/utils';
-import ModalContact from '../../../components/ModalContact';
-import ModalFollowers from '../../../components/ModalFollowers';
+
 import Error from '../../_error';
 
 const useStyles = makeStyles(() => ({
@@ -78,26 +77,10 @@ const Announce = () => {
         isAdmin : false,
         announce : new AnnounceModel(),
         likesCounter : 0
-
     });
-
-    const handleOpenModalContact = () => {
-        setOpenModalContact(true);
-    };
-
-    const handleCloseModalContact = () => {
-        setOpenModalContact(false);
-    };
-
-    const handleOpenModalFollowers = () => {
-        setOpenModalFollowers(true);
-
-    };
-
-    const handleCloseModalFollowers = () => {
-        setOpenModalFollowers(false);
-    };
-
+    
+    const { announce } = state
+    
     const handleCLickImg = (index) => {
         if (refImg.current) {
             refImg.current.slideToIndex(index);
@@ -116,6 +99,7 @@ const Announce = () => {
     const handleClickLikeButton = async () => {
         if (!isAuthenticated) return setForceLoginModal(true);
         let counter = state.likesCounter;
+        
         try {
             if (alreadyLikeCurrentUser) {
                 await AnnounceService.removeLikeLoggedInUser(state.announce.getID);
@@ -160,20 +144,12 @@ const Announce = () => {
 
     return (
         <Container>
-            <ModalContact
-                recipient={state.announce.getAuthor}
-                handleClose={handleCloseModalContact}
-                open={openModalContact}
+    
+            <NextSeo
+                title={`${announce.getTitle} - Kargain`}
+                description={announce.getTheExcerpt()}
             />
-
-            <ModalFollowers
-                likes={state.announce.getLikes}
-                handleClose={handleCloseModalFollowers}
-                open={openModalFollowers}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-            />
-
+            
             {state.isAdmin && (
                 <Alert severity="info" className="mb-2">
                     Connected as Admin
