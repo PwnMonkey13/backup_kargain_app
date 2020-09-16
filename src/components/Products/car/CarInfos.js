@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
-import PropTypes from 'prop-types';
-import { Col, Row } from 'reactstrap';
-import Typography from '@material-ui/core/Typography';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import React, { memo } from 'react'
+import PropTypes from 'prop-types'
+import { Col, Row } from 'reactstrap'
+import Typography from '@material-ui/core/Typography'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import useTranslation from 'next-translate/useTranslation'
 
 const useStyles = makeStyles(() => ({
@@ -19,12 +19,12 @@ const useStyles = makeStyles(() => ({
             fontWeight: 700
         }
     }
-}));
+}))
 
 const CarInfos = ({ announce, enableThirdColumn }) => {
-    const classes = useStyles();
+    const classes = useStyles()
     const { t } = useTranslation()
-    const cols = enableThirdColumn ? 4 : 6;
+    const cols = enableThirdColumn ? 4 : 6
     
     return (
         <Row className="specs my-2 p-2">
@@ -157,19 +157,19 @@ const CarInfos = ({ announce, enableThirdColumn }) => {
                             {announce.getVehicleMaterials && announce.getVehicleMaterials.map((material, i) => {
                                 return (
                                     <li key={i}> {material.label}</li>
-                                );
+                                )
                             })}
                         </ul>
                     </div>
                 </Col>
             )}
         </Row>
-    );
-};
+    )
+}
 
 CarInfos.propTypes = {
     announce: PropTypes.object.isRequired,
     responsiveCols: PropTypes.bool,
     enableThirdColumn: PropTypes.bool
-};
-export default memo(CarInfos);
+}
+export default memo(CarInfos)

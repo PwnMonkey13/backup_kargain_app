@@ -1,25 +1,25 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Col, Container, Row } from 'reactstrap';
-import clsx from 'clsx';
-import { NextSeo } from 'next-seo';
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { Col, Container, Row } from 'reactstrap'
+import clsx from 'clsx'
+import { NextSeo } from 'next-seo'
 import useTranslation from 'next-translate/useTranslation'
-import Typography from '@material-ui/core/Typography';
-import FindInPageIcon from '@material-ui/icons/FindInPage';
-import PaginateResults from './PaginateResults';
-import Sorters from './Sorters/Sorters';
+import Typography from '@material-ui/core/Typography'
+import FindInPageIcon from '@material-ui/icons/FindInPage'
+import PaginateResults from './PaginateResults'
+import Sorters from './Sorters/Sorters'
 import AnnounceCard from '../components/AnnounceCard'
 import AnnounceService from '../services/AnnounceService'
-import { MessageContext } from '../context/MessageContext';
-import { useAuth } from '../context/AuthProvider';
+import { MessageContext } from '../context/MessageContext'
+import { useAuth } from '../context/AuthProvider'
 import AdvancedFilters from './Filters/Advanced/AdvancedFilters'
 import Loading from '../components/Loading'
 import CTALink from './CTALink'
 
 const SearchPage = ({fetchFeed, ...props}) => {
     const { t } = useTranslation()
-    const { dispatchModalError } = useContext(MessageContext);
-    const { isAuthenticated } = useAuth();
-    const [filtersOpened] = useState(false);
+    const { dispatchModalError } = useContext(MessageContext)
+    const { isAuthenticated } = useAuth()
+    const [filtersOpened] = useState(false)
     const [state, setState] = useState({
         loading: false,
         sorter: {},
@@ -27,11 +27,11 @@ const SearchPage = ({fetchFeed, ...props}) => {
         page: 1,
         announces: [],
         total: 0
-    });
+    })
 
     const fetchAnnounces = useCallback(async() => {
-        const { sorter, filters, page } = state;
-        const { size } = props;
+        const { sorter, filters, page } = state
+        const { size } = props
 
         const params = {
             ...filters,
@@ -39,61 +39,61 @@ const SearchPage = ({fetchFeed, ...props}) => {
             sort_ord: sorter.asc ? 'ASC' : null,
             page,
             size
-        };
+        }
 
         setState(state => ({
             ...state,
             loading: true
-        }));
+        }))
 
         try {
             const result = fetchFeed ?
                 await AnnounceService.getFeedAnnounces(params)
-                : await AnnounceService.getSearchAnnounces(params);
+                : await AnnounceService.getSearchAnnounces(params)
 
             setState(state => ({
                 ...state,
                 announces: result.rows || [],
                 total: result.total || 0,
                 loading: false
-            }));
+            }))
 
         } catch (err) {
             setState(state => ({
                 ...state,
                 loading: false
-            }));
-            dispatchModalError({ err });
+            }))
+            dispatchModalError({ err })
         }
-    },[state.page, state.filters, state.sorter]);
+    },[state.page, state.filters, state.sorter])
 
     const handlePageChange = (page) => {
         setState(state => ({
             ...state,
             page
-        }));
-    };
+        }))
+    }
 
     const updateFilters = (filters) => {
         setState(state => ({
             ...state,
             filters
-        }));
-    };
+        }))
+    }
 
     const updateSorter = (sorter) => {
         setState(state => ({
             ...state,
             sorter
-        }));
-    };
+        }))
+    }
 
     useEffect(() => {
         if(isAuthenticated){
-            fetchAnnounces();
-            window.scrollTo(0, 0);
+            fetchAnnounces()
+            window.scrollTo(0, 0)
         }
-    }, [isAuthenticated, fetchAnnounces]);
+    }, [isAuthenticated, fetchAnnounces])
 
     return (
         <Container>
@@ -165,13 +165,13 @@ const SearchPage = ({fetchFeed, ...props}) => {
                 </Col>
             </Row>
         </Container>
-    );
-};
+    )
+}
 
 SearchPage.defaultProps = {
     fetchFeed : false,
     paginate: 3,
     size: 5
-};
+}
 
-export default SearchPage;
+export default SearchPage

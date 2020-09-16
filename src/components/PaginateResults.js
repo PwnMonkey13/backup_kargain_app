@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
-import PropTypes from 'prop-types';
-import Pagination from 'react-paginating';
+import React, { memo } from 'react'
+import PropTypes from 'prop-types'
+import Pagination from 'react-paginating'
 
 const PaginateResults = ({ totalPages, size, pageCount, page, handlePageChange }) => {
     return (
@@ -21,7 +21,7 @@ const PaginateResults = ({ totalPages, size, pageCount, page, handlePageChange }
                     totalPages,
                     getPageItemProps
                 }) => {
-                    if (totalPages < 2) return null;
+                    if (totalPages < 2) return null
                     return (
                         <div>
                             {currentPage !== 1 && (
@@ -47,9 +47,9 @@ const PaginateResults = ({ totalPages, size, pageCount, page, handlePageChange }
                             )}
 
                             {pages.map((page, i) => {
-                                let activePage = null;
+                                let activePage = null
                                 if (currentPage === page) {
-                                    activePage = { backgroundColor: '#fdce09' };
+                                    activePage = { backgroundColor: '#fdce09' }
                                 }
                                 return (
                                     <button key={i}
@@ -62,37 +62,37 @@ const PaginateResults = ({ totalPages, size, pageCount, page, handlePageChange }
                                     >
                                         {page}
                                     </button>
-                                );
+                                )
                             })}
 
                             {(hasNextPage && pages.length > 2) && (
-                            <>
-                                <button
-                                    {...getPageItemProps({
-                                        pageValue: nextPage,
-                                        onPageChange: handlePageChange
-                                    })}
-                                >
-                                    {'>'}
-                                </button>
+                                <>
+                                    <button
+                                        {...getPageItemProps({
+                                            pageValue: nextPage,
+                                            onPageChange: handlePageChange
+                                        })}
+                                    >
+                                        {'>'}
+                                    </button>
 
-                                <button
-                                    {...getPageItemProps({
-                                        pageValue: totalPages,
-                                        onPageChange: handlePageChange
-                                    })}
-                                >
-                                    {totalPages}
-                                </button>
-                            </>
+                                    <button
+                                        {...getPageItemProps({
+                                            pageValue: totalPages,
+                                            onPageChange: handlePageChange
+                                        })}
+                                    >
+                                        {totalPages}
+                                    </button>
+                                </>
                             )}
                         </div>
-                    );
+                    )
                 }}
             </Pagination>
         </div>
-    );
-};
+    )
+}
 
 PaginateResults.propsType = {
     totalPages: PropTypes.number.isRequired,
@@ -102,4 +102,4 @@ PaginateResults.propsType = {
     handlePageChange : PropTypes.func.isRequired
 }
 
-export default memo(PaginateResults);
+export default memo(PaginateResults)

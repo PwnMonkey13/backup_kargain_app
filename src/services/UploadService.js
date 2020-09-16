@@ -16,7 +16,7 @@ function generatePutUrl (Key, ContentType) {
         ContentType
     }
 
-    let url = buildUrl(config.api, "/uploads/generate-put-url", params);
+    let url = buildUrl(config.api, "/uploads/generate-put-url", params)
 
     return fetch(url, requestOptions)
         .then(handleResponse)
@@ -40,7 +40,7 @@ function putSingleObjectExternal (putURL, file, Key, ContentType) {
         ContentType
     }
 
-    let url = `${putURL}&${queryString.stringify(params)}`;
+    let url = `${putURL}&${queryString.stringify(params)}`
     return fetch(url, requestOptions)
         .then(res => res)
         .catch(err => {

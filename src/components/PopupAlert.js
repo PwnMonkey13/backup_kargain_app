@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Link from 'next-translate/Link';
-import { Modal } from 'reactstrap';
-import { MessageContext } from '../context/MessageContext';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import { themeColors } from '../theme/palette';
+import React, { useContext, useEffect, useState } from 'react'
+import Link from 'next-translate/Link'
+import { Modal } from 'reactstrap'
+import { MessageContext } from '../context/MessageContext'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import { themeColors } from '../theme/palette'
 import useTranslation from 'next-translate/useTranslation'
 
 const useStyles = makeStyles(() => ({
@@ -33,30 +33,30 @@ const useStyles = makeStyles(() => ({
         backgroundColor: themeColors.blue,
         color: themeColors.white
     }
-}));
+}))
 
 const PopupAlert = () => {
     const { t } = useTranslation()
-    const classes = useStyles();
-    const { modalState } = useContext(MessageContext);
-    const [state, setState] = useState({});
+    const classes = useStyles()
+    const { modalState } = useContext(MessageContext)
+    const [state, setState] = useState({})
 
     useEffect(() => {
-        setState(modalState);
-    }, [modalState]);
+        setState(modalState)
+    }, [modalState])
 
     const toggleModal = () => {
-        setState(!state.active);
-    };
+        setState(!state.active)
+    }
 
     const getMessage = () => {
-        if (state.msg) return state.msg;
+        if (state.msg) return state.msg
         if (state.type === 'error') {
             const err = typeof state.err === 'object' ? state.err?.message : state.err
-            return t(`messages_api: ${err}`);
+            return t(`messages_api: ${err}`)
         }
-        return null;
-    };
+        return null
+    }
 
     return (
         <Modal className={classes.rootClass} zIndex={1601}
@@ -72,8 +72,8 @@ const PopupAlert = () => {
                 )}
             </div>
         </Modal>
-    );
+    )
 }
-;
 
-export default PopupAlert;
+
+export default PopupAlert

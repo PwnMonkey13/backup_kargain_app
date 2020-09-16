@@ -15,8 +15,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import useTranslation from 'next-translate/useTranslation';
 import { Col, Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
-import { EmailInput, SelectCountryFlags, TelInput, TextareaInput, TextInput } from '../../../components/Form/Inputs';
-import SearchLocationInput from '../../../components/Form/Inputs/SearchLocationInput';
+import TextInput from '../../../components/Form/Inputs/TextInput'
+import EmailInput from '../../../components/Form/Inputs/EmailInput'
+import SelectCountryFlags from '../../../components/Form/Inputs/SelectCountryFlags'
+import SearchLocationInput from '../../../components/Form/Inputs/SearchLocationInput'
 import ValidationErrors from '../../../components/Form/Validations/ValidationErrors';
 import AvatarPreviewUpload from '../../../components/Avatar/AvatarPreviewUpload';
 import OffersPurchaseForm from '../../../components/Stripe/OffersPurchaseForm';

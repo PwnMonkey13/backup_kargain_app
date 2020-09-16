@@ -260,4 +260,4 @@ export const RadioChoicesPaints = [
         value: 'autre',
         label: 'Autre'
     }
-];
+]

@@ -1,21 +1,12 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Row } from 'reactstrap';
 import ValidationError from '../Validations/ValidationError';
 
-const RadioGroupInput = memo(({ name, control, rules, errors, options, ...props }) => {
-    const FieldRow = classNames(
-        'd-flex',
-        { 'justify-content-center': props.center },
-        { 'flex-column': props.vertical },
-    );
-
-    const InputClasses = classNames(
-        props.noInputClass ? 'no-input' : 'form-check',
-        'mx-2',
-        'my-1',
-    );
+const RadioGroupInput = ({ name, rules, control, errors, ...props }) => {
+    const FieldRow = clsx('d-flex', props.center && 'justify-content-center', props.vertical && 'flex-column');
+    const InputClasses = clsx(props.noInputClass ? 'no-input' : 'form-check', 'mx-2', 'my-1');
 
     return (
         <>
@@ -41,16 +32,16 @@ const RadioGroupInput = memo(({ name, control, rules, errors, options, ...props 
             {errors && <ValidationError errors={errors} name={name}/>}
         </>
     );
-});
+};
 
 RadioGroupInput.propTypes = {
     name: PropTypes.string.isRequired,
-    center: PropTypes.bool,
+    center: PropTypes.bool
 };
 
 RadioGroupInput.defaultProps = {
     center: true,
-    rules: {},
+    rules: {}
 };
 
-export default RadioGroupInput;
+export default memo(RadioGroupInput);

@@ -1,30 +1,30 @@
-import React from 'react';
-import NProgress from 'nprogress';
-import Router from "next/router";
-import PropTypes from 'prop-types';
+import React from 'react'
+import NProgress from 'nprogress'
+import Router from "next/router"
+import PropTypes from 'prop-types'
 
 class NextProgress extends React.Component {
     static defaultProps = {
         color: '#29D',
         startPosition: 0.3,
         stopDelayMs: 200,
-        height: 3,
+        height: 3
     };
 
     timer = null;
 
     routeChangeStart = () => {
-        console.log("route start changed");
-        NProgress.set(this.props.startPosition);
-        NProgress.start();
+        console.log("route start changed")
+        NProgress.set(this.props.startPosition)
+        NProgress.start()
     };
 
     routeChangeEnd = () => {
-        console.log("route end changed");
-        clearTimeout(this.timer);
+        console.log("route end changed")
+        clearTimeout(this.timer)
         this.timer = setTimeout(() => {
-            NProgress.done(true);
-        }, this.props.stopDelayMs);
+            NProgress.done(true)
+        }, this.props.stopDelayMs)
     };
 
     render() {
@@ -103,15 +103,15 @@ class NextProgress extends React.Component {
     }
 
     componentDidMount() {
-        const { options } = this.props;
+        const { options } = this.props
 
         if (options) {
-            NProgress.configure(options);
+            NProgress.configure(options)
         }
 
-        Router.events.on('routeChangeStart', this.routeChangeStart);
-        Router.events.on('routeChangeComplete', this.routeChangeEnd);
-        Router.events.on('routeChangeError', this.routeChangeEnd);
+        Router.events.on('routeChangeStart', this.routeChangeStart)
+        Router.events.on('routeChangeComplete', this.routeChangeEnd)
+        Router.events.on('routeChangeError', this.routeChangeEnd)
     }
 }
 
@@ -119,7 +119,7 @@ NextProgress.propTypes = {
     color: PropTypes.string,
     startPosition: PropTypes.number,
     stopDelayMs: PropTypes.number,
-    options: PropTypes.object,
-};
+    options: PropTypes.object
+}
 
-export default NextProgress;
+export default NextProgress

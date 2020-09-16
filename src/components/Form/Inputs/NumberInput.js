@@ -46,7 +46,8 @@ const NumberInput = ({ name, rules, control, errors, ...props }) => {
 };
 
 NumberInput.propTypes = {
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
+    control : PropTypes.any.isRequired
 };
 
 NumberInput.defaultProps = {

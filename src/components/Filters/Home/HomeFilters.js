@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import clsx from 'clsx'
+import { useForm } from 'react-hook-form'
+import { Col, Row } from 'reactstrap'
 import useTranslation from 'next-translate/useTranslation'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Typography from '@material-ui/core/Typography'
 import Alert from '@material-ui/lab/Alert'
-import { useForm } from 'react-hook-form'
-import { Col, Row } from 'reactstrap'
 import filterProps from '../../../libs/filterProps'
 import vehicleTypes from '../../../business/vehicleTypes.js'
 import AnnounceTypes from '../../../business/announceTypes.js'
 import { useAuth } from '../../../context/AuthProvider'
-import LightFiltersForm from './HomeFiltersForm'
+import HomeFiltersForm from './HomeFiltersForm'
 import CTAButton from '../../CTAButton'
 import CTALink from '../../CTALink'
 
@@ -45,7 +45,7 @@ const useStyles = makeStyles(() => ({
 const HomeFilters = ({ updateFilters, totalResult }) => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const { authenticatedUser } = useAuth();
+    const { authenticatedUser } = useAuth()
     const [vehicleType, setVehicleType] = useState(vehicleTypes[0].value)
     const methods = useForm({
         mode: 'onChange',
@@ -55,21 +55,21 @@ const HomeFilters = ({ updateFilters, totalResult }) => {
         }
     })
 
-    const { errors, register, handleSubmit } = methods;
+    const { errors, register, handleSubmit } = methods
 
     const onSubmit = (form, e) => {
-        const { coordinates, radius } = form;
-        const filtersFlat = filterProps(form);
-        const data = { ...filtersFlat };
+        const { coordinates, radius } = form
+        const filtersFlat = filterProps(form)
+        const data = { ...filtersFlat }
 
         if (coordinates && radius) {
-            data.radius = radius;
-            data.coordinates = coordinates;
-            data.enableGeocoding = true;
+            data.radius = radius
+            data.coordinates = coordinates
+            data.enableGeocoding = true
         }
 
-        e.preventDefault();
-        updateFilters(data);
+        e.preventDefault()
+        updateFilters(data)
     }
 
     return(
@@ -124,7 +124,7 @@ const HomeFilters = ({ updateFilters, totalResult }) => {
                     })}
             </Row>
 
-            <LightFiltersForm
+            <HomeFiltersForm
                 vehicleType={vehicleType}
                 methods={methods}
             />

@@ -1,22 +1,22 @@
-import React, { useContext } from 'react';
-import { useForm } from 'react-hook-form';
-import { EmailInput } from '../../components/Form/Inputs';
-import FieldWrapper from '../../components/Form/FieldWrapper';
-import AuthService from '../../services/AuthService';
-import { MessageContext } from '../../context/MessageContext';
-import CTAButton from '../../components/CTAButton';
-import { useAuth } from '../../context/AuthProvider';
+import React, { useContext } from 'react'
+import { useForm } from 'react-hook-form'
+import EmailInput from '../../components/Form/Inputs/EmailInput'
+import FieldWrapper from '../../components/Form/FieldWrapper'
+import AuthService from '../../services/AuthService'
+import { MessageContext } from '../../context/MessageContext'
+import CTAButton from '../../components/CTAButton'
+import { useAuth } from '../../context/AuthProvider'
 import useTranslation from 'next-translate/useTranslation'
 
 const ForgottenForm = () => {
     const { t } = useTranslation()
-    const { authenticatedUser } = useAuth();
-    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
+    const { authenticatedUser } = useAuth()
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext)
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: authenticatedUser.getRaw
-    });
+    })
 
     const onSubmit = (form) => {
         AuthService.forgotPassword(form.email)
@@ -24,11 +24,11 @@ const ForgottenForm = () => {
                 dispatchModal({
                     msg: t('vehicles:email_had_been_sent_to_{email}', {email : form.email}),
                     persist: true
-                });
+                })
             }).catch(err => {
-                dispatchModalError({ err });
-            });
-    };
+                dispatchModalError({ err })
+            })
+    }
 
     return (
         <main>
@@ -54,7 +54,7 @@ const ForgottenForm = () => {
                 </div>
             </form>
         </main>
-    );
-};
+    )
+}
 
-export default ForgottenForm;
+export default ForgottenForm

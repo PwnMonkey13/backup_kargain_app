@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import useTranslation from 'next-translate/useTranslation';
-import {  SelectInput, SliderInput } from '../../../Form/Inputs';
-import SelectCountryFlags from '../../../Form/Inputs/SelectCountryFlags';
-import SearchLocationInput from '../../../Form/Inputs/SearchLocationInput';
-
+import PropTypes from 'prop-types'
+import Typography from '@material-ui/core/Typography'
+import useTranslation from 'next-translate/useTranslation'
+import SelectInput from '../../../Form/Inputs/SelectInput'
+import SliderInput from '../../../Form/Inputs/SliderInputUI'
+import SelectCountryFlags from '../../../Form/Inputs/SelectCountryFlags'
+import SearchLocationInput from '../../../Form/Inputs/SearchLocationInput'
 import FieldWrapper from '../../../Form/FieldWrapper'
 
 const CamperFilters = ({control, watch, errors }) => {
-    const { t, lang } = useTranslation();
-    const countrySelect = watch('countrySelect');
+    const { t, lang } = useTranslation()
+    const countrySelect = watch('countrySelect')
     const [formData, setFormData] = useState({
         RadioVehicleGeneralState: [],
         CheckboxOptionsEquipments: [],
@@ -23,16 +23,16 @@ const CamperFilters = ({control, watch, errors }) => {
         RadioChoicesPaints: [],
         RadioChoicesMaterials: [],
         RadioChoicesExternalColor: []
-    });
+    })
     
     const getData = useCallback(async () => {
-        const data = lang === 'fr' ? await import('../../../Products/camper/form.data.js') : await import('../../../Products/car/form.data.js');
-        setFormData(data);
-    },[lang]);
+        const data = lang === 'fr' ? await import('../../../Products/camper/form.data.js') : await import('../../../Products/car/form.data.js')
+        setFormData(data)
+    },[lang])
     
     useEffect(() => {
-        getData();
-    }, [getData]);
+        getData()
+    }, [getData])
 
     return (
         <>
@@ -267,13 +267,13 @@ const CamperFilters = ({control, watch, errors }) => {
                 errors={errors}
             />
         </>
-    );
-};
+    )
+}
 
 CamperFilters.propTypes = {
     control: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
     watch: PropTypes.func
-};
+}
 
-export default CamperFilters;
+export default CamperFilters

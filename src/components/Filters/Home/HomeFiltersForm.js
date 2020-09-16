@@ -1,139 +1,94 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types';
-import { Col, Container, Row } from 'reactstrap';
-import useTranslation from 'next-translate/useTranslation';
-import { SelectInput, SliderInput } from '../../Form/Inputs';
-import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags';
-import FieldWrapper from '../../Form/FieldWrapper';
-import SearchLocationInput from '../../Form/Inputs/SearchLocationInput';
-import { RadioChoicesGas } from '../../Products/car/form.data';
-import useAddress from '../../../hooks/useAddress';
+import PropTypes from 'prop-types'
+import { Col, Container, Row } from 'reactstrap'
+import useTranslation from 'next-translate/useTranslation'
+import useAddress from '../../../hooks/useAddress'
 import VehiclesService from '../../../services/VehiclesService'
 import { MessageContext } from '../../../context/MessageContext'
-import {vehicleTypeRefModels} from '../../../business/vehicleTypes'
-
-// const popularMakesOptions = [
-//     {
-//         label: 'AlphaRomeo',
-//         value: 3
-//     },
-//     {
-//         label: 'Audi',
-//         value: 9
-//     },
-//     {
-//         label: 'BMW',
-//         value: 16
-//     },
-//     {
-//         label: 'Peugeot',
-//         value: 107
-//     },
-//     {
-//         label: 'Renault',
-//         value: 117
-//     },
-//     {
-//         label: 'Citroen',
-//         value: 28
-//     },
-//     {
-//         label: 'Volkswagen',
-//         value: 147
-//     },
-//     {
-//         label: 'Ford',
-//         value: 48
-//     },
-//     {
-//         label: 'Mercedes-Benz',
-//         value: 88
-//     },
-//     {
-//         label: 'Opel',
-//         value: 182
-//     },
-//     {
-//         label: 'Fiat',
-//         value: 47
-//     },
-//     {
-//         label: 'Toyota',
-//         value: 140
-//     },
-//     {
-//         label: 'Susuki',
-//         value: 133
-//     }
-// ];
+import { vehicleTypes, vehicleTypeRefModels } from '../../../business/vehicleTypes'
+import FieldWrapper from '../../Form/FieldWrapper'
+import SelectInput from '../../Form/Inputs/SelectInput'
+import SliderInput from '../../Form/Inputs/SliderInputUI'
+import SelectCountryFlags from '../../Form/Inputs/SelectCountryFlags'
+import SearchLocationInput from '../../Form/Inputs/SearchLocationInput'
 
 const HomeFiltersForm = ({ vehicleType, methods }) => {
-    const cache = useRef({});
-    const { t } = useTranslation();
-    const isCar = vehicleType === "car"
-    const [, , coordinates] = useAddress();
+    const cache = useRef({})
+    const { t, lang } = useTranslation()
+    const [, , coordinates] = useAddress()
+    const isCar = vehicleType === vehicleTypes.car
     const vehicleTypeModel = vehicleTypeRefModels[vehicleType]
-    const { setValue, control, errors, watch } = methods;
-    const countrySelect = watch('countrySelect');
+    const { control, errors, watch } = methods
+    const countrySelect = watch('countrySelect')
     const selectedMake = watch('manufacturer.make')
     const selectedModel = watch('manufacturer.model')
-    const { dispatchModalError } = useContext(MessageContext);
+    const { dispatchModalError } = useContext(MessageContext)
     const [manufacturersData, setManufacturersData] = useState({
         makes: [],
         models: [],
         generations: [],
         years: []
-    });
-
+    })
+    
+    const [formData, setFormData] = useState({
+        RadioChoicesGas: []
+    })
+    
+    const getData = useCallback(async () => {
+        const dataPath = lang === 'fr' ? `../../Products/${vehicleType}form.data.js` : `../../Products/${vehicleType}form.data_en.js`
+        const data = await import(dataPath)
+        setFormData(data)
+    },[lang])
+    
     const fetchMakes = useCallback(async () => {
-        const cacheKey = `${vehicleType}_makes`;
+        const cacheKey = `${vehicleType}_makes`
 
         if(!cache.current[cacheKey]) {
-            console.log('fetch makes');
+            console.log('fetch makes')
             await VehiclesService.getMakes(vehicleTypeModel)
                 .then(makes => {
                     if(!Array.isArray(makes)) makes = [makes]
                     const makesOptions = makes.map(make => ({
                         value: make._id,
                         label: make.make
-                    }));
+                    }))
 
                     const defaultOption = {
                         value: 'other',
                         label: 'Je ne sais pas/Autre'
-                    };
+                    }
 
                     const data = [...makesOptions, defaultOption]
-                    cache.current[cacheKey] = data;
+                    cache.current[cacheKey] = data
 
                     setManufacturersData(manufacturersData => (
                         {
                             ...manufacturersData,
                             makes: data
                         })
-                    );
+                    )
                 })
                 .catch(err => {
-                    dispatchModalError({ err });
-                });
+                    dispatchModalError({ err })
+                })
         } else{
             setManufacturersData(manufacturersData => (
                 {
                     ...manufacturersData,
                     makes: cache.current[cacheKey]
                 })
-            );
+            )
         }
 
     },[vehicleTypeModel])
 
     const fetchModels = useCallback(async ()=> {
-        const make = selectedMake?.label;
-        const cacheKey = `${vehicleType}_makes_${make}_models`;
+        const make = selectedMake?.label
+        const cacheKey = `${vehicleType}_makes_${make}_models`
 
         if (!make) return
         if(!cache.current[cacheKey]) {
-            console.log('fetch models');
+            console.log('fetch models')
             const modelsService = isCar ? VehiclesService.getCarsDistinctModels
                 : VehiclesService.getMakeModels
 
@@ -141,60 +96,60 @@ const HomeFiltersForm = ({ vehicleType, methods }) => {
                 .then(models => {
                     console.log(models)
                     if(!Array.isArray(models)) models = [models]
-                    let modelsOptions = [];
+                    let modelsOptions = []
 
                     if(isCar){
                         modelsOptions = models.map(model => ({
                             value: model,
                             label: model
-                        }));
+                        }))
                     }
                     else {
                         modelsOptions = models.map(model => ({
                             value: model._id,
                             label: model.model
-                        }));
+                        }))
                     }
 
                     const defaultOption = {
                         value: 'other',
                         label: 'Je ne sais pas/Autre'
-                    };
+                    }
 
                     const data = [...modelsOptions, defaultOption]
-                    cache.current[cacheKey] = data;
+                    cache.current[cacheKey] = data
 
                     setManufacturersData(manufacturersData => (
                         {
                             ...manufacturersData,
                             models: data
                         })
-                    );
+                    )
                 })
                 .catch(err => {
                     dispatchModalError({
                         err,
                         persist: true
-                    });
-                });
+                    })
+                })
         } else {
             setManufacturersData(manufacturersData => (
                 {
                     ...manufacturersData,
                     models: cache.current[cacheKey]
                 })
-            );
+            )
         }
     },[selectedMake])
 
     const fetchModelsYears = useCallback(async() => {
-        const make = selectedMake?.value;
-        const model = selectedModel?.value;
-        const cacheKey = `${vehicleType}_makes_${make}_models_${model}`;
+        const make = selectedMake?.value
+        const model = selectedModel?.value
+        const cacheKey = `${vehicleType}_makes_${make}_models_${model}`
 
         if (!make || !model) return
         if(!cache.current[cacheKey]) {
-            console.log('fetch cars models years');
+            console.log('fetch cars models years')
             await VehiclesService.getCarsMakeModelTrimYears(make, model)
                 .then(years => {
                     if(!Array.isArray(years)) years = [years]
@@ -202,62 +157,60 @@ const HomeFiltersForm = ({ vehicleType, methods }) => {
                     const yearsOptions = years.map(year => ({
                         value: year._id,
                         label: year.year
-                    }));
+                    }))
 
                     const defaultOption = {
                         value: 'other',
                         label: 'Je ne sais pas/Autre'
-                    };
+                    }
 
                     const data = [...yearsOptions, defaultOption]
-                    cache.current[cacheKey] = data;
+                    cache.current[cacheKey] = data
 
                     setManufacturersData(manufacturersData => (
                         {
                             ...manufacturersData,
                             years: data
                         })
-                    );
+                    )
                 })
                 .catch(err => {
-                    dispatchModalError({ err });
-                });
+                    dispatchModalError({ err })
+                })
         } else {
             setManufacturersData(manufacturersData => (
                 {
                     ...manufacturersData,
                     years: cache.current[cacheKey]
                 })
-            );
+            )
         }
     },[vehicleTypeModel])
-
+    
     useEffect(() => {
-        control.register({ name: 'coordinates' });
-        control.setValue('coordinates', coordinates);
-    }, [coordinates]);
-
+        getData()
+    }, [])
+    
     useEffect(() => {
-        setValue('manufacturer.make', null)
-        setValue('manufacturer.model', null)
-        setValue('manufacturer.year', null)
-    }, [vehicleType]);
+        control.register({ name: 'coordinates' })
+        control.setValue('coordinates', coordinates)
+    }, [coordinates])
 
     useEffect(() => {
         fetchMakes()
-    }, [fetchMakes]);
+    }, [fetchMakes])
 
     useEffect(() => {
-        const make = selectedMake?.label;
+        const make = selectedMake?.label
         if (!make) return
         fetchModels()
-    }, [selectedMake, fetchModels]);
+    }, [selectedMake, fetchModels])
 
     useEffect(() => {
-        const model = selectedModel?.label;
+        const model = selectedModel?.label
         if (!model) return
         fetchModelsYears()
-    }, [selectedModel, fetchModelsYears]);
+    }, [selectedModel, fetchModelsYears])
 
     return (
         <Container>
@@ -334,7 +287,7 @@ const HomeFiltersForm = ({ vehicleType, methods }) => {
                         <SelectInput
                             name="vehicleEngineGas"
                             className="mb-2"
-                            options={RadioChoicesGas}
+                            options={formData.RadioChoicesGas}
                             control={control}
                             errors={errors}
                         />
@@ -364,8 +317,8 @@ const HomeFiltersForm = ({ vehicleType, methods }) => {
                 </Col>
             </Row>
         </Container>
-    );
-};
+    )
+}
 
 HomeFiltersForm.defaultProps = {
     vehicleType : 'car'
@@ -373,6 +326,6 @@ HomeFiltersForm.defaultProps = {
 
 HomeFiltersForm.propTypes = {
     methods: PropTypes.object.isRequired
-};
+}
 
-export default React.memo(HomeFiltersForm);
+export default React.memo(HomeFiltersForm)

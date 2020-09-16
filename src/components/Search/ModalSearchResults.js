@@ -62,8 +62,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ModalSearchResults = () => {
     const classes = useStyles()
-    const { searchStateContext, closeSearchModal } = useContext(SearchContext);
-    const { openModalSearch, loading, results } = searchStateContext;
+    const { searchStateContext, closeSearchModal } = useContext(SearchContext)
+    const { openModalSearch, loading, results } = searchStateContext
     
     return (
         <Modal className={classes.modal}

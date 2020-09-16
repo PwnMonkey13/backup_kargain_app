@@ -1,5 +1,5 @@
-import handleResponse from '../libs/handleResponse';
-import config from '../config/config';
+import handleResponse from '../libs/handleResponse'
+import config from '../config/config'
 
 function login (form) {
     const requestOptions = {
@@ -7,32 +7,32 @@ function login (form) {
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
-    };
+    }
 
     return fetch(`${config.api}/auth/login`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
+            throw err
+        })
 }
 
 function SSOAuthLogin (provider, data) {
-    const url = `${config.api}/auth/sso-register`;
+    const url = `${config.api}/auth/sso-register`
     return request(url, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
-    });
+    })
 
     function request (url, requestOptions) {
         return fetch(url, requestOptions)
             .then(handleResponse)
             .then(json => json.data)
             .catch(err => {
-                throw err;
-            });
+                throw err
+            })
     }
 }
 
@@ -40,14 +40,14 @@ function logout () {
     const requestOptions = {
         method: 'POST',
         credentials: 'include'
-    };
+    }
 
     return fetch(`${config.api}/auth/logout`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
+            throw err
+        })
 }
 
 function register (form) {
@@ -55,14 +55,14 @@ function register (form) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
-    };
+    }
 
     return fetch(`${config.api}/auth/register`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
+            throw err
+        })
 }
 
 function registerPro (form) {
@@ -70,30 +70,30 @@ function registerPro (form) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
-    };
+    }
 
     return fetch(`${config.api}/auth/register-pro`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
+            throw err
+        })
 }
 
 function authorize () {
     const requestOptions = {
         method: 'GET',
         credentials: 'include'
-    };
+    }
 
-    const url = `${config.api}/auth/authorize`;
+    const url = `${config.api}/auth/authorize`
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
+            throw err
+        })
 }
 
 function authorizeSSR (headers) {
@@ -101,16 +101,16 @@ function authorizeSSR (headers) {
         method: 'GET',
         credentials: 'include',
         headers
-    };
+    }
 
-    const url = `${config.api}/auth/authorize`;
+    const url = `${config.api}/auth/authorize`
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
+            throw err
+        })
 }
 
 function askForEmailActivation (email) {
@@ -118,27 +118,27 @@ function askForEmailActivation (email) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
-    };
+    }
 
     return fetch(`${config.api}/auth/ask-email-activation`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
+            throw err
+        })
 }
 
 function confirmAccount (token) {
     const requestOptions = {
         method: 'PUT'
-    };
+    }
 
     return fetch(`${config.api}/auth/confirm-account/${token}`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
+            throw err
+        })
 }
 
 function forgotPassword (email) {
@@ -148,14 +148,14 @@ function forgotPassword (email) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email })
-    };
+    }
 
     return fetch(`${config.api}/auth/forgot-password`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
+            throw err
+        })
 }
 
 function resetPassword (token, password) {
@@ -168,14 +168,14 @@ function resetPassword (token, password) {
             token,
             password
         })
-    };
+    }
 
     return fetch(`${config.api}/auth/reset-password`, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
+            throw err
+        })
 }
 
 export default {
@@ -190,4 +190,4 @@ export default {
     confirmAccount,
     forgotPassword,
     resetPassword
-};
+}

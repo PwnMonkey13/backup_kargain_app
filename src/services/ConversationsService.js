@@ -1,38 +1,38 @@
-import handleResponse from '../libs/handleResponse';
-import config from '../config/config';
+import handleResponse from '../libs/handleResponse'
+import config from '../config/config'
 
 const getCurrentUserConversations = () => {
-    const url = `${config.api}/conversations`;
+    const url = `${config.api}/conversations`
     const requestOptions = {
         method: 'GET',
         credentials: 'include'
-    };
+    }
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
-};
+            throw err
+        })
+}
 
 const getConversationWithProfile = (profileId) => {
-    const url = `${config.api}/conversations/profile/${profileId}`;
+    const url = `${config.api}/conversations/profile/${profileId}`
     const requestOptions = {
         method: 'GET',
         credentials: 'include'
-    };
+    }
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
-};
+            throw err
+        })
+}
 
 const postConversationMessage = (message, recipientId) => {
-    const url = `${config.api}/conversations`;
+    const url = `${config.api}/conversations`
     const requestOptions = {
         method: 'POST',
         credentials: 'include',
@@ -41,15 +41,15 @@ const postConversationMessage = (message, recipientId) => {
             message,
             recipientId
         })
-    };
+    }
 
     return fetch(url, requestOptions)
         .then(handleResponse)
         .then(json => json.data)
         .catch(err => {
-            throw err;
-        });
-};
+            throw err
+        })
+}
 
 export default {
     getConversationWithProfile,

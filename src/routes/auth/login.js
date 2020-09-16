@@ -1,56 +1,57 @@
-import React, { useContext, useEffect } from 'react';
-import Link from 'next-translate/Link';
-import { useForm } from 'react-hook-form';
-import { Container, Col, Row } from 'reactstrap';
-import nextCookies from 'next-cookies';
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
-import { EmailInput, PasswordInput } from '../../components/Form/Inputs';
-import { MessageContext } from '../../context/MessageContext';
-import FieldWrapper from '../../components/Form/FieldWrapper';
-import SSOProviders from '../../components/SSOProviders';
-import CTAButton from '../../components/CTAButton';
-import AuthService from '../../services/AuthService';
-import { useAuth } from '../../context/AuthProvider';
+import React, { useContext, useEffect } from 'react'
+import Link from 'next-translate/Link'
+import { useForm } from 'react-hook-form'
+import { Container, Col, Row } from 'reactstrap'
+import nextCookies from 'next-cookies'
+import { useRouter } from 'next/router'
+import useTranslation from 'next-translate/useTranslation'
+import EmailInput from '../../components/Form/Inputs/EmailInput'
+import PasswordInput from '../../components/Form/Inputs/PasswordInput'
+import { MessageContext } from '../../context/MessageContext'
+import FieldWrapper from '../../components/Form/FieldWrapper'
+import SSOProviders from '../../components/SSOProviders'
+import CTAButton from '../../components/CTAButton'
+import AuthService from '../../services/AuthService'
+import { useAuth } from '../../context/AuthProvider'
 
 export default ({ forceLogout }) => {
-    const router = useRouter();
-    const { logout } = useAuth();
-    const { t } = useTranslation();
-    const { redirect } = router.query;
-    const { dispatchModalError } = useContext(MessageContext);
+    const router = useRouter()
+    const { logout } = useAuth()
+    const { t } = useTranslation()
+    const { redirect } = router.query
+    const { dispatchModalError } = useContext(MessageContext)
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all'
-    });
+    })
 
     useEffect(() => {
-        if (forceLogout) logout();
-    }, []);
+        if (forceLogout) logout()
+    }, [])
 
     const onSubmit = (form) => {
-        const { email, password } = form;
+        const { email, password } = form
         AuthService.login({
             email,
             password
         })
             .then(user => {
                 if (redirect) {
-                    router.push(`/auth/callback?redirect=${redirect}`);
+                    router.push(`/auth/callback?redirect=${redirect}`)
                 } else {
-                    const isAdmin = user.isAdmin;
+                    const isAdmin = user.isAdmin
                     if (isAdmin) {
-                        router.push(`/auth/callback?redirect=/admin`);
+                        router.push(`/auth/callback?redirect=/admin`)
                     } else {
-                        router.push(`/auth/callback?redirect=/profile/${user.username}`);
+                        router.push(`/auth/callback?redirect=/profile/${user.username}`)
                     }
                 }
             }).catch(err => {
-                dispatchModalError({ err });
-                if (redirect) router.push({ pathname: redirect });
+                dispatchModalError({ err })
+                if (redirect) router.push({ pathname: redirect })
             }
-            );
-    };
+            )
+    }
 
     return (
         <Container>
@@ -109,14 +110,14 @@ export default ({ forceLogout }) => {
                 </Col>
             </Row>
         </Container>
-    );
+    )
 }
 
 export async function getServerSideProps (ctx) {
-    const cookies = nextCookies(ctx);
+    const cookies = nextCookies(ctx)
     return {
         props: {
             forceLogout: !!cookies.token
         }
-    };
+    }
 }

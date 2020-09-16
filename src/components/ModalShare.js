@@ -9,7 +9,7 @@ import useTranslation from 'next-translate/useTranslation'
 import { FacebookShareButton, FacebookMessengerShareButton } from "react-share";
 import copy from 'copy-to-clipboard';
 import { ModalContext } from '../context/ModalContext'
-import EmailInput from './Form/Inputs/EmailInput'
+import EmailInput from '../components/Form/Inputs/EmailInput'
 import AnnounceService from '../services/AnnounceService'
 import { MessageContext } from '../context/MessageContext'
 import { useAuth } from '../context/AuthProvider'

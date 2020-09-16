@@ -1,42 +1,42 @@
-import React, { memo, useContext, useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { useRouter } from 'next/router';
-import GoogleLogin from 'react-google-login';
-import useTranslation from 'next-translate/useTranslation';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-import { MessageContext } from '../context/MessageContext';
-import AuthService from '../services/AuthService';
-import Loading from './Loading';
-import config from '../config/config';
+import React, { memo, useContext, useState } from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { useRouter } from 'next/router'
+import GoogleLogin from 'react-google-login'
+import useTranslation from 'next-translate/useTranslation'
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import { MessageContext } from '../context/MessageContext'
+import AuthService from '../services/AuthService'
+import Loading from './Loading'
+import config from '../config/config'
 
 const SSOProviders = ({ col }) => {
-    const router = useRouter();
-    const { redirect } = router.query;
-    const { t } = useTranslation();
-    const [isLoading, setIsLoading] = useState(false);
-    const { dispatchModalError } = useContext(MessageContext);
+    const router = useRouter()
+    const { redirect } = router.query
+    const { t } = useTranslation()
+    const [isLoading, setIsLoading] = useState(false)
+    const { dispatchModalError } = useContext(MessageContext)
 
     const startAuth = async (provider, data) => {
-        setIsLoading(true);
+        setIsLoading(true)
         AuthService.SSOAuthLogin(provider, data)
             .then(user => {
-                setIsLoading(false);
+                setIsLoading(false)
                 if (redirect) {
-                    router.push(redirect);
+                    router.push(redirect)
                 } else {
-                    router.push(`/auth/callback?redirect=/profile/${user?.username}`);
+                    router.push(`/auth/callback?redirect=/profile/${user?.username}`)
                 }
             }).catch(err => {
-                setIsLoading(false);
-                dispatchModalError({ err });
-                if (redirect) router.push(redirect);
-            });
-    };
+                setIsLoading(false)
+                dispatchModalError({ err })
+                if (redirect) router.push(redirect)
+            })
+    }
 
     const responseGoogle = (response) => {
-        const { accessToken, profileObj } = response;
-        const { googleId, email, familyName, givenName, imageUrl } = profileObj;
+        const { accessToken, profileObj } = response
+        const { googleId, email, familyName, givenName, imageUrl } = profileObj
 
         startAuth('google', {
             email,
@@ -47,15 +47,15 @@ const SSOProviders = ({ col }) => {
                 id: googleId,
                 token: accessToken
             }
-        });
-    };
+        })
+    }
 
     const badResponseGoogle = (response) => {
-        console.log(response);
-    };
+        console.log(response)
+    }
 
     const responseFacebook = (response) => {
-        const { accessToken, id, email, first_name, last_name, picture } = response;
+        const { accessToken, id, email, first_name, last_name, picture } = response
         startAuth('facebook', {
             email,
             firstname: first_name,
@@ -65,8 +65,8 @@ const SSOProviders = ({ col }) => {
                 id: id,
                 token: accessToken
             }
-        });
-    };
+        })
+    }
 
     return (
         <div className={clsx('sso d-flex', col && 'flex-column', 'justify-content-center mx-auto my-2')}>
@@ -98,11 +98,11 @@ const SSOProviders = ({ col }) => {
                 )}
             />
         </div>
-    );
-};
+    )
+}
 
 SSOProviders.propTypes = {
     col: PropTypes.bool
-};
+}
 
-export default memo(SSOProviders);
+export default memo(SSOProviders)

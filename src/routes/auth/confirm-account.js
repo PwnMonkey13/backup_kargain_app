@@ -1,51 +1,51 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
-import querystring from 'querystring';
-import { Col, Row, Container } from 'reactstrap';
-import useTranslation from 'next-translate/useTranslation';
-import AuthService from '../../services/AuthService';
-import FieldWrapper from '../../components/Form/FieldWrapper';
-import { EmailInput } from '../../components/Form/Inputs';
-import { MessageContext } from '../../context/MessageContext';
-import Loading from '../../components/Loading';
-import CTALink from '../../components/CTALink';
+import React, { useContext, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
+import querystring from 'querystring'
+import { Col, Row, Container } from 'reactstrap'
+import useTranslation from 'next-translate/useTranslation'
+import AuthService from '../../services/AuthService'
+import FieldWrapper from '../../components/Form/FieldWrapper'
+import EmailInput from '../../components/Form/Inputs/EmailInput'
+import { MessageContext } from '../../context/MessageContext'
+import Loading from '../../components/Loading'
+import CTALink from '../../components/CTALink'
 
 const ConfirmAccount = () => {
-    const router = useRouter();
-    const { token } = router.query;
+    const router = useRouter()
+    const { token } = router.query
     const { t } = useTranslation()
-    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
-    const [activated, setActivated] = useState(false);
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext)
+    const [activated, setActivated] = useState(false)
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all'
-    });
+    })
 
     const onSubmitAskForActivation = (form) => {
-        const { email } = form;
+        const { email } = form
         AuthService.askForEmailActivation(email)
             .then(() => {
-                dispatchModal({ msg: t('vehicles:activation_email_sent') });
+                dispatchModal({ msg: t('vehicles:activation_email_sent') })
             }).catch(err => {
-                dispatchModalError({ err });
-            });
-    };
+                dispatchModalError({ err })
+            })
+    }
 
     useEffect(() => {
-        if (!token) return;
+        if (!token) return
         AuthService.confirmAccount(token)
             .then(() => {
-                dispatchModal({ msg: t('vehicles:account_activated') });
-                setActivated(true);
+                dispatchModal({ msg: t('vehicles:account_activated') })
+                setActivated(true)
                 router.push('/auth/login')
             })
             .catch(err => {
-                const action = err.name === 'AlreadyActivatedError' ? 'already-activated' : 'activation-invalid';
-                const redirect = `/auth/error?${querystring.stringify({ action })}`;
-                router.push(`/auth/callback?redirect=${redirect}`);
-            });
-    }, []);
+                const action = err.name === 'AlreadyActivatedError' ? 'already-activated' : 'activation-invalid'
+                const redirect = `/auth/error?${querystring.stringify({ action })}`
+                router.push(`/auth/callback?redirect=${redirect}`)
+            })
+    }, [])
 
     if (!token) {
         return (
@@ -72,7 +72,7 @@ const ConfirmAccount = () => {
                     </Col>
                 </Row>
             </>
-        );
+        )
     } else if (activated) {
         return (
             <Container>
@@ -82,9 +82,9 @@ const ConfirmAccount = () => {
                     className="cta_nav_link"
                 />
             </Container>
-        );
+        )
     }
-    return <Loading/>;
-};
+    return <Loading/>
+}
 
-export default ConfirmAccount;
+export default ConfirmAccount

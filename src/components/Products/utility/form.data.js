@@ -1,24 +1,5 @@
 import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
 
-export const RadioCategoryChoices = [
-    {
-        label: 'Voiture',
-        value: 'car'
-    },
-    {
-        label: 'Moto',
-        value: 'bike'
-    },
-    {
-        label: 'Camping',
-        value: 'campingcar'
-    },
-    {
-        label: 'Utilitaire',
-        value: 'commercial vehicule'
-    }
-]
-
 export const RadioTypeFunction = SelectOptionsUtils([
     'Bus', 'Poid lourd', 'Véhicule de voirie', 'Remorque', 'Chariot élévateur à fourche', 'Fourgon',
     'Semi-remorque', 'Tracteur routier', 'Machine construction', 'Machine agricole']

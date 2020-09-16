@@ -5,7 +5,10 @@ import { useForm } from 'react-hook-form';
 import useTranslation from 'next-translate/useTranslation';
 import { MessageContext } from '../../context/MessageContext';
 import AuthService from '../../services/AuthService';
-import { CheckBoxInput, EmailInput, PasswordInput, TextInput } from '../../components/Form/Inputs';
+import TextInput from '../../components/Form/Inputs/TextInput'
+import EmailInput from '../../components/Form/Inputs/EmailInput'
+import CheckBoxInput from '../../components/Form/Inputs/CheckBoxInput'
+import PasswordInput from '../../components/Form/Inputs/PasswordInput'
 import FieldWrapper from '../../components/Form/FieldWrapper';
 import CTAButton from '../../components/CTAButton';
 import SSOProviders from '../../components/SSOProviders';
