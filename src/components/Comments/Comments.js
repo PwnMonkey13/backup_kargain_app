@@ -1,11 +1,11 @@
-import React, { useContext, useRef, useState } from 'react';
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
-import AnnounceClass from '../../models/announce.model';
-import { useAuth } from '../../context/AuthProvider';
-import { MessageContext } from '../../context/MessageContext';
-import commentsService from '../../services/CommentsService';
+import React, { useContext, useRef, useState } from 'react'
+import { useRouter } from 'next/router'
+import AnnounceClass from '../../models/announce.model'
+import { useAuth } from '../../context/AuthProvider'
+import { MessageContext } from '../../context/MessageContext'
+import commentsService from '../../services/CommentsService'
 import CommentsList from './CommentsList'
+import CommentForm from './CommentForm'
 
 const Comments = ({ announceRaw }) => {
     const router = useRouter();
@@ -58,33 +58,6 @@ const Comments = ({ announceRaw }) => {
                 doneSubmitting
             }}/>
         </div>
-    );
-};
-
-const CommentForm = ({ onSubmitComment, textareaCommentRef, doneSubmitting }) => {
-    const { t } = useTranslation();
-    return (
-        <form onSubmit={e => onSubmitComment(e)}
-            className="comments-write">
-            <div className="form-group position-relative w-auto">
-                <textarea
-                    rows={3}
-                    cols={13}
-                    ref={textareaCommentRef}
-                    placeholder="ex: Superbe voiture"
-                    className="form-control editor"
-                />
-            </div>
-
-            <div className="mx-auto my-2">
-                <button
-                    disabled={!doneSubmitting}
-                    type="submit"
-                    className="btn btn-primary">
-                    {t('vehicles:add_a_comment')}
-                </button>
-            </div>
-        </form>
     );
 };
 

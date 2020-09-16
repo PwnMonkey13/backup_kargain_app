@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography';
-import Comment from '../../models/comment.model';
+
 import { useAuth } from '../../context/AuthProvider'
 import { MessageContext } from '../../context/MessageContext'
 import CommentsService from '../../services/CommentsService'
@@ -47,8 +47,7 @@ const CommentsList = ({ comments }) => {
             />
 
             <ul className="commentsCardList">
-                {comments && comments.map((item, index) => {
-                    const comment = new Comment(item);
+                {comments && comments.map((comment, index) => {
                     const isOwn = authenticatedUser.getID === comment.getAuthor.getID
 
                     return (

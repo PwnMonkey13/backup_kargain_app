@@ -1,6 +1,7 @@
-import UserModel from './user.model';
-import parseISO from 'date-fns/parseISO';
-import ImageModel from './image.model';
+import UserModel from './user.model'
+import parseISO from 'date-fns/parseISO'
+import ImageModel from './image.model'
+import CommentModel from './comment.model'
 
 export default class AnnounceModel {
     
@@ -233,11 +234,12 @@ export default class AnnounceModel {
     }
 
     get getComments () {
-        return this.raw?.comments ?? [];
+        const comments = this.raw?.comments ?? [];
+        return comments.map(comment => new CommentModel(comment));
     }
 
     get getCountComments () {
-        return this.getComments ? this.getComments.length : 0;
+        return this.getComments.length ?? 0;
     }
 
     get getImages () {
