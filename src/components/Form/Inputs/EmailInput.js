@@ -1,11 +1,11 @@
-import React, { memo, useEffect } from 'react'
-import ClassNames from 'classnames'
+import React from 'react'
+import clsx from 'clsx'
 import PropTypes from 'prop-types'
 import ValidationError from '../Validations/ValidationError'
 import ValidationsRules from '../Validations/ValidationRules'
 
-const EmailInput = ({ name, required, classname, rules, control, errors, ...props }) => {
-    const classnames = ClassNames('input-field', { 'w-100': props.fullwidth })
+const EmailInput = ({ name, rules, control, errors, ...props }) => {
+    const classnames = clsx('input-field', props.fullwidth && 'w-100')
     const { validate } = rules
 
     const validations = {
@@ -14,8 +14,6 @@ const EmailInput = ({ name, required, classname, rules, control, errors, ...prop
             ...validate
         }
     }
-
-    if(!control) return null;
 
     return (
         <>

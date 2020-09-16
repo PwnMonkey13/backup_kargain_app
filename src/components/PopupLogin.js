@@ -1,33 +1,35 @@
-import React, { memo, useContext, useState } from 'react';
-import clsx from 'clsx';
-import Link from 'next-translate/Link';
-import { useRouter } from 'next/router';
-import { Col, Row } from 'reactstrap';
-import { useForm } from 'react-hook-form';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import TrackChangesIcon from '@material-ui/icons/TrackChanges';
-import Typography from '@material-ui/core/Typography';
-import ExploreIcon from '@material-ui/icons/Explore';
-import ForumIcon from '@material-ui/icons/Forum';
-import CloseIcon from '@material-ui/icons/Close';
-import useTranslation from 'next-translate/useTranslation';
-import AuthService from '../services/AuthService';
-import { useAuth } from '../context/AuthProvider';
-import { MessageContext } from '../context/MessageContext';
-import { CheckBoxInput, EmailInput, PasswordInput } from './Form/Inputs';
-import SSOProviders from './SSOProviders';
-import { themeColors } from '../theme/palette';
-import Divider from './Divider';
-import CTAButton from './CTAButton';
-import CTALink from './CTALink';
+import React, { useContext, useState } from 'react'
+import clsx from 'clsx'
+import Link from 'next-translate/Link'
+import { useRouter } from 'next/router'
+import { Col, Row } from 'reactstrap'
+import { useForm } from 'react-hook-form'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
+import TrackChangesIcon from '@material-ui/icons/TrackChanges'
+import Typography from '@material-ui/core/Typography'
+import ExploreIcon from '@material-ui/icons/Explore'
+import ForumIcon from '@material-ui/icons/Forum'
+import CloseIcon from '@material-ui/icons/Close'
+import useTranslation from 'next-translate/useTranslation'
+import AuthService from '../services/AuthService'
+import { useAuth } from '../context/AuthProvider'
+import { MessageContext } from '../context/MessageContext'
+import CheckBoxInput from './Form/Inputs/CheckBoxInput'
+import EmailInput from './Form/Inputs/EmailInput'
+import PasswordInput from './Form/Inputs/PasswordInput'
+import SSOProviders from './SSOProviders'
+import { themeColors } from '../theme/palette'
+import Divider from './Divider'
+import CTAButton from './CTAButton'
+import CTALink from './CTALink'
 import userModel from '../models/user.model'
 
 const formConfig = {
     mode: 'onChange',
     reValidateMode: 'onChange',
     validateCriteriaMode: 'all'
-};
+}
 
 const useStyles = makeStyles(() => ({
 
@@ -82,43 +84,41 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         transition: 'all .5s'
     }
-}));
+}))
 
 export default () => {
-    const theme = useTheme();
-    const classes = useStyles();
-    const router = useRouter();
-    const { t } = useTranslation();
-    const { isAuthenticated, avoidCloseLoginModal } = useAuth();
-    const { control, errors, handleSubmit } = useForm(formConfig);
-    const { dispatchModal, dispatchModalError } = useContext(MessageContext);
-    const [openLoginModal, toggleLoginModal] = useState(!isAuthenticated);
+    const theme = useTheme()
+    const classes = useStyles()
+    const router = useRouter()
+    const { t } = useTranslation()
+    const { isAuthenticated, avoidCloseLoginModal } = useAuth()
+    const { control, errors, handleSubmit } = useForm(formConfig)
+    const { dispatchModal, dispatchModalError } = useContext(MessageContext)
+    const [openLoginModal, toggleLoginModal] = useState(!isAuthenticated)
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
         defaultMatches: true
-    });
-    
+    })
+
     const onSubmit = (form) => {
-        const { email, password } = form;
+        const { email, password } = form
         AuthService.login({
             email,
             password
         })
             .then(user => {
                 const User = new userModel(user)
-                router.reload();
-                toggleLoginModal(false);
-                
-                dispatchModal({
-                    msg: `Welcome back ${User.getFirstname}`
-                });
+                const msg = `Welcome back ${User.getFullName}`
+                router.reload()
+                toggleLoginModal(false)
+                dispatchModal({ msg })
             }).catch(err => {
-                dispatchModalError({ err });
-                toggleLoginModal(false);
-            });
-    };
+                dispatchModalError({ err })
+                toggleLoginModal(false)
+            })
+    }
 
     if (!openLoginModal && !avoidCloseLoginModal){
-        return null;
+        return null
     }
 
     return (
@@ -127,11 +127,11 @@ export default () => {
                 {isDesktop && (
                     <Col sm={12} md={6}>
                         <div className={classes.wrapperLeft}>
-                            <LeftBlock/>
+                            <Left/>
                         </div>
                     </Col>
                 )}
-
+            
                 <Col sm={12} md={isDesktop ? 6 : 12}>
                     <div className={classes.wrapperForm}>
                         {!avoidCloseLoginModal && (
@@ -157,7 +157,7 @@ export default () => {
                                         rules={{ required: t('form_validations:field-is-required') }}
                                     />
                                 </div>
-
+            
                                 <div className="mt-2 form-group">
                                     <PasswordInput
                                         name="password"
@@ -167,7 +167,7 @@ export default () => {
                                         rules={{ required: t('form_validations:field-is-required') }}
                                     />
                                 </div>
-
+            
                                 <div className="mt-2 form-group">
                                     <CheckBoxInput
                                         name="confirm"
@@ -175,9 +175,9 @@ export default () => {
                                         errors={errors}
                                         control={control}
                                     />
-
+            
                                 </div>
-
+            
                                 <div className="submit">
                                     <CTAButton
                                         title={t('layout:login')}
@@ -186,14 +186,12 @@ export default () => {
                                     />
                                 </div>
                             </form>
-
+            
                             <div className="d-block text-center">
                                 <Link href="/auth/reset-password">
                                     <a>{t('layout:password-forgotten')}</a>
                                 </Link>
-
                             </div>
-
                             <Divider className="m-3"/>
                             <CTALink
                                 className="submit"
@@ -210,11 +208,11 @@ export default () => {
                 </Col>
             </Row>
         </div>
-    );
+    )
 }
 
 const Left = () => {
-    const classes = useStyles();
+    const classes = useStyles()
     return (
         <>
             <div style={{ flex: 1 }}>
@@ -245,7 +243,5 @@ const Left = () => {
                 </div>
             </div>
         </>
-    );
-};
-
-const LeftBlock = memo(Left)
+    )
+}

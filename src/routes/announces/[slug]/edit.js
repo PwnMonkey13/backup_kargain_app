@@ -1,44 +1,44 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import clsx from 'clsx';
-import { inflate } from 'flattenjs';
-import { useForm } from 'react-hook-form';
+import clsx from 'clsx'
+import { inflate } from 'flattenjs'
+import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
-import { Col,  Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap';
-import useTranslation from 'next-translate/useTranslation';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import SaveIcon from '@material-ui/icons/Save';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import Alert from '@material-ui/lab/Alert';
-import { themeColors } from '../../../theme/palette';
-import resolveObjectKey from '../../../libs/resolveObjectKey';
-import AnnounceService from '../../../services/AnnounceService';
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
-import { MessageContext } from '../../../context/MessageContext';
-import FieldWrapper from '../../../components/Form/FieldWrapper';
-import TextInput from '../../../components/Form/Inputs/TextInput';
-import NumberInput from '../../../components/Form/Inputs/NumberInput';
-import SelectInput from '../../../components/Form/Inputs/SelectInput';
-import TagsControlled from '../../../components/Tags/TagsControlled';
-import TextareaInput from '../../../components/Form/Inputs/TextareaInput';
-import AnnounceImagesAutoUpload from '../../../components/Uploads/AnnounceImagesAutoUpload';
-import DamageSelectorControlled from '../../../components/Damages/DamageSelectorControlled';
-import GalleryViewer from '../../../components/Gallery/GalleryViewer';
-import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy';
-import CheckboxGroup from '../../../components/Form/Inputs/CheckboxGroup';
-import CheckboxMUI from '../../../components/Form/Inputs/CheckboxMUI';
-import CTALink from '../../../components/CTALink';
-import ValidationErrors from '../../../components/Form/Validations/ValidationErrors';
+import { Col,  Nav, NavItem, Row, TabContent, TabPane } from 'reactstrap'
+import useTranslation from 'next-translate/useTranslation'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+import SaveIcon from '@material-ui/icons/Save'
+import DeleteIcon from '@material-ui/icons/Delete'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogActions from '@material-ui/core/DialogActions'
+import Alert from '@material-ui/lab/Alert'
+import { themeColors } from '../../../theme/palette'
+import resolveObjectKey from '../../../libs/resolveObjectKey'
+import AnnounceService from '../../../services/AnnounceService'
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
+import { MessageContext } from '../../../context/MessageContext'
 import AnnounceModel from '../../../models/announce.model'
 import {vehicleTypes} from '../../../business/vehicleTypes'
-import { SelectCountryFlags } from '../../../components/Form/Inputs'
+import FieldWrapper from '../../../components/Form/FieldWrapper'
+import TagsControlled from '../../../components/Tags/TagsControlled'
+import TextareaInput from '../../../components/Form/Inputs/TextareaInput'
+import AnnounceImagesAutoUpload from '../../../components/Uploads/AnnounceImagesAutoUpload'
+import DamageSelectorControlled from '../../../components/Damages/DamageSelectorControlled'
+import TextInput from '../../../components/Form/Inputs/TextInput'
+import NumberInput from '../../../components/Form/Inputs/NumberInput'
+import SelectInput from '../../../components/Form/Inputs/SelectInput'
+import SelectCountryFlags from '../../../components/Form/Inputs/SelectCountryFlags'
+import CheckboxMUI from '../../../components/Form/Inputs/CheckboxMUI'
+import CheckboxGroup from '../../../components/Form/Inputs/CheckboxGroup'
 import SearchLocationInput from '../../../components/Form/Inputs/SearchLocationInput'
-import Error from '../../_error';
+import GalleryViewer from '../../../components/Gallery/GalleryViewer'
+import GalleryImgsLazy from '../../../components/Gallery/GalleryImgsLazy'
+import ValidationErrors from '../../../components/Form/Validations/ValidationErrors'
+import CTALink from '../../../components/CTALink'
+import Error from '../../_error'
 
 const useStyles = makeStyles(() => ({
 

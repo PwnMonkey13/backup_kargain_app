@@ -1,23 +1,24 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { Col, Row } from 'reactstrap';
-import { useForm } from 'react-hook-form';
-import useTranslation from 'next-translate/useTranslation';
-import Header from '../../Header';
-import FieldWrapper from '../../Form/FieldWrapper';
-import StepNavigation from '../../Form/StepNavigation';
-import { NumberInput, SelectInput } from '../../Form/Inputs';
-import { FormContext } from '../../../context/FormContext';
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import { Col, Row } from 'reactstrap'
+import { useForm } from 'react-hook-form'
+import useTranslation from 'next-translate/useTranslation'
+import FieldWrapper from '../../Form/FieldWrapper'
+import StepNavigation from '../../Form/StepNavigation'
+import NumberInput from '../../Form/Inputs/NumberInput'
+import SelectInput from '../../Form/Inputs/SelectInput'
+import { FormContext } from '../../../context/FormContext'
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
+import Header from '../../Header'
 
 const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
-    const formRef = useRef(null);
-    const { formDataContext } = useContext(FormContext);
-    const { t, lang } = useTranslation();
+    const formRef = useRef(null)
+    const { formDataContext } = useContext(FormContext)
+    const { t, lang } = useTranslation()
     const { control, errors, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
         defaultValues: formDataContext
-    });
+    })
     
     const [formData, setFormData] = useState({
         RadioVehicleGeneralState: [],
@@ -31,16 +32,16 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
         RadioChoicesPaints: [],
         RadioChoicesMaterials: [],
         RadioChoicesExternalColor: []
-    });
+    })
     
     const getData = useCallback(async () => {
-        const data = lang === 'fr' ? await import('./form.data.js') : await import('./form.data.js');
-        setFormData(data);
-    },[lang]);
+        const data = lang === 'fr' ? await import('./form.data.js') : await import('./form.data.js')
+        setFormData(data)
+    },[lang])
     
     useEffect(() => {
-        getData();
-    }, [getData]);
+        getData()
+    }, [getData])
 
     return (
         <form className="form_wizard" ref={formRef} onSubmit={handleSubmit(onSubmitStep)}>
@@ -287,7 +288,7 @@ const Step1CamperDetails = ({ onSubmitStep, prevStep }) => {
 
             <StepNavigation prev={prevStep} submit/>
         </form>
-    );
-};
+    )
+}
 
-export default Step1CamperDetails;
+export default Step1CamperDetails

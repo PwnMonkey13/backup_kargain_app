@@ -1,16 +1,13 @@
-    import React, { memo } from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx';
 import ValidationError from '../Validations/ValidationError'
 
-const CheckBoxInput = memo(({ name, required, rules, control, errors, ...props }) => {
-    const classnames = clsx('checkbox', 'd-flex', 'align-items-center', props.fullwidth && 'w-100')
-
-    if(!control) return null;
-
+const CheckBoxInput = ({ name, rules, control, errors, ...props }) => {
+    
     return (
         <>
-            <div className={classnames}>
+            <div className={clsx('input', 'input-field', props.fullwidth && 'w-100', props.className)}>
                 <label className="pl-1" htmlFor={name}>
                     <input
                         id={name}
@@ -27,10 +24,11 @@ const CheckBoxInput = memo(({ name, required, rules, control, errors, ...props }
             {errors && <ValidationError errors={errors} name={name}/>}
         </>
     )
-})
-
-CheckBoxInput.propTypes = {
-    control : PropTypes.any.isRequired,
 }
 
-export default CheckBoxInput
+CheckBoxInput.propTypes = {
+    name: PropTypes.string.isRequired,
+    control : PropTypes.any.isRequired
+}
+
+export default memo(CheckBoxInput)

@@ -1,21 +1,24 @@
-import React, { useContext, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { Col, Row } from 'reactstrap';
-import useTranslation from 'next-translate/useTranslation';
-import { CheckboxMUI, NumberInput, SelectCountryFlags, TextareaInput } from '../Form/Inputs'
-import StepNavigation from '../Form/StepNavigation';
-import FieldWrapper from '../Form/FieldWrapper';
-import useAddress from '../../hooks/useAddress';
-import UploadDropZone from '../Uploads/UploadDropZone';
-import { FormContext } from '../../context/FormContext';
-import Header from '../Header';
-import SearchLocationInput from '../Form/Inputs/SearchLocationInput';
+import React, { useContext, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { Col, Row } from 'reactstrap'
+import useTranslation from 'next-translate/useTranslation'
+import NumberInput from '../Form/Inputs/NumberInput'
+import SelectCountryFlags from '../Form/Inputs/SelectCountryFlags'
+import CheckboxMUI from '../Form/Inputs/CheckboxMUI'
+import TextareaInput from '../Form/Inputs/TextareaInput'
+import StepNavigation from '../Form/StepNavigation'
+import FieldWrapper from '../Form/FieldWrapper'
+import useAddress from '../../hooks/useAddress'
+import UploadDropZone from '../Uploads/UploadDropZone'
+import { FormContext } from '../../context/FormContext'
+import SearchLocationInput from '../Form/Inputs/SearchLocationInput'
 import TagsControlled from '../Tags/TagsControlled'
+import Header from '../Header'
 
 const Step = ({ handleSubmitForm, prevStep }) => {
-    const { t } = useTranslation();
-    const [, , coordinates] = useAddress();
-    const { formDataContext } = useContext(FormContext);
+    const { t } = useTranslation()
+    const [, , coordinates] = useAddress()
+    const { formDataContext } = useContext(FormContext)
     const { watch, control, errors, setValue, register, handleSubmit } = useForm({
         mode: 'onChange',
         validateCriteriaMode: 'all',
@@ -24,22 +27,22 @@ const Step = ({ handleSubmitForm, prevStep }) => {
             showCellPhone: true,
             visible: true
         }
-    });
+    })
 
     const getFiles = (files) => {
-        setValue('images', files);
-    };
+        setValue('images', files)
+    }
 
-    const countrySelect = watch('countrySelect');
-
-    useEffect(() => {
-        register({ name: 'location.coordinates' });
-        setValue('location.coordinates', coordinates);
-    }, [coordinates]);
+    const countrySelect = watch('countrySelect')
 
     useEffect(() => {
-        register({ name: 'images' });
-    }, []);
+        register({ name: 'location.coordinates' })
+        setValue('location.coordinates', coordinates)
+    }, [coordinates])
+
+    useEffect(() => {
+        register({ name: 'images' })
+    }, [])
 
     return (
         <form className="form_wizard" onSubmit={handleSubmit(handleSubmitForm)}>
@@ -73,9 +76,9 @@ const Step = ({ handleSubmitForm, prevStep }) => {
                             rules={{
                                 required: t('form_validations:required'),
                                 validate: val => {
-                                    const value = Number(val);
-                                    if (value < 500) return t('form_validations:min_price_{min}{currency}', { min : 500, currency : '€'});
-                                    if (value > 200000) return t('form_validations:max_price_{max}{currency}', { max : 200000, currency : '€'});
+                                    const value = Number(val)
+                                    if (value < 500) return t('form_validations:min_price_{min}{currency}', { min : 500, currency : '€'})
+                                    if (value > 200000) return t('form_validations:max_price_{max}{currency}', { max : 200000, currency : '€'})
                                 }
                             }}
                         />
@@ -145,7 +148,7 @@ const Step = ({ handleSubmitForm, prevStep }) => {
 
             <StepNavigation prev={prevStep} submitLabel={t('vehicles:create-my-announce')} submit/>
         </form>
-    );
-};
+    )
+}
 
-export default Step;
+export default Step

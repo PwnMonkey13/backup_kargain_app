@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import PropTypes from 'prop-types';
-import useTranslation from 'next-translate/useTranslation';
-import {  SelectInput, SliderInput } from '../../../Form/Inputs';
-import SearchLocationInput from '../../../Form/Inputs/SearchLocationInput';
-import SelectCountryFlags from '../../../Form/Inputs/SelectCountryFlags';
+import PropTypes from 'prop-types'
+import useTranslation from 'next-translate/useTranslation'
+import SelectInput from '../../../Form/Inputs/SelectInput'
+import SliderInput from '../../../Form/Inputs/SliderInputUI'
+import SelectCountryFlags from '../../../Form/Inputs/SelectCountryFlags'
+import SearchLocationInput from '../../../Form/Inputs/SearchLocationInput'
 import FieldWrapper from '../../../Form/FieldWrapper'
 import { SelectOptionsUtils } from '../../../../libs/formFieldsUtils'
 
 const UtilityFilters = ({ control, watch, errors }) => {
-    const { t, lang } = useTranslation();
-    const countrySelect = watch('countrySelect');
+    const { t, lang } = useTranslation()
+    const countrySelect = watch('countrySelect')
     const [formData, setFormData] = useState({
         RadioVehicleGeneralState: [],
         CheckboxOptionsEquipments: [],
@@ -22,16 +23,16 @@ const UtilityFilters = ({ control, watch, errors }) => {
         RadioChoicesPaints: [],
         RadioChoicesMaterials: [],
         RadioChoicesExternalColor: []
-    });
+    })
     
     const getData = useCallback(async () => {
-        const data = lang === 'fr' ? await import('../../../Products/utility/form.data.js') : await import('../../../Products/car/form.data.js');
-        setFormData(data);
-    },[lang]);
+        const data = lang === 'fr' ? await import('../../../Products/utility/form.data.js') : await import('../../../Products/car/form.data.js')
+        setFormData(data)
+    },[lang])
     
     useEffect(() => {
-        getData();
-    }, [getData]);
+        getData()
+    }, [getData])
     
     return (
         <>
@@ -233,13 +234,13 @@ const UtilityFilters = ({ control, watch, errors }) => {
                 />
             </FieldWrapper>
         </>
-    );
-};
+    )
+}
 
 UtilityFilters.propTypes = {
     control: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
     watch: PropTypes.func
-};
+}
 
-export default UtilityFilters;
+export default UtilityFilters

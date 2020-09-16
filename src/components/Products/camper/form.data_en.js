@@ -1,4 +1,4 @@
-import { SelectOptionsUtils } from '../../../libs/formFieldsUtils';
+import { SelectOptionsUtils } from '../../../libs/formFieldsUtils'
 
 export const RadioTypeFunction = [
     {
@@ -25,7 +25,7 @@ export const RadioTypeFunction = [
         label: 'Other',
         value: 'other'
     }
-];
+]
 export const RadioChoicesGas = [
     {
         label: 'Diesel',
@@ -55,7 +55,7 @@ export const RadioChoicesGas = [
         label: 'Liquified petroleum gas (LPG),',
         value: 'gpl'
     }
-];
+]
 export const RadioChoicesEngine = [{
     label: 'Automatic',
     value: 'automatic'
@@ -68,10 +68,10 @@ export const RadioChoicesEngine = [{
     label: 'Semi-automatic',
     value: 'semi-auto'
 }
-];
-export const RadioChoicesEmission = SelectOptionsUtils(['EURO1', 'EURO2', 'EURO3', 'EURO4', 'EURO5', 'EURO6']);
+]
+export const RadioChoicesEmission = SelectOptionsUtils(['EURO1', 'EURO2', 'EURO3', 'EURO4', 'EURO5', 'EURO6'])
 
-export const SelectChoicesBrandsAPI = SelectOptionsUtils(['Audi', 'BMW', 'Mercedes', 'Peugeot', 'Renault', 'Fiat']);
+export const SelectChoicesBrandsAPI = SelectOptionsUtils(['Audi', 'BMW', 'Mercedes', 'Peugeot', 'Renault', 'Fiat'])
 
 export const CheckboxOptionsEquipments = SelectOptionsUtils([
     'ABS',
@@ -102,7 +102,7 @@ export const CheckboxOptionsEquipments = SelectOptionsUtils([
     'Immobilizer',
     'Central locking',
     'Additional headlights '
-]);
+])
 
 export const RadioChoicesExternalColor = [
     {
@@ -165,7 +165,7 @@ export const RadioChoicesExternalColor = [
         value: 'other',
         label: 'Other'
     }
-];
+]
 
 export const RadioChoicesBeds = [
     {
@@ -195,7 +195,7 @@ export const RadioChoicesPaints = [
         value: 'other',
         label: 'Other'
     }
-];
+]
 
 export const RadioChoicesMaterials = [
     {
@@ -222,7 +222,7 @@ export const RadioChoicesMaterials = [
         value: 'Autre',
         label: 'autre'
     }
-];
+]
 export const RadioVehicleGeneralState = [{
     value: 'neuf',
     label: 'Neuf'
@@ -255,4 +255,4 @@ export const RadioVehicleGeneralState = [{
     value: 'demo-car',
     label: 'Véhicule de démonstration'
 }
-];
+]

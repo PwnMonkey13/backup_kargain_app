@@ -83,64 +83,64 @@ export const CheckboxOptionsEquipments = SelectOptionsUtils([
 export const RadioChoicesExternalColor = [
     {
         value: 'noir',
-        label: 'Noir',
+        label: 'Noir'
     },
     {
         value: 'gris',
-        label: 'Gris',
+        label: 'Gris'
     },
     {
         value: 'blanc',
-        label: 'Blanc',
+        label: 'Blanc'
     },
     {
         value: 'vert',
-        label: 'Vert',
+        label: 'Vert'
     },
     {
         value: 'beige',
-        label: 'Beige',
+        label: 'Beige'
     },
     {
         value: 'doré',
-        label: 'Doré',
+        label: 'Doré'
     },
     {
         value: 'marron',
-        label: 'Marron',
+        label: 'Marron'
     },
     {
         value: 'orange',
-        label: 'Orange',
+        label: 'Orange'
     },
     {
         value: 'bronze',
-        label: 'Bronze',
+        label: 'Bronze'
     },
     {
         value: 'violet',
-        label: 'Violet',
+        label: 'Violet'
     },
     {
         value: 'bleu',
-        label: 'Bleu',
+        label: 'Bleu'
     },
     {
         value: 'rouge',
-        label: 'Rouge',
+        label: 'Rouge'
     },
     {
         value: 'argent',
-        label: 'Argent',
+        label: 'Argent'
     },
     {
         value: 'jaune',
-        label: 'Jaune',
+        label: 'Jaune'
     },
     {
         value: 'autre',
-        label: 'Autre',
-    },
+        label: 'Autre'
+    }
 ]
 
 export const RadioChoicesPaints = [

@@ -1,24 +1,24 @@
-import React, { useContext, useState } from 'react';
-import PropTypes from 'prop-types';
-import Link from 'next-translate/Link';
-import useDimensions from 'react-use-dimensions'
+import React, { useContext, useState } from 'react'
 import clsx from 'clsx'
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import IconButton from '@material-ui/core/IconButton';
-import { PhotoCamera } from '@material-ui/icons';
-import Typography from '@material-ui/core/Typography';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import PropTypes from 'prop-types'
+import Link from 'next-translate/Link'
+import useDimensions from 'react-use-dimensions'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import IconButton from '@material-ui/core/IconButton'
+import { PhotoCamera } from '@material-ui/icons'
+import Typography from '@material-ui/core/Typography'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import MailOutlineIcon from '@material-ui/icons/MailOutline'
-import useTranslation from 'next-translate/useTranslation';
-import { ReactComponent as StarSVG } from '../../public/images/svg/star.svg';
-import { ReactComponent as StarSVGYellow } from '../../public/images/svg/star-yellow.svg';
-import { MessageContext } from '../context/MessageContext';
-import CommentsList from './Comments/CommentsList';
-import AnnounceService from '../services/AnnounceService';
-import { useAuth } from '../context/AuthProvider';
-import { getTimeAgo } from '../libs/utils';
-import TagsList from './Tags/TagsList';
-import CTALink from './CTALink';
+import useTranslation from 'next-translate/useTranslation'
+import { ReactComponent as StarSVG } from '../../public/images/svg/star.svg'
+import { ReactComponent as StarSVGYellow } from '../../public/images/svg/star-yellow.svg'
+import { MessageContext } from '../context/MessageContext'
+import CommentsList from './Comments/CommentsList'
+import AnnounceService from '../services/AnnounceService'
+import { useAuth } from '../context/AuthProvider'
+import { getTimeAgo } from '../libs/utils'
+import TagsList from './Tags/TagsList'
+import CTALink from './CTALink'
 import { ModalContext } from '../context/ModalContext'
 import AnnounceModel from '../models/announce.model'
 
@@ -52,41 +52,41 @@ const useStyles = makeStyles((theme) => ({
         display : 'flex',
         justifyContent : 'space-between'
     }
-}));
+}))
 
 const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
-    const classes = useStyles();
-    const { t } = useTranslation();
-    const announce = new AnnounceModel(announceRaw);
-    const [refWidth, { width }] = useDimensions();
-    const { dispatchModalError } = useContext(MessageContext);
-    const { dispatchModalState } = useContext(ModalContext);
-    const [likesCounter, setLikesCounter] = useState(announce.getCountLikes);
-    const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth();
-    const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID;
+    const classes = useStyles()
+    const { t } = useTranslation()
+    const announce = new AnnounceModel(announceRaw)
+    const [refWidth, { width }] = useDimensions()
+    const { dispatchModalError } = useContext(MessageContext)
+    const { dispatchModalState } = useContext(ModalContext)
+    const [likesCounter, setLikesCounter] = useState(announce.getCountLikes)
+    const { isAuthenticated, authenticatedUser, setForceLoginModal } = useAuth()
+    const isAuthor = isAuthenticated && authenticatedUser.getID === announce.getAuthor?.getID
    
     const checkIfAlreadyLike = () => {
-        const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite.getID === announce.getID);
-        const matchAnnounceLike = announce.getLikes.find(like => like.getAuthor.getID === authenticatedUser.getID);
-        return !!matchUserFavorite || !!matchAnnounceLike;
-    };
+        const matchUserFavorite = authenticatedUser.getFavorites.find(favorite => favorite.getID === announce.getID)
+        const matchAnnounceLike = announce.getLikes.find(like => like.getAuthor.getID === authenticatedUser.getID)
+        return !!matchUserFavorite || !!matchAnnounceLike
+    }
     
-    const alreadyLikeCurrentUser = checkIfAlreadyLike();
+    const alreadyLikeCurrentUser = checkIfAlreadyLike()
     
     const handleClickLikeButton = async () => {
-        if (!isAuthenticated) return setForceLoginModal(true);
+        if (!isAuthenticated) return setForceLoginModal(true)
         try {
             if (alreadyLikeCurrentUser) {
-                await AnnounceService.addLikeLoggedInUser(announce.getID);
-                setLikesCounter(likesCount => likesCount + 1);
+                await AnnounceService.addLikeLoggedInUser(announce.getID)
+                setLikesCounter(likesCount => likesCount + 1)
             } else {
-                await AnnounceService.removeLikeLoggedInUser(announce.getID);
-                setLikesCounter(likesCount => Math.max(likesCount - 1));
+                await AnnounceService.removeLikeLoggedInUser(announce.getID)
+                setLikesCounter(likesCount => Math.max(likesCount - 1))
             }
         } catch (err) {
-            dispatchModalError({ err });
+            dispatchModalError({ err })
         }
-    };
+    }
     
     return (
         <div className="objava-wrapper cardAd" ref={refWidth}>
@@ -228,13 +228,13 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
 const CardTopSubInfos = ({width, announce}) => {
     const classes = useStyles()
     const { lang } = useTranslation()
-    const { dispatchModalState } = useContext(ModalContext);
+    const { dispatchModalState } = useContext(ModalContext)
     
     return(
         <div className={clsx(classes.cardTopSubInfos, width <= 500 && 'flex-column')}>
@@ -265,10 +265,10 @@ const CardTopSubInfos = ({width, announce}) => {
 AnnounceCard.propTypes = {
     announceRaw: PropTypes.any.isRequired,
     featuredImgHeight: PropTypes.number
-};
+}
 
 AnnounceCard.defaultProps = {
     featuredImgHeight: 500
-};
+}
 
-export default AnnounceCard;
+export default AnnounceCard

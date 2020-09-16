@@ -1,12 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import PropTypes from 'prop-types';
-import useTranslation from 'next-translate/useTranslation';
-import { SearchLocationInput, SelectCountryFlags, SelectInput, SliderInput } from '../../../Form/Inputs';
+import PropTypes from 'prop-types'
+import useTranslation from 'next-translate/useTranslation'
+import SelectInput from '../../../Form/Inputs/SelectInput'
+import SliderInput from '../../../Form/Inputs/SliderInputUI'
+import SelectCountryFlags from '../../../Form/Inputs/SelectCountryFlags'
+import SearchLocationInput from '../../../Form/Inputs/SearchLocationInput'
 import FieldWrapper from '../../../Form/FieldWrapper'
 
 const CarFilters = ({ control, watch, errors }) => {
-    const { t, lang } = useTranslation();
-    const countrySelect = watch('countrySelect');
+    const { t, lang } = useTranslation()
+    const countrySelect = watch('countrySelect')
     const [formData, setFormData] = useState({
         RadioVehicleGeneralState: [],
         CheckboxOptionsEquipments: [],
@@ -19,16 +22,16 @@ const CarFilters = ({ control, watch, errors }) => {
         RadioChoicesPaints: [],
         RadioChoicesMaterials: [],
         RadioChoicesExternalColor: []
-    });
+    })
     
     const getData = useCallback(async () => {
-        const data = lang === 'fr' ? await import('../../../Products/car/form.data.js') : await import('../../../Products/car/form.data.js');
-        setFormData(data);
-    },[lang]);
+        const data = lang === 'fr' ? await import('../../../Products/car/form.data.js') : await import('../../../Products/car/form.data.js')
+        setFormData(data)
+    },[lang])
     
     useEffect(() => {
-        getData();
-    }, [getData]);
+        getData()
+    }, [getData])
     
     return (
         <>
@@ -221,13 +224,13 @@ const CarFilters = ({ control, watch, errors }) => {
                 />
             </FieldWrapper>
         </>
-    );
-};
+    )
+}
 
 CarFilters.propTypes = {
     control: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired,
     watch: PropTypes.func
-};
+}
 
-export default CarFilters;
+export default CarFilters
