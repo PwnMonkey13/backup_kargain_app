@@ -42,6 +42,8 @@ const TableMUI = ({ columns, data, title, ...props }) => {
             title={title}
             columns={columns}
             data={data}
+            actions={props.actions}
+            detailPanel={props.detailPanel}
             options={{
                 search: props.search,
                 // selection: props.selection,
@@ -53,7 +55,6 @@ const TableMUI = ({ columns, data, title, ...props }) => {
                 exportFileName: props.exportFileName
                 // actionsColumnIndex: -1
             }}
-            actions={props.actions}
         />
     );
 };

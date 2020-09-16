@@ -8,6 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import BulletPoint from '../../../BulletPoint';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import BooleanBullet from '../../BooleanBullet';
+import AnnounceModel from '../../../../models/announce.model'
 
 const useStyles = makeStyles((theme) => ({
     editSelectPop: {
@@ -60,12 +61,13 @@ const ActivatedBullet = ({ slug, activated: activatedProps }) => {
 
     const handleUpdate = async () => {
         try {
-            const data = await AnnounceService.updateAdminAnnounce(slug, {
+            const announceRawUpdated = await AnnounceService.updateAdminAnnounce(slug, {
                 activated: selectedOption
             });
-            const { document } = data;
+    
+            const announce = new AnnounceModel(announceRawUpdated);
             setActivated(activated => !activated);
-            dispatchModal({ msg: `updated. Mail sent to ${document?.user?.email}` });
+            dispatchModal({ msg: `updated. Mail sent to ${announce.getAuthor.getEmail}` });
         } catch (err) {
             dispatchModalError({ err });
         }

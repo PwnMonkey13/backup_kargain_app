@@ -27,7 +27,6 @@ import { MessageContext } from '../../../context/MessageContext';
 import { ModalContext } from '../../../context/ModalContext';
 import { useAuth } from '../../../context/AuthProvider';
 import { getTimeAgo } from '../../../libs/utils';
-
 import Error from '../../_error';
 
 const useStyles = makeStyles(() => ({
@@ -309,7 +308,6 @@ const Announce = () => {
                                 )}
                             </div>
                         </div>
-
                         <Comments announceRaw={announce.getRaw}/>
                     </Col>
                 </Row>

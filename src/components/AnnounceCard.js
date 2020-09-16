@@ -13,9 +13,8 @@ import useTranslation from 'next-translate/useTranslation';
 import { ReactComponent as StarSVG } from '../../public/images/svg/star.svg';
 import { ReactComponent as StarSVGYellow } from '../../public/images/svg/star-yellow.svg';
 import { MessageContext } from '../context/MessageContext';
-import CommentsListLight from './Comments/CommentsList';
+import CommentsList from './Comments/CommentsList';
 import AnnounceService from '../services/AnnounceService';
-
 import { useAuth } from '../context/AuthProvider';
 import { getTimeAgo } from '../libs/utils';
 import TagsList from './Tags/TagsList';
@@ -211,7 +210,7 @@ const AnnounceCard = ({ announceRaw, featuredImgHeight }) => {
                 <TagsList tags={announce.getTags}/>
 
                 {announce.getCountComments > 0 && (
-                    <CommentsListLight comments={announce.getComments}/>
+                    <CommentsList comments={announce.getComments}/>
                 )}
 
                 <div className="my-2 text-center">

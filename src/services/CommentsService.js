@@ -32,7 +32,22 @@ function disableComment (commentID) {
         });
 }
 
+function enableComment (commentID) {
+    const requestOptions = {
+        method: 'PUT',
+        credentials: 'include'
+    };
+    
+    return fetch(`${config.api}/comments/enable/${commentID}`, requestOptions)
+        .then(handleResponse)
+        .then(json => json.data)
+        .catch(err => {
+            throw err;
+        });
+}
+
 export default {
     createComment,
-    disableComment
+    disableComment,
+    enableComment
 };
