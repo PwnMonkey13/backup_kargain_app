@@ -27,9 +27,11 @@
         "babel",
         "react",
         "react-hooks",
+        "styled-components-a11y",
         "unused-imports"
     ],
     "rules": {
+        "semi": ["error", "never"],
         "no-extra-semi": "error",
         "comma-dangle": ["error", {
             "arrays": "never",
