@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types';
-import BooleanBullet from '../../BooleanBullet';
+import PropTypes from 'prop-types'
+import BooleanBullet from '../../BooleanBullet'
 
 const CommentEnableBullet = ({ comment, handleDisableAction, handleEnableAction }) => {
     const activated = comment.getIsEnabled
